@@ -17,17 +17,45 @@
   },
   "nxJsonPlugins": [],
   "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": "README.md",
+        "hash": "11369023913616062043"
+      },
+      {
+        "file": "DESIGN.md",
+        "hash": "16333061076861862651"
+      },
+      {
+        "file": "package.json",
+        "hash": "14353842317020433229"
+      },
+      {
+        "file": "pnpm-workspace.yaml",
+        "hash": "2373171212127886927"
+      },
+      {
+        "file": "nx.json",
+        "hash": "16429485800271762598"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "14570171387777529578"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "837728823281347826"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "5855524580645261722"
+      },
+      {
+        "file": "Blih_Product_Documentation_v2.md",
+        "hash": "5525013559395352115"
+      }
+    ],
     "projectFileMap": {
-      "@blih/api-client": [
-        {
-          "file": "packages/api-client/package.json",
-          "hash": "12253421402689962015"
-        },
-        {
-          "file": "packages/api-client/src/index.ts",
-          "hash": "8046290248135554880"
-        }
-      ],
       "@blih/api": [
         {
           "file": "apps/api/.env.example",
@@ -59,8 +87,44 @@
         },
         {
           "file": "apps/api/package.json",
-          "hash": "7660068512438821812",
+          "hash": "14427172738629258667",
           "deps": [
+            "npm:@prisma/config",
+            "npm:@types/bcryptjs",
+            "npm:@types/cookie-parser",
+            "npm:@types/cors",
+            "npm:@types/express",
+            "npm:@types/jest",
+            "npm:@types/jsonwebtoken",
+            "npm:@types/morgan",
+            "npm:@types/multer",
+            "npm:@types/node",
+            "npm:@types/supertest",
+            "npm:jest",
+            "npm:prisma",
+            "npm:supertest",
+            "npm:ts-jest",
+            "npm:ts-node-dev",
+            "npm:typescript@6.0.3",
+            "npm:@prisma/adapter-pg",
+            "npm:@prisma/client",
+            "npm:@types/pg",
+            "npm:@types/swagger-jsdoc",
+            "npm:@types/swagger-ui-express",
+            "npm:bcryptjs",
+            "npm:cookie-parser",
+            "npm:cors",
+            "npm:dotenv@16.6.1",
+            "npm:express",
+            "npm:helmet",
+            "npm:jsonwebtoken",
+            "npm:morgan",
+            "npm:multer",
+            "npm:node-fetch",
+            "npm:pg",
+            "npm:swagger-jsdoc",
+            "npm:swagger-ui-express",
+            "npm:zod@3.25.76",
             "@blih/validation"
           ]
         },
@@ -250,7 +314,7 @@
         },
         {
           "file": "apps/api/src/server.ts",
-          "hash": "18432500194477441454"
+          "hash": "10093206270877377501"
         },
         {
           "file": "apps/api/src/types/auth.types.ts",
@@ -258,7 +322,430 @@
         },
         {
           "file": "apps/api/tsconfig.json",
-          "hash": "5852235872430896258"
+          "hash": "2155343309978258408"
+        }
+      ],
+      "@blih/types": [
+        {
+          "file": "packages/types/package.json",
+          "hash": "8881237571806645053"
+        },
+        {
+          "file": "packages/types/src/index.ts",
+          "hash": "8534277695626630103"
+        }
+      ],
+      "@blih/validation": [
+        {
+          "file": "packages/validation/package.json",
+          "hash": "5608590233577503316",
+          "deps": [
+            "npm:zod@4.4.3"
+          ]
+        },
+        {
+          "file": "packages/validation/src/index.ts",
+          "hash": "878879275129292538"
+        }
+      ],
+      "@blih/auth-web": [
+        {
+          "file": "apps/auth-web/.env.local.example",
+          "hash": "12826300261671813054"
+        },
+        {
+          "file": "apps/auth-web/.gitattributes",
+          "hash": "18007627905445077091"
+        },
+        {
+          "file": "apps/auth-web/.gitignore",
+          "hash": "18029942368515381371"
+        },
+        {
+          "file": "apps/auth-web/README.md",
+          "hash": "1621972162990641063"
+        },
+        {
+          "file": "apps/auth-web/eslint.config.mjs",
+          "hash": "1702003467233685370"
+        },
+        {
+          "file": "apps/auth-web/next-env.d.ts",
+          "hash": "11942690884056199491"
+        },
+        {
+          "file": "apps/auth-web/next.config.js",
+          "hash": "4278534899681944106"
+        },
+        {
+          "file": "apps/auth-web/package-lock.json",
+          "hash": "2429801802523248333"
+        },
+        {
+          "file": "apps/auth-web/package.json",
+          "hash": "8896416152557149519",
+          "deps": [
+            "npm:@tailwindcss/postcss",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:eslint",
+            "npm:eslint-config-next",
+            "npm:postcss@8.5.26",
+            "npm:tailwindcss",
+            "npm:typescript@6.0.3",
+            "@blih/types",
+            "@blih/api-client",
+            "@blih/ui",
+            "npm:lucide-react",
+            "npm:next",
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/auth-web/postcss.config.js",
+          "hash": "14822812834701160985"
+        },
+        {
+          "file": "apps/auth-web/src/app/forgot-password/page.tsx",
+          "hash": "16117192872580819769"
+        },
+        {
+          "file": "apps/auth-web/src/app/globals.css",
+          "hash": "9369986677379985839"
+        },
+        {
+          "file": "apps/auth-web/src/app/layout.tsx",
+          "hash": "3587392602946276714"
+        },
+        {
+          "file": "apps/auth-web/src/app/login/page.tsx",
+          "hash": "4481878038029609676"
+        },
+        {
+          "file": "apps/auth-web/src/app/not-found.tsx",
+          "hash": "17906096427528196016"
+        },
+        {
+          "file": "apps/auth-web/src/app/page.tsx",
+          "hash": "4567618685116508642"
+        },
+        {
+          "file": "apps/auth-web/src/app/register/page.tsx",
+          "hash": "9622073490904100083"
+        },
+        {
+          "file": "apps/auth-web/src/app/reset-password/page.tsx",
+          "hash": "15118164275335044078"
+        },
+        {
+          "file": "apps/auth-web/src/app/verify-email/page.tsx",
+          "hash": "10003581702410900454"
+        },
+        {
+          "file": "apps/auth-web/src/components/auth/AuthLayout.tsx",
+          "hash": "5903368209103890128"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Alert.tsx",
+          "hash": "12470985303198605451"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Badge.tsx",
+          "hash": "2811464931792897955"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Button.tsx",
+          "hash": "11228297964220026661"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Card.tsx",
+          "hash": "12675134903608939870"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Checkbox.tsx",
+          "hash": "9723264194204996131"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/ConfirmDialog.tsx",
+          "hash": "15457945203390544711"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/EmptyState.tsx",
+          "hash": "5572827929709823500"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/FormField.tsx",
+          "hash": "9614545578408228937"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Input.tsx",
+          "hash": "6256208098942052598"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Modal.tsx",
+          "hash": "15864451565660237110"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Pagination.tsx",
+          "hash": "6550256956053313147"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/PasswordInput.tsx",
+          "hash": "6936574151342347308"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Select.tsx",
+          "hash": "12635154147386213690"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Skeleton.tsx",
+          "hash": "1031555091361028764"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Spinner.tsx",
+          "hash": "15638010288998606061"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Textarea.tsx",
+          "hash": "7744849850738883986"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Tooltip.tsx",
+          "hash": "17667141075389141254"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/index.ts",
+          "hash": "10881532955205620032"
+        },
+        {
+          "file": "apps/auth-web/src/lib/api.ts",
+          "hash": "8800901008555811550"
+        },
+        {
+          "file": "apps/auth-web/src/types/user.ts",
+          "hash": "14784906957447820365"
+        },
+        {
+          "file": "apps/auth-web/tsconfig.json",
+          "hash": "17808866200018543864"
+        }
+      ],
+      "@blih/skills-web": [
+        {
+          "file": "apps/skills-web/.env.local.example",
+          "hash": "3707606950370373805"
+        },
+        {
+          "file": "apps/skills-web/.gitattributes",
+          "hash": "18007627905445077091"
+        },
+        {
+          "file": "apps/skills-web/.gitignore",
+          "hash": "12382257461612073840"
+        },
+        {
+          "file": "apps/skills-web/README.md",
+          "hash": "3388998997074902824"
+        },
+        {
+          "file": "apps/skills-web/eslint.config.mjs",
+          "hash": "1702003467233685370"
+        },
+        {
+          "file": "apps/skills-web/next-env.d.ts",
+          "hash": "11942690884056199491"
+        },
+        {
+          "file": "apps/skills-web/next.config.js",
+          "hash": "4278534899681944106"
+        },
+        {
+          "file": "apps/skills-web/package-lock.json",
+          "hash": "11269273641153072264"
+        },
+        {
+          "file": "apps/skills-web/package.json",
+          "hash": "17183918602954773827",
+          "deps": [
+            "npm:@tailwindcss/postcss",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:eslint",
+            "npm:eslint-config-next",
+            "npm:postcss@8.5.26",
+            "npm:tailwindcss",
+            "npm:typescript@6.0.3",
+            "@blih/types",
+            "@blih/api-client",
+            "@blih/ui",
+            "npm:lucide-react",
+            "npm:next",
+            "npm:react",
+            "npm:react-dom"
+          ]
+        },
+        {
+          "file": "apps/skills-web/postcss.config.js",
+          "hash": "3234494678065701231"
+        },
+        {
+          "file": "apps/skills-web/src/app/admin/courses/[courseId]/edit/page.tsx",
+          "hash": "2150894441781762697"
+        },
+        {
+          "file": "apps/skills-web/src/app/admin/courses/new/page.tsx",
+          "hash": "12283736308511291205"
+        },
+        {
+          "file": "apps/skills-web/src/app/admin/courses/page.tsx",
+          "hash": "3287840124296972306"
+        },
+        {
+          "file": "apps/skills-web/src/app/admin/page.tsx",
+          "hash": "8849228657604542688"
+        },
+        {
+          "file": "apps/skills-web/src/app/certificates/page.tsx",
+          "hash": "8520018835441693045"
+        },
+        {
+          "file": "apps/skills-web/src/app/courses/[courseId]/learn/page.tsx",
+          "hash": "5439429825176217820"
+        },
+        {
+          "file": "apps/skills-web/src/app/courses/[courseId]/page.tsx",
+          "hash": "4488679393062527072"
+        },
+        {
+          "file": "apps/skills-web/src/app/courses/page.tsx",
+          "hash": "3775587116484274763"
+        },
+        {
+          "file": "apps/skills-web/src/app/dashboard/page.tsx",
+          "hash": "9448179540228638032"
+        },
+        {
+          "file": "apps/skills-web/src/app/globals.css",
+          "hash": "9369986677379985839"
+        },
+        {
+          "file": "apps/skills-web/src/app/layout.tsx",
+          "hash": "1887368637093420409"
+        },
+        {
+          "file": "apps/skills-web/src/app/not-found.tsx",
+          "hash": "4590452738134371193"
+        },
+        {
+          "file": "apps/skills-web/src/app/page.tsx",
+          "hash": "9836273654053753011"
+        },
+        {
+          "file": "apps/skills-web/src/app/profile/page.tsx",
+          "hash": "1162991208464963775"
+        },
+        {
+          "file": "apps/skills-web/src/components/auth/AuthGuard.tsx",
+          "hash": "17411417529872239324"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Alert.tsx",
+          "hash": "12470985303198605451"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Badge.tsx",
+          "hash": "2811464931792897955"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Button.tsx",
+          "hash": "11228297964220026661"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Card.tsx",
+          "hash": "12675134903608939870"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Checkbox.tsx",
+          "hash": "9723264194204996131"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/ConfirmDialog.tsx",
+          "hash": "15457945203390544711"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/EmptyState.tsx",
+          "hash": "5572827929709823500"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/FormField.tsx",
+          "hash": "9614545578408228937"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Input.tsx",
+          "hash": "6256208098942052598"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Modal.tsx",
+          "hash": "15864451565660237110"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Pagination.tsx",
+          "hash": "6550256956053313147"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/PasswordInput.tsx",
+          "hash": "6936574151342347308"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Select.tsx",
+          "hash": "12635154147386213690"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Skeleton.tsx",
+          "hash": "1031555091361028764"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Spinner.tsx",
+          "hash": "15638010288998606061"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Textarea.tsx",
+          "hash": "7744849850738883986"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Tooltip.tsx",
+          "hash": "17667141075389141254"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/index.ts",
+          "hash": "10881532955205620032"
+        },
+        {
+          "file": "apps/skills-web/src/lib/api.ts",
+          "hash": "8046290248135554880"
+        },
+        {
+          "file": "apps/skills-web/src/lib/courses.ts",
+          "hash": "15681375267167942864"
+        },
+        {
+          "file": "apps/skills-web/src/providers/AuthProvider.tsx",
+          "hash": "4229945863402148898"
+        },
+        {
+          "file": "apps/skills-web/src/types/course.ts",
+          "hash": "7327158235774203327"
+        },
+        {
+          "file": "apps/skills-web/src/types/user.ts",
+          "hash": "8534277695626630103"
+        },
+        {
+          "file": "apps/skills-web/tsconfig.json",
+          "hash": "17808866200018543864"
         }
       ],
       "@blih/talent-web": [
@@ -298,10 +785,26 @@
           "file": "apps/talent-web/package.json",
           "hash": "2110852148854958319",
           "deps": [
+            "npm:@tailwindcss/postcss",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:eslint",
+            "npm:eslint-config-next",
+            "npm:postcss@8.5.26",
+            "npm:tailwindcss",
+            "npm:typescript@6.0.3",
             "@blih/types",
             "@blih/api-client",
             "@blih/ui",
-            "@blih/validation"
+            "@blih/validation",
+            "npm:@hookform/resolvers",
+            "npm:lucide-react",
+            "npm:next",
+            "npm:react",
+            "npm:react-dom",
+            "npm:react-hook-form",
+            "npm:zod@4.4.3"
           ]
         },
         {
@@ -590,226 +1093,27 @@
         },
         {
           "file": "apps/talent-web/tsconfig.json",
-          "hash": "10809079493683637700"
+          "hash": "17808866200018543864"
         }
       ],
-      "@blih/skills-web": [
+      "@blih/api-client": [
         {
-          "file": "apps/skills-web/.env.local.example",
-          "hash": "3707606950370373805"
+          "file": "packages/api-client/package.json",
+          "hash": "12253421402689962015"
         },
         {
-          "file": "apps/skills-web/.gitattributes",
-          "hash": "18007627905445077091"
-        },
-        {
-          "file": "apps/skills-web/.gitignore",
-          "hash": "12382257461612073840"
-        },
-        {
-          "file": "apps/skills-web/README.md",
-          "hash": "3388998997074902824"
-        },
-        {
-          "file": "apps/skills-web/eslint.config.mjs",
-          "hash": "1702003467233685370"
-        },
-        {
-          "file": "apps/skills-web/next-env.d.ts",
-          "hash": "11942690884056199491"
-        },
-        {
-          "file": "apps/skills-web/next.config.js",
-          "hash": "4278534899681944106"
-        },
-        {
-          "file": "apps/skills-web/package-lock.json",
-          "hash": "11269273641153072264"
-        },
-        {
-          "file": "apps/skills-web/package.json",
-          "hash": "17183918602954773827",
-          "deps": [
-            "@blih/types",
-            "@blih/api-client",
-            "@blih/ui"
-          ]
-        },
-        {
-          "file": "apps/skills-web/postcss.config.js",
-          "hash": "3234494678065701231"
-        },
-        {
-          "file": "apps/skills-web/src/app/admin/courses/[courseId]/edit/page.tsx",
-          "hash": "2150894441781762697"
-        },
-        {
-          "file": "apps/skills-web/src/app/admin/courses/new/page.tsx",
-          "hash": "12283736308511291205"
-        },
-        {
-          "file": "apps/skills-web/src/app/admin/courses/page.tsx",
-          "hash": "3287840124296972306"
-        },
-        {
-          "file": "apps/skills-web/src/app/admin/page.tsx",
-          "hash": "8849228657604542688"
-        },
-        {
-          "file": "apps/skills-web/src/app/certificates/page.tsx",
-          "hash": "8520018835441693045"
-        },
-        {
-          "file": "apps/skills-web/src/app/courses/[courseId]/learn/page.tsx",
-          "hash": "5439429825176217820"
-        },
-        {
-          "file": "apps/skills-web/src/app/courses/[courseId]/page.tsx",
-          "hash": "4488679393062527072"
-        },
-        {
-          "file": "apps/skills-web/src/app/courses/page.tsx",
-          "hash": "3775587116484274763"
-        },
-        {
-          "file": "apps/skills-web/src/app/dashboard/page.tsx",
-          "hash": "9448179540228638032"
-        },
-        {
-          "file": "apps/skills-web/src/app/globals.css",
-          "hash": "9369986677379985839"
-        },
-        {
-          "file": "apps/skills-web/src/app/layout.tsx",
-          "hash": "1887368637093420409"
-        },
-        {
-          "file": "apps/skills-web/src/app/not-found.tsx",
-          "hash": "4590452738134371193"
-        },
-        {
-          "file": "apps/skills-web/src/app/page.tsx",
-          "hash": "9836273654053753011"
-        },
-        {
-          "file": "apps/skills-web/src/app/profile/page.tsx",
-          "hash": "1162991208464963775"
-        },
-        {
-          "file": "apps/skills-web/src/components/auth/AuthGuard.tsx",
-          "hash": "17411417529872239324"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Alert.tsx",
-          "hash": "12470985303198605451"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Badge.tsx",
-          "hash": "2811464931792897955"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Button.tsx",
-          "hash": "11228297964220026661"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Card.tsx",
-          "hash": "12675134903608939870"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Checkbox.tsx",
-          "hash": "9723264194204996131"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/ConfirmDialog.tsx",
-          "hash": "15457945203390544711"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/EmptyState.tsx",
-          "hash": "5572827929709823500"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/FormField.tsx",
-          "hash": "9614545578408228937"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Input.tsx",
-          "hash": "6256208098942052598"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Modal.tsx",
-          "hash": "15864451565660237110"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Pagination.tsx",
-          "hash": "6550256956053313147"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/PasswordInput.tsx",
-          "hash": "6936574151342347308"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Select.tsx",
-          "hash": "12635154147386213690"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Skeleton.tsx",
-          "hash": "1031555091361028764"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Spinner.tsx",
-          "hash": "15638010288998606061"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Textarea.tsx",
-          "hash": "7744849850738883986"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/Tooltip.tsx",
-          "hash": "17667141075389141254"
-        },
-        {
-          "file": "apps/skills-web/src/components/ui/index.ts",
-          "hash": "10881532955205620032"
-        },
-        {
-          "file": "apps/skills-web/src/lib/api.ts",
+          "file": "packages/api-client/src/index.ts",
           "hash": "8046290248135554880"
-        },
-        {
-          "file": "apps/skills-web/src/lib/courses.ts",
-          "hash": "15681375267167942864"
-        },
-        {
-          "file": "apps/skills-web/src/providers/AuthProvider.tsx",
-          "hash": "4229945863402148898"
-        },
-        {
-          "file": "apps/skills-web/src/types/course.ts",
-          "hash": "7327158235774203327"
-        },
-        {
-          "file": "apps/skills-web/src/types/user.ts",
-          "hash": "8534277695626630103"
-        },
-        {
-          "file": "apps/skills-web/tsconfig.json",
-          "hash": "8568508057185241381"
-        }
-      ],
-      "@blih/validation": [
-        {
-          "file": "packages/validation/package.json",
-          "hash": "5608590233577503316"
-        },
-        {
-          "file": "packages/validation/src/index.ts",
-          "hash": "878879275129292538"
         }
       ],
       "@blih/ui": [
         {
           "file": "packages/ui/package.json",
-          "hash": "12900523198839188972"
+          "hash": "12900523198839188972",
+          "deps": [
+            "npm:react",
+            "npm:react-dom"
+          ]
         },
         {
           "file": "packages/ui/src/Alert.tsx",
@@ -883,1306 +1187,7 @@
           "file": "packages/ui/src/index.ts",
           "hash": "10881532955205620032"
         }
-      ],
-      "@blih/auth-web": [
-        {
-          "file": "apps/auth-web/.env.local.example",
-          "hash": "12826300261671813054"
-        },
-        {
-          "file": "apps/auth-web/.gitattributes",
-          "hash": "18007627905445077091"
-        },
-        {
-          "file": "apps/auth-web/.gitignore",
-          "hash": "18029942368515381371"
-        },
-        {
-          "file": "apps/auth-web/README.md",
-          "hash": "1621972162990641063"
-        },
-        {
-          "file": "apps/auth-web/eslint.config.mjs",
-          "hash": "1702003467233685370"
-        },
-        {
-          "file": "apps/auth-web/next-env.d.ts",
-          "hash": "11942690884056199491"
-        },
-        {
-          "file": "apps/auth-web/next.config.js",
-          "hash": "4278534899681944106"
-        },
-        {
-          "file": "apps/auth-web/package-lock.json",
-          "hash": "2429801802523248333"
-        },
-        {
-          "file": "apps/auth-web/package.json",
-          "hash": "8896416152557149519",
-          "deps": [
-            "@blih/types",
-            "@blih/api-client",
-            "@blih/ui"
-          ]
-        },
-        {
-          "file": "apps/auth-web/postcss.config.js",
-          "hash": "14822812834701160985"
-        },
-        {
-          "file": "apps/auth-web/src/app/forgot-password/page.tsx",
-          "hash": "16117192872580819769"
-        },
-        {
-          "file": "apps/auth-web/src/app/globals.css",
-          "hash": "9369986677379985839"
-        },
-        {
-          "file": "apps/auth-web/src/app/layout.tsx",
-          "hash": "3587392602946276714"
-        },
-        {
-          "file": "apps/auth-web/src/app/login/page.tsx",
-          "hash": "4481878038029609676"
-        },
-        {
-          "file": "apps/auth-web/src/app/not-found.tsx",
-          "hash": "17906096427528196016"
-        },
-        {
-          "file": "apps/auth-web/src/app/page.tsx",
-          "hash": "4567618685116508642"
-        },
-        {
-          "file": "apps/auth-web/src/app/register/page.tsx",
-          "hash": "9622073490904100083"
-        },
-        {
-          "file": "apps/auth-web/src/app/reset-password/page.tsx",
-          "hash": "15118164275335044078"
-        },
-        {
-          "file": "apps/auth-web/src/app/verify-email/page.tsx",
-          "hash": "10003581702410900454"
-        },
-        {
-          "file": "apps/auth-web/src/components/auth/AuthLayout.tsx",
-          "hash": "5903368209103890128"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Alert.tsx",
-          "hash": "12470985303198605451"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Badge.tsx",
-          "hash": "2811464931792897955"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Button.tsx",
-          "hash": "11228297964220026661"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Card.tsx",
-          "hash": "12675134903608939870"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Checkbox.tsx",
-          "hash": "9723264194204996131"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/ConfirmDialog.tsx",
-          "hash": "15457945203390544711"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/EmptyState.tsx",
-          "hash": "5572827929709823500"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/FormField.tsx",
-          "hash": "9614545578408228937"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Input.tsx",
-          "hash": "6256208098942052598"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Modal.tsx",
-          "hash": "15864451565660237110"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Pagination.tsx",
-          "hash": "6550256956053313147"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/PasswordInput.tsx",
-          "hash": "6936574151342347308"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Select.tsx",
-          "hash": "12635154147386213690"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Skeleton.tsx",
-          "hash": "1031555091361028764"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Spinner.tsx",
-          "hash": "15638010288998606061"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Textarea.tsx",
-          "hash": "7744849850738883986"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Tooltip.tsx",
-          "hash": "17667141075389141254"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/index.ts",
-          "hash": "10881532955205620032"
-        },
-        {
-          "file": "apps/auth-web/src/lib/api.ts",
-          "hash": "8800901008555811550"
-        },
-        {
-          "file": "apps/auth-web/src/types/user.ts",
-          "hash": "14784906957447820365"
-        },
-        {
-          "file": "apps/auth-web/tsconfig.json",
-          "hash": "8568508057185241381"
-        }
-      ],
-      "@blih/types": [
-        {
-          "file": "packages/types/package.json",
-          "hash": "8881237571806645053"
-        },
-        {
-          "file": "packages/types/src/index.ts",
-          "hash": "8534277695626630103"
-        }
       ]
-    },
-    "nonProjectFiles": [
-      {
-        "file": ".gitignore",
-        "hash": "5855524580645261722"
-      },
-      {
-        "file": "Blih_Product_Documentation_v2.md",
-        "hash": "12870244484643972784"
-      },
-      {
-        "file": "DESIGN.md",
-        "hash": "16333061076861862651"
-      },
-      {
-        "file": "README.md",
-        "hash": "6287141397237032145"
-      },
-      {
-        "file": "blih-api/.env.example",
-        "hash": "1451883925983306051"
-      },
-      {
-        "file": "blih-api/.gitattributes",
-        "hash": "18007627905445077091"
-      },
-      {
-        "file": "blih-api/.gitignore",
-        "hash": "6931383573275338261"
-      },
-      {
-        "file": "blih-api/README.md",
-        "hash": "10290654970018413041"
-      },
-      {
-        "file": "blih-api/docker-compose.yml",
-        "hash": "4269043306192000919"
-      },
-      {
-        "file": "blih-api/jest.config.js",
-        "hash": "942688081172211732"
-      },
-      {
-        "file": "blih-api/package-lock.json",
-        "hash": "4083431579217918502"
-      },
-      {
-        "file": "blih-api/package.json",
-        "hash": "12452149095443283934"
-      },
-      {
-        "file": "blih-api/prisma.config.ts",
-        "hash": "9385480991041479100"
-      },
-      {
-        "file": "blih-api/prisma/migrations/20260819071224_init/migration.sql",
-        "hash": "13080037123350356338"
-      },
-      {
-        "file": "blih-api/prisma/migrations/20260819084055_add_auth_tokens/migration.sql",
-        "hash": "12098351857567456840"
-      },
-      {
-        "file": "blih-api/prisma/migrations/20260821050622_add_profiles/migration.sql",
-        "hash": "8518454978534255351"
-      },
-      {
-        "file": "blih-api/prisma/migrations/20260821064109_add_title_to_talent_profile/migration.sql",
-        "hash": "9987202511525505468"
-      },
-      {
-        "file": "blih-api/prisma/migrations/20260826053722_add_courses/migration.sql",
-        "hash": "4781183089290660796"
-      },
-      {
-        "file": "blih-api/prisma/migrations/migration_lock.toml",
-        "hash": "872437952673290735"
-      },
-      {
-        "file": "blih-api/prisma/schema.prisma",
-        "hash": "14969271593157660494"
-      },
-      {
-        "file": "blih-api/prisma/seed.ts",
-        "hash": "6317381878895733534"
-      },
-      {
-        "file": "blih-api/src/__tests__/courses.test.ts",
-        "hash": "5272054501340095588"
-      },
-      {
-        "file": "blih-api/src/app.ts",
-        "hash": "12209427252609161734"
-      },
-      {
-        "file": "blih-api/src/config/env.ts",
-        "hash": "16307933689038804814"
-      },
-      {
-        "file": "blih-api/src/config/prisma.ts",
-        "hash": "10040464699348266531"
-      },
-      {
-        "file": "blih-api/src/config/swagger.ts",
-        "hash": "8632860766502464566"
-      },
-      {
-        "file": "blih-api/src/middleware/auth.ts",
-        "hash": "3651718481723581151"
-      },
-      {
-        "file": "blih-api/src/middleware/errorHandler.ts",
-        "hash": "17682005669793549223"
-      },
-      {
-        "file": "blih-api/src/middleware/upload.ts",
-        "hash": "11127565957839035409"
-      },
-      {
-        "file": "blih-api/src/middleware/validate.ts",
-        "hash": "799354337113215264"
-      },
-      {
-        "file": "blih-api/src/modules/applications/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/auth/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/auth/auth.controller.ts",
-        "hash": "6470578431386930095"
-      },
-      {
-        "file": "blih-api/src/modules/auth/auth.routes.ts",
-        "hash": "460884425514946935"
-      },
-      {
-        "file": "blih-api/src/modules/auth/auth.schemas.ts",
-        "hash": "17370123351565338038"
-      },
-      {
-        "file": "blih-api/src/modules/certificates/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/companies/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/companies/company.controller.ts",
-        "hash": "14160916383672748291"
-      },
-      {
-        "file": "blih-api/src/modules/companies/company.routes.ts",
-        "hash": "13485456927714454624"
-      },
-      {
-        "file": "blih-api/src/modules/companies/company.schemas.ts",
-        "hash": "5767535536837298161"
-      },
-      {
-        "file": "blih-api/src/modules/companies/company.service.ts",
-        "hash": "3122098654101133626"
-      },
-      {
-        "file": "blih-api/src/modules/courses/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/courses/course.controller.ts",
-        "hash": "12513028938909517987"
-      },
-      {
-        "file": "blih-api/src/modules/courses/course.routes.ts",
-        "hash": "14131030556694858116"
-      },
-      {
-        "file": "blih-api/src/modules/courses/course.schemas.ts",
-        "hash": "2097398684077465824"
-      },
-      {
-        "file": "blih-api/src/modules/courses/course.service.ts",
-        "hash": "10283600213506944699"
-      },
-      {
-        "file": "blih-api/src/modules/jobs/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/learning/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/notifications/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/payments/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/subscriptions/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/talents/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/modules/talents/talent.controller.ts",
-        "hash": "14239260558004129451"
-      },
-      {
-        "file": "blih-api/src/modules/talents/talent.routes.ts",
-        "hash": "11900793091696143807"
-      },
-      {
-        "file": "blih-api/src/modules/talents/talent.schemas.ts",
-        "hash": "878879275129292538"
-      },
-      {
-        "file": "blih-api/src/modules/talents/talent.service.ts",
-        "hash": "16326594699484645221"
-      },
-      {
-        "file": "blih-api/src/modules/users/.gitkeep",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "blih-api/src/routes/index.ts",
-        "hash": "17316577812708622670"
-      },
-      {
-        "file": "blih-api/src/server.ts",
-        "hash": "18432500194477441454"
-      },
-      {
-        "file": "blih-api/src/types/auth.types.ts",
-        "hash": "4802892097338336846"
-      },
-      {
-        "file": "blih-api/tsconfig.json",
-        "hash": "5852235872430896258"
-      },
-      {
-        "file": "blih-auth-web/.env.local.example",
-        "hash": "12826300261671813054"
-      },
-      {
-        "file": "blih-auth-web/.gitattributes",
-        "hash": "18007627905445077091"
-      },
-      {
-        "file": "blih-auth-web/.gitignore",
-        "hash": "18029942368515381371"
-      },
-      {
-        "file": "blih-auth-web/README.md",
-        "hash": "1621972162990641063"
-      },
-      {
-        "file": "blih-auth-web/eslint.config.mjs",
-        "hash": "1702003467233685370"
-      },
-      {
-        "file": "blih-auth-web/next-env.d.ts",
-        "hash": "11942690884056199491"
-      },
-      {
-        "file": "blih-auth-web/next.config.js",
-        "hash": "4278534899681944106"
-      },
-      {
-        "file": "blih-auth-web/package-lock.json",
-        "hash": "2429801802523248333"
-      },
-      {
-        "file": "blih-auth-web/package.json",
-        "hash": "885405659508954221"
-      },
-      {
-        "file": "blih-auth-web/postcss.config.js",
-        "hash": "14822812834701160985"
-      },
-      {
-        "file": "blih-auth-web/src/app/forgot-password/page.tsx",
-        "hash": "16117192872580819769"
-      },
-      {
-        "file": "blih-auth-web/src/app/globals.css",
-        "hash": "9369986677379985839"
-      },
-      {
-        "file": "blih-auth-web/src/app/layout.tsx",
-        "hash": "3587392602946276714"
-      },
-      {
-        "file": "blih-auth-web/src/app/login/page.tsx",
-        "hash": "4481878038029609676"
-      },
-      {
-        "file": "blih-auth-web/src/app/not-found.tsx",
-        "hash": "17906096427528196016"
-      },
-      {
-        "file": "blih-auth-web/src/app/page.tsx",
-        "hash": "4567618685116508642"
-      },
-      {
-        "file": "blih-auth-web/src/app/register/page.tsx",
-        "hash": "9622073490904100083"
-      },
-      {
-        "file": "blih-auth-web/src/app/reset-password/page.tsx",
-        "hash": "15118164275335044078"
-      },
-      {
-        "file": "blih-auth-web/src/app/verify-email/page.tsx",
-        "hash": "10003581702410900454"
-      },
-      {
-        "file": "blih-auth-web/src/components/auth/AuthLayout.tsx",
-        "hash": "5903368209103890128"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Alert.tsx",
-        "hash": "12470985303198605451"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Badge.tsx",
-        "hash": "2811464931792897955"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Button.tsx",
-        "hash": "11228297964220026661"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Card.tsx",
-        "hash": "12675134903608939870"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Checkbox.tsx",
-        "hash": "9723264194204996131"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/ConfirmDialog.tsx",
-        "hash": "15457945203390544711"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/EmptyState.tsx",
-        "hash": "5572827929709823500"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/FormField.tsx",
-        "hash": "9614545578408228937"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Input.tsx",
-        "hash": "6256208098942052598"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Modal.tsx",
-        "hash": "15864451565660237110"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Pagination.tsx",
-        "hash": "6550256956053313147"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/PasswordInput.tsx",
-        "hash": "6936574151342347308"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Select.tsx",
-        "hash": "12635154147386213690"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Skeleton.tsx",
-        "hash": "1031555091361028764"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Spinner.tsx",
-        "hash": "15638010288998606061"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Textarea.tsx",
-        "hash": "7744849850738883986"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/Tooltip.tsx",
-        "hash": "17667141075389141254"
-      },
-      {
-        "file": "blih-auth-web/src/components/ui/index.ts",
-        "hash": "10881532955205620032"
-      },
-      {
-        "file": "blih-auth-web/src/lib/api.ts",
-        "hash": "8800901008555811550"
-      },
-      {
-        "file": "blih-auth-web/src/types/user.ts",
-        "hash": "14784906957447820365"
-      },
-      {
-        "file": "blih-auth-web/tsconfig.json",
-        "hash": "8568508057185241381"
-      },
-      {
-        "file": "blih-skills-web/.env.local.example",
-        "hash": "3707606950370373805"
-      },
-      {
-        "file": "blih-skills-web/.gitattributes",
-        "hash": "18007627905445077091"
-      },
-      {
-        "file": "blih-skills-web/.gitignore",
-        "hash": "12382257461612073840"
-      },
-      {
-        "file": "blih-skills-web/README.md",
-        "hash": "3388998997074902824"
-      },
-      {
-        "file": "blih-skills-web/eslint.config.mjs",
-        "hash": "1702003467233685370"
-      },
-      {
-        "file": "blih-skills-web/next-env.d.ts",
-        "hash": "11942690884056199491"
-      },
-      {
-        "file": "blih-skills-web/next.config.js",
-        "hash": "4278534899681944106"
-      },
-      {
-        "file": "blih-skills-web/package-lock.json",
-        "hash": "11269273641153072264"
-      },
-      {
-        "file": "blih-skills-web/package.json",
-        "hash": "6489130881424649808"
-      },
-      {
-        "file": "blih-skills-web/postcss.config.js",
-        "hash": "3234494678065701231"
-      },
-      {
-        "file": "blih-skills-web/src/app/admin/courses/[courseId]/edit/page.tsx",
-        "hash": "2150894441781762697"
-      },
-      {
-        "file": "blih-skills-web/src/app/admin/courses/new/page.tsx",
-        "hash": "12283736308511291205"
-      },
-      {
-        "file": "blih-skills-web/src/app/admin/courses/page.tsx",
-        "hash": "3287840124296972306"
-      },
-      {
-        "file": "blih-skills-web/src/app/admin/page.tsx",
-        "hash": "8849228657604542688"
-      },
-      {
-        "file": "blih-skills-web/src/app/certificates/page.tsx",
-        "hash": "8520018835441693045"
-      },
-      {
-        "file": "blih-skills-web/src/app/courses/[courseId]/learn/page.tsx",
-        "hash": "5439429825176217820"
-      },
-      {
-        "file": "blih-skills-web/src/app/courses/[courseId]/page.tsx",
-        "hash": "4488679393062527072"
-      },
-      {
-        "file": "blih-skills-web/src/app/courses/page.tsx",
-        "hash": "3775587116484274763"
-      },
-      {
-        "file": "blih-skills-web/src/app/dashboard/page.tsx",
-        "hash": "9448179540228638032"
-      },
-      {
-        "file": "blih-skills-web/src/app/globals.css",
-        "hash": "9369986677379985839"
-      },
-      {
-        "file": "blih-skills-web/src/app/layout.tsx",
-        "hash": "1887368637093420409"
-      },
-      {
-        "file": "blih-skills-web/src/app/not-found.tsx",
-        "hash": "4590452738134371193"
-      },
-      {
-        "file": "blih-skills-web/src/app/page.tsx",
-        "hash": "9836273654053753011"
-      },
-      {
-        "file": "blih-skills-web/src/app/profile/page.tsx",
-        "hash": "1162991208464963775"
-      },
-      {
-        "file": "blih-skills-web/src/components/auth/AuthGuard.tsx",
-        "hash": "17411417529872239324"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Alert.tsx",
-        "hash": "12470985303198605451"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Badge.tsx",
-        "hash": "2811464931792897955"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Button.tsx",
-        "hash": "11228297964220026661"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Card.tsx",
-        "hash": "12675134903608939870"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Checkbox.tsx",
-        "hash": "9723264194204996131"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/ConfirmDialog.tsx",
-        "hash": "15457945203390544711"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/EmptyState.tsx",
-        "hash": "5572827929709823500"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/FormField.tsx",
-        "hash": "9614545578408228937"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Input.tsx",
-        "hash": "6256208098942052598"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Modal.tsx",
-        "hash": "15864451565660237110"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Pagination.tsx",
-        "hash": "6550256956053313147"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/PasswordInput.tsx",
-        "hash": "6936574151342347308"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Select.tsx",
-        "hash": "12635154147386213690"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Skeleton.tsx",
-        "hash": "1031555091361028764"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Spinner.tsx",
-        "hash": "15638010288998606061"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Textarea.tsx",
-        "hash": "7744849850738883986"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/Tooltip.tsx",
-        "hash": "17667141075389141254"
-      },
-      {
-        "file": "blih-skills-web/src/components/ui/index.ts",
-        "hash": "10881532955205620032"
-      },
-      {
-        "file": "blih-skills-web/src/lib/api.ts",
-        "hash": "8046290248135554880"
-      },
-      {
-        "file": "blih-skills-web/src/lib/courses.ts",
-        "hash": "15681375267167942864"
-      },
-      {
-        "file": "blih-skills-web/src/providers/AuthProvider.tsx",
-        "hash": "4229945863402148898"
-      },
-      {
-        "file": "blih-skills-web/src/types/course.ts",
-        "hash": "7327158235774203327"
-      },
-      {
-        "file": "blih-skills-web/src/types/user.ts",
-        "hash": "8534277695626630103"
-      },
-      {
-        "file": "blih-skills-web/tsconfig.json",
-        "hash": "8568508057185241381"
-      },
-      {
-        "file": "blih-talent-web/.env.local.example",
-        "hash": "4339450732623912510"
-      },
-      {
-        "file": "blih-talent-web/.gitattributes",
-        "hash": "18007627905445077091"
-      },
-      {
-        "file": "blih-talent-web/.gitignore",
-        "hash": "12382257461612073840"
-      },
-      {
-        "file": "blih-talent-web/README.md",
-        "hash": "3810607537432105992"
-      },
-      {
-        "file": "blih-talent-web/eslint.config.mjs",
-        "hash": "1702003467233685370"
-      },
-      {
-        "file": "blih-talent-web/next-env.d.ts",
-        "hash": "11942690884056199491"
-      },
-      {
-        "file": "blih-talent-web/next.config.js",
-        "hash": "3740100178546445603"
-      },
-      {
-        "file": "blih-talent-web/package-lock.json",
-        "hash": "3219571090009885126"
-      },
-      {
-        "file": "blih-talent-web/package.json",
-        "hash": "10255009942965643404"
-      },
-      {
-        "file": "blih-talent-web/postcss.config.js",
-        "hash": "14822812834701160985"
-      },
-      {
-        "file": "blih-talent-web/src/app/applications/page.tsx",
-        "hash": "1820009975352032707"
-      },
-      {
-        "file": "blih-talent-web/src/app/companies/[companyId]/page.tsx",
-        "hash": "16986685662301583548"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/jobs/[jobId]/applications/page.tsx",
-        "hash": "1960455650608303270"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/jobs/[jobId]/edit/page.tsx",
-        "hash": "4851618416439682055"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/jobs/new/page.tsx",
-        "hash": "2519133146375085976"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/jobs/page.tsx",
-        "hash": "15337427914149429494"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/page.tsx",
-        "hash": "8692572927864529343"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/profile/page.tsx",
-        "hash": "6688159611963133410"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/subscription/page.tsx",
-        "hash": "16072769851978100922"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/talents/[talentId]/page.tsx",
-        "hash": "6952068079018745202"
-      },
-      {
-        "file": "blih-talent-web/src/app/company/talents/page.tsx",
-        "hash": "2936179207238831051"
-      },
-      {
-        "file": "blih-talent-web/src/app/globals.css",
-        "hash": "9369986677379985839"
-      },
-      {
-        "file": "blih-talent-web/src/app/jobs/[jobId]/page.tsx",
-        "hash": "12068025268226443565"
-      },
-      {
-        "file": "blih-talent-web/src/app/jobs/page.tsx",
-        "hash": "5727709689226849336"
-      },
-      {
-        "file": "blih-talent-web/src/app/layout.tsx",
-        "hash": "3586034032614042168"
-      },
-      {
-        "file": "blih-talent-web/src/app/not-found.tsx",
-        "hash": "15381425775975098845"
-      },
-      {
-        "file": "blih-talent-web/src/app/page.tsx",
-        "hash": "13009049067788055500"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/edit/page.tsx",
-        "hash": "16397132854718760800"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/layout.tsx",
-        "hash": "15157894698973547354"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/page.tsx",
-        "hash": "2458757158416594654"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/preview/page.tsx",
-        "hash": "9298188508793606785"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/setup/layout.tsx",
-        "hash": "10471761783863281484"
-      },
-      {
-        "file": "blih-talent-web/src/app/profile/setup/page.tsx",
-        "hash": "8683848812059342772"
-      },
-      {
-        "file": "blih-talent-web/src/components/auth/AuthGuard.tsx",
-        "hash": "1104296736738535776"
-      },
-      {
-        "file": "blih-talent-web/src/components/layout/MobileSidebar.tsx",
-        "hash": "1344210079209033991"
-      },
-      {
-        "file": "blih-talent-web/src/components/layout/SectionNav.tsx",
-        "hash": "16360447946256270062"
-      },
-      {
-        "file": "blih-talent-web/src/components/layout/Sidebar.tsx",
-        "hash": "16643867745857563488"
-      },
-      {
-        "file": "blih-talent-web/src/components/layout/Topbar.tsx",
-        "hash": "17560848618358365714"
-      },
-      {
-        "file": "blih-talent-web/src/components/layout/index.ts",
-        "hash": "6310674565221903254"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/CvUpload.tsx",
-        "hash": "11788287383542198758"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/EducationForm.tsx",
-        "hash": "12731239170665008664"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/ExperienceForm.tsx",
-        "hash": "1490563389677603999"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/GeneralDetailsForm.tsx",
-        "hash": "16204319309004479616"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/LogoUpload.tsx",
-        "hash": "5592243771452058683"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/PhotoUpload.tsx",
-        "hash": "5891944604669146554"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/ProfileCompletionBanner.tsx",
-        "hash": "9490483837737882708"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/SkillsInput.tsx",
-        "hash": "15190749370476701771"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/setup/StepExpertise.tsx",
-        "hash": "10539105808757470793"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/setup/StepMedia.tsx",
-        "hash": "18258949612964467358"
-      },
-      {
-        "file": "blih-talent-web/src/components/profile/setup/StepPersonalInfo.tsx",
-        "hash": "12711817073112912850"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Alert.tsx",
-        "hash": "12470985303198605451"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Badge.tsx",
-        "hash": "2811464931792897955"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Button.tsx",
-        "hash": "11228297964220026661"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Card.tsx",
-        "hash": "12675134903608939870"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Checkbox.tsx",
-        "hash": "9723264194204996131"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/ConfirmDialog.tsx",
-        "hash": "15457945203390544711"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/EmptyState.tsx",
-        "hash": "5572827929709823500"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/FormField.tsx",
-        "hash": "9614545578408228937"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Input.tsx",
-        "hash": "6256208098942052598"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Modal.tsx",
-        "hash": "15864451565660237110"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Pagination.tsx",
-        "hash": "6550256956053313147"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/PasswordInput.tsx",
-        "hash": "6936574151342347308"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Select.tsx",
-        "hash": "12635154147386213690"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Skeleton.tsx",
-        "hash": "1031555091361028764"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Spinner.tsx",
-        "hash": "15638010288998606061"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Textarea.tsx",
-        "hash": "7744849850738883986"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/Tooltip.tsx",
-        "hash": "17667141075389141254"
-      },
-      {
-        "file": "blih-talent-web/src/components/ui/index.ts",
-        "hash": "10881532955205620032"
-      },
-      {
-        "file": "blih-talent-web/src/hooks/useCompanyProfile.ts",
-        "hash": "14596740744585918570"
-      },
-      {
-        "file": "blih-talent-web/src/hooks/useTalentProfile.ts",
-        "hash": "10414191240609224607"
-      },
-      {
-        "file": "blih-talent-web/src/lib/api.ts",
-        "hash": "9391382850197735380"
-      },
-      {
-        "file": "blih-talent-web/src/lib/companyApi.ts",
-        "hash": "15101490555214070584"
-      },
-      {
-        "file": "blih-talent-web/src/lib/talentApi.ts",
-        "hash": "13193109973768060579"
-      },
-      {
-        "file": "blih-talent-web/src/providers/AuthProvider.tsx",
-        "hash": "4229945863402148898"
-      },
-      {
-        "file": "blih-talent-web/src/shared/talent.schemas.ts",
-        "hash": "16299821671241880782"
-      },
-      {
-        "file": "blih-talent-web/src/state/profile/profileForm.ts",
-        "hash": "2278412952720960715"
-      },
-      {
-        "file": "blih-talent-web/src/types/edit.ts",
-        "hash": "9089960290745894843"
-      },
-      {
-        "file": "blih-talent-web/src/types/profile.ts",
-        "hash": "4340050886218081486"
-      },
-      {
-        "file": "blih-talent-web/src/types/setup.ts",
-        "hash": "9567887930131584397"
-      },
-      {
-        "file": "blih-talent-web/src/types/user.ts",
-        "hash": "8534277695626630103"
-      },
-      {
-        "file": "blih-talent-web/tsconfig.json",
-        "hash": "10809079493683637700"
-      },
-      {
-        "file": "nx.json",
-        "hash": "16429485800271762598"
-      },
-      {
-        "file": "package.json",
-        "hash": "14353842317020433229"
-      },
-      {
-        "file": "pnpm-workspace.yaml",
-        "hash": "2373171212127886927"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/admin_dashboard_blih_skills/code.html",
-        "hash": "3938466743774038939"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/admin_dashboard_blih_skills/screen.png",
-        "hash": "3397376699370991092"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/blih_product_documentation_v2.md",
-        "hash": "12870244484643972784"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/blihops/DESIGN.md",
-        "hash": "5810169155675119442"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/company_dashboard_blih_talent/code.html",
-        "hash": "2749054455484503166"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/company_dashboard_blih_talent/screen.png",
-        "hash": "7372057514062264319"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/company_settings_blih_talent/code.html",
-        "hash": "14982859215148209230"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/company_settings_blih_talent/screen.png",
-        "hash": "16015396800663204851"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/complete_your_profile_blih_talent/code.html",
-        "hash": "6219031839975933611"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/complete_your_profile_blih_talent/screen.png",
-        "hash": "12079350588050064341"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/course_catalog_blih_skills/code.html",
-        "hash": "7673421817612164349"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/course_catalog_blih_skills/screen.png",
-        "hash": "16925844069368591544"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/design.md",
-        "hash": "16333061076861862651"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/find_jobs_blih_talent/code.html",
-        "hash": "4401300785989303266"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/find_jobs_blih_talent/screen.png",
-        "hash": "13595856285960376474"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/job_applications_blih_talent/code.html",
-        "hash": "12198928792515313927"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/job_applications_blih_talent/screen.png",
-        "hash": "14358267566528645257"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/learner_dashboard_blih_skills/code.html",
-        "hash": "13362771148032568245"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/learner_dashboard_blih_skills/screen.png",
-        "hash": "11191946445191115560"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/lesson_player_blih_skills/code.html",
-        "hash": "15382436991356434097"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/lesson_player_blih_skills/screen.png",
-        "hash": "8104394090967846950"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/login_blih_auth/code.html",
-        "hash": "2435183416588873948"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/login_blih_auth/screen.png",
-        "hash": "10154945994531334055"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/manage_jobs_blih_talent/code.html",
-        "hash": "16727048625755140023"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/manage_jobs_blih_talent/screen.png",
-        "hash": "7004089810343151145"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/my_applications_blih_talent/code.html",
-        "hash": "14566192325821589098"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/my_applications_blih_talent/screen.png",
-        "hash": "17895751072300077974"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/password_reset_blih_auth/code.html",
-        "hash": "11616565539658041157"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/password_reset_blih_auth/screen.png",
-        "hash": "12324223715123658850"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/post_a_new_job_blih_talent/code.html",
-        "hash": "6155013721008370727"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/post_a_new_job_blih_talent/screen.png",
-        "hash": "11614142090610223151"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/register_blih_auth/code.html",
-        "hash": "7932894824866386911"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/register_blih_auth/screen.png",
-        "hash": "10287937965059812608"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/remote_operations_fundamentals_blih_skills/code.html",
-        "hash": "1926063499691554228"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/remote_operations_fundamentals_blih_skills/screen.png",
-        "hash": "4840762904444025422"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/subscription_blih_talent/code.html",
-        "hash": "7625701917284223829"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/subscription_blih_talent/screen.png",
-        "hash": "12060330985969299528"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/talent_profile_blih_talent/code.html",
-        "hash": "91081458261026616"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/talent_profile_blih_talent/screen.png",
-        "hash": "10228515141004843178"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/talent_search_blih_talent/code.html",
-        "hash": "16072653747760208074"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/talent_search_blih_talent/screen.png",
-        "hash": "1720973005956209023"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/verify_email_blih_auth/code.html",
-        "hash": "7346120275245963917"
-      },
-      {
-        "file": "stitch_blih_product_ecosystem_design_system/verify_email_blih_auth/screen.png",
-        "hash": "15171161344472670647"
-      },
-      {
-        "file": "tsconfig.base.json",
-        "hash": "10232939708745786393"
-      }
-    ]
+    }
   }
 }

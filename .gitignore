@@ -33,6 +33,7 @@ Thumbs.db
 
 # Nx cache
 .nx/cache/
+.nx/workspace-data/
 
 # Prisma
 apps/api/prisma/generated/

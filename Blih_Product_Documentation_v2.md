@@ -13,6 +13,21 @@ api.blih.com     →  One API
 
 The exact production domains can change later. These names describe the planned separation of responsibilities.
 
+### Repository Architecture
+
+The entire Blih platform is structured as a single Nx Monorepo (in `blih-ops`). This approach allows all projects to share code while remaining independently deployable:
+
+- **Apps (`apps/`)**:
+  - `api`: The single backend API (Express + Prisma).
+  - `auth-web`: Authentication web frontend (Next.js).
+  - `skills-web`: Skills/Learner web frontend (Next.js).
+  - `talent-web`: Talent/Company web frontend (Next.js).
+- **Shared Packages (`packages/`)**:
+  - `api-client`: Centralized data fetching and API hooks.
+  - `types`: Shared TypeScript definitions across the stack.
+  - `ui`: Shared UI components.
+  - `validation`: Shared Zod validation schemas.
+
 ## 2. Skills Web
 
 ### Main users
