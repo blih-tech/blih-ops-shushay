@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  TALENT
+  COMPANY
+  ADMIN
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  role          Role
+  emailVerified     Boolean   @default(false)
+  verificationToken String?
+  resetToken        String?
+  resetExpires      DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  talentProfile TalentProfile?
+  companyProfile CompanyProfile?
+
+  @@map("users")
+}
+
+enum EnglishLevel {
+  BASIC
+  CONVERSATIONAL
+  PROFESSIONAL
+  FLUENT
+  NATIVE
+}
+
+model TalentProfile {
+  id           String       @id @default(cuid())
+  userId       String       @unique
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName     String?
+  title        String?
+  phone        String?
+  country      String?
+  city         String?
+  englishLevel EnglishLevel?
+  skills       String[]
+  bio          String?
+  photoUrl     String?
+  cvUrl        String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  experience   Experience[]
+  education    Education[]
+
+  @@map("talent_profiles")
+}
+
+model Experience {
+  id          String        @id @default(cuid())
+  profileId   String
+  profile     TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  company     String
+  startDate   DateTime
+  endDate     DateTime?
+  current     Boolean       @default(false)
+  description String?
+
+  @@map("experiences")
+}
+
+model Education {
+  id          String        @id @default(cuid())
+  profileId   String
+  profile     TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  institution String
+  degree      String
+  field       String?
+  startYear   Int
+  endYear     Int?
+
+  @@map("education")
+}
+
+model CompanyProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName       String?
+  description       String?
+  website           String?
+  country           String?
+  city              String?
+  contactName       String?
+  contactEmail      String?
+  contactPhone      String?
+  logoUrl           String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("company_profiles")
+}
+
+// ─── Course Domain ──────────────────────────────────────────────────────────
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model Course {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  status      CourseStatus @default(DRAFT)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  lessons     Lesson[]
+
+  @@map("courses")
+}
+
+model Lesson {
+  id         String          @id @default(cuid())
+  courseId   String
+  course     Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title      String
+  content    String?         // Written content (markdown / plain text)
+  order      Int
+  videoUrl   String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  documents  LessonDocument[]
+  quiz       Quiz?
+  assignment Assignment?
+
+  @@index([courseId, order])
+  @@map("lessons")
+}
+
+model LessonDocument {
+  id        String   @id @default(cuid())
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+
+  @@index([lessonId])
+  @@map("lesson_documents")
+}
+
+model Quiz {
+  id        String   @id @default(cuid())
+  lessonId  String   @unique
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  title     String
+  questions Json     // Array of { text: string, options: string[], correctOptionIndex: number }
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quizzes")
+}
+
+model Assignment {
+  id           String   @id @default(cuid())
+  lessonId     String   @unique
+  lesson       Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  title        String
+  instructions String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("assignments")
+}
+

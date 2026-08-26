@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Job Management - Blih Ecosystem</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500&amp;family=Source+Serif+4:wght@600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#adc6ff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#ffdcc6",
+                      "destructive": "#EF4444",
+                      "surface-container-highest": "#e1e2ec",
+                      "body-text": "#4B5563",
+                      "secondary-fixed": "#e1e2e4",
+                      "on-primary": "#ffffff",
+                      "background": "#f9f9ff",
+                      "inverse-surface": "#2e3038",
+                      "surface-container-low": "#f2f3fd",
+                      "on-surface": "#191b23",
+                      "surface-container": "#ecedf7",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-variant": "#e1e2ec",
+                      "error-container": "#ffdad6",
+                      "dark-surface": "#171717",
+                      "surface-dim": "#d8d9e3",
+                      "on-tertiary-fixed": "#311400",
+                      "on-secondary": "#ffffff",
+                      "on-primary-container": "#fefcff",
+                      "surface-container-high": "#e6e7f2",
+                      "on-surface-variant": "#424754",
+                      "accent-blue-soft": "#E0F2FE",
+                      "on-tertiary-container": "#fffbff",
+                      "surface": "#f9f9ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-bright": "#f9f9ff",
+                      "on-secondary-fixed-variant": "#444749",
+                      "muted-foreground": "#6B7280",
+                      "on-background": "#191b23",
+                      "inverse-on-surface": "#eff0fa",
+                      "on-primary-fixed-variant": "#004395",
+                      "error": "#ba1a1a",
+                      "secondary": "#5c5f60",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "on-error": "#ffffff",
+                      "primary": "#0058be",
+                      "primary-fixed": "#d8e2ff",
+                      "dark-border": "#404040",
+                      "tertiary-container": "#b75b00",
+                      "outline-variant": "#c2c6d6",
+                      "secondary-container": "#dee0e2",
+                      "on-primary-fixed": "#001a42",
+                      "accent-blue-deep": "#1E3A8A",
+                      "outline": "#727785",
+                      "tertiary": "#924700",
+                      "surface-tint": "#005ac2",
+                      "primary-container": "#2170e4",
+                      "secondary-fixed-dim": "#c5c6c8",
+                      "on-secondary-container": "#606365",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#191c1e",
+                      "on-tertiary-fixed-variant": "#723600"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "section-desktop": "96px",
+                      "md": "12px",
+                      "2xl": "48px",
+                      "section-mobile": "64px",
+                      "base": "16px",
+                      "xs": "4px",
+                      "xl": "32px",
+                      "sm": "8px"
+              },
+              "fontFamily": {
+                      "button": [
+                              "\"Inter, sans-serif\""
+                      ],
+                      "display-hero": [
+                              "\"'Source Serif 4', Georgia, serif\""
+                      ],
+                      "label": [
+                              "\"Inter, sans-serif\""
+                      ],
+                      "display-section": [
+                              "\"'Source Serif 4', Georgia, serif\""
+                      ],
+                      "technical": [
+                              "\"'JetBrains Mono', monospace\""
+                      ],
+                      "body-lg": [
+                              "\"Inter, sans-serif\""
+                      ],
+                      "body-md": [
+                              "\"Inter, sans-serif\""
+                      ],
+                      "body-sm": [
+                              "\"Inter, sans-serif\""
+                      ],
+                      "heading-card": [
+                              "\"'Source Serif 4', Georgia, serif\""
+                      ]
+              },
+              "fontSize": {
+                      "button": [
+                              "14px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-hero": [
+                              "60px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "-1.5px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.25",
+                                      "letterSpacing": "1.2px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-section": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.05",
+                                      "letterSpacing": "-1.2px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "technical": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "letterSpacing": "0.6px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.625",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.625",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.625",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "heading-card": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.2px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F9FAFB;
+        }
+        .hairline-border {
+            border: 1px solid #E5E7EB;
+        }
+        .ambient-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased h-screen flex overflow-hidden">
+<!-- SideNavBar Component -->
+<aside class="hidden lg:flex flex-col h-full w-64 bg-surface-container-low border-r border-outline-variant p-base space-y-md shrink-0">
+<!-- Header -->
+<div class="flex items-center gap-md mb-xl px-sm">
+<img alt="Organization Logo" class="w-10 h-10 rounded-DEFAULT object-cover" data-alt="A minimalist, geometric logo representing a modern organization in a bright, clean corporate setting. The logo uses deep blues and crisp whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3gOwxNVkc4krD7zpshT9sK3VnOt9tKBV4tDjiqDGT2WGMxpn1Wo1KcAXMxMFgtoJ21V13jRwC0wUpTc1rCgOcFfDJPViboPr9IHzqRT8V06aWhA8eOrT0lmDd7irYjoRp6iF93N_7_5iT8ITHqbAqPJ6Q-TTT_nF5MrqWtFg6lV9p6eolH94dO6Uw9dSbdm75t3uSMG7hlR4l-zQA0RYKCSvN3MKJ5uEXQOiIdAPOzr6f0bSLPpzjaA"/>
+<div>
+<h2 class="font-display-section text-display-section-mobile text-primary">Blih Ecosystem</h2>
+<p class="font-label text-label text-on-surface-variant">Remote Operations</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 space-y-sm">
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<!-- Active State -->
+<a class="bg-primary-container text-on-primary-container rounded-xl px-md py-sm flex items-center gap-md scale-[0.98] transition-transform duration-200 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="work" data-weight="fill" style="font-variation-settings: 'FILL' 1;">work</span>
+                Jobs
+            </a>
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+                Courses
+            </a>
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="card_membership">card_membership</span>
+                Subscriptions
+            </a>
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analytics
+            </a>
+</nav>
+<!-- CTA & Footer -->
+<div class="mt-auto space-y-md pt-lg border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary h-10 rounded-DEFAULT font-button text-button hover:opacity-90 transition-opacity duration-300">
+                Switch Role
+            </button>
+<div class="space-y-sm">
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                    Support
+                </a>
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-secondary-container rounded-xl transition-all duration-300 font-label text-label" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto bg-[#F9FAFB]">
+<!-- Top App Bar (Mobile Nav Alternative & Page Header) -->
+<header class="bg-surface border-b border-outline-variant h-16 flex items-center justify-between px-lg md:px-2xl sticky top-0 z-10 w-full">
+<div class="flex items-center gap-md">
+<button class="lg:hidden text-on-surface-variant p-sm rounded-DEFAULT hover:bg-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-heading-card text-heading-card text-on-surface">Job Management</h1>
+</div>
+<div class="flex items-center gap-lg">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="pl-xl pr-sm py-sm border border-outline-variant rounded-DEFAULT bg-surface text-body-sm font-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none w-64" placeholder="Search jobs..." type="text"/>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors duration-300 relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full"></span>
+</button>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover hairline-border cursor-pointer" data-alt="A professional headshot of a corporate manager smiling warmly in a bright modern office with natural light." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO4ueWqB2ZQratS7AqkCZDRru-SnoYPQGr3B8Lid9HLgfHdK9im-wf2WVoVn6OulMhDuG2xq0_jet9eUF-w637dOIJCQ9NDd6WYLbxUDtTIIR111iKboEiubo3N2Xv6cc66VUCcLiiywI5eMXxOufLz9Tg0WK5MzxUcsNFQeh2zRyYsnwz7-BzW-_a-i9pVlaOhxadDJ17XVWU-supKa-O-OT4M55oRa8MyjWVrxjuOBOjjPjDwtDLXA"/>
+</div>
+</header>
+<!-- Content Area -->
+<div class="max-w-7xl mx-auto p-lg md:p-2xl space-y-xl">
+<!-- Page Header & Global Actions -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-base">
+<div>
+<h2 class="font-display-section text-display-section text-on-surface">Active Postings</h2>
+<p class="font-body-md text-body-md text-muted-foreground mt-xs">Manage and track all current job requisitions.</p>
+</div>
+<button class="bg-primary text-on-primary h-10 px-lg rounded-DEFAULT font-button text-button flex items-center gap-sm hover:bg-primary-container hover:text-on-primary-container transition-all duration-300 ambient-shadow">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Post New Job
+                </button>
+</div>
+<!-- Metric Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="bg-surface p-lg rounded-lg hairline-border ambient-shadow flex flex-col justify-between h-32">
+<div class="flex items-center justify-between">
+<p class="font-label text-label text-muted-foreground uppercase tracking-wider">Total Active Jobs</p>
+<span class="material-symbols-outlined text-outline">work_outline</span>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-technical text-[32px] font-bold text-on-surface leading-none">24</span>
+<span class="font-technical text-technical text-primary mb-1">+3 this week</span>
+</div>
+</div>
+<div class="bg-surface p-lg rounded-lg hairline-border ambient-shadow flex flex-col justify-between h-32">
+<div class="flex items-center justify-between">
+<p class="font-label text-label text-muted-foreground uppercase tracking-wider">Total Applications</p>
+<span class="material-symbols-outlined text-outline">group</span>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-technical text-[32px] font-bold text-on-surface leading-none">1,204</span>
+<span class="font-technical text-technical text-primary mb-1">+15% vs last month</span>
+</div>
+</div>
+<div class="bg-surface p-lg rounded-lg hairline-border ambient-shadow flex flex-col justify-between h-32">
+<div class="flex items-center justify-between">
+<p class="font-label text-label text-muted-foreground uppercase tracking-wider">Time to Hire (Avg)</p>
+<span class="material-symbols-outlined text-outline">schedule</span>
+</div>
+<div class="flex items-end gap-sm">
+<span class="font-technical text-[32px] font-bold text-on-surface leading-none">18</span>
+<span class="font-label text-label text-muted-foreground mb-1">days</span>
+</div>
+</div>
+</div>
+<!-- Structural Panel: Jobs Table -->
+<div class="bg-surface rounded-lg hairline-border ambient-shadow overflow-hidden">
+<!-- Table Header/Filters -->
+<div class="p-base border-b border-outline-variant flex flex-col sm:flex-row justify-between items-center gap-sm bg-surface-container-lowest">
+<div class="flex items-center gap-sm w-full sm:w-auto">
+<button class="px-md py-xs bg-surface-container text-on-surface font-label text-label rounded-full border border-outline-variant">All Roles</button>
+<button class="px-md py-xs bg-transparent text-muted-foreground hover:bg-surface-container font-label text-label rounded-full transition-colors">Engineering</button>
+<button class="px-md py-xs bg-transparent text-muted-foreground hover:bg-surface-container font-label text-label rounded-full transition-colors">Design</button>
+</div>
+<div class="flex items-center gap-sm text-muted-foreground cursor-pointer hover:text-primary transition-colors">
+<span class="font-label text-label">Filter</span>
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-[#F9FAFB]">
+<th class="p-lg font-label text-label text-muted-foreground font-semibold uppercase tracking-wider">Job Title</th>
+<th class="p-lg font-label text-label text-muted-foreground font-semibold uppercase tracking-wider">Status</th>
+<th class="p-lg font-label text-label text-muted-foreground font-semibold uppercase tracking-wider">Applications</th>
+<th class="p-lg font-label text-label text-muted-foreground font-semibold uppercase tracking-wider">Date Posted</th>
+<th class="p-lg font-label text-label text-muted-foreground font-semibold uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-sm text-body-sm text-on-surface">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors duration-200 group">
+<td class="p-lg">
+<div class="font-heading-card text-heading-card text-on-surface mb-xs">Senior Frontend Engineer</div>
+<div class="text-muted-foreground text-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Remote, US
+                                    </div>
+</td>
+<td class="p-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-accent-blue-soft text-accent-blue-deep font-technical text-technical">Active</span>
+</td>
+<td class="p-lg">
+<div class="flex items-center gap-sm">
+<div class="w-16 h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-primary"></div>
+</div>
+<span class="font-technical text-technical">142</span>
+</div>
+</td>
+<td class="p-lg font-technical text-technical text-muted-foreground">Oct 24, 2023</td>
+<td class="p-lg text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="View Applications">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="Edit Job">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors duration-200 group">
+<td class="p-lg">
+<div class="font-heading-card text-heading-card text-on-surface mb-xs">Product Designer</div>
+<div class="text-muted-foreground text-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">location_on</span> London, UK
+                                    </div>
+</td>
+<td class="p-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-technical text-technical">Closed</span>
+</td>
+<td class="p-lg">
+<div class="flex items-center gap-sm">
+<div class="w-16 h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-full h-full bg-outline"></div>
+</div>
+<span class="font-technical text-technical">89</span>
+</div>
+</td>
+<td class="p-lg font-technical text-technical text-muted-foreground">Sep 15, 2023</td>
+<td class="p-lg text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="View Applications">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="Edit Job">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors duration-200 group">
+<td class="p-lg">
+<div class="font-heading-card text-heading-card text-on-surface mb-xs">Data Analyst</div>
+<div class="text-muted-foreground text-xs flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Remote, Global
+                                    </div>
+</td>
+<td class="p-lg">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-accent-blue-soft text-accent-blue-deep font-technical text-technical">Active</span>
+</td>
+<td class="p-lg">
+<div class="flex items-center gap-sm">
+<div class="w-16 h-2 bg-surface-variant rounded-full overflow-hidden">
+<div class="w-1/4 h-full bg-primary"></div>
+</div>
+<span class="font-technical text-technical">34</span>
+</div>
+</td>
+<td class="p-lg font-technical text-technical text-muted-foreground">Nov 02, 2023</td>
+<td class="p-lg text-right">
+<div class="flex justify-end gap-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="View Applications">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+<button class="p-sm text-outline hover:text-primary transition-colors border border-transparent hover:border-outline-variant rounded-DEFAULT" title="Edit Job">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-base border-t border-outline-variant flex items-center justify-between bg-surface-container-lowest">
+<span class="font-label text-label text-muted-foreground">Showing 1-3 of 24 jobs</span>
+<div class="flex items-center gap-xs">
+<button class="p-xs text-outline hover:text-primary disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="p-xs text-outline hover:text-primary">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "skipLibCheck": true,
+    "paths": {
+      "@blih/types": ["packages/types/src/index.ts"],
+      "@blih/api-client": ["packages/api-client/src/index.ts"],
+      "@blih/validation": ["packages/validation/src/index.ts"],
+      "@blih/ui": ["packages/ui/src/index.ts"]
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "blih-ops",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Blih product monorepo — API, Auth, Skills, and Talent applications",
+  "scripts": {
+    "dev:api": "pnpm --filter @blih/api dev",
+    "dev:auth": "pnpm --filter @blih/auth-web dev",
+    "dev:skills": "pnpm --filter @blih/skills-web dev",
+    "dev:talent": "pnpm --filter @blih/talent-web dev"
+  },
+  "devDependencies": {
+    "nx": "^20.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.0"
+}

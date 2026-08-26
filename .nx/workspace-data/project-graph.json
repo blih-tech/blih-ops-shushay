@@ -1,0 +1,654 @@
+{
+  "nodes": {
+    "@blih/api-client": {
+      "name": "@blih/api-client",
+      "type": "lib",
+      "data": {
+        "root": "packages/api-client",
+        "name": "@blih/api-client",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {},
+          "js": {
+            "packageName": "@blih/api-client",
+            "packageExports": {
+              ".": "./src/index.ts"
+            },
+            "packageMain": "./src/index.ts",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {},
+        "implicitDependencies": []
+      }
+    },
+    "@blih/validation": {
+      "name": "@blih/validation",
+      "type": "lib",
+      "data": {
+        "root": "packages/validation",
+        "name": "@blih/validation",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {},
+          "js": {
+            "packageName": "@blih/validation",
+            "packageExports": {
+              ".": "./src/index.ts"
+            },
+            "packageMain": "./src/index.ts",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {},
+        "implicitDependencies": []
+      }
+    },
+    "@blih/skills-web": {
+      "name": "@blih/skills-web",
+      "type": "lib",
+      "data": {
+        "root": "apps/skills-web",
+        "name": "@blih/skills-web",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "dev",
+              "build",
+              "start",
+              "lint",
+              "typecheck"
+            ]
+          },
+          "js": {
+            "packageName": "@blih/skills-web",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "next dev -p 3001",
+              "runCommand": "npm run dev"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "next build",
+              "runCommand": "npm run build"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": [
+              "^build"
+            ],
+            "inputs": [
+              "production",
+              "^production"
+            ],
+            "cache": true
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "next start -p 3001",
+              "runCommand": "npm run start"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint .",
+              "runCommand": "npm run lint"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "{workspaceRoot}/.eslintrc.json"
+            ],
+            "cache": true
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "npm run typecheck"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "^production"
+            ],
+            "cache": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@blih/talent-web": {
+      "name": "@blih/talent-web",
+      "type": "lib",
+      "data": {
+        "root": "apps/talent-web",
+        "name": "@blih/talent-web",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "dev",
+              "build",
+              "start",
+              "lint",
+              "typecheck"
+            ]
+          },
+          "js": {
+            "packageName": "@blih/talent-web",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "next dev -p 3002",
+              "runCommand": "npm run dev"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "next build",
+              "runCommand": "npm run build"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": [
+              "^build"
+            ],
+            "inputs": [
+              "production",
+              "^production"
+            ],
+            "cache": true
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "next start -p 3002",
+              "runCommand": "npm run start"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint .",
+              "runCommand": "npm run lint"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "{workspaceRoot}/.eslintrc.json"
+            ],
+            "cache": true
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "npm run typecheck"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "^production"
+            ],
+            "cache": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@blih/types": {
+      "name": "@blih/types",
+      "type": "lib",
+      "data": {
+        "root": "packages/types",
+        "name": "@blih/types",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {},
+          "js": {
+            "packageName": "@blih/types",
+            "packageExports": {
+              ".": "./src/index.ts"
+            },
+            "packageMain": "./src/index.ts",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {},
+        "implicitDependencies": []
+      }
+    },
+    "@blih/auth-web": {
+      "name": "@blih/auth-web",
+      "type": "lib",
+      "data": {
+        "root": "apps/auth-web",
+        "name": "@blih/auth-web",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "dev",
+              "build",
+              "start",
+              "lint",
+              "typecheck"
+            ]
+          },
+          "js": {
+            "packageName": "@blih/auth-web",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "next dev -p 3003",
+              "runCommand": "npm run dev"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "next build",
+              "runCommand": "npm run build"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": [
+              "^build"
+            ],
+            "inputs": [
+              "production",
+              "^production"
+            ],
+            "cache": true
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "next start -p 3003",
+              "runCommand": "npm run start"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "lint": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "lint"
+            },
+            "metadata": {
+              "scriptContent": "eslint .",
+              "runCommand": "npm run lint"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "{workspaceRoot}/.eslintrc.json"
+            ],
+            "cache": true
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "npm run typecheck"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "^production"
+            ],
+            "cache": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    },
+    "@blih/ui": {
+      "name": "@blih/ui",
+      "type": "lib",
+      "data": {
+        "root": "packages/ui",
+        "name": "@blih/ui",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {},
+          "js": {
+            "packageName": "@blih/ui",
+            "packageExports": {
+              ".": "./src/index.ts"
+            },
+            "packageMain": "./src/index.ts",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {},
+        "implicitDependencies": []
+      }
+    },
+    "@blih/api": {
+      "name": "@blih/api",
+      "type": "lib",
+      "data": {
+        "root": "apps/api",
+        "name": "@blih/api",
+        "tags": [
+          "npm:private"
+        ],
+        "metadata": {
+          "targetGroups": {
+            "NPM Scripts": [
+              "dev",
+              "build",
+              "start",
+              "prisma:migrate",
+              "prisma:generate",
+              "prisma:studio",
+              "seed",
+              "typecheck",
+              "test"
+            ]
+          },
+          "js": {
+            "packageName": "@blih/api",
+            "packageMain": "dist/server.js",
+            "isInPackageManagerWorkspaces": true
+          }
+        },
+        "targets": {
+          "dev": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "dev"
+            },
+            "metadata": {
+              "scriptContent": "ts-node-dev --respawn --transpile-only src/server.ts",
+              "runCommand": "npm run dev"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "build": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "build"
+            },
+            "metadata": {
+              "scriptContent": "tsc",
+              "runCommand": "npm run build"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "dependsOn": [
+              "^build"
+            ],
+            "inputs": [
+              "production",
+              "^production"
+            ],
+            "cache": true
+          },
+          "start": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "start"
+            },
+            "metadata": {
+              "scriptContent": "node dist/server.js",
+              "runCommand": "npm run start"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "prisma:migrate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prisma:migrate"
+            },
+            "metadata": {
+              "scriptContent": "prisma migrate dev",
+              "runCommand": "npm run prisma:migrate"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "prisma:generate": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prisma:generate"
+            },
+            "metadata": {
+              "scriptContent": "prisma generate",
+              "runCommand": "npm run prisma:generate"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "prisma:studio": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "prisma:studio"
+            },
+            "metadata": {
+              "scriptContent": "prisma studio",
+              "runCommand": "npm run prisma:studio"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "seed": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "seed"
+            },
+            "metadata": {
+              "scriptContent": "ts-node prisma/seed.ts",
+              "runCommand": "npm run seed"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "typecheck": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "typecheck"
+            },
+            "metadata": {
+              "scriptContent": "tsc --noEmit",
+              "runCommand": "npm run typecheck"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "^production"
+            ],
+            "cache": true
+          },
+          "test": {
+            "executor": "nx:run-script",
+            "options": {
+              "script": "test"
+            },
+            "metadata": {
+              "scriptContent": "jest",
+              "runCommand": "npm run test"
+            },
+            "configurations": {},
+            "parallelism": true,
+            "inputs": [
+              "default",
+              "^production"
+            ],
+            "cache": true
+          }
+        },
+        "implicitDependencies": []
+      }
+    }
+  },
+  "externalNodes": {},
+  "dependencies": {
+    "@blih/api-client": [],
+    "@blih/validation": [],
+    "@blih/skills-web": [
+      {
+        "source": "@blih/skills-web",
+        "target": "@blih/types",
+        "type": "static"
+      },
+      {
+        "source": "@blih/skills-web",
+        "target": "@blih/api-client",
+        "type": "static"
+      },
+      {
+        "source": "@blih/skills-web",
+        "target": "@blih/ui",
+        "type": "static"
+      }
+    ],
+    "@blih/talent-web": [
+      {
+        "source": "@blih/talent-web",
+        "target": "@blih/types",
+        "type": "static"
+      },
+      {
+        "source": "@blih/talent-web",
+        "target": "@blih/api-client",
+        "type": "static"
+      },
+      {
+        "source": "@blih/talent-web",
+        "target": "@blih/ui",
+        "type": "static"
+      },
+      {
+        "source": "@blih/talent-web",
+        "target": "@blih/validation",
+        "type": "static"
+      }
+    ],
+    "@blih/types": [],
+    "@blih/auth-web": [
+      {
+        "source": "@blih/auth-web",
+        "target": "@blih/types",
+        "type": "static"
+      },
+      {
+        "source": "@blih/auth-web",
+        "target": "@blih/api-client",
+        "type": "static"
+      },
+      {
+        "source": "@blih/auth-web",
+        "target": "@blih/ui",
+        "type": "static"
+      }
+    ],
+    "@blih/ui": [],
+    "@blih/api": [
+      {
+        "source": "@blih/api",
+        "target": "@blih/validation",
+        "type": "static"
+      }
+    ]
+  },
+  "version": "6.0",
+  "errors": [],
+  "computedAt": 1787737301281
+}
