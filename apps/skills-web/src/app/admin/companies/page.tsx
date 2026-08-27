@@ -12,32 +12,12 @@ import {
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
-import { apiFetch } from "@/lib/api";
-
-interface CompanyItem {
-  id: string;
-  userId: string;
-  companyName: string | null;
-  description: string | null;
-  website: string | null;
-  country: string | null;
-  city: string | null;
-  contactName: string | null;
-  contactEmail: string | null;
-  contactPhone: string | null;
-  logoUrl: string | null;
-  createdAt: string;
-  user: {
-    id: string;
-    email: string;
-    role: string;
-    createdAt: string;
-  };
-}
+import { fetchAdminCompanies } from "@/lib/adminApi";
+import type { AdminCompanyItem } from "@/types/admin";
 
 function AdminCompaniesContent() {
   const { user, logout } = useAuth();
-  const [companies, setCompanies] = useState<CompanyItem[]>([]);
+  const [companies, setCompanies] = useState<AdminCompanyItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,8 +27,8 @@ function AdminCompaniesContent() {
       setLoading(true);
       setError(null);
       try {
-        const data = await apiFetch<CompanyItem[]>("/admin/companies");
-        setCompanies(data || []);
+        const data = await fetchAdminCompanies();
+        setCompanies(data);
       } catch (err: any) {
         setError(err.message || "Failed to load company records");
       } finally {
@@ -101,11 +81,11 @@ function AdminCompaniesContent() {
         {error && <Alert variant="error">{error}</Alert>}
 
         {/* Search Bar */}
-        <div className="max-w-md">
+        <div className="w-full">
           <UniversalSearch
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search companies by name, location, contact, or email..."
+            placeholder="Search companies by name, email, country, or contact..."
           />
         </div>
 

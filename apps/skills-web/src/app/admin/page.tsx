@@ -9,15 +9,8 @@ import {
 import AuthGuard from "@/components/auth/AuthGuard";
 import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
-import { apiFetch } from "@/lib/api";
-
-interface AdminStats {
-  totalTalents: number;
-  totalCompanies: number;
-  totalCourses: number;
-  publishedCourses: number;
-  totalLessons: number;
-}
+import { fetchAdminStats } from "@/lib/adminApi";
+import type { AdminStats } from "@/types/admin";
 
 function AdminContent() {
   const { user, logout } = useAuth();
@@ -28,7 +21,7 @@ function AdminContent() {
   useEffect(() => {
     async function loadStats() {
       try {
-        const data = await apiFetch<AdminStats>("/admin/stats");
+        const data = await fetchAdminStats();
         setStats(data);
       } catch (err: any) {
         setError(err.message || "Failed to load platform statistics");

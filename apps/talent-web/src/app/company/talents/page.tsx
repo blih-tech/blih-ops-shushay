@@ -62,7 +62,7 @@ function CompanyTalentsSearchContent() {
 
         {/* Filter & Search Bar */}
         <div className="space-y-4">
-          <div className="max-w-md">
+          <div className="w-full">
             <UniversalSearch
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}

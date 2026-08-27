@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Plus, BookOpen, Pencil, Eye, EyeOff, GraduationCap, ArrowLeft } from "lucide-react";
 import {
-  Button, Badge, Alert, Skeleton, EmptyState, ConfirmDialog, Card, CardContent, GlobalNavbar
+  Button, Badge, Alert, Skeleton, EmptyState, ConfirmDialog, Card, CardContent, GlobalNavbar, UniversalSearch
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -14,6 +14,7 @@ import type { Course } from "@/types/course";
 function CoursesContent() {
   const { user, logout } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -54,6 +55,16 @@ function CoursesContent() {
     }
   }
 
+  const filteredCourses = courses.filter((c) => {
+    const q = searchQuery.toLowerCase();
+    if (!q) return true;
+    return (
+      c.title.toLowerCase().includes(q) ||
+      (c.description && c.description.toLowerCase().includes(q)) ||
+      (c.status && c.status.toLowerCase().includes(q))
+    );
+  });
+
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
       <GlobalNavbar currentApp="courses" user={user} onSignOut={logout} />
@@ -86,6 +97,15 @@ function CoursesContent() {
         {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
         {actionError && <Alert variant="error" onClose={() => setActionError(null)}>{actionError}</Alert>}
 
+        {/* Search Bar */}
+        <div className="w-full">
+          <UniversalSearch
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search courses by title, topic, or status..."
+          />
+        </div>
+
         {/* Loading */}
         {loading && (
           <div className="space-y-4">
@@ -96,23 +116,29 @@ function CoursesContent() {
         )}
 
         {/* Empty */}
-        {!loading && !error && courses.length === 0 && (
+        {!loading && !error && filteredCourses.length === 0 && (
           <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
               <GraduationCap className="w-6 h-6" />
             </div>
-            <h3 className="font-display font-bold text-xl text-[#17131F]">No courses yet</h3>
-            <p className="text-sm text-[#6E6678]">Create your first course to get started.</p>
-            <Link href="/admin/courses/new">
-              <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>Create Course</Button>
-            </Link>
+            <h3 className="font-display font-bold text-xl text-[#17131F]">
+              {searchQuery ? "No matching courses found" : "No courses yet"}
+            </h3>
+            <p className="text-sm text-[#6E6678]">
+              {searchQuery ? "Try a different search term." : "Create your first course to get started."}
+            </p>
+            {!searchQuery && (
+              <Link href="/admin/courses/new">
+                <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>Create Course</Button>
+              </Link>
+            )}
           </div>
         )}
 
         {/* Course list */}
-        {!loading && courses.length > 0 && (
+        {!loading && filteredCourses.length > 0 && (
           <div className="space-y-4">
-            {courses.map((course) => {
+            {filteredCourses.map((course) => {
               const isPublished = course.status === "PUBLISHED";
               const isActing = actionLoading === course.id;
               const lessonCount = course._count?.lessons ?? 0;

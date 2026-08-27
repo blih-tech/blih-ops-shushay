@@ -13,61 +13,24 @@ import {
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
-import { apiFetch } from "@/lib/api";
-
-interface TalentItem {
-  id: string;
-  userId: string;
-  fullName: string | null;
-  title: string | null;
-  phone: string | null;
-  country: string | null;
-  city: string | null;
-  englishLevel: string | null;
-  skills: string[];
-  bio: string | null;
-  photoUrl: string | null;
-  cvUrl: string | null;
-  createdAt: string;
-  user: {
-    id: string;
-    email: string;
-    role: string;
-    createdAt: string;
-  };
-  experience: {
-    id: string;
-    title: string;
-    company: string;
-    startDate: string;
-    endDate: string | null;
-    current: boolean;
-  }[];
-  education: {
-    id: string;
-    institution: string;
-    degree: string;
-    field: string | null;
-    startYear: number;
-    endYear: number | null;
-  }[];
-}
+import { fetchAdminTalents } from "@/lib/adminApi";
+import type { AdminTalentItem } from "@/types/admin";
 
 function AdminTalentsContent() {
   const { user, logout } = useAuth();
-  const [talents, setTalents] = useState<TalentItem[]>([]);
+  const [talents, setTalents] = useState<AdminTalentItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTalent, setSelectedTalent] = useState<TalentItem | null>(null);
+  const [selectedTalent, setSelectedTalent] = useState<AdminTalentItem | null>(null);
 
   useEffect(() => {
     async function load() {
       setLoading(true);
       setError(null);
       try {
-        const data = await apiFetch<TalentItem[]>("/admin/talents");
-        setTalents(data || []);
+        const data = await fetchAdminTalents();
+        setTalents(data);
       } catch (err: any) {
         setError(err.message || "Failed to load talent records");
       } finally {
@@ -121,7 +84,7 @@ function AdminTalentsContent() {
         {error && <Alert variant="error">{error}</Alert>}
 
         {/* Search Bar */}
-        <div className="max-w-md">
+        <div className="w-full">
           <UniversalSearch
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
