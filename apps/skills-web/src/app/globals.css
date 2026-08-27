@@ -102,13 +102,13 @@ body {
 
 /* Typography scale — rem-based Tailwind utilities scale proportionally */
 html {
-  font-size: 16px; /* 320px – 1535px: Mobile, Tablet, Laptop */
+  font-size: 14.5px; /* Scaled down for laptops and smaller viewports (e.g. 1366px) */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1536px) {
-  html { font-size: 17px; } /* 2XL (1536px+): +6% type scale */
+@media (min-width: 1400px) {
+  html { font-size: 16px; } /* Medium desktops */
 }
 
 @media (min-width: 1920px) {
