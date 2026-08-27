@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit2, Calendar, GraduationCap, Loader2, Check } from "lucide-react";
 import { Education } from "@/types/profile";
 import { addEducation, updateEducation, deleteEducation } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, FormField, Alert } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, FormField, Alert, Badge } from "@/components/ui";
 
 interface EducationFormProps {
   entries: Education[];
@@ -82,7 +82,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this education?")) return;
+    if (!confirm("Are you sure you want to delete this education entry?")) return;
     setLoading(true);
     setError(null);
     try {
@@ -96,16 +96,20 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
   };
 
   return (
-    <Card className="border border-border shadow-none rounded-xl overflow-hidden font-sans">
-      <CardHeader className="px-6 py-5 border-b border-border bg-muted/40 flex flex-row items-center justify-between gap-4">
-        <div>
-          <CardTitle className="text-base font-semibold text-foreground font-sans flex items-center gap-2">
-            <GraduationCap className="h-4 w-4 text-muted-foreground" />
-            Education
-          </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground mt-0.5">
-            Academic degrees, certifications, and programs attended.
-          </CardDescription>
+    <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] overflow-hidden font-sans bg-white">
+      <CardHeader className="px-6 py-6 sm:px-8 border-b border-[#D9CEDF] bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white flex flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm">
+            <GraduationCap className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold text-[#17131F] font-display">
+              Education & Degrees
+            </CardTitle>
+            <CardDescription className="text-sm text-[#6E6678] font-sans">
+              Your academic background, certifications, and institutions attended.
+            </CardDescription>
+          </div>
         </div>
         {!isAdding && !editingId && (
           <Button
@@ -115,14 +119,14 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
               resetForm();
               setIsAdding(true);
             }}
-            leftIcon={<Plus className="h-3.5 w-3.5" />}
+            leftIcon={<Plus className="h-4 w-4" />}
           >
             Add Education
           </Button>
         )}
       </CardHeader>
 
-      <CardContent className="p-0 divide-y divide-border">
+      <CardContent className="p-0 divide-y divide-[#D9CEDF]/70 bg-white">
         {error && (
           <div className="p-6 pb-0">
             <Alert variant="error">{error}</Alert>
@@ -131,41 +135,35 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
 
         {/* Add/Edit Form Box */}
         {(isAdding || editingId) && (
-          <div className="p-6 bg-muted/20 border-b border-border">
-            <form onSubmit={handleSave} className="space-y-4">
+          <div className="p-6 sm:p-8 bg-[#EEF3FF]/30 border-b border-[#D9CEDF]">
+            <form onSubmit={handleSave} className="space-y-5">
               <div className="flex items-center justify-between">
-                <h4 className="font-serif text-base font-semibold text-foreground">
+                <h4 className="font-display text-lg font-bold text-[#17131F]">
                   {editingId ? "Edit Education Entry" : "New Education Entry"}
                 </h4>
-                <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
+                <Badge variant="primary" size="sm">
                   {editingId ? "Updating record" : "New record"}
-                </span>
+                </Badge>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="School / Institution" required>
+                <FormField label="Institution / University" required>
                   <Input
                     type="text"
                     value={institution}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val.length <= 100) setInstitution(val);
-                    }}
+                    onChange={(e) => setInstitution(e.target.value)}
                     placeholder="e.g. Addis Ababa University"
                     maxLength={100}
                     disabled={loading}
                   />
                 </FormField>
 
-                <FormField label="Degree / Certificate" required>
+                <FormField label="Degree Type" required>
                   <Input
                     type="text"
                     value={degree}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val.length <= 100) setDegree(val);
-                    }}
-                    placeholder="e.g. Bachelor of Science"
+                    onChange={(e) => setDegree(e.target.value)}
+                    placeholder="e.g. Bachelor of Science (B.Sc.)"
                     maxLength={100}
                     disabled={loading}
                   />
@@ -177,10 +175,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   <Input
                     type="text"
                     value={field}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val.length <= 100) setField(val);
-                    }}
+                    onChange={(e) => setField(e.target.value)}
                     placeholder="e.g. Computer Science"
                     maxLength={100}
                     disabled={loading}
@@ -191,10 +186,10 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   <Input
                     type="number"
                     value={startYear}
-                    onChange={(e) => setStartYear(e.target.value ? parseInt(e.target.value, 10) : "")}
-                    placeholder="e.g. 2018"
-                    min={1900}
-                    max={new Date().getFullYear() + 10}
+                    onChange={(e) => setStartYear(e.target.value ? Number(e.target.value) : "")}
+                    placeholder="e.g. 2019"
+                    min={1950}
+                    max={2035}
                     disabled={loading}
                   />
                 </FormField>
@@ -203,18 +198,19 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   <Input
                     type="number"
                     value={endYear}
-                    onChange={(e) => setEndYear(e.target.value ? parseInt(e.target.value, 10) : "")}
-                    placeholder="e.g. 2022"
-                    min={1900}
-                    max={new Date().getFullYear() + 10}
+                    onChange={(e) => setEndYear(e.target.value ? Number(e.target.value) : "")}
+                    placeholder="e.g. 2023"
+                    min={1950}
+                    max={2035}
                     disabled={loading}
                   />
                 </FormField>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-border">
+              <div className="flex justify-end gap-3 pt-2">
                 <Button
-                  variant="outline"
+                  type="button"
+                  variant="ghost"
                   size="sm"
                   onClick={() => {
                     setIsAdding(false);
@@ -229,51 +225,44 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   type="submit"
                   variant="primary"
                   size="sm"
-                  disabled={loading}
-                  leftIcon={loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                  isLoading={loading}
+                  leftIcon={<Check className="h-4 w-4" />}
                 >
-                  {editingId ? "Save Changes" : "Save Education"}
+                  Save Entry
                 </Button>
               </div>
             </form>
           </div>
         )}
 
-        {/* Entries List */}
-        {entries.length > 0 ? (
+        {/* Existing List */}
+        {entries.length === 0 && !isAdding && !editingId ? (
+          <div className="p-8 text-center text-sm text-[#6E6678]">
+            No education records added yet. Click &quot;Add Education&quot; to list your degrees and certifications.
+          </div>
+        ) : (
           entries.map((edu) => (
             <div
               key={edu.id}
-              className="p-6 transition-colors hover:bg-muted/30 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
+              className="p-6 sm:p-8 transition-colors hover:bg-[#EEF3FF]/20 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
             >
               <div className="space-y-1.5 flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <h4 className="font-semibold text-foreground text-base">
-                    {edu.degree}
-                  </h4>
-                  <span className="text-muted-foreground text-sm">·</span>
-                  <span className="text-sm font-medium text-body">
-                    {edu.institution}
-                    {edu.field ? ` (${edu.field})` : ""}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-                  <Calendar className="h-3.5 w-3.5 shrink-0" />
-                  <span>
-                    {edu.startYear} – {edu.endYear || "Present"}
-                  </span>
+                <h4 className="font-display font-bold text-lg text-[#17131F]">
+                  {edu.degree} {edu.field ? `in ${edu.field}` : ""}
+                </h4>
+                <p className="text-sm font-semibold text-[#1E5BFF]">{edu.institution}</p>
+                <div className="flex items-center gap-2 text-xs font-mono text-[#6E6678]">
+                  <Calendar className="h-3.5 w-3.5" />
+                  <span>{edu.startYear} – {edu.endYear || "Present"}</span>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-1 shrink-0 self-start">
+              <div className="flex items-center gap-2 self-end sm:self-start shrink-0">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleEditInit(edu)}
-                  disabled={loading}
-                  className="h-8 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+                  disabled={loading || isAdding || editingId !== null}
                   leftIcon={<Edit2 className="h-3.5 w-3.5" />}
                 >
                   Edit
@@ -283,7 +272,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   size="sm"
                   onClick={() => handleDelete(edu.id)}
                   disabled={loading}
-                  className="h-8 px-2.5 text-xs text-destructive hover:bg-destructive/10"
+                  className="text-[#EF4444] hover:bg-[#EF4444]/10 hover:text-[#EF4444]"
                   leftIcon={<Trash2 className="h-3.5 w-3.5" />}
                 >
                   Delete
@@ -291,16 +280,6 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
               </div>
             </div>
           ))
-        ) : (
-          !isAdding && !editingId && (
-            <div className="p-8 text-center space-y-2">
-              <GraduationCap className="h-8 w-8 text-muted-foreground/40 mx-auto" />
-              <p className="text-sm font-medium text-foreground">No education history listed yet</p>
-              <p className="text-xs text-muted-foreground max-w-md mx-auto">
-                Add your academic degrees and educational background.
-              </p>
-            </div>
-          )
         )}
       </CardContent>
     </Card>

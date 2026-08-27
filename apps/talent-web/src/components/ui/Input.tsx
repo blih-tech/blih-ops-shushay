@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import React from "react";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -18,85 +18,72 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       helperText,
       leftIcon,
       rightIcon,
-      fullWidth = true,
-      type = "text",
-      disabled,
+      fullWidth = false,
       className = "",
       id,
+      disabled,
       ...props
     },
     ref
   ) => {
-    const [showPassword, setShowPassword] = useState(false);
-    const generatedId = React.useId();
-    const inputId = id || generatedId;
-    const isPasswordType = type === "password";
-    const actualType = isPasswordType ? (showPassword ? "text" : "password") : type;
-
-    const baseInputStyles =
-      "appearance-none block w-full px-4 py-3 sm:py-2.5 min-h-[48px] bg-background text-foreground border rounded-md text-base sm:text-sm font-sans placeholder:text-muted-foreground transition-colors duration-interactive focus:outline-none focus:ring-2 disabled:bg-muted disabled:opacity-60 disabled:cursor-not-allowed";
-
-    const stateStyles = error
-      ? "border-destructive focus:border-destructive focus:ring-destructive/20"
-      : "border-border focus:border-primary focus:ring-primary/20";
-
-    const paddingLeftClass = leftIcon ? "pl-11" : "";
-    const paddingRightClass = rightIcon || isPasswordType ? "pr-11" : "";
+    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
 
     return (
-      <div className={`${fullWidth ? "w-full" : "inline-block"}`}>
+      <div className={`group space-y-1.5 font-sans ${fullWidth ? "w-full" : ""}`}>
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs sm:text-sm font-medium text-foreground uppercase tracking-wider mb-1.5"
+            className={`block text-xs font-mono uppercase tracking-wider transition-colors duration-200 ${
+              error
+                ? "text-[#EF4444]"
+                : "text-[#6E6678] group-focus-within:text-[#1E5BFF] group-focus-within:font-semibold"
+            }`}
           >
             {label}
           </label>
         )}
-        <div className="relative flex items-center">
+        <div className="relative w-full">
           {leftIcon && (
-            <div className="absolute top-1/2 -translate-y-1/2 left-3.5 z-10 flex items-center pointer-events-none text-muted-foreground">
+            <div className={`absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-all duration-200 ${
+              error
+                ? "text-[#EF4444]"
+                : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
+            }`}>
               {leftIcon}
             </div>
           )}
           <input
             ref={ref}
             id={inputId}
-            type={actualType}
             disabled={disabled}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
-            className={`${baseInputStyles} ${stateStyles} ${paddingLeftClass} ${paddingRightClass} ${className}`}
+            className={`
+              w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm sm:text-base text-[#17131F] placeholder:text-[#6E6678]/50
+              outline-none focus:outline-none focus:ring-0
+              transition-all duration-200
+              disabled:cursor-not-allowed disabled:bg-[#EEF3FF]/70 disabled:text-[#6E6678]
+              ${leftIcon ? "pl-10" : ""}
+              ${rightIcon ? "pr-10" : ""}
+              ${
+                error
+                  ? "border-[#EF4444] bg-[#FFF8F8] focus:border-[#EF4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
+                  : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:shadow-[0_0_0_3px_rgba(30,91,255,0.15)]"
+              }
+              ${className}
+            `}
             {...props}
           />
-          {isPasswordType ? (
-            <button
-              type="button"
-              tabIndex={-1}
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute top-1/2 -translate-y-1/2 right-3.5 z-10 flex items-center justify-center p-1 text-muted-foreground hover:text-foreground focus:outline-none cursor-pointer rounded"
-              aria-label={showPassword ? "Hide password" : "Show password"}
-            >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5 shrink-0 stroke-[1.75]" />
-              ) : (
-                <Eye className="w-5 h-5 shrink-0 stroke-[1.75]" />
-              )}
-            </button>
-          ) : rightIcon ? (
-            <div className="absolute top-1/2 -translate-y-1/2 right-3.5 z-10 flex items-center pointer-events-none text-muted-foreground">
+          {rightIcon && (
+            <div className={`absolute inset-y-0 right-0 pr-3.5 flex items-center transition-colors duration-200 ${
+              error ? "text-[#EF4444]" : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
+            }`}>
               {rightIcon}
             </div>
-          ) : null}
+          )}
         </div>
         {error ? (
-          <p id={`${inputId}-error`} className="mt-1.5 text-xs text-destructive font-sans">
-            {error}
-          </p>
+          <p className="text-xs font-mono text-[#EF4444] mt-1 flex items-center gap-1">{error}</p>
         ) : helperText ? (
-          <p id={`${inputId}-helper`} className="mt-1.5 text-xs text-muted-foreground font-sans">
-            {helperText}
-          </p>
+          <p className="text-xs font-mono text-[#6E6678] mt-1">{helperText}</p>
         ) : null}
       </div>
     );

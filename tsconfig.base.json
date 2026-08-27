@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": ".",
-    "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "bundler",
@@ -13,10 +10,11 @@
     "lib": ["ES2022"],
     "skipLibCheck": true,
     "paths": {
-      "@blih/types": ["packages/types/src/index.ts"],
-      "@blih/api-client": ["packages/api-client/src/index.ts"],
-      "@blih/validation": ["packages/validation/src/index.ts"],
-      "@blih/ui": ["packages/ui/src/index.ts"]
+      "@blih/types": ["./packages/types/src/index.ts"],
+      "@blih/api-client": ["./packages/api-client/src/index.ts"],
+      "@blih/validation": ["./packages/validation/src/index.ts"],
+      "@blih/ui": ["./packages/ui/src/index.ts"],
+      "@blih/ui/*": ["./packages/ui/src/*"]
     }
   }
 }

@@ -29,6 +29,7 @@ export const StepExpertise: React.FC<StepExpertiseProps> = ({
 
   const englishLevel = watch("englishLevel");
   const skills = watch("skills") || [];
+  const bio = watch("bio") || "";
 
   return (
     <form onSubmit={onNext} className="space-y-6 font-sans">
@@ -59,6 +60,7 @@ export const StepExpertise: React.FC<StepExpertiseProps> = ({
           disabled={saving}
           rows={4}
           error={errors.bio?.message}
+          value={bio}
           {...register("bio")}
         />
       </FormField>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Plus } from "lucide-react";
+import { X, Plus, Sparkles } from "lucide-react";
 import { Input, Button } from "@/components/ui";
 
 interface SkillsInputProps {
@@ -34,17 +34,17 @@ export const SkillsInput: React.FC<SkillsInputProps> = ({ value, onChange, error
   };
 
   return (
-    <div className="space-y-2 font-sans">
-      <label className="block text-xs font-semibold text-foreground uppercase tracking-widest">
-        Skills / Technologies
+    <div className="space-y-2.5 font-sans">
+      <label className="block text-xs font-mono uppercase tracking-wider text-[#6E6678]">
+        Skills & Technical Stack
       </label>
-      <div className="flex gap-2">
+      <div className="flex gap-2.5 items-center">
         <Input
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="e.g. React, Node.js — press Enter to add"
+          placeholder="e.g. Next.js, TypeScript, GraphQL — press Enter to add"
           error={error}
           disabled={disabled}
           fullWidth
@@ -62,28 +62,28 @@ export const SkillsInput: React.FC<SkillsInputProps> = ({ value, onChange, error
       </div>
 
       {value.length > 0 ? (
-        <div className="flex flex-wrap gap-2 pt-3">
+        <div className="flex flex-wrap gap-2 pt-2">
           {value.map((skill, index) => (
             <span
               key={index}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#EEF3FF] border border-[#1E5BFF]/25 text-[#1E5BFF] text-xs font-mono font-medium shadow-xs"
             >
               {skill}
               <button
                 type="button"
                 onClick={() => handleRemove(skill)}
-                className="h-4 w-4 rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors focus:outline-none"
+                className="h-4 w-4 rounded-full flex items-center justify-center hover:bg-[#1E5BFF]/20 transition-colors focus:outline-none cursor-pointer"
                 aria-label={`Remove ${skill}`}
                 disabled={disabled}
               >
-                <X className="h-2.5 w-2.5" />
+                <X className="h-3 w-3" />
               </button>
             </span>
           ))}
         </div>
       ) : (
-        <p className="text-xs text-muted-foreground italic pt-1">
-          No skills added yet. Add at least one skill to activate your profile.
+        <p className="text-xs text-[#6E6678] font-sans italic pt-1">
+          No skills added yet. Type a technology and click &quot;Add&quot;.
         </p>
       )}
     </div>

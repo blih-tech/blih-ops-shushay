@@ -69,18 +69,29 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       setIsOpen(false);
     };
 
-    const triggerStyles = `w-full flex items-center justify-between px-4 py-3 sm:py-2.5 min-h-[44px] bg-background border rounded-md text-base sm:text-sm font-sans transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 ${error ? "border-destructive text-destructive" : "border-border text-foreground focus:border-primary"
-      } ${disabled ? "bg-muted opacity-60 cursor-not-allowed" : "cursor-pointer"}`;
+    const triggerStyles = `w-full h-12 flex items-center justify-between px-4 py-3 bg-white border rounded-xl text-sm sm:text-base font-sans outline-none focus:outline-none focus:ring-0 transition-all duration-200 ${
+      error
+        ? "border-[#EF4444] bg-[#FFF8F8] text-[#EF4444] focus:border-[#EF4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
+        : "border-[#D9CEDF] text-[#17131F] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:shadow-[0_0_0_3px_rgba(30,91,255,0.15)]"
+    } ${disabled ? "bg-[#EEF3FF]/70 text-[#6E6678] cursor-not-allowed" : "cursor-pointer"} ${
+      isOpen ? "border-[#1E5BFF] shadow-[0_0_0_3px_rgba(30,91,255,0.15)]" : ""
+    }`;
 
     return (
       <div
         ref={containerRef}
-        className={`relative font-sans ${fullWidth ? "w-full" : "inline-block"}`}
+        className={`group relative font-sans space-y-1.5 ${fullWidth ? "w-full" : "inline-block"}`}
       >
         {label && (
           <label
             htmlFor={selectId}
-            className="block text-xs sm:text-sm font-medium text-foreground uppercase tracking-wider mb-1.5"
+            className={`block text-xs font-mono uppercase tracking-wider transition-colors duration-200 ${
+              error
+                ? "text-[#EF4444]"
+                : isOpen
+                ? "text-[#1E5BFF] font-semibold"
+                : "text-[#6E6678] group-focus-within:text-[#1E5BFF] group-focus-within:font-semibold"
+            }`}
           >
             {label}
           </label>
@@ -97,21 +108,23 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
-            <span className={isPlaceholderActive ? "text-muted-foreground" : "text-foreground"}>
+            <span className={isPlaceholderActive ? "text-[#6E6678]/60 font-normal" : "text-[#17131F] font-medium"}>
               {displayLabel}
             </span>
-            <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+            <ChevronDown className={`h-4 w-4 transition-all duration-200 ${
+              isOpen ? "rotate-180 text-[#1E5BFF]" : "text-[#6E6678] group-hover:text-[#1E5BFF]"
+            }`} />
           </button>
         </div>
 
         {/* Floating Custom Dropdown Options Menu */}
         {isOpen && (
-          <div className="absolute left-0 mt-1 w-full rounded-md border border-border bg-card shadow-lg z-50 overflow-hidden py-1 max-h-60 overflow-y-auto animate-in fade-in duration-100">
+          <div className="absolute left-0 mt-2 w-full rounded-xl border border-[#D9CEDF] bg-white shadow-[0_16px_48px_rgba(23,19,31,0.12)] z-50 overflow-hidden p-1.5 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
             {placeholder && (
               <button
                 type="button"
                 onClick={() => handleSelectOption("")}
-                className="w-full text-left px-4 py-2 text-sm text-muted-foreground hover:bg-muted font-medium transition-colors"
+                className="w-full text-left px-3.5 py-2.5 text-xs font-mono text-[#6E6678] hover:bg-[#EEF3FF] rounded-lg transition-colors cursor-pointer"
               >
                 {placeholder}
               </button>
@@ -124,15 +137,16 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   type="button"
                   disabled={opt.disabled}
                   onClick={() => !opt.disabled && handleSelectOption(opt.value)}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 text-sm text-left transition-colors ${isSelected
-                      ? "bg-primary/10 text-primary font-semibold"
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-sm text-left rounded-lg transition-colors cursor-pointer ${
+                    isSelected
+                      ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold shadow-xs"
                       : opt.disabled
-                        ? "opacity-40 cursor-not-allowed"
-                        : "text-foreground hover:bg-muted"
-                    }`}
+                      ? "opacity-40 cursor-not-allowed"
+                      : "text-[#17131F] hover:bg-[#EEF3FF]/70"
+                  }`}
                 >
                   <span>{opt.label}</span>
-                  {isSelected && <Check className="h-4 w-4 text-primary shrink-0" />}
+                  {isSelected && <Check className="h-4 w-4 text-[#1E5BFF] shrink-0" />}
                 </button>
               );
             })}
@@ -157,11 +171,11 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         </select>
 
         {error ? (
-          <p className="mt-1.5 text-xs text-destructive">
+          <p className="text-xs font-mono text-[#EF4444] mt-1">
             {error}
           </p>
         ) : helperText ? (
-          <p className="mt-1.5 text-xs text-muted-foreground">
+          <p className="text-xs font-mono text-[#6E6678] mt-1">
             {helperText}
           </p>
         ) : null}

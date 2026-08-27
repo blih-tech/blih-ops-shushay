@@ -8,25 +8,34 @@ import { Button, PasswordInput, Alert, Spinner } from "@/components/ui";
 import { apiFetch } from "@/lib/api";
 
 function ResetPasswordForm() {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  if (!token) {
+    return (
+      <div className="text-center space-y-4">
+        <Alert variant="error" title="Invalid Request">
+          Missing password reset token. Please check the link from your email or request a new one.
+        </Alert>
+        <div className="pt-2">
+          <Link href="/forgot-password">
+            <Button variant="outline" fullWidth>Request new link</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!token) {
-      setError("Reset token is missing.");
-      return;
-    }
-
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError("Passwords do not match");
       return;
     }
 
@@ -40,7 +49,7 @@ function ResetPasswordForm() {
       });
       setSuccess(true);
     } catch (err: any) {
-      setError(err.message || "Password reset failed.");
+      setError(err.message || "An error occurred. The link may have expired.");
     } finally {
       setLoading(false);
     }
@@ -49,12 +58,12 @@ function ResetPasswordForm() {
   if (success) {
     return (
       <div className="text-center space-y-4 font-sans">
-        <Alert variant="success">
-          Your password has been reset successfully. You can now use your new password to sign in.
+        <Alert variant="success" title="Password Reset Complete">
+          Your password has been successfully updated. You can now sign in with your new credentials.
         </Alert>
         <div className="pt-4">
           <Link href="/login">
-            <Button fullWidth>Sign in</Button>
+            <Button fullWidth size="lg">Sign In</Button>
           </Link>
         </div>
       </div>
@@ -65,18 +74,12 @@ function ResetPasswordForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <Alert variant="error">{error}</Alert>}
 
-      {!token && (
-        <Alert variant="warning">
-          Warning: Reset token is missing from the URL. You will not be able to submit this form.
-        </Alert>
-      )}
-
       <PasswordInput
         label="New Password"
         required
         minLength={6}
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
         placeholder="••••••••"
       />
 
@@ -85,7 +88,7 @@ function ResetPasswordForm() {
         required
         minLength={6}
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
         placeholder="••••••••"
       />
 
@@ -93,20 +96,11 @@ function ResetPasswordForm() {
         <Button
           type="submit"
           fullWidth
-          disabled={!token}
+          size="lg"
           isLoading={loading}
         >
-          {loading ? "Resetting password..." : "Reset password"}
+          {loading ? "Resetting password..." : "Reset Password"}
         </Button>
-      </div>
-
-      <div className="text-center pt-3 font-sans">
-        <Link
-          href="/login"
-          className="text-sm sm:text-base font-semibold text-primary hover:underline cursor-pointer"
-        >
-          Back to Sign In
-        </Link>
       </div>
     </form>
   );
@@ -116,9 +110,9 @@ export default function ResetPasswordPage() {
   return (
     <AuthLayout
       title="Create new password"
-      subtitle="Enter and confirm your new password below"
+      subtitle="Enter a new secure password for your Blih account"
     >
-      <Suspense fallback={<div className="text-center py-4 text-sm text-muted-foreground flex justify-center items-center gap-2"><Spinner size="sm" /> Loading token...</div>}>
+      <Suspense fallback={<div className="text-center py-4 text-sm text-[#6E6678] flex justify-center items-center gap-2"><Spinner size="sm" /> Loading form...</div>}>
         <ResetPasswordForm />
       </Suspense>
     </AuthLayout>

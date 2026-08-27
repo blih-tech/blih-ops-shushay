@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Save } from "lucide-react";
+import { User, Save, Phone, MapPin, Globe, Sparkles } from "lucide-react";
 import { FormField, Input, Select, Textarea, Card, CardContent, CardHeader, CardTitle, CardDescription, Button } from "@/components/ui";
 import { SkillsInput } from "./SkillsInput";
 import { ProfileFormReturn } from "@/state/profile/profileForm";
@@ -27,26 +27,34 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
 
   const englishLevel = watch("englishLevel");
   const skills = watch("skills") || [];
+  const bio = watch("bio") || "";
 
   return (
     <form onSubmit={onSubmit}>
-      <Card className="border border-border shadow-none rounded-xl overflow-hidden">
-        <CardHeader className="bg-muted/40 border-b border-border p-6 sm:p-8">
-          <CardTitle className="text-base font-semibold text-foreground font-sans">
-            General Profile Details
-          </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground mt-1">
-            Your name, location, and technical skill descriptors.
-          </CardDescription>
+      <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] overflow-hidden bg-white">
+        <CardHeader className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm">
+              <User className="h-5 w-5" />
+            </div>
+            <div>
+              <CardTitle className="text-xl font-bold text-[#17131F] font-display">
+                General Profile Details
+              </CardTitle>
+              <CardDescription className="text-sm text-[#6E6678] font-sans">
+                Your professional identity, contact reachability, and capability tags.
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
 
-        <CardContent className="p-6 sm:p-8 space-y-6 bg-card">
+        <CardContent className="p-6 sm:p-8 space-y-6 bg-white">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <FormField label="Full Name" required error={errors.fullName?.message}>
               <Input
                 type="text"
-                placeholder="e.g. Abreham Yohannes"
-                leftIcon={<User className="h-4 w-4 text-muted-foreground" />}
+                placeholder="e.g. Sara Tesfaye"
+                leftIcon={<User className="h-4 w-4 text-[#6E6678]" />}
                 disabled={saving}
                 error={errors.fullName?.message}
                 {...register("fullName")}
@@ -56,7 +64,7 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
             <FormField label="Professional Title" required error={errors.title?.message}>
               <Input
                 type="text"
-                placeholder="e.g. Fullstack Developer"
+                placeholder="e.g. Senior Frontend Systems Engineer"
                 maxLength={100}
                 disabled={saving}
                 error={errors.title?.message}
@@ -69,11 +77,23 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
             <FormField label="Phone Number" required error={errors.phone?.message}>
               <Input
                 type="tel"
-                placeholder="e.g. +251943668796"
-                maxLength={15}
+                placeholder="e.g. +251 91 123 4567"
+                leftIcon={<Phone className="h-4 w-4 text-[#6E6678]" />}
+                maxLength={20}
                 disabled={saving}
                 error={errors.phone?.message}
                 {...register("phone")}
+              />
+            </FormField>
+
+            <FormField label="English Proficiency" required error={errors.englishLevel?.message}>
+              <Select
+                value={englishLevel || ""}
+                onChange={(e) => setValue("englishLevel", e.target.value as any, { shouldValidate: true })}
+                placeholder="Select English level"
+                options={ENGLISH_LEVELS}
+                disabled={saving}
+                error={errors.englishLevel?.message}
               />
             </FormField>
           </div>
@@ -83,6 +103,7 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
               <Input
                 type="text"
                 placeholder="e.g. Ethiopia"
+                leftIcon={<Globe className="h-4 w-4 text-[#6E6678]" />}
                 disabled={saving}
                 error={errors.country?.message}
                 {...register("country")}
@@ -93,6 +114,7 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
               <Input
                 type="text"
                 placeholder="e.g. Addis Ababa"
+                leftIcon={<MapPin className="h-4 w-4 text-[#6E6678]" />}
                 disabled={saving}
                 error={errors.city?.message}
                 {...register("city")}
@@ -100,18 +122,7 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
             </FormField>
           </div>
 
-          <div className="border-t border-border my-8 pt-8" />
-
-          <FormField label="English Level" required error={errors.englishLevel?.message}>
-            <Select
-              value={englishLevel || ""}
-              onChange={(e) => setValue("englishLevel", e.target.value as any, { shouldValidate: true })}
-              placeholder="Select proficiency level"
-              options={ENGLISH_LEVELS}
-              disabled={saving}
-              error={errors.englishLevel?.message}
-            />
-          </FormField>
+          <div className="border-t border-[#D9CEDF]/80 my-8 pt-6" />
 
           <SkillsInput
             value={skills}
@@ -120,21 +131,23 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
             error={errors.skills?.message}
           />
 
-          <FormField label="About Me (Bio)" error={errors.bio?.message}>
+          <FormField label="About & Technical Overview" error={errors.bio?.message}>
             <Textarea
-              placeholder="Give a summary of your professional background, remote capabilities, goals, etc."
+              placeholder="Highlight your core engineering expertise, architectural decisions, and career objectives..."
               maxLength={500}
               disabled={saving}
               rows={4}
               error={errors.bio?.message}
+              value={bio}
               {...register("bio")}
             />
           </FormField>
 
-          <div className="flex justify-end pt-4 border-t border-border mt-8">
+          <div className="flex justify-end pt-4 border-t border-[#D9CEDF]/80 mt-8">
             <Button
               type="submit"
               variant="primary"
+              size="lg"
               isLoading={saving}
               leftIcon={<Save className="h-4 w-4" />}
             >

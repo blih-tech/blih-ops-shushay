@@ -10145,6 +10145,26 @@
         "source": "@blih/ui",
         "target": "npm:react-dom",
         "type": "static"
+      },
+      {
+        "source": "@blih/ui",
+        "target": "npm:@types/react",
+        "type": "static"
+      },
+      {
+        "source": "@blih/ui",
+        "target": "npm:@types/react-dom",
+        "type": "static"
+      },
+      {
+        "source": "@blih/ui",
+        "target": "npm:typescript",
+        "type": "static"
+      },
+      {
+        "source": "@blih/ui",
+        "target": "npm:lucide-react",
+        "type": "static"
       }
     ],
     "@blih/api": [
@@ -21913,5 +21933,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1787747680331
+  "computedAt": 1787811459637
 }

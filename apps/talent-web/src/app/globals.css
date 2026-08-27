@@ -1,113 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
-/* ─── DESIGN.md Token Layer ───────────────────────────────────────────────── */
-/* Source of truth: DESIGN.md. Do not copy hex values into components —        */
-/* use the semantic Tailwind classes they power instead.                        */
-/* ─────────────────────────────────────────────────────────────────────────── */
-
+/* ─── blih_ops_ui_ux Design Tokens ───────────────────────────────────────── */
 :root {
   /* Surfaces */
-  --background:         255 255 255;  /* #FFFFFF */
-  --card:               255 255 255;  /* #FFFFFF */
-  --muted:              249 250 251;  /* #F9FAFB */
-  --secondary:          243 244 246;  /* #F3F4F6 */
+  --bg: 255 255 255;
+  --paper: 255 255 255;
+  --surface: 238 243 255; /* #EEF3FF */
+  --lav: 221 231 255;     /* #DDE7FF */
 
   /* Text */
-  --foreground:          51  51  51;  /* #333333 */
-  --body:                75  85  99;  /* #4B5563 */
-  --muted-foreground:   107 114 128;  /* #6B7280 */
-  --card-foreground:     51  51  51;
-
-  /* Brand / Action */
-  --primary:             59 130 246;  /* #3B82F6 */
-  --primary-foreground:  255 255 255; /* #FFFFFF */
-  --accent:              224 242 254; /* #E0F2FE */
-  --accent-foreground:    30  58 138; /* #1E3A8A */
+  --ink: 23 19 31;        /* #17131F */
+  --muted: 110 102 120;   /* #6E6678 */
 
   /* Structural */
-  --border:              229 231 235; /* #E5E7EB */
-  --destructive:         239  68  68; /* #EF4444 */
+  --line: 217 206 223;    /* #D9CEDF */
 
-  /* Dark contrast (deliberate dark panels — not a global dark theme) */
-  --dark-background:      23  23  23; /* #171717 */
-  --dark-card:            38  38  38; /* #262626 */
-  --dark-foreground:     229 229 229; /* #E5E5E5 */
-  --dark-muted:           31  31  31; /* #1F1F1F */
-  --dark-muted-foreground:163 163 163;/* #A3A3A3 */
-  --dark-border:          64  64  64; /* #404040 */
+  /* Brand / Action */
+  --accent: 30 91 255;    /* #1E5BFF */
+  --accent2: 255 138 91;  /* #FF8A5B */
+  --amber: 221 170 60;    /* #DDAA3C */
+  --ok: 46 143 121;       /* #2E8F79 */
 
-  /* Radius — DESIGN.md compact scale */
-  --radius-sm:   3.6px;
-  --radius-md:   4.8px;
-  --radius-lg:   6px;
-  --radius-xl:   8.4px;
-  --radius-2xl:  10.8px;
-  --radius-3xl:  13.2px;
+  /* Tailwind compatibility */
+  --background: 255 255 255;
+  --foreground: 23 19 31;
+  --card: 255 255 255;
+  --card-foreground: 23 19 31;
+  --primary: 30 91 255;
+  --primary-foreground: 255 255 255;
+  --secondary: 238 243 255;
+  --muted-foreground: 110 102 120;
+  --border: 217 206 223;
+  --destructive: 239 68 68;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-3xl: 34px;
   --radius-full: 9999px;
-
-  /* Motion */
-  --ease-out:               cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-snappy:            cubic-bezier(0.16, 1, 0.3,  1);
-  --duration-micro:         180ms;
-  --duration-interactive:   300ms;
-  --duration-entrance:      450ms;
-  --duration-entrance-long: 550ms;
-  --duration-numeric:       900ms;
-  --stagger:                 80ms;
 }
 
 @theme {
-  /* Color Mappings */
-  --color-background:  rgb(var(--background));
-  --color-foreground:  rgb(var(--foreground));
-  --color-body:        rgb(var(--body));
-  --color-card:        rgb(var(--card));
+  --color-bg: #FFFFFF;
+  --color-paper: #FFFFFF;
+  --color-surface: #EEF3FF;
+  --color-lav: #DDE7FF;
+  --color-ink: #17131F;
+  --color-muted: #6E6678;
+  --color-line: #D9CEDF;
+  --color-accent: #1E5BFF;
+  --color-accent2: #FF8A5B;
+  --color-amber: #DDAA3C;
+  --color-ok: #2E8F79;
+
+  --color-background: rgb(var(--background));
+  --color-foreground: rgb(var(--foreground));
+  --color-card: rgb(var(--card));
   --color-card-foreground: rgb(var(--card-foreground));
-  --color-muted:       rgb(var(--muted));
-  --color-muted-foreground: rgb(var(--muted-foreground));
-  --color-secondary:   rgb(var(--secondary));
-  --color-primary:     rgb(var(--primary));
+  --color-primary: rgb(var(--primary));
   --color-primary-foreground: rgb(var(--primary-foreground));
-  --color-accent:      rgb(var(--accent));
-  --color-accent-foreground: rgb(var(--accent-foreground));
-  --color-border:      rgb(var(--border));
+  --color-secondary: rgb(var(--secondary));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-border: rgb(var(--border));
   --color-destructive: rgb(var(--destructive));
 
-  /* Dark theme colors */
-  --color-dark-background: rgb(var(--dark-background));
-  --color-dark-card:       rgb(var(--dark-card));
-  --color-dark-foreground: rgb(var(--dark-foreground));
-  --color-dark-muted:      rgb(var(--dark-muted));
-  --color-dark-muted-foreground: rgb(var(--dark-muted-foreground));
-  --color-dark-border:      rgb(var(--dark-border));
-
   /* Fonts */
-  --font-serif: var(--font-serif), Georgia, serif;
-  --font-sans:  var(--font-sans), system-ui, sans-serif;
-  --font-mono:  var(--font-mono), monospace;
-
-  /* Radii */
-  --radius-sm:   var(--radius-sm);
-  --radius-md:   var(--radius-md);
-  --radius-lg:   var(--radius-lg);
-  --radius-xl:   var(--radius-xl);
-  --radius-2xl:  var(--radius-2xl);
-  --radius-3xl:  var(--radius-3xl);
-  --radius-full: var(--radius-full);
-
-  /* Custom timing/duration variables inside Tailwind v4 theme mapping */
-  --duration-micro:       var(--duration-micro);
-  --duration-interactive: var(--duration-interactive);
-  --duration-entrance:    var(--duration-entrance);
-  
-  --ease-ease-out:        var(--ease-out);
-  --ease-ease-snappy:     var(--ease-snappy);
+  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* Thin Scrollbar Customization */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(107, 114, 128, 0.3) transparent;
+  scrollbar-color: rgba(110, 102, 120, 0.3) transparent;
 }
 
 ::-webkit-scrollbar {
@@ -120,13 +91,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(107, 114, 128, 0.2);
+  background-color: rgba(110, 102, 120, 0.2);
   border-radius: 9999px;
-  border: 1px solid transparent;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(107, 114, 128, 0.4);
+  background-color: rgba(110, 102, 120, 0.4);
 }
 
 html {
@@ -135,36 +105,21 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (min-width: 1440px) {
-  html {
-    font-size: clamp(16px, 1.111vw, 24px);
-  }
-}
-
 body {
-  background-color: rgb(var(--background));
-  color: rgb(var(--foreground));
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background-color: #FFFFFF;
+  color: #17131F;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* Accessible focus ring — DESIGN.md §Accessibility */
-*:focus-visible {
-  outline: 2px solid rgba(var(--primary), 0.7);
-  outline-offset: 2px;
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  outline: none !important;
 }
 
-/* Reduced motion — DESIGN.md §Motion */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Global Clickable Cursor Rules */
 a, button, [role="button"], input[type="submit"], input[type="button"], input[type="checkbox"], input[type="radio"], select {
   cursor: pointer;
 }

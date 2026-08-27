@@ -11,17 +11,17 @@ import {
   uploadTalentCv,
   deleteTalentCv,
 } from "@/lib/talentApi";
-import { Alert, Spinner, Button, Card, CardContent } from "@/components/ui";
+import { Alert, Spinner, Button, Card, CardContent, Badge, GlobalNavbar } from "@/components/ui";
 import { StepPersonalInfo } from "@/components/profile/setup/StepPersonalInfo";
 import { StepExpertise } from "@/components/profile/setup/StepExpertise";
 import { StepMedia } from "@/components/profile/setup/StepMedia";
 import { useProfileFormState } from "@/state/profile/profileForm";
-import { LogOut, User, Zap, Image as ImageIcon, ChevronRight, Check } from "lucide-react";
+import { LogOut, User, Sparkles, Image as ImageIcon, ChevronRight, Check, ArrowRight } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 
 function ProfileSetupContent() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { profile, loading, error: fetchError, refetch } = useTalentProfile();
 
   const form = useProfileFormState(profile);
@@ -33,10 +33,10 @@ function ProfileSetupContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-muted">
-        <div className="text-center space-y-3">
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center space-y-3 font-sans">
           <Spinner size="md" />
-          <p className="text-sm text-muted-foreground animate-pulse font-sans">
+          <p className="text-sm text-[#6E6678] animate-pulse">
             Initializing setup wizard…
           </p>
         </div>
@@ -46,52 +46,53 @@ function ProfileSetupContent() {
 
   if (fetchError) {
     return (
-      <div className="max-w-md mx-auto mt-20 p-6">
-        <Alert variant="error" title="Load Error">
-          {fetchError}
-        </Alert>
+      <div className="min-h-screen bg-white p-6 flex items-center justify-center">
+        <div className="max-w-md w-full">
+          <Alert variant="error" title="Load Error">
+            {fetchError}
+          </Alert>
+        </div>
       </div>
     );
   }
 
-  const handleNextStep = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleNextStep = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setError(null);
 
     if (step === 1) {
-      const isValid = await trigger(["fullName", "title", "phone", "country", "city"]);
-      if (isValid) {
-        setStep(2);
-      }
+      const valid = await trigger(["fullName", "title", "phone", "country", "city"]);
+      if (!valid) return;
+      setStep(2);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (step === 2) {
-      const isValid = await trigger(["englishLevel", "skills", "bio"]);
-      if (isValid) {
-        setSaving(true);
-        try {
-          const data = getValues();
-          await updateTalentProfile({
-            fullName: data.fullName,
-            title: data.title,
-            phone: data.phone,
-            country: data.country,
-            city: data.city,
-            englishLevel: data.englishLevel as any,
-            skills: data.skills,
-            bio: data.bio?.trim() || null,
-          });
-          await refetch();
-          setStep(3);
-        } catch (err: any) {
-          setError(err?.message || "Failed to save profile progress.");
-        } finally {
-          setSaving(false);
-        }
+      const valid = await trigger(["englishLevel", "skills"]);
+      if (!valid) return;
+      setStep(3);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (step === 3) {
+      setSaving(true);
+      try {
+        const values = getValues();
+        await updateTalentProfile({
+          fullName: values.fullName,
+          title: values.title,
+          phone: values.phone,
+          country: values.country,
+          city: values.city,
+          englishLevel: values.englishLevel as any,
+          skills: values.skills,
+          bio: values.bio?.trim() || null,
+        });
+
+        await refetch();
+        router.push("/profile");
+      } catch (err: any) {
+        setError(err?.message || "Failed to complete profile onboarding. Please try again.");
+      } finally {
+        setSaving(false);
       }
     }
-  };
-
-  const handleCompleteSetup = () => {
-    router.push("/profile");
   };
 
   const handlePhotoUpload = async (file: File) => {
@@ -115,94 +116,74 @@ function ProfileSetupContent() {
   };
 
   const steps = [
-    { id: 1, title: "Personal Details", icon: User, desc: "Contact & location" },
-    { id: 2, title: "Expertise", icon: Zap, desc: "Skills & languages" },
+    { id: 1, title: "Personal Details", icon: User, desc: "Name, title & contact" },
+    { id: 2, title: "Skills & English", icon: Sparkles, desc: "Proficiency & stack" },
     { id: 3, title: "Media & Files", icon: ImageIcon, desc: "Photo & resume CV" },
   ];
 
   return (
-    <div className="min-h-screen bg-muted flex flex-col font-sans">
+    <div className="min-h-screen bg-white text-[#17131F] flex flex-col font-sans antialiased relative">
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
-      {/* Top bar */}
-      <header className="bg-background border-b border-border h-14 flex items-center justify-between px-4 sm:px-8 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center shrink-0">
-            <Zap className="h-4 w-4 text-primary-foreground fill-primary-foreground/20" />
-          </div>
-          <div>
-            <span className="font-serif font-semibold text-foreground text-base leading-none block">
-              Blih
-            </span>
-            <span className="font-mono text-[0.625rem] text-muted-foreground uppercase tracking-widest leading-none block mt-0.5">
-              Talent Onboarding
-            </span>
-          </div>
-        </div>
-
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={logout}
-          rightIcon={<LogOut className="h-4 w-4" />}
-          className="text-xs text-muted-foreground hover:text-foreground"
-        >
-          Save & Exit
-        </Button>
-      </header>
+      {/* Global Navbar */}
+      <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
 
       {/* Main wizard area */}
-      <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 flex-1 flex flex-col">
+      <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
         {error && <Alert variant="error" className="mb-6">{error}</Alert>}
 
         <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
-
           {/* Stepper rail */}
-          <aside className="w-full lg:w-72 shrink-0 bg-card border border-border rounded-xl p-5 space-y-4">
-            <p className="text-[0.625rem] font-mono font-semibold text-muted-foreground uppercase tracking-widest">
-              Setup Progress
-            </p>
+          <aside className="w-full lg:w-80 shrink-0 bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-6 shadow-sm">
+            <div>
+              <p className="text-xs font-mono font-bold text-[#6E6678] uppercase tracking-wider">
+                Profile Setup Progress
+              </p>
+              <h2 className="font-display font-bold text-xl text-[#17131F] mt-1">
+                Build your verified profile
+              </h2>
+            </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               {steps.map((s, index) => {
                 const isActive = step === s.id;
                 const isCompleted = step > s.id;
-                const Icon = s.icon;
 
                 return (
                   <div key={s.id} className="relative">
                     {index !== steps.length - 1 && (
                       <div
-                        className={`absolute left-4 top-10 bottom-[-14px] w-0.5 ${isCompleted ? "bg-primary" : "bg-border"
-                          }`}
+                        className={`absolute left-5 top-12 bottom-[-16px] w-0.5 ${
+                          isCompleted ? "bg-[#2E8F79]" : "bg-[#D9CEDF]"
+                        }`}
                       />
                     )}
 
                     <div
-                      className={`flex items-start gap-3 p-2.5 rounded-lg transition-colors ${isActive
-                          ? "bg-primary/8 text-primary"
+                      className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all ${
+                        isActive
+                          ? "bg-[#EEF3FF] border border-[#1E5BFF]/30 text-[#1E5BFF]"
                           : isCompleted
-                            ? "text-foreground"
-                            : "text-muted-foreground"
-                        }`}
+                          ? "text-[#17131F]"
+                          : "text-[#6E6678]"
+                      }`}
                     >
                       <div
-                        className={`shrink-0 h-8 w-8 rounded-md flex items-center justify-center border text-xs font-mono font-semibold transition-colors ${isActive
-                            ? "bg-primary text-primary-foreground border-primary"
+                        className={`shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-xs font-mono font-bold transition-all shadow-xs ${
+                          isActive
+                            ? "bg-[#1E5BFF] text-white"
                             : isCompleted
-                              ? "bg-accent text-accent-foreground border-accent"
-                              : "bg-muted text-muted-foreground border-border"
-                          }`}
+                            ? "bg-[#2E8F79] text-white"
+                            : "bg-white border border-[#D9CEDF] text-[#6E6678]"
+                        }`}
                       >
-                        {isCompleted ? <Check className="h-4 w-4" /> : s.id}
+                        {isCompleted ? <Check className="h-5 w-5" /> : s.id}
                       </div>
                       <div className="pt-0.5 min-w-0">
-                        <p
-                          className={`text-sm font-medium leading-tight ${isActive ? "text-primary font-semibold" : "text-foreground"
-                            }`}
-                        >
+                        <p className="text-sm font-bold leading-tight font-display">
                           {s.title}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
+                        <p className="text-xs text-[#6E6678] mt-1 font-sans">
                           {s.desc}
                         </p>
                       </div>
@@ -214,28 +195,27 @@ function ProfileSetupContent() {
           </aside>
 
           {/* Form card */}
-          <main className="flex-1 w-full min-w-0">
-            <Card className="border border-border shadow-none rounded-xl overflow-hidden bg-card">
-
+          <div className="flex-1 w-full min-w-0">
+            <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_8px_30px_rgba(23,19,31,0.04)] overflow-hidden bg-white">
               {/* Form header */}
-              <div className="bg-muted/40 border-b border-border p-6 sm:p-8">
-                <div className="flex items-center gap-2 text-xs font-mono font-semibold text-primary uppercase tracking-widest mb-1.5">
-                  Step {step} of 3 <ChevronRight className="h-3 w-3" />
+              <div className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1E5BFF] uppercase tracking-wider mb-2">
+                  Step {step} of 3 <ChevronRight className="h-3.5 w-3.5" />
                 </div>
-                <h3 className="font-serif font-bold text-2xl text-foreground">
+                <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#17131F]">
                   {step === 1 && "Personal Information"}
-                  {step === 2 && "Expertise & Skills"}
+                  {step === 2 && "Expertise & Technical Stack"}
                   {step === 3 && "Media & Curriculum Vitae"}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#6E6678] font-sans mt-1">
                   {step === 1 && "Provide your official contact details and current location."}
-                  {step === 2 && "Select your English proficiency level and list your technical capabilities."}
+                  {step === 2 && "Select your English proficiency level and list your core capabilities."}
                   {step === 3 && "Upload your professional headshot and PDF curriculum vitae."}
                 </p>
               </div>
 
               {/* Form body */}
-              <CardContent className="p-6 sm:p-8">
+              <CardContent className="p-6 sm:p-8 bg-white">
                 {step === 1 && (
                   <StepPersonalInfo
                     form={form}
@@ -248,30 +228,29 @@ function ProfileSetupContent() {
                   <StepExpertise
                     form={form}
                     saving={saving}
-                    onBack={() => setStep(1)}
                     onNext={handleNextStep}
+                    onBack={() => setStep(1)}
                   />
                 )}
 
                 {step === 3 && (
                   <StepMedia
                     photoUrl={profile?.photoUrl}
+                    cvUrl={profile?.cvUrl}
                     onPhotoUpload={handlePhotoUpload}
                     onPhotoDelete={handlePhotoDelete}
-                    cvUrl={profile?.cvUrl}
                     onCvUpload={handleCvUpload}
                     onCvDelete={handleCvDelete}
-                    saving={saving}
+                    onComplete={() => handleNextStep()}
                     onBack={() => setStep(2)}
-                    onComplete={handleCompleteSetup}
+                    saving={saving}
                   />
                 )}
               </CardContent>
             </Card>
-          </main>
-
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

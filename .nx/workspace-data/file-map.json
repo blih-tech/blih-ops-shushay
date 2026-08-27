@@ -19,12 +19,12 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "README.md",
-        "hash": "11369023913616062043"
+        "file": "tsconfig.base.json",
+        "hash": "14570171387777529578"
       },
       {
-        "file": "DESIGN.md",
-        "hash": "16333061076861862651"
+        "file": "Blih_Product_Documentation_v2.md",
+        "hash": "5525013559395352115"
       },
       {
         "file": "package.json",
@@ -35,24 +35,24 @@
         "hash": "2373171212127886927"
       },
       {
+        "file": ".gitignore",
+        "hash": "3963499779210702932"
+      },
+      {
+        "file": "README.md",
+        "hash": "3890197456955923019"
+      },
+      {
+        "file": "blih_ops_ui_ux_v2.pen",
+        "hash": "226392487578116293"
+      },
+      {
         "file": "nx.json",
         "hash": "16429485800271762598"
       },
       {
-        "file": "tsconfig.base.json",
-        "hash": "14570171387777529578"
-      },
-      {
         "file": "pnpm-lock.yaml",
         "hash": "837728823281347826"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "5855524580645261722"
-      },
-      {
-        "file": "Blih_Product_Documentation_v2.md",
-        "hash": "5525013559395352115"
       }
     ],
     "projectFileMap": {
@@ -335,201 +335,114 @@
           "hash": "8534277695626630103"
         }
       ],
-      "@blih/validation": [
+      "@blih/ui": [
         {
-          "file": "packages/validation/package.json",
-          "hash": "5608590233577503316",
+          "file": "packages/ui/package.json",
+          "hash": "3563021161907497844",
           "deps": [
-            "npm:zod@4.4.3"
-          ]
-        },
-        {
-          "file": "packages/validation/src/index.ts",
-          "hash": "878879275129292538"
-        }
-      ],
-      "@blih/auth-web": [
-        {
-          "file": "apps/auth-web/.env.local.example",
-          "hash": "12826300261671813054"
-        },
-        {
-          "file": "apps/auth-web/.gitattributes",
-          "hash": "18007627905445077091"
-        },
-        {
-          "file": "apps/auth-web/.gitignore",
-          "hash": "18029942368515381371"
-        },
-        {
-          "file": "apps/auth-web/README.md",
-          "hash": "1621972162990641063"
-        },
-        {
-          "file": "apps/auth-web/eslint.config.mjs",
-          "hash": "1702003467233685370"
-        },
-        {
-          "file": "apps/auth-web/next-env.d.ts",
-          "hash": "11942690884056199491"
-        },
-        {
-          "file": "apps/auth-web/next.config.js",
-          "hash": "4278534899681944106"
-        },
-        {
-          "file": "apps/auth-web/package-lock.json",
-          "hash": "2429801802523248333"
-        },
-        {
-          "file": "apps/auth-web/package.json",
-          "hash": "8896416152557149519",
-          "deps": [
-            "npm:@tailwindcss/postcss",
-            "npm:@types/node",
+            "npm:react",
+            "npm:react-dom",
             "npm:@types/react",
             "npm:@types/react-dom",
-            "npm:eslint",
-            "npm:eslint-config-next",
-            "npm:postcss@8.5.26",
-            "npm:tailwindcss",
-            "npm:typescript@6.0.3",
-            "@blih/types",
-            "@blih/api-client",
-            "@blih/ui",
-            "npm:lucide-react",
-            "npm:next",
-            "npm:react",
-            "npm:react-dom"
+            "npm:typescript",
+            "npm:lucide-react"
           ]
         },
         {
-          "file": "apps/auth-web/postcss.config.js",
-          "hash": "14822812834701160985"
+          "file": "packages/ui/src/Alert.tsx",
+          "hash": "10633021403447797227"
         },
         {
-          "file": "apps/auth-web/src/app/forgot-password/page.tsx",
-          "hash": "16117192872580819769"
+          "file": "packages/ui/src/Badge.tsx",
+          "hash": "4752240758428031916"
         },
         {
-          "file": "apps/auth-web/src/app/globals.css",
-          "hash": "9369986677379985839"
+          "file": "packages/ui/src/Button.tsx",
+          "hash": "16441742760850644799"
         },
         {
-          "file": "apps/auth-web/src/app/layout.tsx",
-          "hash": "3587392602946276714"
+          "file": "packages/ui/src/Card.tsx",
+          "hash": "14661395367918285903"
         },
         {
-          "file": "apps/auth-web/src/app/login/page.tsx",
-          "hash": "4481878038029609676"
-        },
-        {
-          "file": "apps/auth-web/src/app/not-found.tsx",
-          "hash": "17906096427528196016"
-        },
-        {
-          "file": "apps/auth-web/src/app/page.tsx",
-          "hash": "4567618685116508642"
-        },
-        {
-          "file": "apps/auth-web/src/app/register/page.tsx",
-          "hash": "9622073490904100083"
-        },
-        {
-          "file": "apps/auth-web/src/app/reset-password/page.tsx",
-          "hash": "15118164275335044078"
-        },
-        {
-          "file": "apps/auth-web/src/app/verify-email/page.tsx",
-          "hash": "10003581702410900454"
-        },
-        {
-          "file": "apps/auth-web/src/components/auth/AuthLayout.tsx",
-          "hash": "5903368209103890128"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Alert.tsx",
-          "hash": "12470985303198605451"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Badge.tsx",
-          "hash": "2811464931792897955"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Button.tsx",
-          "hash": "11228297964220026661"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Card.tsx",
-          "hash": "12675134903608939870"
-        },
-        {
-          "file": "apps/auth-web/src/components/ui/Checkbox.tsx",
+          "file": "packages/ui/src/Checkbox.tsx",
           "hash": "9723264194204996131"
         },
         {
-          "file": "apps/auth-web/src/components/ui/ConfirmDialog.tsx",
+          "file": "packages/ui/src/Chip.tsx",
+          "hash": "9258108713642668946"
+        },
+        {
+          "file": "packages/ui/src/ConfirmDialog.tsx",
           "hash": "15457945203390544711"
         },
         {
-          "file": "apps/auth-web/src/components/ui/EmptyState.tsx",
+          "file": "packages/ui/src/EmptyState.tsx",
           "hash": "5572827929709823500"
         },
         {
-          "file": "apps/auth-web/src/components/ui/FormField.tsx",
+          "file": "packages/ui/src/FormField.tsx",
           "hash": "9614545578408228937"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Input.tsx",
-          "hash": "6256208098942052598"
+          "file": "packages/ui/src/GlobalNavbar.tsx",
+          "hash": "17281855377773099847"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Modal.tsx",
+          "file": "packages/ui/src/Input.tsx",
+          "hash": "6182788495890827026"
+        },
+        {
+          "file": "packages/ui/src/MetricCard.tsx",
+          "hash": "12279204743863105170"
+        },
+        {
+          "file": "packages/ui/src/Modal.tsx",
           "hash": "15864451565660237110"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Pagination.tsx",
+          "file": "packages/ui/src/Pagination.tsx",
           "hash": "6550256956053313147"
         },
         {
-          "file": "apps/auth-web/src/components/ui/PasswordInput.tsx",
-          "hash": "6936574151342347308"
+          "file": "packages/ui/src/PasswordInput.tsx",
+          "hash": "1441353444421274469"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Select.tsx",
+          "file": "packages/ui/src/Select.tsx",
           "hash": "12635154147386213690"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Skeleton.tsx",
+          "file": "packages/ui/src/Skeleton.tsx",
           "hash": "1031555091361028764"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Spinner.tsx",
+          "file": "packages/ui/src/SkillBar.tsx",
+          "hash": "13880686015513838552"
+        },
+        {
+          "file": "packages/ui/src/Spinner.tsx",
           "hash": "15638010288998606061"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Textarea.tsx",
+          "file": "packages/ui/src/Textarea.tsx",
           "hash": "7744849850738883986"
         },
         {
-          "file": "apps/auth-web/src/components/ui/Tooltip.tsx",
+          "file": "packages/ui/src/Tooltip.tsx",
           "hash": "17667141075389141254"
         },
         {
-          "file": "apps/auth-web/src/components/ui/index.ts",
-          "hash": "10881532955205620032"
+          "file": "packages/ui/src/UniversalSearch.tsx",
+          "hash": "10004954585073698112"
         },
         {
-          "file": "apps/auth-web/src/lib/api.ts",
-          "hash": "8800901008555811550"
+          "file": "packages/ui/src/index.ts",
+          "hash": "14413522530846001756"
         },
         {
-          "file": "apps/auth-web/src/types/user.ts",
-          "hash": "14784906957447820365"
-        },
-        {
-          "file": "apps/auth-web/tsconfig.json",
-          "hash": "17808866200018543864"
+          "file": "packages/ui/tsconfig.json",
+          "hash": "1560159078297376097"
         }
       ],
       "@blih/skills-web": [
@@ -555,7 +468,7 @@
         },
         {
           "file": "apps/skills-web/next-env.d.ts",
-          "hash": "11942690884056199491"
+          "hash": "6031290551108734700"
         },
         {
           "file": "apps/skills-web/next.config.js",
@@ -609,31 +522,31 @@
         },
         {
           "file": "apps/skills-web/src/app/certificates/page.tsx",
-          "hash": "8520018835441693045"
+          "hash": "17993403027409568009"
         },
         {
           "file": "apps/skills-web/src/app/courses/[courseId]/learn/page.tsx",
-          "hash": "5439429825176217820"
+          "hash": "8176836559185375010"
         },
         {
           "file": "apps/skills-web/src/app/courses/[courseId]/page.tsx",
-          "hash": "4488679393062527072"
+          "hash": "495469613646244606"
         },
         {
           "file": "apps/skills-web/src/app/courses/page.tsx",
-          "hash": "3775587116484274763"
+          "hash": "6574276578661100132"
         },
         {
           "file": "apps/skills-web/src/app/dashboard/page.tsx",
-          "hash": "9448179540228638032"
+          "hash": "5590658803353787123"
         },
         {
           "file": "apps/skills-web/src/app/globals.css",
-          "hash": "9369986677379985839"
+          "hash": "480627051065462962"
         },
         {
           "file": "apps/skills-web/src/app/layout.tsx",
-          "hash": "1887368637093420409"
+          "hash": "14384780756567243883"
         },
         {
           "file": "apps/skills-web/src/app/not-found.tsx",
@@ -641,7 +554,7 @@
         },
         {
           "file": "apps/skills-web/src/app/page.tsx",
-          "hash": "9836273654053753011"
+          "hash": "5685737373809529391"
         },
         {
           "file": "apps/skills-web/src/app/profile/page.tsx",
@@ -653,23 +566,27 @@
         },
         {
           "file": "apps/skills-web/src/components/ui/Alert.tsx",
-          "hash": "12470985303198605451"
+          "hash": "10633021403447797227"
         },
         {
           "file": "apps/skills-web/src/components/ui/Badge.tsx",
-          "hash": "2811464931792897955"
+          "hash": "4752240758428031916"
         },
         {
           "file": "apps/skills-web/src/components/ui/Button.tsx",
-          "hash": "11228297964220026661"
+          "hash": "16441742760850644799"
         },
         {
           "file": "apps/skills-web/src/components/ui/Card.tsx",
-          "hash": "12675134903608939870"
+          "hash": "14661395367918285903"
         },
         {
           "file": "apps/skills-web/src/components/ui/Checkbox.tsx",
           "hash": "9723264194204996131"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/Chip.tsx",
+          "hash": "9258108713642668946"
         },
         {
           "file": "apps/skills-web/src/components/ui/ConfirmDialog.tsx",
@@ -684,8 +601,16 @@
           "hash": "9614545578408228937"
         },
         {
+          "file": "apps/skills-web/src/components/ui/GlobalNavbar.tsx",
+          "hash": "17281855377773099847"
+        },
+        {
           "file": "apps/skills-web/src/components/ui/Input.tsx",
-          "hash": "6256208098942052598"
+          "hash": "6182788495890827026"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/MetricCard.tsx",
+          "hash": "12279204743863105170"
         },
         {
           "file": "apps/skills-web/src/components/ui/Modal.tsx",
@@ -697,7 +622,7 @@
         },
         {
           "file": "apps/skills-web/src/components/ui/PasswordInput.tsx",
-          "hash": "6936574151342347308"
+          "hash": "1441353444421274469"
         },
         {
           "file": "apps/skills-web/src/components/ui/Select.tsx",
@@ -706,6 +631,10 @@
         {
           "file": "apps/skills-web/src/components/ui/Skeleton.tsx",
           "hash": "1031555091361028764"
+        },
+        {
+          "file": "apps/skills-web/src/components/ui/SkillBar.tsx",
+          "hash": "13880686015513838552"
         },
         {
           "file": "apps/skills-web/src/components/ui/Spinner.tsx",
@@ -720,8 +649,12 @@
           "hash": "17667141075389141254"
         },
         {
+          "file": "apps/skills-web/src/components/ui/UniversalSearch.tsx",
+          "hash": "10004954585073698112"
+        },
+        {
           "file": "apps/skills-web/src/components/ui/index.ts",
-          "hash": "10881532955205620032"
+          "hash": "14413522530846001756"
         },
         {
           "file": "apps/skills-web/src/lib/api.ts",
@@ -748,6 +681,29 @@
           "hash": "17808866200018543864"
         }
       ],
+      "@blih/api-client": [
+        {
+          "file": "packages/api-client/package.json",
+          "hash": "12253421402689962015"
+        },
+        {
+          "file": "packages/api-client/src/index.ts",
+          "hash": "8046290248135554880"
+        }
+      ],
+      "@blih/validation": [
+        {
+          "file": "packages/validation/package.json",
+          "hash": "5608590233577503316",
+          "deps": [
+            "npm:zod@4.4.3"
+          ]
+        },
+        {
+          "file": "packages/validation/src/index.ts",
+          "hash": "878879275129292538"
+        }
+      ],
       "@blih/talent-web": [
         {
           "file": "apps/talent-web/.env.local.example",
@@ -771,7 +727,7 @@
         },
         {
           "file": "apps/talent-web/next-env.d.ts",
-          "hash": "11942690884056199491"
+          "hash": "6031290551108734700"
         },
         {
           "file": "apps/talent-web/next.config.js",
@@ -837,7 +793,7 @@
         },
         {
           "file": "apps/talent-web/src/app/company/page.tsx",
-          "hash": "8692572927864529343"
+          "hash": "4710588587840515440"
         },
         {
           "file": "apps/talent-web/src/app/company/profile/page.tsx",
@@ -857,7 +813,7 @@
         },
         {
           "file": "apps/talent-web/src/app/globals.css",
-          "hash": "9369986677379985839"
+          "hash": "480627051065462962"
         },
         {
           "file": "apps/talent-web/src/app/jobs/[jobId]/page.tsx",
@@ -865,11 +821,11 @@
         },
         {
           "file": "apps/talent-web/src/app/jobs/page.tsx",
-          "hash": "5727709689226849336"
+          "hash": "12047797620771586548"
         },
         {
           "file": "apps/talent-web/src/app/layout.tsx",
-          "hash": "3586034032614042168"
+          "hash": "12422042464835703792"
         },
         {
           "file": "apps/talent-web/src/app/not-found.tsx",
@@ -877,7 +833,7 @@
         },
         {
           "file": "apps/talent-web/src/app/page.tsx",
-          "hash": "13009049067788055500"
+          "hash": "2754866163196898013"
         },
         {
           "file": "apps/talent-web/src/app/profile/edit/page.tsx",
@@ -889,7 +845,7 @@
         },
         {
           "file": "apps/talent-web/src/app/profile/page.tsx",
-          "hash": "2458757158416594654"
+          "hash": "14132092546879465162"
         },
         {
           "file": "apps/talent-web/src/app/profile/preview/page.tsx",
@@ -973,23 +929,27 @@
         },
         {
           "file": "apps/talent-web/src/components/ui/Alert.tsx",
-          "hash": "12470985303198605451"
+          "hash": "10633021403447797227"
         },
         {
           "file": "apps/talent-web/src/components/ui/Badge.tsx",
-          "hash": "2811464931792897955"
+          "hash": "4752240758428031916"
         },
         {
           "file": "apps/talent-web/src/components/ui/Button.tsx",
-          "hash": "11228297964220026661"
+          "hash": "16441742760850644799"
         },
         {
           "file": "apps/talent-web/src/components/ui/Card.tsx",
-          "hash": "12675134903608939870"
+          "hash": "14661395367918285903"
         },
         {
           "file": "apps/talent-web/src/components/ui/Checkbox.tsx",
           "hash": "9723264194204996131"
+        },
+        {
+          "file": "apps/talent-web/src/components/ui/Chip.tsx",
+          "hash": "9258108713642668946"
         },
         {
           "file": "apps/talent-web/src/components/ui/ConfirmDialog.tsx",
@@ -1004,8 +964,16 @@
           "hash": "9614545578408228937"
         },
         {
+          "file": "apps/talent-web/src/components/ui/GlobalNavbar.tsx",
+          "hash": "17281855377773099847"
+        },
+        {
           "file": "apps/talent-web/src/components/ui/Input.tsx",
-          "hash": "6256208098942052598"
+          "hash": "6182788495890827026"
+        },
+        {
+          "file": "apps/talent-web/src/components/ui/MetricCard.tsx",
+          "hash": "12279204743863105170"
         },
         {
           "file": "apps/talent-web/src/components/ui/Modal.tsx",
@@ -1017,7 +985,7 @@
         },
         {
           "file": "apps/talent-web/src/components/ui/PasswordInput.tsx",
-          "hash": "6936574151342347308"
+          "hash": "1441353444421274469"
         },
         {
           "file": "apps/talent-web/src/components/ui/Select.tsx",
@@ -1026,6 +994,10 @@
         {
           "file": "apps/talent-web/src/components/ui/Skeleton.tsx",
           "hash": "1031555091361028764"
+        },
+        {
+          "file": "apps/talent-web/src/components/ui/SkillBar.tsx",
+          "hash": "13880686015513838552"
         },
         {
           "file": "apps/talent-web/src/components/ui/Spinner.tsx",
@@ -1040,8 +1012,12 @@
           "hash": "17667141075389141254"
         },
         {
+          "file": "apps/talent-web/src/components/ui/UniversalSearch.tsx",
+          "hash": "10004954585073698112"
+        },
+        {
           "file": "apps/talent-web/src/components/ui/index.ts",
-          "hash": "10881532955205620032"
+          "hash": "14413522530846001756"
         },
         {
           "file": "apps/talent-web/src/hooks/useCompanyProfile.ts",
@@ -1096,96 +1072,208 @@
           "hash": "17808866200018543864"
         }
       ],
-      "@blih/api-client": [
+      "@blih/auth-web": [
         {
-          "file": "packages/api-client/package.json",
-          "hash": "12253421402689962015"
+          "file": "apps/auth-web/.env.local.example",
+          "hash": "12826300261671813054"
         },
         {
-          "file": "packages/api-client/src/index.ts",
-          "hash": "8046290248135554880"
-        }
-      ],
-      "@blih/ui": [
+          "file": "apps/auth-web/.gitattributes",
+          "hash": "18007627905445077091"
+        },
         {
-          "file": "packages/ui/package.json",
-          "hash": "12900523198839188972",
+          "file": "apps/auth-web/.gitignore",
+          "hash": "18029942368515381371"
+        },
+        {
+          "file": "apps/auth-web/README.md",
+          "hash": "1621972162990641063"
+        },
+        {
+          "file": "apps/auth-web/eslint.config.mjs",
+          "hash": "1702003467233685370"
+        },
+        {
+          "file": "apps/auth-web/next-env.d.ts",
+          "hash": "6031290551108734700"
+        },
+        {
+          "file": "apps/auth-web/next.config.js",
+          "hash": "4278534899681944106"
+        },
+        {
+          "file": "apps/auth-web/package-lock.json",
+          "hash": "2429801802523248333"
+        },
+        {
+          "file": "apps/auth-web/package.json",
+          "hash": "8896416152557149519",
           "deps": [
+            "npm:@tailwindcss/postcss",
+            "npm:@types/node",
+            "npm:@types/react",
+            "npm:@types/react-dom",
+            "npm:eslint",
+            "npm:eslint-config-next",
+            "npm:postcss@8.5.26",
+            "npm:tailwindcss",
+            "npm:typescript@6.0.3",
+            "@blih/types",
+            "@blih/api-client",
+            "@blih/ui",
+            "npm:lucide-react",
+            "npm:next",
             "npm:react",
             "npm:react-dom"
           ]
         },
         {
-          "file": "packages/ui/src/Alert.tsx",
-          "hash": "12470985303198605451"
+          "file": "apps/auth-web/postcss.config.js",
+          "hash": "14822812834701160985"
         },
         {
-          "file": "packages/ui/src/Badge.tsx",
-          "hash": "2811464931792897955"
+          "file": "apps/auth-web/src/app/forgot-password/page.tsx",
+          "hash": "15577315984218742324"
         },
         {
-          "file": "packages/ui/src/Button.tsx",
-          "hash": "11228297964220026661"
+          "file": "apps/auth-web/src/app/globals.css",
+          "hash": "480627051065462962"
         },
         {
-          "file": "packages/ui/src/Card.tsx",
-          "hash": "12675134903608939870"
+          "file": "apps/auth-web/src/app/layout.tsx",
+          "hash": "4541082670302372262"
         },
         {
-          "file": "packages/ui/src/Checkbox.tsx",
+          "file": "apps/auth-web/src/app/login/page.tsx",
+          "hash": "1533356351704326852"
+        },
+        {
+          "file": "apps/auth-web/src/app/not-found.tsx",
+          "hash": "17906096427528196016"
+        },
+        {
+          "file": "apps/auth-web/src/app/page.tsx",
+          "hash": "4567618685116508642"
+        },
+        {
+          "file": "apps/auth-web/src/app/register/page.tsx",
+          "hash": "17889741016581565168"
+        },
+        {
+          "file": "apps/auth-web/src/app/reset-password/page.tsx",
+          "hash": "14754368231686395347"
+        },
+        {
+          "file": "apps/auth-web/src/app/verify-email/page.tsx",
+          "hash": "10003581702410900454"
+        },
+        {
+          "file": "apps/auth-web/src/components/auth/AuthLayout.tsx",
+          "hash": "7997418313456850456"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Alert.tsx",
+          "hash": "10633021403447797227"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Badge.tsx",
+          "hash": "4752240758428031916"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Button.tsx",
+          "hash": "16441742760850644799"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Card.tsx",
+          "hash": "14661395367918285903"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Checkbox.tsx",
           "hash": "9723264194204996131"
         },
         {
-          "file": "packages/ui/src/ConfirmDialog.tsx",
+          "file": "apps/auth-web/src/components/ui/Chip.tsx",
+          "hash": "9258108713642668946"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/ConfirmDialog.tsx",
           "hash": "15457945203390544711"
         },
         {
-          "file": "packages/ui/src/EmptyState.tsx",
+          "file": "apps/auth-web/src/components/ui/EmptyState.tsx",
           "hash": "5572827929709823500"
         },
         {
-          "file": "packages/ui/src/FormField.tsx",
+          "file": "apps/auth-web/src/components/ui/FormField.tsx",
           "hash": "9614545578408228937"
         },
         {
-          "file": "packages/ui/src/Input.tsx",
-          "hash": "6256208098942052598"
+          "file": "apps/auth-web/src/components/ui/GlobalNavbar.tsx",
+          "hash": "17281855377773099847"
         },
         {
-          "file": "packages/ui/src/Modal.tsx",
+          "file": "apps/auth-web/src/components/ui/Input.tsx",
+          "hash": "6182788495890827026"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/MetricCard.tsx",
+          "hash": "12279204743863105170"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Modal.tsx",
           "hash": "15864451565660237110"
         },
         {
-          "file": "packages/ui/src/Pagination.tsx",
+          "file": "apps/auth-web/src/components/ui/Pagination.tsx",
           "hash": "6550256956053313147"
         },
         {
-          "file": "packages/ui/src/PasswordInput.tsx",
-          "hash": "6936574151342347308"
+          "file": "apps/auth-web/src/components/ui/PasswordInput.tsx",
+          "hash": "1441353444421274469"
         },
         {
-          "file": "packages/ui/src/Select.tsx",
+          "file": "apps/auth-web/src/components/ui/Select.tsx",
           "hash": "12635154147386213690"
         },
         {
-          "file": "packages/ui/src/Skeleton.tsx",
+          "file": "apps/auth-web/src/components/ui/Skeleton.tsx",
           "hash": "1031555091361028764"
         },
         {
-          "file": "packages/ui/src/Spinner.tsx",
+          "file": "apps/auth-web/src/components/ui/SkillBar.tsx",
+          "hash": "13880686015513838552"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/Spinner.tsx",
           "hash": "15638010288998606061"
         },
         {
-          "file": "packages/ui/src/Textarea.tsx",
+          "file": "apps/auth-web/src/components/ui/Textarea.tsx",
           "hash": "7744849850738883986"
         },
         {
-          "file": "packages/ui/src/Tooltip.tsx",
+          "file": "apps/auth-web/src/components/ui/Tooltip.tsx",
           "hash": "17667141075389141254"
         },
         {
-          "file": "packages/ui/src/index.ts",
-          "hash": "10881532955205620032"
+          "file": "apps/auth-web/src/components/ui/UniversalSearch.tsx",
+          "hash": "10004954585073698112"
+        },
+        {
+          "file": "apps/auth-web/src/components/ui/index.ts",
+          "hash": "14413522530846001756"
+        },
+        {
+          "file": "apps/auth-web/src/lib/api.ts",
+          "hash": "8800901008555811550"
+        },
+        {
+          "file": "apps/auth-web/src/types/user.ts",
+          "hash": "14784906957447820365"
+        },
+        {
+          "file": "apps/auth-web/tsconfig.json",
+          "hash": "17808866200018543864"
         }
       ]
     }

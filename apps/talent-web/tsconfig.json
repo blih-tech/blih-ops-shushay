@@ -1,14 +1,13 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "target": "ES2020",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -17,14 +16,15 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "incremental": true,
     "paths": {
       "@/*": ["./src/*"],
       "@blih/types": ["../../packages/types/src/index.ts"],
       "@blih/api-client": ["../../packages/api-client/src/index.ts"],
       "@blih/validation": ["../../packages/validation/src/index.ts"],
-      "@blih/ui": ["../../packages/ui/src/index.ts"]
+      "@blih/ui": ["../../packages/ui/src/index.ts"],
+      "@blih/ui/*": ["../../packages/ui/src/*"]
     },
     "plugins": [
       {

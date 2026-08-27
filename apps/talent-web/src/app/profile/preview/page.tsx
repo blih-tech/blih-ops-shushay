@@ -1,11 +1,11 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
-import { Button, Badge, Spinner, Alert } from "@/components/ui";
+import { Button, Badge, Spinner, Alert, GlobalNavbar } from "@/components/ui";
 import {
-  ArrowLeft,
   Mail,
   Phone,
   MapPin,
@@ -16,21 +16,27 @@ import {
   User,
   CheckCircle2,
   Edit3,
+  Eye,
+  ArrowLeft,
+  Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 
 function ProfilePreviewContent() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const { profile, loading, error } = useTalentProfile();
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center space-y-3">
-          <Spinner size="md" />
-          <p className="text-sm text-muted-foreground animate-pulse">
-            Loading preview…
-          </p>
+      <div className="min-h-screen bg-white">
+        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center space-y-3">
+            <Spinner size="md" />
+            <p className="text-sm text-[#6E6678] font-sans">
+              Loading preview…
+            </p>
+          </div>
         </div>
       </div>
     );
@@ -38,19 +44,22 @@ function ProfilePreviewContent() {
 
   if (error) {
     return (
-      <div className="max-w-md mx-auto mt-12 px-4">
-        <Alert variant="error" title="Load Error">
-          {error}
-        </Alert>
+      <div className="min-h-screen bg-white">
+        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
+        <div className="max-w-md mx-auto mt-12 px-4">
+          <Alert variant="error" title="Load Error">
+            {error}
+          </Alert>
+        </div>
       </div>
     );
   }
 
   const sortedExperience = profile?.experience
     ? [...profile.experience].sort(
-      (a, b) =>
-        new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-    )
+        (a, b) =>
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+      )
     : [];
 
   const sortedEducation = profile?.education
@@ -65,152 +74,125 @@ function ProfilePreviewContent() {
     });
 
   return (
-    <div className="font-sans">
+    <div className="min-h-screen bg-white text-[#17131F] font-sans">
+      <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
+
       {/* Preview mode banner */}
-      <div className="bg-foreground text-primary-foreground px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5 text-sm">
-          <Eye className="h-4 w-4 text-dark-muted-foreground" />
-          <span className="text-dark-foreground font-medium">
-            Recruiter preview mode
-          </span>
-          <span className="text-dark-muted-foreground hidden sm:inline">
-            — This is how companies see your profile
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          {profile?.cvUrl && (
-            <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer">
+      <div className="bg-[#17131F] text-white px-4 sm:px-6 py-3">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 text-sm font-sans">
+            <Eye className="h-4 w-4 text-[#FF8A5B]" />
+            <span className="font-semibold text-white">
+              Recruiter Preview Mode
+            </span>
+            <span className="text-[#6E6678] hidden sm:inline">
+              — This is how companies and hiring managers view your verified profile
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {profile?.cvUrl && (
+              <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10 text-xs"
+                  leftIcon={<Download className="h-3.5 w-3.5" />}
+                >
+                  Download CV
+                </Button>
+              </a>
+            )}
+            <Link href="/profile/edit">
               <Button
                 size="sm"
-                variant="outline"
-                className="border-dark-border text-dark-foreground bg-transparent hover:bg-dark-card text-xs"
-                leftIcon={<Download className="h-3.5 w-3.5" />}
+                variant="coral"
+                className="text-xs font-bold"
+                leftIcon={<Edit3 className="h-3.5 w-3.5" />}
               >
-                Download CV
+                Back to Editor
               </Button>
-            </a>
-          )}
-          <Link href="/profile/edit">
-            <Button
-              size="sm"
-              variant="primary"
-              className="text-xs"
-              leftIcon={<Edit3 className="h-3.5 w-3.5" />}
-            >
-              Back to Editor
-            </Button>
-          </Link>
+            </Link>
+          </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-        {/* Two-column layout */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
           {/* Left column: identity + contact */}
-          <aside className="lg:col-span-4 space-y-4">
-
-            {/* Identity card */}
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <div className="px-6 pt-8 pb-6 text-center">
-                <div className="mx-auto h-24 w-24 rounded-full border border-border bg-muted flex items-center justify-center overflow-hidden mb-4 relative">
-                  {profile?.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={profile.photoUrl}
-                      alt="Avatar"
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <User className="h-10 w-10 text-muted-foreground" />
-                  )}
-                  {profile?.isComplete && (
-                    <div className="absolute bottom-0.5 right-0.5 h-4 w-4 bg-green-500 rounded-full border-2 border-card" />
-                  )}
-                </div>
-
-                <h2 className="font-serif font-bold text-2xl text-foreground">
-                  {profile?.fullName || "Name Not Set"}
-                </h2>
-                {profile?.title && (
-                  <p className="text-sm font-medium text-primary mt-1">
-                    {profile.title}
-                  </p>
+          <aside className="lg:col-span-4 space-y-6">
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 text-center shadow-sm">
+              <div className="mx-auto h-28 w-28 rounded-full border-2 border-[#1E5BFF]/20 bg-[#EEF3FF] flex items-center justify-center overflow-hidden mb-4 relative">
+                {profile?.photoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={profile.photoUrl}
+                    alt="Avatar"
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <User className="h-12 w-12 text-[#6E6678]" />
                 )}
-
-                <div className="flex flex-wrap justify-center gap-2 mt-3">
-                  {profile?.isComplete ? (
-                    <Badge
-                      variant="success"
-                      className="flex items-center gap-1"
-                    >
-                      <CheckCircle2 className="h-3 w-3" />
-                      Active Profile
-                    </Badge>
-                  ) : (
-                    <Badge variant="warning">Incomplete</Badge>
-                  )}
-                  {profile?.englishLevel && (
-                    <Badge variant="secondary">
-                      English: {profile.englishLevel.replace("_", " ")}
-                    </Badge>
-                  )}
-                </div>
+                {profile?.isComplete && (
+                  <div className="absolute bottom-1 right-1 h-5 w-5 bg-[#2E8F79] rounded-full border-2 border-white flex items-center justify-center text-white">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                  </div>
+                )}
               </div>
 
-              {profile?.cvUrl && (
-                <div className="border-t border-border px-6 py-4">
-                  <a
-                    href={profile.cvUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2 h-9 border border-border rounded-md text-sm font-medium text-foreground hover:bg-muted transition-colors"
-                  >
-                    <Download className="h-3.5 w-3.5 text-muted-foreground" />
-                    Download CV
-                  </a>
-                </div>
+              <h2 className="font-display font-bold text-2xl text-[#17131F]">
+                {profile?.fullName || "Name Not Set"}
+              </h2>
+              {profile?.title && (
+                <p className="text-sm font-medium text-[#1E5BFF] mt-1">
+                  {profile.title}
+                </p>
               )}
-            </div>
 
-            {/* Contact card */}
-            <div className="bg-card border border-border rounded-xl px-5 py-4 space-y-3">
-              <p className="text-[0.625rem] font-mono font-semibold text-muted-foreground uppercase tracking-widest">
-                Contact
-              </p>
-              <ul className="space-y-2.5 text-sm text-body">
-                <li className="flex items-center gap-2.5 min-w-0">
-                  <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                  <span className="truncate">{user?.email}</span>
-                </li>
+              <div className="flex justify-center gap-2 mt-3">
+                <Badge variant={profile?.isComplete ? "verified" : "secondary"}>
+                  {profile?.isComplete ? "Verified Profile" : "In Progress"}
+                </Badge>
+                {profile?.englishLevel && (
+                  <Badge variant="outline">
+                    {profile.englishLevel}
+                  </Badge>
+                )}
+              </div>
+
+              {/* Contact info list */}
+              <div className="mt-6 pt-6 border-t border-[#D9CEDF] space-y-3 text-left text-sm text-[#6E6678]">
+                {user?.email && (
+                  <div className="flex items-center gap-2.5">
+                    <Mail className="h-4 w-4 text-[#1E5BFF] shrink-0" />
+                    <span className="truncate">{user.email}</span>
+                  </div>
+                )}
                 {profile?.phone && (
-                  <li className="flex items-center gap-2.5">
-                    <Phone className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    {profile.phone}
-                  </li>
+                  <div className="flex items-center gap-2.5">
+                    <Phone className="h-4 w-4 text-[#1E5BFF] shrink-0" />
+                    <span>{profile.phone}</span>
+                  </div>
                 )}
                 {(profile?.city || profile?.country) && (
-                  <li className="flex items-center gap-2.5">
-                    <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    {[profile.city, profile.country]
-                      .filter(Boolean)
-                      .join(", ")}
-                  </li>
+                  <div className="flex items-center gap-2.5">
+                    <MapPin className="h-4 w-4 text-[#1E5BFF] shrink-0" />
+                    <span>{[profile.city, profile.country].filter(Boolean).join(", ")}</span>
+                  </div>
                 )}
-              </ul>
+              </div>
             </div>
 
-            {/* Skills */}
+            {/* Skills chip card */}
             {profile?.skills && profile.skills.length > 0 && (
-              <div className="bg-card border border-border rounded-xl px-5 py-4 space-y-3">
-                <p className="text-[0.625rem] font-mono font-semibold text-muted-foreground uppercase tracking-widest">
-                  Skills & Expertise
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {profile.skills.map((skill, i) => (
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-3">
+                <h3 className="font-display font-bold text-base text-[#17131F]">
+                  Core Capabilities
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.skills.map((skill) => (
                     <span
-                      key={i}
-                      className="inline-flex items-center px-2.5 py-1 bg-accent text-accent-foreground text-xs font-medium rounded-full border border-accent"
+                      key={skill}
+                      className="px-3 py-1 bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/20 rounded-full text-xs font-mono font-medium"
                     >
                       {skill}
                     </span>
@@ -220,148 +202,88 @@ function ProfilePreviewContent() {
             )}
           </aside>
 
-          {/* Right column: bio + timeline sections */}
+          {/* Right column: bio + experience + education */}
           <div className="lg:col-span-8 space-y-6">
-
-            {/* Bio */}
-            <div className="bg-card border border-border rounded-xl px-6 py-5 space-y-3">
-              <p className="text-[0.625rem] font-mono font-semibold text-muted-foreground uppercase tracking-widest">
-                Professional Overview
-              </p>
-              {profile?.bio ? (
-                <p className="text-sm sm:text-base text-body leading-relaxed whitespace-pre-line">
+            {/* Bio Card */}
+            {profile?.bio && (
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
+                <h3 className="font-display font-bold text-xl text-[#17131F]">
+                  About & Background
+                </h3>
+                <p className="text-[#17131F] leading-relaxed text-sm sm:text-base whitespace-pre-line">
                   {profile.bio}
                 </p>
+              </div>
+            )}
+
+            {/* Work Experience */}
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex items-center gap-2.5">
+                <Briefcase className="h-5 w-5 text-[#1E5BFF]" />
+                <h3 className="font-display font-bold text-xl text-[#17131F]">
+                  Work Experience
+                </h3>
+              </div>
+
+              {sortedExperience.length === 0 ? (
+                <p className="text-sm text-[#6E6678]">No experience records added yet.</p>
               ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  No professional summary added yet.
-                </p>
+                <div className="space-y-6 divide-y divide-[#D9CEDF]/70">
+                  {sortedExperience.map((exp, idx) => (
+                    <div key={exp.id || idx} className={idx > 0 ? "pt-6" : ""}>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                        <h4 className="font-display font-bold text-base text-[#17131F]">
+                          {exp.title}
+                        </h4>
+                        <span className="text-xs font-mono text-[#6E6678]">
+                          {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium text-[#1E5BFF]">{exp.company}</p>
+                      {exp.description && (
+                        <p className="text-sm text-[#6E6678] mt-2 leading-relaxed whitespace-pre-line">
+                          {exp.description}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 
-            {/* Work History */}
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <div className="px-6 py-4 border-b border-border bg-muted/40 flex items-center gap-2.5">
-                <Briefcase className="h-4 w-4 text-muted-foreground" />
-                <h3 className="font-serif font-semibold text-lg text-foreground">
-                  Work History
-                </h3>
-              </div>
-              <div className="px-6 py-5">
-                {sortedExperience.length > 0 ? (
-                  <div className="space-y-6">
-                    {sortedExperience.map((exp, i) => (
-                      <div
-                        key={exp.id}
-                        className={`relative pl-5 ${i < sortedExperience.length - 1
-                            ? "pb-6 border-l border-border"
-                            : ""
-                          }`}
-                      >
-                        <div className="absolute -left-1.5 top-1.5 h-3 w-3 rounded-full border-2 border-border bg-card" />
-                        <div className="space-y-1">
-                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
-                            <h4 className="font-semibold text-foreground text-base">
-                              {exp.title}
-                            </h4>
-                            <span className="text-xs text-muted-foreground flex items-center gap-1.5 shrink-0 font-mono">
-                              <Calendar className="h-3 w-3" />
-                              {formatDate(exp.startDate)} –{" "}
-                              {exp.current
-                                ? "Present"
-                                : exp.endDate
-                                  ? formatDate(exp.endDate)
-                                  : ""}
-                            </span>
-                          </div>
-                          <p className="text-sm font-medium text-primary">
-                            {exp.company}
-                          </p>
-                          {exp.description && (
-                            <p className="text-sm text-body leading-relaxed mt-2 whitespace-pre-line">
-                              {exp.description}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground italic">
-                    No work history provided.
-                  </p>
-                )}
-              </div>
-            </div>
-
             {/* Education */}
-            <div className="bg-card border border-border rounded-xl overflow-hidden">
-              <div className="px-6 py-4 border-b border-border bg-muted/40 flex items-center gap-2.5">
-                <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                <h3 className="font-serif font-semibold text-lg text-foreground">
-                  Education
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex items-center gap-2.5">
+                <GraduationCap className="h-5 w-5 text-[#1E5BFF]" />
+                <h3 className="font-display font-bold text-xl text-[#17131F]">
+                  Education & Credentials
                 </h3>
               </div>
-              <div className="px-6 py-5">
-                {sortedEducation.length > 0 ? (
-                  <div className="space-y-6">
-                    {sortedEducation.map((edu, i) => (
-                      <div
-                        key={edu.id}
-                        className={`relative pl-5 ${i < sortedEducation.length - 1
-                            ? "pb-6 border-l border-border"
-                            : ""
-                          }`}
-                      >
-                        <div className="absolute -left-1.5 top-1.5 h-3 w-3 rounded-full border-2 border-border bg-card" />
-                        <div className="space-y-1">
-                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
-                            <h4 className="font-semibold text-foreground text-base">
-                              {edu.degree}
-                            </h4>
-                            <span className="text-xs text-muted-foreground font-mono shrink-0">
-                              {edu.startYear} – {edu.endYear || "Present"}
-                            </span>
-                          </div>
-                          <p className="text-sm font-medium text-body">
-                            {edu.institution}
-                            {edu.field ? ` · ${edu.field}` : ""}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground italic">
-                    No academic history provided.
-                  </p>
-                )}
-              </div>
-            </div>
 
+              {sortedEducation.length === 0 ? (
+                <p className="text-sm text-[#6E6678]">No education records added yet.</p>
+              ) : (
+                <div className="space-y-6 divide-y divide-[#D9CEDF]/70">
+                  {sortedEducation.map((edu, idx) => (
+                    <div key={edu.id || idx} className={idx > 0 ? "pt-6" : ""}>
+                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                        <h4 className="font-display font-bold text-base text-[#17131F]">
+                          {edu.degree} {edu.field ? `in ${edu.field}` : ""}
+                        </h4>
+                        <span className="text-xs font-mono text-[#6E6678]">
+                          {edu.startYear} – {edu.endYear || "Present"}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium text-[#1E5BFF]">{edu.institution}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
-  );
-}
-
-// Inline Eye icon to avoid an extra import
-function Eye(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
   );
 }
 

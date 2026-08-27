@@ -2,25 +2,42 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button, Input, PasswordInput, Alert } from "@/components/ui";
-import { GraduationCap, Building2, ArrowRight, ArrowLeft, Mail, Plus } from "lucide-react";
+import { Button, Input, PasswordInput, Alert, Badge } from "@/components/ui";
+import { Mail, User, BookOpen, ShieldCheck, Briefcase } from "lucide-react";
 import { apiFetch } from "@/lib/api";
-
 import { Role } from "@/types/user";
 
+function GoogleIcon() {
+  return (
+    <svg className="w-5 h-5" viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 10.04 0 12s.45 3.82 1.25 5.42l4.03-3.15z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+      />
+    </svg>
+  );
+}
+
 export default function RegisterPage() {
-  const [step, setStep] = useState<"choose" | "form">("choose");
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<Role>("TALENT");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  const handleSelectRole = (selectedRole: Role) => {
-    setRole(selectedRole);
-    setStep("form");
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,53 +57,50 @@ export default function RegisterPage() {
     }
   };
 
-  // 1. Navigation Header — full-width, content capped wide
   const navHeader = (
-    <header className="fixed top-0 left-0 right-0 bg-background border-b border-border z-50">
-      <div className="flex justify-between items-center w-full px-6 md:px-10 xl:px-16 h-16 xl:h-20">
-        <Link
-          className="font-serif text-lg xl:text-xl font-semibold text-primary hover:opacity-80 transition-opacity"
-          href="/"
-        >
-          Blih Ecosystem
+    <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
+      <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
+        <Link href="http://localhost:3002" className="flex items-baseline gap-2 group">
+          <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
+            BLIH OPS
+          </span>
         </Link>
         <Link
-          className="font-sans text-xs xl:text-sm font-medium uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors duration-interactive ease-out px-4 py-2 border border-transparent hover:border-border rounded-md cursor-pointer"
           href="/login"
+          className="font-mono text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-4 py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white"
         >
-          SIGN IN
+          Already have an account? Sign in
         </Link>
       </div>
     </header>
   );
 
-  // 2. Footer Section — full-width, content capped wide
   const footerSection = (
-    <footer className="w-full px-6 md:px-10 xl:px-16 py-6 xl:py-8 border-t border-border flex flex-col md:flex-row justify-between items-center text-muted-foreground text-xs xl:text-sm mt-auto font-sans">
-      <p>© 2026 Blih Ecosystem. All rights reserved.</p>
-      <div className="flex gap-4 mt-4 md:mt-0 font-sans text-xs xl:text-sm uppercase tracking-wider">
-        <a className="hover:text-primary transition-colors duration-interactive ease-out" href="#">Privacy Policy</a>
-        <span className="text-border">|</span>
-        <a className="hover:text-primary transition-colors duration-interactive ease-out" href="#">Terms of Service</a>
-        <span className="text-border">|</span>
-        <a className="hover:text-primary transition-colors duration-interactive ease-out" href="#">Support</a>
+    <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-auto">
+      <p>© 2026 BLIH OPS. All rights reserved.</p>
+      <div className="flex gap-4 uppercase tracking-wider">
+        <a className="hover:text-[#1E5BFF] transition-colors" href="#">Privacy Policy</a>
+        <span className="text-[#D9CEDF]">·</span>
+        <a className="hover:text-[#1E5BFF] transition-colors" href="#">Terms of Service</a>
+        <span className="text-[#D9CEDF]">·</span>
+        <a className="hover:text-[#1E5BFF] transition-colors" href="#">Support</a>
       </div>
     </footer>
   );
 
-  // Successful state
   if (success) {
     return (
-      <div className="min-h-screen bg-muted text-foreground flex flex-col antialiased">
+      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
+        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
         {navHeader}
-        <main className="flex-1 flex flex-col items-center justify-center w-full px-4 mt-20 mb-12">
-          <div className="w-full max-w-md xl:max-w-lg bg-card border border-border p-8 xl:p-12 rounded-xl text-center space-y-6">
+        <main className="flex-1 flex flex-col items-center justify-center w-full px-4 py-16">
+          <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-[0_16px_50px_rgba(30,91,255,0.06)]">
             <Alert variant="success" title="Check your email">
               {"We've sent you a link to verify your account. For local development, check the **blih-api** server console logs to retrieve the mock verification link."}
             </Alert>
             <div className="pt-4">
               <Link href="/login">
-                <Button fullWidth>Go to Sign In</Button>
+                <Button fullWidth size="lg">Go to Sign In</Button>
               </Link>
             </div>
           </div>
@@ -97,162 +111,180 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted text-foreground flex flex-col antialiased">
+    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
       {navHeader}
 
-      {/* Main — full width, generous top/bottom padding at all breakpoints */}
-      <main className="flex-1 w-full px-6 md:px-10 xl:px-16 mt-24 xl:mt-32 mb-16 xl:mb-24 flex flex-col items-center justify-center">
-
-        {step === "choose" ? (
-          <div className="w-full flex flex-col items-center">
-
-            {/* Hero headline — fluid from mobile → 1920px */}
-            <div className="max-w-3xl xl:max-w-5xl text-center mb-12 xl:mb-16 space-y-5">
-              <h1 className="font-serif text-3xl md:text-4xl xl:text-5xl font-semibold tracking-tight text-foreground leading-tight">
-                Your future starts here.
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start w-full">
+          {/* Left Column: Intro & Benefits */}
+          <div className="lg:col-span-6 space-y-8">
+            <div className="space-y-4">
+              <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F] leading-tight">
+                Build proof of skill. <br />
+                Compete for better work.
               </h1>
-              <p className="font-sans text-sm md:text-base xl:text-lg text-muted-foreground leading-relaxed max-w-2xl xl:max-w-3xl mx-auto">
-                Join the Blih Ecosystem. Whether you are looking to accelerate your skills or seeking top-tier operational talent, our structured platform provides the clarity you need.
+              <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
+                Create a free BLIH OPS account to learn, build a verified profile, discover opportunities and apply with evidence.
               </p>
             </div>
 
-            {/* Role Selection Cards — wider at xl, two columns always from md up */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 xl:gap-8 w-full max-w-3xl xl:max-w-5xl">
-
-              {/* Talent Card */}
-              <button
-                onClick={() => handleSelectRole("TALENT")}
-                className="group relative bg-card border border-border p-8 xl:p-10 hover:border-primary/50 transition-all duration-interactive ease-out text-left flex flex-col justify-between overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl cursor-pointer"
-              >
-                <div className="absolute top-4 right-4 text-border group-hover:text-primary/30 transition-colors">
-                  <Plus className="h-5 w-5 xl:h-6 xl:w-6" />
+            {/* 3 Step Benefits */}
+            <div className="space-y-4 pt-2">
+              <div className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-start gap-4 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] font-mono font-bold flex items-center justify-center shrink-0">
+                  1
                 </div>
-                <div className="mb-10 xl:mb-14">
-                  <div className="w-12 h-12 xl:w-14 xl:h-14 bg-muted flex items-center justify-center border border-border mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors group-hover:border-primary text-primary rounded-lg">
-                    <GraduationCap className="h-6 w-6 xl:h-7 xl:w-7" />
-                  </div>
-                  <h2 className="font-serif text-xl xl:text-2xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    I want to learn
-                  </h2>
-                  <p className="text-sm xl:text-base text-muted-foreground leading-relaxed font-sans">
-                    Access structured learning paths, track your skill gaps, and connect with mentors to advance your career.
+                <div>
+                  <h3 className="font-display text-lg font-bold text-[#17131F]">
+                    Learn
+                  </h3>
+                  <p className="font-sans text-sm text-[#6E6678]">
+                    Access course discovery and learning paths
                   </p>
                 </div>
-                <div className="flex items-center text-primary font-sans text-xs xl:text-sm uppercase tracking-wider mt-auto pt-6 border-t border-border w-full">
-                  <span className="mr-2 font-medium">Join as Talent</span>
-                  <ArrowRight className="h-4 w-4 xl:h-5 xl:w-5 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </button>
+              </div>
 
-              {/* Company Card */}
-              <button
-                onClick={() => handleSelectRole("COMPANY")}
-                className="group relative bg-card border border-border p-8 xl:p-10 hover:border-primary/50 transition-all duration-interactive ease-out text-left flex flex-col justify-between overflow-hidden focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent rounded-xl cursor-pointer"
-              >
-                <div className="absolute top-4 right-4 text-border group-hover:text-primary/30 transition-colors">
-                  <Plus className="h-5 w-5 xl:h-6 xl:w-6" />
+              <div className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-start gap-4 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] font-mono font-bold flex items-center justify-center shrink-0">
+                  2
                 </div>
-                <div className="mb-10 xl:mb-14">
-                  <div className="w-12 h-12 xl:w-14 xl:h-14 bg-muted flex items-center justify-center border border-border mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors group-hover:border-primary text-primary rounded-lg">
-                    <Building2 className="h-6 w-6 xl:h-7 xl:w-7" />
-                  </div>
-                  <h2 className="font-serif text-xl xl:text-2xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    I want to hire
-                  </h2>
-                  <p className="text-sm xl:text-base text-muted-foreground leading-relaxed font-sans">
-                    Source verified professionals, manage skills assessments, and build operational excellence within your team.
+                <div>
+                  <h3 className="font-display text-lg font-bold text-[#17131F]">
+                    Prove
+                  </h3>
+                  <p className="font-sans text-sm text-[#6E6678]">
+                    Attach projects, assessments and certificates
                   </p>
                 </div>
-                <div className="flex items-center text-primary font-sans text-xs xl:text-sm uppercase tracking-wider mt-auto pt-6 border-t border-border w-full">
-                  <span className="mr-2 font-medium">Join as Company</span>
-                  <ArrowRight className="h-4 w-4 xl:h-5 xl:w-5 group-hover:translate-x-1 transition-transform" />
+              </div>
+
+              <div className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-start gap-4 shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] font-mono font-bold flex items-center justify-center shrink-0">
+                  3
                 </div>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-[#17131F]">
+                    Apply
+                  </h3>
+                  <p className="font-sans text-sm text-[#6E6678]">
+                    Use your profile evidence in opportunity applications
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Form Panel */}
+          <div className="lg:col-span-6 flex justify-center">
+            <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
+              <div className="space-y-1">
+                <h2 className="font-display text-3xl font-bold text-[#17131F]">
+                  Create your free account
+                </h2>
+                <p className="font-sans text-sm text-[#6E6678]">
+                  Free includes learning discovery, profile building, opportunities, applications and certificates.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {error && <Alert variant="error">{error}</Alert>}
+
+                <Input
+                  label="Full name"
+                  type="text"
+                  value={fullName}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
+                  placeholder="Sara Tesfaye"
+                  leftIcon={<User className="h-4 w-4" />}
+                />
+
+                <Input
+                  label="Email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  placeholder="sara@blih.example"
+                  leftIcon={<Mail className="h-4 w-4" />}
+                />
+
+                <PasswordInput
+                  label="Password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                  placeholder="••••••••••"
+                />
+
+                {/* Account type choice */}
+                <div className="space-y-1.5 pt-1">
+                  <label className="block text-xs font-mono uppercase tracking-wider text-[#6E6678]">
+                    I want to use BLIH OPS for
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setRole("TALENT")}
+                      className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
+                        role === "TALENT"
+                          ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
+                          : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                      }`}
+                    >
+                      Learning + work
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRole("COMPANY")}
+                      className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
+                        role === "COMPANY"
+                          ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
+                          : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                      }`}
+                    >
+                      Hiring talent
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    size="lg"
+                    isLoading={loading}
+                  >
+                    {loading ? "Creating account..." : "Create account"}
+                  </Button>
+                </div>
+              </form>
+
+              {/* Divider */}
+              <div className="relative flex items-center justify-center">
+                <div className="border-t border-[#D9CEDF]/70 w-full" />
+                <span className="bg-white px-3 font-sans text-xs text-[#6E6678] uppercase absolute">
+                  or
+                </span>
+              </div>
+
+              {/* Google OAuth Button */}
+              <button
+                type="button"
+                className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#EEF3FF]/60 hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
+              >
+                <GoogleIcon />
+                <span>Continue with Google</span>
               </button>
-            </div>
 
-            {/* Trust Signals */}
-            <div className="mt-16 xl:mt-20 w-full max-w-3xl xl:max-w-5xl border-t border-border pt-8 xl:pt-10 text-center font-sans">
-              <p className="text-xs xl:text-sm uppercase tracking-widest text-muted-foreground mb-6 xl:mb-8">
-                Trusted by industry leaders in operations
-              </p>
-              <div className="flex flex-wrap justify-center gap-8 xl:gap-16 items-center opacity-40 grayscale">
-                <div className="flex items-center gap-1 text-foreground font-serif font-bold tracking-tight text-base xl:text-lg">
-                  ▲ VORTEX
-                </div>
-                <div className="flex items-center gap-1 text-foreground font-mono font-bold tracking-tight text-sm xl:text-base">
-                  <div className="w-3.5 h-3.5 xl:w-4 xl:h-4 border-2 border-foreground rounded-full"></div> ALTITUDE
-                </div>
-                <div className="flex items-center gap-1 text-foreground font-serif font-bold tracking-tight text-base xl:text-lg">
-                  ▬ OMEGA
-                </div>
-              </div>
-            </div>
-
-          </div>
-        ) : (
-          /* Registration Form — centered, wider at xl */
-          <div className="w-full max-w-md xl:max-w-lg mx-auto bg-card border border-border p-8 xl:p-12 rounded-xl space-y-6">
-            <div className="text-center space-y-2">
-              <h2 className="font-serif text-2xl xl:text-3xl font-semibold tracking-tight text-foreground">
-                Register as {role === "TALENT" ? "Talent" : "Company"}
-              </h2>
-              <p className="text-sm xl:text-base text-muted-foreground font-sans">
-                Enter your credentials below to create your account
+              {/* Terms Note */}
+              <p className="font-sans text-xs text-[#6E6678] text-center leading-relaxed">
+                By creating an account, you agree to BLIH OPS terms. You can upgrade to Talent Pro later; Free remains useful.
               </p>
             </div>
-
-            <form onSubmit={handleSubmit} className="space-y-4 xl:space-y-5">
-              {error && <Alert variant="error">{error}</Alert>}
-
-              <Input
-                label="Email Address"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                leftIcon={<Mail className="h-4 w-4" />}
-              />
-
-              <PasswordInput
-                label="Password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-
-              <div className="pt-2">
-                <Button
-                  type="submit"
-                  fullWidth
-                  isLoading={loading}
-                >
-                  {loading ? "Creating Account..." : "Create Account"}
-                </Button>
-              </div>
-
-              <div className="flex justify-between items-center pt-2 font-sans">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setStep("choose")}
-                  leftIcon={<ArrowLeft className="h-4 w-4" />}
-                >
-                  Change Role
-                </Button>
-                <Link
-                  href="/login"
-                  className="text-xs xl:text-sm font-medium text-primary hover:underline cursor-pointer"
-                >
-                  Sign In Instead
-                </Link>
-              </div>
-            </form>
           </div>
-        )}
+        </div>
       </main>
 
       {footerSection}

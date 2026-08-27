@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Upload, FileText, X, Loader2, Download, CheckCircle2 } from "lucide-react";
-import { Button, Alert } from "@/components/ui";
+import { Button, Alert, Badge } from "@/components/ui";
 
 interface CvUploadProps {
   value?: string | null;
@@ -69,53 +69,54 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
   };
 
   return (
-    <div className="space-y-3 font-sans">
-      <label className="block w-full text-left text-xs font-semibold text-foreground uppercase tracking-widest pt-1.5">
-        Curriculum Vitae (CV)
+    <div className="space-y-4 font-sans">
+      <label className="block text-xs font-mono uppercase tracking-wider text-[#6E6678]">
+        Curriculum Vitae (CV / Resume)
       </label>
 
       {value ? (
         /* Uploaded state — document card */
-        <div className="border border-border rounded-lg bg-card overflow-hidden">
-          <div className="flex items-center gap-3 p-4">
-            <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
-              <FileText className="h-5 w-5 text-primary" />
+        <div className="border border-[#D9CEDF] rounded-3xl bg-white overflow-hidden shadow-sm">
+          <div className="flex items-center gap-3 p-5">
+            <div className="h-12 w-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
+              <FileText className="h-6 w-6" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground truncate">
+              <p className="text-sm font-bold text-[#17131F] truncate font-display">
                 {getFriendlyFileName(value)}
               </p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <CheckCircle2 className="h-3 w-3 text-green-500" />
-                <span className="text-xs text-green-600 font-medium">CV uploaded</span>
+              <div className="flex items-center gap-1.5 mt-1">
+                <Badge variant="verified" size="sm">
+                  CV Verified & Ready
+                </Badge>
               </div>
             </div>
             <a
               href={value}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 text-primary hover:text-primary/70 transition-colors"
+              className="shrink-0 p-2 rounded-xl text-[#1E5BFF] hover:bg-[#EEF3FF] transition-colors"
               title="Download CV"
             >
-              <Download className="h-4 w-4" />
+              <Download className="h-5 w-5" />
             </a>
           </div>
-          <div className="border-t border-border px-4 py-2 bg-muted/30 flex items-center justify-between">
+          <div className="border-t border-[#D9CEDF] px-5 py-3 bg-[#EEF3FF]/30 flex items-center justify-between">
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={loading}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors font-medium"
+              className="text-xs font-mono text-[#1E5BFF] hover:underline cursor-pointer"
             >
-              Replace file
+              Replace Document
             </button>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleDelete}
               disabled={loading}
-              className="text-xs text-destructive hover:bg-destructive/10 h-7 px-2"
-              leftIcon={loading ? <Loader2 className="h-3 w-3 animate-spin" /> : <X className="h-3 w-3" />}
+              className="text-[#EF4444] hover:bg-[#EF4444]/10 h-8 px-2.5"
+              leftIcon={loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
             >
               Remove
             </Button>
@@ -128,25 +129,26 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-all ${isDragging
-              ? "border-primary bg-primary/5"
-              : "border-border bg-muted/30 hover:border-primary/50 hover:bg-muted/50"
-            }`}
+          className={`border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${
+            isDragging
+              ? "border-[#1E5BFF] bg-[#EEF3FF]"
+              : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
+          }`}
         >
           {loading ? (
-            <Loader2 className="h-7 w-7 animate-spin text-primary mb-3" />
+            <Loader2 className="h-8 w-8 animate-spin text-[#1E5BFF] mb-3" />
           ) : (
-            <div className="h-10 w-10 rounded-full bg-muted flex items-center justify-center mb-3">
-              <Upload className="h-5 w-5 text-muted-foreground" />
+            <div className="h-12 w-12 rounded-2xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#1E5BFF] mb-3 shadow-sm">
+              <Upload className="h-6 w-6" />
             </div>
           )}
-          <p className="text-sm font-semibold text-foreground">
-            {loading ? "Uploading…" : "Upload your CV"}
+          <p className="text-sm font-bold text-[#17131F] font-display">
+            {loading ? "Uploading CV…" : "Upload your CV / Resume"}
           </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            Click to browse or drag & drop a PDF
+          <p className="text-xs text-[#6E6678] font-sans mt-1">
+            Click to browse or drag & drop a PDF document
           </p>
-          <p className="text-xs text-muted-foreground/70 mt-0.5">PDF format · Max 10 MB</p>
+          <p className="text-xs font-mono text-[#6E6678]/70 mt-1">PDF format · Max 10 MB</p>
         </div>
       )}
 
@@ -159,7 +161,7 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
       />
 
       {error && (
-        <Alert variant="error" className="mt-2 py-2 px-3 text-xs">
+        <Alert variant="error" className="py-2 px-3 text-xs">
           {error}
         </Alert>
       )}

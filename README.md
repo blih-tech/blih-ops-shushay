@@ -71,7 +71,7 @@ Ensure you have the following installed on your local machine:
    cd apps/api
    cp .env.example .env
    ```
-   *Update your `.env` file with your local PostgreSQL `DATABASE_URL` (e.g., `postgresql://postgres:postgres@localhost:5433/blih_dev?schema=public`).*
+   *Update your `.env` file with your local PostgreSQL `DATABASE_URL` (e.g., `postgresql://postgres:postgres@localhost:5432/blih_dev?schema=public`).*
 
    For the frontend apps (`apps/auth-web`, `apps/skills-web`, `apps/talent-web`), duplicate their `.env.local.example` files to `.env.local`.
 

@@ -38,16 +38,16 @@ export default function ForgotPasswordPage() {
         subtitle="Please check your inbox to reset your password"
       >
         <div className="text-center space-y-4 font-sans">
-          <p className="text-sm sm:text-base text-body">
+          <p className="text-sm sm:text-base text-[#17131F]">
             If the email address `{email}` exists in our system, a message containing a password reset link has been dispatched.
           </p>
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-[#6E6678]">
             In development, check the **blih-api** server console logs to retrieve the mock password reset link.
           </p>
-          <div className="pt-4 border-t border-border mt-4">
+          <div className="pt-4 border-t border-[#D9CEDF] mt-4">
             <Link
               href="/login"
-              className="text-sm sm:text-base font-medium text-primary hover:underline cursor-pointer"
+              className="text-sm sm:text-base font-medium text-[#1E5BFF] hover:underline cursor-pointer"
             >
               Back to Sign In
             </Link>
@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
           type="email"
           required
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
           placeholder="you@example.com"
           leftIcon={<Mail className="h-4 w-4" />}
         />
@@ -79,6 +79,7 @@ export default function ForgotPasswordPage() {
           <Button
             type="submit"
             fullWidth
+            size="lg"
             isLoading={loading}
           >
             {loading ? "Sending link..." : "Send recovery link"}
@@ -88,7 +89,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center pt-3 font-sans">
           <Link
             href="/login"
-            className="text-sm sm:text-base font-semibold text-primary hover:underline cursor-pointer"
+            className="text-sm sm:text-base font-semibold text-[#1E5BFF] hover:underline cursor-pointer"
           >
             Back to Sign In
           </Link>

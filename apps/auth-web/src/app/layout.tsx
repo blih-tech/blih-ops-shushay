@@ -1,27 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Source_Serif_4, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-/* ─── Fonts (DESIGN.md §Typography) ─────────────────────────────────────── */
-const sourceSerif4 = Source_Serif_4({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-serif",
-  weight: ["400", "600"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-sans",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-mono",
-  weight: ["500", "600"],
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -29,17 +7,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Blih Auth",
+  title: "Blih Auth — Skill & Talent",
   description: "Central authentication for Blih platforms",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="en"
-      className={`${sourceSerif4.variable} ${inter.variable} ${jetbrainsMono.variable}`}
-    >
-      <body>{children}</body>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-white text-[#17131F] font-sans antialiased">{children}</body>
     </html>
   );
 }

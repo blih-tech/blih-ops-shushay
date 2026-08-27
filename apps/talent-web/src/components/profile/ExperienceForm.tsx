@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit2, Calendar, Briefcase, Loader2, Check } from "lucide-react";
 import { Experience } from "@/types/profile";
 import { addExperience, updateExperience, deleteExperience } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Textarea, Checkbox, FormField, Alert } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Textarea, Checkbox, FormField, Alert, Badge } from "@/components/ui";
 
 interface ExperienceFormProps {
   entries: Experience[];
@@ -38,8 +38,6 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
     setIsAdding(false);
     setTitle(exp.title);
     setCompany(exp.company);
-
-    // Format dates to YYYY-MM-DD for input[type="date"]
     setStartDate(exp.startDate ? new Date(exp.startDate).toISOString().split("T")[0] : "");
     setEndDate(exp.endDate ? new Date(exp.endDate).toISOString().split("T")[0] : "");
     setCurrent(exp.current);
@@ -105,16 +103,20 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
   };
 
   return (
-    <Card className="border border-border shadow-none rounded-xl overflow-hidden font-sans">
-      <CardHeader className="px-6 py-5 border-b border-border bg-muted/40 flex flex-row items-center justify-between gap-4">
-        <div>
-          <CardTitle className="text-base font-semibold text-foreground font-sans flex items-center gap-2">
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
-            Work Experience
-          </CardTitle>
-          <CardDescription className="text-sm text-muted-foreground mt-0.5">
-            Your professional work history in reverse chronological order.
-          </CardDescription>
+    <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] overflow-hidden font-sans bg-white">
+      <CardHeader className="px-6 py-6 sm:px-8 border-b border-[#D9CEDF] bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white flex flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm">
+            <Briefcase className="h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-xl font-bold text-[#17131F] font-display">
+              Work Experience
+            </CardTitle>
+            <CardDescription className="text-sm text-[#6E6678] font-sans">
+              Your professional work history in reverse chronological order.
+            </CardDescription>
+          </div>
         </div>
         {!isAdding && !editingId && (
           <Button
@@ -124,14 +126,14 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
               resetForm();
               setIsAdding(true);
             }}
-            leftIcon={<Plus className="h-3.5 w-3.5" />}
+            leftIcon={<Plus className="h-4 w-4" />}
           >
             Add Experience
           </Button>
         )}
       </CardHeader>
 
-      <CardContent className="p-0 divide-y divide-border">
+      <CardContent className="p-0 divide-y divide-[#D9CEDF]/70 bg-white">
         {error && (
           <div className="p-6 pb-0">
             <Alert variant="error">{error}</Alert>
@@ -140,15 +142,15 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
 
         {/* Add/Edit Form Box */}
         {(isAdding || editingId) && (
-          <div className="p-6 bg-muted/20 border-b border-border">
-            <form onSubmit={handleSave} className="space-y-4">
+          <div className="p-6 sm:p-8 bg-[#EEF3FF]/30 border-b border-[#D9CEDF]">
+            <form onSubmit={handleSave} className="space-y-5">
               <div className="flex items-center justify-between">
-                <h4 className="font-serif text-base font-semibold text-foreground">
+                <h4 className="font-display text-lg font-bold text-[#17131F]">
                   {editingId ? "Edit Experience Entry" : "New Experience Entry"}
                 </h4>
-                <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
+                <Badge variant="primary" size="sm">
                   {editingId ? "Updating record" : "New record"}
-                </span>
+                </Badge>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -156,10 +158,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                   <Input
                     type="text"
                     value={title}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val.length <= 100) setTitle(val);
-                    }}
+                    onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. Senior Frontend Developer"
                     maxLength={100}
                     disabled={loading}
@@ -170,10 +169,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                   <Input
                     type="text"
                     value={company}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      if (val.length <= 100) setCompany(val);
-                    }}
+                    onChange={(e) => setCompany(e.target.value)}
                     placeholder="e.g. Google"
                     maxLength={100}
                     disabled={loading}
@@ -211,24 +207,25 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                     if (isChecked) setEndDate("");
                   }}
                   disabled={loading}
-                  label={<span className="text-sm font-medium text-body cursor-pointer select-none">I currently work here</span>}
+                  label={<span className="text-sm font-medium text-[#17131F] cursor-pointer select-none">I currently work here</span>}
                 />
               </div>
 
-              <FormField label="Job Description">
+              <FormField label="Job Description & Key Achievements">
                 <Textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Summarize your main responsibilities, technologies used, and key achievements..."
-                  maxLength={1000}
-                  disabled={loading}
+                  placeholder="Outline key systems delivered, technical stack used, and direct outcomes..."
                   rows={3}
+                  maxLength={500}
+                  disabled={loading}
                 />
               </FormField>
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-border">
+              <div className="flex justify-end gap-3 pt-2">
                 <Button
-                  variant="outline"
+                  type="button"
+                  variant="ghost"
                   size="sm"
                   onClick={() => {
                     setIsAdding(false);
@@ -243,63 +240,58 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                   type="submit"
                   variant="primary"
                   size="sm"
-                  disabled={loading}
-                  leftIcon={loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
+                  isLoading={loading}
+                  leftIcon={<Check className="h-4 w-4" />}
                 >
-                  {editingId ? "Save Changes" : "Save Experience"}
+                  Save Entry
                 </Button>
               </div>
             </form>
           </div>
         )}
 
-        {/* Entries List */}
-        {entries.length > 0 ? (
+        {/* Existing List */}
+        {entries.length === 0 && !isAdding && !editingId ? (
+          <div className="p-8 text-center text-sm text-[#6E6678]">
+            No experience records added yet. Click &quot;Add Experience&quot; to build your profile history.
+          </div>
+        ) : (
           entries.map((exp) => (
             <div
               key={exp.id}
-              className="p-6 transition-colors hover:bg-muted/30 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
+              className="p-6 sm:p-8 transition-colors hover:bg-[#EEF3FF]/20 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
             >
               <div className="space-y-1.5 flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <h4 className="font-semibold text-foreground text-base">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <h4 className="font-display font-bold text-lg text-[#17131F]">
                     {exp.title}
                   </h4>
-                  <span className="text-muted-foreground text-sm">·</span>
-                  <span className="text-sm font-medium text-primary">
-                    {exp.company}
-                  </span>
+                  {exp.current && (
+                    <Badge variant="verified" size="sm">
+                      Current Role
+                    </Badge>
+                  )}
                 </div>
-
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-                  <Calendar className="h-3.5 w-3.5 shrink-0" />
+                <p className="text-sm font-semibold text-[#1E5BFF]">{exp.company}</p>
+                <div className="flex items-center gap-2 text-xs font-mono text-[#6E6678]">
+                  <Calendar className="h-3.5 w-3.5" />
                   <span>
-                    {formatDate(exp.startDate)} –{" "}
-                    {exp.current ? (
-                      <span className="text-green-600 font-semibold font-sans">Present</span>
-                    ) : exp.endDate ? (
-                      formatDate(exp.endDate)
-                    ) : (
-                      ""
-                    )}
+                    {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
                   </span>
                 </div>
-
                 {exp.description && (
-                  <p className="text-sm text-body leading-relaxed pt-1 whitespace-pre-line max-w-3xl">
+                  <p className="text-sm text-[#6E6678] mt-2 leading-relaxed whitespace-pre-line">
                     {exp.description}
                   </p>
                 )}
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-1 shrink-0 self-start">
+              <div className="flex items-center gap-2 self-end sm:self-start shrink-0">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleEditInit(exp)}
-                  disabled={loading}
-                  className="h-8 px-2.5 text-xs text-muted-foreground hover:text-foreground"
+                  disabled={loading || isAdding || editingId !== null}
                   leftIcon={<Edit2 className="h-3.5 w-3.5" />}
                 >
                   Edit
@@ -309,7 +301,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                   size="sm"
                   onClick={() => handleDelete(exp.id)}
                   disabled={loading}
-                  className="h-8 px-2.5 text-xs text-destructive hover:bg-destructive/10"
+                  className="text-[#EF4444] hover:bg-[#EF4444]/10 hover:text-[#EF4444]"
                   leftIcon={<Trash2 className="h-3.5 w-3.5" />}
                 >
                   Delete
@@ -317,16 +309,6 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
               </div>
             </div>
           ))
-        ) : (
-          !isAdding && !editingId && (
-            <div className="p-8 text-center space-y-2">
-              <Briefcase className="h-8 w-8 text-muted-foreground/40 mx-auto" />
-              <p className="text-sm font-medium text-foreground">No work experience listed yet</p>
-              <p className="text-xs text-muted-foreground max-w-md mx-auto">
-                Add your previous positions to showcase your career journey to potential employers.
-              </p>
-            </div>
-          )
         )}
       </CardContent>
     </Card>

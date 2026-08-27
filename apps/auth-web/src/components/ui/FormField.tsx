@@ -20,21 +20,21 @@ export const FormField: React.FC<FormFieldProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`space-y-1.5 w-full ${className}`}>
+    <div className={`space-y-1.5 w-full font-sans ${className}`}>
       {label && (
         <label
           htmlFor={htmlFor}
-          className="block text-xs sm:text-sm font-medium text-foreground uppercase tracking-wider mb-1.5"
+          className="block text-xs font-mono uppercase tracking-wider text-[#6E6678] mb-1.5"
         >
           {label}
-          {required && <span className="text-destructive ml-1">*</span>}
+          {required && <span className="text-[#EF4444] ml-1">*</span>}
         </label>
       )}
       {children}
       {error ? (
-        <p className="text-xs text-destructive font-sans">{error}</p>
+        <p className="text-xs font-mono text-[#EF4444] mt-1">{error}</p>
       ) : helperText ? (
-        <p className="text-xs text-muted-foreground font-sans">{helperText}</p>
+        <p className="text-xs font-mono text-[#6E6678] mt-1">{helperText}</p>
       ) : null}
     </div>
   );

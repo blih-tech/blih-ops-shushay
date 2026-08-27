@@ -60,15 +60,17 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
   };
 
   return (
-    <div className="space-y-3 font-sans">
-      <label className="block w-full text-left text-xs font-semibold text-foreground uppercase tracking-widest pt-1.5">
-        Company Logo
+    <div className="space-y-4 font-sans">
+      <label className="block text-xs font-mono uppercase tracking-wider text-[#6E6678]">
+        Brand Logo Image
       </label>
 
       {/* Logo Drop Zone */}
       <div
-        className={`relative w-full aspect-video max-h-40 rounded-lg border-2 border-dashed ${
-          isDragging ? "border-primary bg-primary/5" : "border-border bg-muted/30"
+        className={`relative w-full aspect-video max-h-48 rounded-3xl border-2 border-dashed ${
+          isDragging
+            ? "border-[#1E5BFF] bg-[#EEF3FF]"
+            : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
         } flex flex-col items-center justify-center overflow-hidden cursor-pointer group transition-all`}
         onClick={() => !loading && fileInputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -81,23 +83,25 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
             <img src={value} alt="Company Logo" className="max-h-full max-w-full object-contain p-4" />
             {/* Hover overlay */}
             {!loading && (
-              <div className="absolute inset-0 bg-foreground/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <ImageIcon className="h-5 w-5 text-white" />
-                <span className="text-xs text-white font-medium mt-1">Change Logo</span>
+              <div className="absolute inset-0 bg-[#17131F]/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <ImageIcon className="h-6 w-6 text-white" />
+                <span className="text-xs font-mono text-white font-medium mt-1">Change Logo</span>
               </div>
             )}
           </>
         ) : (
           <div className="flex flex-col items-center gap-2 py-4 px-3 text-center pointer-events-none">
-            <Building className="h-8 w-8 text-muted-foreground/50" />
-            <p className="text-sm font-medium text-foreground">Upload Company Logo</p>
-            <p className="text-xs text-muted-foreground">Click or drag an image here</p>
+            <div className="w-12 h-12 rounded-2xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#1E5BFF] shadow-sm">
+              <Building className="h-6 w-6" />
+            </div>
+            <p className="text-sm font-bold font-display text-[#17131F]">Upload Company Logo</p>
+            <p className="text-xs text-[#6E6678] font-sans">Click or drag an image here</p>
           </div>
         )}
 
         {loading && (
-          <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
-            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
+            <Loader2 className="h-6 w-6 animate-spin text-[#1E5BFF]" />
           </div>
         )}
       </div>
@@ -109,7 +113,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
           size="sm"
           onClick={() => fileInputRef.current?.click()}
           disabled={loading}
-          leftIcon={<Upload className="h-3.5 w-3.5" />}
+          leftIcon={<Upload className="h-4 w-4" />}
           fullWidth
         >
           {value ? "Replace Logo" : "Upload Logo"}
@@ -120,15 +124,15 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
             size="sm"
             onClick={handleDelete}
             disabled={loading}
-            className="text-destructive border-destructive/20 hover:bg-destructive/10"
-            leftIcon={<X className="h-3.5 w-3.5" />}
+            className="text-[#EF4444] border-[#EF4444]/30 hover:bg-[#EF4444]/10"
+            leftIcon={<X className="h-4 w-4" />}
           >
             Remove
           </Button>
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground">JPG, PNG, or WebP · Max 5 MB</p>
+      <p className="text-xs font-mono text-[#6E6678] text-center">JPG, PNG, or WebP · Max 5 MB</p>
 
       <input
         ref={fileInputRef}
@@ -139,7 +143,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
       />
 
       {error && (
-        <Alert variant="error" className="mt-2 py-2 px-3 text-xs">
+        <Alert variant="error" className="py-2 px-3 text-xs">
           {error}
         </Alert>
       )}
