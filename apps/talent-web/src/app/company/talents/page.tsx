@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
+
 import {
-  Search, User, MapPin, Globe, Sparkles, Filter,
-  FileText, CheckCircle2, ChevronRight, Eye, Briefcase
+  MapPin, Filter,
+  FileText, Eye
 } from "lucide-react";
 import {
-  Button, Badge, Card, CardHeader, CardTitle, CardContent,
+  Button, Badge, Card,
   GlobalNavbar, UniversalSearch
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
@@ -79,11 +79,10 @@ function CompanyTalentsSearchContent() {
                 key={skill}
                 type="button"
                 onClick={() => setActiveSkillFilter(skill)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${
-                  activeSkillFilter === skill
-                    ? "bg-[#1E5BFF] text-white shadow-xs"
-                    : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF] border border-[#D9CEDF]/70"
-                }`}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${activeSkillFilter === skill
+                  ? "bg-[#1E5BFF] text-white shadow-xs"
+                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF] border border-[#D9CEDF]/70"
+                  }`}
               >
                 {skill}
               </button>

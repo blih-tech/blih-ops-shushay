@@ -5,6 +5,7 @@ import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
 import { Button, Badge, Spinner, Alert, GlobalNavbar } from "@/components/ui";
+import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
 import {
   Mail,
   Phone,
@@ -27,19 +28,7 @@ function ProfilePreviewContent() {
   const { profile, loading, error } = useTalentProfile();
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white">
-        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center space-y-3">
-            <Spinner size="md" />
-            <p className="text-sm text-[#6E6678] font-sans">
-              Loading preview…
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <ProfilePreviewSkeleton user={user} logout={logout} />;
   }
 
   if (error) {

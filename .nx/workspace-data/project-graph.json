@@ -1119,6 +1119,15 @@
         "hash": "sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA=="
       }
     },
+    "npm:@gsap/react": {
+      "type": "npm",
+      "name": "npm:@gsap/react",
+      "data": {
+        "version": "2.1.2",
+        "packageName": "@gsap/react",
+        "hash": "sha512-JqliybO1837UcgH2hVOM4VO+38APk3ECNrsuSM4MuXp+rbf+/2IG2K1YJiqfTcXQHH7XlA0m3ykniFYstfq0Iw=="
+      }
+    },
     "npm:@hookform/resolvers": {
       "type": "npm",
       "name": "npm:@hookform/resolvers",
@@ -5790,6 +5799,15 @@
         "hash": "sha512-5ykVn/EXM1hF0XCaWh05VbYvEiOL2lY1kBxZtaYsyvjp7cmWOU1XsAdfQBwClraEofXDT197lFbXOEVMHpvQOg=="
       }
     },
+    "npm:gsap": {
+      "type": "npm",
+      "name": "npm:gsap",
+      "data": {
+        "version": "3.15.0",
+        "packageName": "gsap",
+        "hash": "sha512-dMW4CWBTUK1AEEDeZc1g4xpPGIrSf9fJF960qbTZmN/QwZIWY5wgliS6JWl9/25fpTGJrMRtSjGtOmPnfjZB+A=="
+      }
+    },
     "npm:handlebars": {
       "type": "npm",
       "name": "npm:handlebars",
@@ -9931,6 +9949,16 @@
       },
       {
         "source": "@blih/skills-web",
+        "target": "npm:@gsap/react",
+        "type": "static"
+      },
+      {
+        "source": "@blih/skills-web",
+        "target": "npm:gsap",
+        "type": "static"
+      },
+      {
+        "source": "@blih/skills-web",
         "target": "npm:lucide-react",
         "type": "static"
       },
@@ -9998,12 +10026,12 @@
       },
       {
         "source": "@blih/talent-web",
-        "target": "@blih/types",
+        "target": "@blih/api-client",
         "type": "static"
       },
       {
         "source": "@blih/talent-web",
-        "target": "@blih/api-client",
+        "target": "@blih/types",
         "type": "static"
       },
       {
@@ -10018,7 +10046,17 @@
       },
       {
         "source": "@blih/talent-web",
+        "target": "npm:@gsap/react",
+        "type": "static"
+      },
+      {
+        "source": "@blih/talent-web",
         "target": "npm:@hookform/resolvers",
+        "type": "static"
+      },
+      {
+        "source": "@blih/talent-web",
+        "target": "npm:gsap",
         "type": "static"
       },
       {
@@ -10148,6 +10186,11 @@
       },
       {
         "source": "@blih/ui",
+        "target": "npm:@types/node",
+        "type": "static"
+      },
+      {
+        "source": "@blih/ui",
         "target": "npm:@types/react",
         "type": "static"
       },
@@ -10158,12 +10201,12 @@
       },
       {
         "source": "@blih/ui",
-        "target": "npm:typescript",
+        "target": "npm:lucide-react",
         "type": "static"
       },
       {
         "source": "@blih/ui",
-        "target": "npm:lucide-react",
+        "target": "npm:typescript",
         "type": "static"
       }
     ],
@@ -11058,6 +11101,18 @@
       {
         "source": "npm:@eslint/plugin-kit",
         "target": "npm:levn",
+        "type": "static"
+      }
+    ],
+    "npm:@gsap/react": [
+      {
+        "source": "npm:@gsap/react",
+        "target": "npm:gsap",
+        "type": "static"
+      },
+      {
+        "source": "npm:@gsap/react",
+        "target": "npm:react",
         "type": "static"
       }
     ],
@@ -21933,5 +21988,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1787811459637
+  "computedAt": 1787835491336
 }

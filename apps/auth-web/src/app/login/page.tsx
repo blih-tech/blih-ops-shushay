@@ -4,7 +4,7 @@ import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Button, Input, PasswordInput, Alert, Badge, Spinner } from "@/components/ui";
-import { Mail, Sparkles, ShieldCheck, ArrowRight } from "lucide-react";
+import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
 const SKILLS_URL = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";

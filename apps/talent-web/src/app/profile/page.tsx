@@ -18,6 +18,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui";
+import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
 import {
   Edit3,
@@ -61,19 +62,7 @@ function ProfileContent() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar currentApp="talent" user={user ? { email: user.email, role: user.role } : null} onSignOut={logout} />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center space-y-3">
-            <Spinner size="lg" />
-            <p className="text-sm font-mono text-[#6E6678] animate-pulse">
-              Loading verified talent decision profile…
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <ProfileSkeleton user={user} logout={logout} />;
   }
 
   if (error) {
@@ -110,9 +99,9 @@ function ProfileContent() {
         <ProfileCompletionBanner isComplete={!!profile?.isComplete} />
 
         {/* Profile Decision Hero Header */}
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-8">
+        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 md:p-12 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/70">
-            <div className="flex items-center gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
               <div className="h-20 w-20 rounded-3xl border-2 border-[#1E5BFF]/20 bg-[#EEF3FF] flex items-center justify-center overflow-hidden shrink-0 text-[#1E5BFF] font-display font-bold text-2xl shadow-sm">
                 {profile?.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -130,7 +119,7 @@ function ProfileContent() {
 
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+                  <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#17131F]">
                     {profile?.fullName || user?.email?.split("@")[0] || "Verified Talent"}
                   </h1>
                   {profile?.isComplete ? (

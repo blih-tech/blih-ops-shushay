@@ -7,27 +7,20 @@ import { useAuth } from "@/providers/AuthProvider";
 import {
   Button,
   Badge,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
+
   UniversalSearch,
   Chip,
   GlobalNavbar,
   SkillBar,
 } from "@/components/ui";
 import {
-  Briefcase,
+
   MapPin,
   DollarSign,
   Sparkles,
-  ChevronRight,
-  ShieldCheck,
-  Building2,
-  Clock,
+
   ArrowUpRight,
-  Filter,
+
 } from "lucide-react";
 
 import { mockJobs, type JobPosting } from "@/data";
@@ -113,18 +106,17 @@ function JobsFeedContent() {
                 <div
                   key={job.id}
                   onClick={() => setSelectedJob(job)}
-                  className={`bg-white border rounded-3xl p-6 sm:p-7 transition-all cursor-pointer select-none space-y-4 ${
-                    isSelected
-                      ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
-                      : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-sm"
-                  }`}
+                  className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all cursor-pointer select-none space-y-4 ${isSelected
+                    ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                    : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-sm"
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
                         {job.company}
                       </span>
-                      <h3 className="font-display text-xl font-bold text-[#17131F] mt-0.5">
+                      <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
                         {job.title}
                       </h3>
                     </div>
@@ -164,7 +156,7 @@ function JobsFeedContent() {
 
           {/* Right Column: "Your Match" Decision Panel & Quick Preview */}
           <div className="lg:col-span-5 sticky top-24 space-y-6">
-            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
                 <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
                   Opportunity Decision Panel

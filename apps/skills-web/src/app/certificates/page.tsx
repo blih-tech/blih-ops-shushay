@@ -3,25 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import {
-  Award,
+
   ShieldCheck,
   Download,
   Share2,
-  ExternalLink,
-  CheckCircle2,
-  Sparkles,
-  QrCode,
   ArrowLeft,
 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
 import {
   Button,
-  Badge,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
   GlobalNavbar,
 } from "@/components/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";

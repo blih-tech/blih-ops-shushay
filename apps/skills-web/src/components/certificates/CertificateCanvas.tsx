@@ -17,7 +17,7 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
   score = 94,
 }) => {
   return (
-    <div className="w-full bg-gradient-to-br from-white via-[#EEF3FF]/60 to-white border-2 border-[#D9CEDF] rounded-3xl p-8 sm:p-12 shadow-[0_20px_60px_rgba(30,91,255,0.08)] relative overflow-hidden space-y-8">
+    <div className="w-full bg-gradient-to-br from-white via-[#EEF3FF]/60 to-white border-2 border-[#D9CEDF] rounded-3xl p-5 sm:p-10 md:p-12 shadow-[0_20px_60px_rgba(30,91,255,0.08)] relative overflow-hidden space-y-6 sm:space-y-8">
       {/* Top watermark / branding */}
       <div className="flex items-center justify-between border-b border-[#D9CEDF]/80 pb-6">
         <div className="flex items-baseline gap-2">

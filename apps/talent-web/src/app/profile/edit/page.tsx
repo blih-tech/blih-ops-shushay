@@ -22,10 +22,12 @@ import {
   Alert,
   Spinner,
   GlobalNavbar,
+  Skeleton,
 } from "@/components/ui";
 import { PhotoUpload } from "@/components/profile/PhotoUpload";
 import { CvUpload } from "@/components/profile/CvUpload";
 import { GeneralDetailsForm } from "@/components/profile/GeneralDetailsForm";
+import { SkillsInput } from "@/components/profile/SkillsInput";
 import { ExperienceForm } from "@/components/profile/ExperienceForm";
 import { EducationForm } from "@/components/profile/EducationForm";
 import { useProfileFormState } from "@/state/profile/profileForm";
@@ -44,16 +46,29 @@ function ProfileEditContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
         <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-        <div className="flex items-center justify-center h-64">
-          <div className="text-center space-y-3">
-            <Spinner size="md" />
-            <p className="text-sm text-[#6E6678] font-sans">
-              Loading profile editor…
-            </p>
+        <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-pulse">
+          <div className="flex items-center justify-between">
+            <Skeleton variant="rectangular" className="h-6 w-32 rounded-lg" />
+            <Skeleton variant="rectangular" className="h-10 w-24 rounded-xl" />
           </div>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 space-y-8">
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+                <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
+                <Skeleton variant="rectangular" className="h-32 rounded-2xl" />
+                <Skeleton variant="rectangular" className="h-12 rounded-xl" />
+              </div>
+            </div>
+            <div className="lg:col-span-4 space-y-8">
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+                <Skeleton variant="rectangular" className="h-8 w-32 rounded-xl" />
+                <Skeleton variant="circular" className="h-24 w-24 mx-auto" />
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }

@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
-  CreditCard, CheckCircle2, ShieldCheck, Sparkles,
-  Building2, Users, FileText, Zap, ArrowRight
+  CheckCircle2, Sparkles,
+
 } from "lucide-react";
 import {
-  Button, Badge, Card, CardHeader, CardTitle, CardContent,
+  Button, Badge, Card,
   GlobalNavbar
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
@@ -48,26 +47,24 @@ function CompanySubscriptionContent() {
           </p>
 
           {/* Billing Cycle Toggle */}
-          <div className="inline-flex p-1 bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl gap-1 mt-4">
+          <div className="inline-flex flex-wrap p-1 bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl gap-1 mt-4">
             <button
               type="button"
               onClick={() => setBillingCycle("monthly")}
-              className={`px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
-                billingCycle === "monthly"
+              className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${billingCycle === "monthly"
                   ? "bg-[#1E5BFF] text-white shadow-xs"
                   : "text-[#6E6678] hover:text-[#17131F]"
-              }`}
+                }`}
             >
               Monthly Billing
             </button>
             <button
               type="button"
               onClick={() => setBillingCycle("yearly")}
-              className={`px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${
-                billingCycle === "yearly"
+              className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${billingCycle === "yearly"
                   ? "bg-[#1E5BFF] text-white shadow-xs"
                   : "text-[#6E6678] hover:text-[#17131F]"
-              }`}
+                }`}
             >
               <span>Yearly Plan</span>
               <span className="bg-[#2E8F79] text-white text-[10px] px-2 py-0.5 rounded-full font-sans font-bold">
@@ -80,9 +77,8 @@ function CompanySubscriptionContent() {
         {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
           {/* Monthly Plan */}
-          <Card className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
-            billingCycle === "monthly" ? "border-2 border-[#1E5BFF] shadow-lg" : "border-[#D9CEDF]"
-          }`}>
+          <Card className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${billingCycle === "monthly" ? "border-2 border-[#1E5BFF] shadow-lg" : "border-[#D9CEDF]"
+            }`}>
             <div className="space-y-6">
               <div className="space-y-2">
                 <Badge variant="default">FLEXIBLE</Badge>
@@ -117,9 +113,8 @@ function CompanySubscriptionContent() {
           </Card>
 
           {/* Yearly Plan */}
-          <Card className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
-            billingCycle === "yearly" ? "border-2 border-[#1E5BFF] shadow-xl relative" : "border-[#D9CEDF]"
-          }`}>
+          <Card className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${billingCycle === "yearly" ? "border-2 border-[#1E5BFF] shadow-xl relative" : "border-[#D9CEDF]"
+            }`}>
             {billingCycle === "yearly" && (
               <div className="absolute -top-3.5 right-6 bg-[#1E5BFF] text-white text-[11px] font-mono uppercase px-3 py-1 rounded-full font-bold shadow-sm">
                 RECOMMENDED

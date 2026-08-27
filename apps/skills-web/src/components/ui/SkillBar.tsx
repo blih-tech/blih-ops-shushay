@@ -28,8 +28,8 @@ export const SkillBar: React.FC<SkillBarProps> = ({
   };
 
   return (
-    <div className={`flex items-center justify-between gap-4 py-2 ${className}`}>
-      <span className="font-sans text-sm font-medium text-[#17131F] min-w-[110px] truncate">
+    <div className={`flex items-center justify-between gap-2.5 sm:gap-4 py-2 ${className}`}>
+      <span className="font-sans text-xs sm:text-sm font-medium text-[#17131F] min-w-[80px] sm:min-w-[110px] max-w-[140px] truncate">
         {name}
       </span>
       <div className="flex-1 bg-[#EEF3FF] h-2 rounded-full overflow-hidden relative">

@@ -12,7 +12,6 @@ import {
   Award,
   ChevronRight,
   Sparkles,
-  BookOpen,
   Volume2,
   Maximize2,
 } from "lucide-react";
@@ -20,10 +19,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import {
   Button,
   Badge,
-  Card,
-  GlobalNavbar,
   Alert,
-  SkillBar,
 } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
@@ -48,7 +44,7 @@ function LearnContent({ courseId }: { courseId: string }) {
       .then((data) => {
         setCourse(data);
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   }, [courseId]);
 
@@ -118,44 +114,40 @@ function LearnContent({ courseId }: { courseId: string }) {
           <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-[#D9CEDF]">
             <button
               onClick={() => setActiveTab("video")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
-                activeTab === "video"
-                  ? "bg-[#1E5BFF] text-white"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "video"
+                ? "bg-[#1E5BFF] text-white"
+                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+                }`}
             >
               <Play className="w-3.5 h-3.5" />
               <span>Video Masterclass</span>
             </button>
             <button
               onClick={() => setActiveTab("reading")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
-                activeTab === "reading"
-                  ? "bg-[#1E5BFF] text-white"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "reading"
+                ? "bg-[#1E5BFF] text-white"
+                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+                }`}
             >
               <FileText className="w-3.5 h-3.5" />
               <span>Architecture & Theory</span>
             </button>
             <button
               onClick={() => setActiveTab("quiz")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
-                activeTab === "quiz"
-                  ? "bg-[#1E5BFF] text-white"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "quiz"
+                ? "bg-[#1E5BFF] text-white"
+                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+                }`}
             >
               <HelpCircle className="w-3.5 h-3.5" />
               <span>Assessment Quiz</span>
             </button>
             <button
               onClick={() => setActiveTab("exercise")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
-                activeTab === "exercise"
-                  ? "bg-[#1E5BFF] text-white"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "exercise"
+                ? "bg-[#1E5BFF] text-white"
+                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+                }`}
             >
               <Code className="w-3.5 h-3.5" />
               <span>Practical Exercise</span>
@@ -249,11 +241,10 @@ function LearnContent({ courseId }: { courseId: string }) {
                   <button
                     key={idx}
                     onClick={() => !quizSubmitted && setSelectedQuizOption(idx)}
-                    className={`w-full text-left p-4 rounded-2xl border font-sans text-sm sm:text-base transition-all cursor-pointer flex items-center justify-between ${
-                      selectedQuizOption === idx
-                        ? "border-[#1E5BFF] bg-[#DDE7FF]/50 text-[#1E5BFF] font-medium"
-                        : "border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF]"
-                    }`}
+                    className={`w-full text-left p-4 rounded-2xl border font-sans text-sm sm:text-base transition-all cursor-pointer flex items-center justify-between ${selectedQuizOption === idx
+                      ? "border-[#1E5BFF] bg-[#DDE7FF]/50 text-[#1E5BFF] font-medium"
+                      : "border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF]"
+                      }`}
                   >
                     <span>{option}</span>
                     <span className="w-5 h-5 rounded-full border border-[#D9CEDF] flex items-center justify-center text-xs font-mono">
@@ -364,21 +355,19 @@ function LearnContent({ courseId }: { courseId: string }) {
                       setSelectedQuizOption(null);
                       setQuizSubmitted(false);
                     }}
-                    className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                      isActive
-                        ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
-                        : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
-                    }`}
+                    className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${isActive
+                      ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
+                      : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
+                      }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                          isCompleted
-                            ? "bg-[#E6F5F0] text-[#2E8F79]"
-                            : isActive
+                        className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${isCompleted
+                          ? "bg-[#E6F5F0] text-[#2E8F79]"
+                          : isActive
                             ? "bg-[#1E5BFF] text-white"
                             : "bg-[#EEF3FF] text-[#6E6678]"
-                        }`}
+                          }`}
                       >
                         {isCompleted ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
                       </div>

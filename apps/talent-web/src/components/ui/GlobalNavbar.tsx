@@ -196,11 +196,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <a
               key={link.label}
               href={link.href}
-              className={`font-sans text-sm transition-colors py-1 cursor-pointer ${
-                link.active
-                  ? "text-[#1E5BFF] font-bold border-b-2 border-[#1E5BFF]"
-                  : "text-[#17131F] hover:text-[#1E5BFF] font-normal"
-              }`}
+              className={`font-sans text-sm transition-colors py-1 cursor-pointer ${link.active
+                ? "text-[#1E5BFF] font-bold border-b-2 border-[#1E5BFF]"
+                : "text-[#17131F] hover:text-[#1E5BFF] font-normal"
+                }`}
             >
               {link.label}
             </a>
@@ -371,11 +370,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               <a
                 key={link.label}
                 href={link.href}
-                className={`px-3 py-2 rounded-xl text-sm ${
-                  link.active
-                    ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold"
-                    : "text-[#17131F] hover:bg-[#EEF3FF]"
-                }`}
+                className={`px-3 py-2 rounded-xl text-sm ${link.active
+                  ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold"
+                  : "text-[#17131F] hover:bg-[#EEF3FF]"
+                  }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -395,6 +393,69 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                     <p className="text-sm font-bold text-[#17131F] truncate">{user.email}</p>
                   </div>
                 </div>
+
+                {/* Role specific mobile shortcuts */}
+                <div className="space-y-1 py-1">
+                  {role === "COMPANY" ? (
+                    <>
+                      <a
+                        href={`${talentUrl}/company/profile`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <Building className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>Company Profile</span>
+                      </a>
+                      <a
+                        href={`${talentUrl}/company/jobs`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>Manage Jobs</span>
+                      </a>
+                    </>
+                  ) : role === "ADMIN" ? (
+                    <>
+                      <a
+                        href={`${skillsUrl}/admin`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <Shield className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>Admin Portal</span>
+                      </a>
+                      <a
+                        href={`${skillsUrl}/admin/courses`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <BookOpen className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>Course Studio</span>
+                      </a>
+                    </>
+                  ) : (
+                    <>
+                      <a
+                        href={`${talentUrl}/profile`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <User className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>View Talent Profile</span>
+                      </a>
+                      <a
+                        href={`${talentUrl}/profile/edit`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                      >
+                        <Settings className="h-4 w-4 text-[#1E5BFF]" />
+                        <span>Edit Profile Details</span>
+                      </a>
+                    </>
+                  )}
+                </div>
+
                 {onSignOut && (
                   <Button variant="outline" fullWidth size="sm" onClick={onSignOut} className="text-[#EF4444] border-[#EF4444]/30 hover:bg-[#FFF0F0]">
                     <LogOut className="h-4 w-4 mr-2" />

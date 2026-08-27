@@ -12,6 +12,7 @@ import {
   deleteTalentCv,
 } from "@/lib/talentApi";
 import { Alert, Spinner, Button, Card, CardContent, Badge, GlobalNavbar } from "@/components/ui";
+import { ProfileSetupSkeleton } from "@/components/profile/ProfileSkeleton";
 import { StepPersonalInfo } from "@/components/profile/setup/StepPersonalInfo";
 import { StepExpertise } from "@/components/profile/setup/StepExpertise";
 import { StepMedia } from "@/components/profile/setup/StepMedia";
@@ -32,16 +33,7 @@ function ProfileSetupContent() {
   const [error, setError] = useState<string | null>(null);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center space-y-3 font-sans">
-          <Spinner size="md" />
-          <p className="text-sm text-[#6E6678] animate-pulse">
-            Initializing setup wizard…
-          </p>
-        </div>
-      </div>
-    );
+    return <ProfileSetupSkeleton user={user} logout={logout} />;
   }
 
   if (fetchError) {

@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
-  Briefcase, Plus, Users, MapPin, DollarSign, Clock,
-  ChevronRight, Eye, Sparkles, Building2, MoreHorizontal
+  Plus, MapPin, DollarSign, Building2
 } from "lucide-react";
 import {
-  Button, Badge, Card, CardHeader, CardTitle, CardContent,
+  Button, Badge, Card,
   GlobalNavbar
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
@@ -24,13 +22,13 @@ function CompanyJobsContent() {
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
       {/* Global Navbar */}
-      <GlobalNavbar currentApp="jobs" user={user} onSignOut={logout} />
+      <GlobalNavbar currentApp="company" user={user} onSignOut={logout} />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
           <div className="space-y-1">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 flex-wrap">
               <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
                 Job Postings & Roles
               </h1>
@@ -41,8 +39,8 @@ function CompanyJobsContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button variant="primary" size="sm" leftIcon={<Plus className="h-4 w-4" />}>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Button variant="primary" size="sm" className="w-full sm:w-auto" leftIcon={<Plus className="h-4 w-4" />}>
               Create New Job Post
             </Button>
           </div>
@@ -53,12 +51,12 @@ function CompanyJobsContent() {
           {jobs.map((job) => (
             <Card
               key={job.id}
-              className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white hover:border-[#1E5BFF]/50 transition-all shadow-xs space-y-4"
+              className="border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 bg-white hover:border-[#1E5BFF]/50 transition-all shadow-xs space-y-4"
             >
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h3 className="font-display text-xl font-bold text-[#17131F]">{job.title}</h3>
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F]">{job.title}</h3>
                     <Badge variant="verified" size="sm">{job.status}</Badge>
                     <span className="text-xs font-mono text-[#6E6678]">{job.type}</span>
                   </div>
@@ -75,9 +73,9 @@ function CompanyJobsContent() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 self-start">
-                  <div className="p-3 bg-[#EEF3FF] border border-[#1E5BFF]/15 rounded-2xl text-center">
-                    <p className="font-display text-xl font-bold text-[#1E5BFF]">{job.applicantsCount}</p>
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start pt-2 sm:pt-0 border-t sm:border-t-0 border-[#D9CEDF]/50">
+                  <div className="p-2.5 sm:p-3 bg-[#EEF3FF] border border-[#1E5BFF]/15 rounded-2xl text-center">
+                    <p className="font-display text-lg sm:text-xl font-bold text-[#1E5BFF]">{job.applicantsCount}</p>
                     <p className="text-[10px] font-mono text-[#6E6678] uppercase">Applicants</p>
                   </div>
                   <Button variant="outline" size="sm">

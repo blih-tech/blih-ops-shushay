@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft, Building2, MapPin, Phone, Globe,
-  ExternalLink, Mail, CheckCircle2, User
 } from "lucide-react";
 import {
   Button, Badge, Alert, Spinner, Card, CardHeader, CardTitle, CardContent,
-  GlobalNavbar, UniversalSearch
+  GlobalNavbar, UniversalSearch, Skeleton
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -43,8 +42,9 @@ function AdminCompaniesContent() {
     if (!q) return true;
     return (
       (c.companyName && c.companyName.toLowerCase().includes(q)) ||
-      (c.user.email && c.user.email.toLowerCase().includes(q)) ||
       (c.contactName && c.contactName.toLowerCase().includes(q)) ||
+      (c.user.email && c.user.email.toLowerCase().includes(q)) ||
+      (c.country && c.country.toLowerCase().includes(q)) ||
       (c.city && c.city.toLowerCase().includes(q))
     );
   });
@@ -68,12 +68,12 @@ function AdminCompaniesContent() {
             </Link>
             <div className="flex items-center gap-3">
               <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
-                Company Management
+                Hiring Companies
               </h1>
               <Badge variant="primary">{companies.length} REGISTERED</Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Manage hiring organizations, verification credentials, job posting allowances, and contact reachability.
+              Monitor hiring company profiles, organization descriptions, websites, and point-of-contact details.
             </p>
           </div>
         </div>
@@ -90,8 +90,22 @@ function AdminCompaniesContent() {
         </div>
 
         {loading ? (
-          <div className="py-20 flex justify-center items-center">
-            <Spinner size="lg" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i} className="p-6 space-y-4">
+                <div className="flex items-center gap-4">
+                  <Skeleton variant="circular" className="h-12 w-12" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton variant="rectangular" className="h-6 w-3/4 rounded-lg" />
+                    <Skeleton variant="rectangular" className="h-4 w-1/2 rounded-lg" />
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-[#D9CEDF] space-y-2">
+                  <Skeleton variant="rectangular" className="h-4 w-full rounded" />
+                  <Skeleton variant="rectangular" className="h-4 w-5/6 rounded" />
+                </div>
+              </Card>
+            ))}
           </div>
         ) : filteredCompanies.length === 0 ? (
           <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">

@@ -21,12 +21,12 @@ import {
   Textarea,
   FormField,
   Alert,
-  Spinner,
   GlobalNavbar,
   Badge,
 } from "@/components/ui";
+import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
 import { LogoUpload } from "@/components/profile/LogoUpload";
-import { ArrowLeft, Save, Building, User, Mail, Phone, Globe, Sparkles } from "lucide-react";
+import { Save, ArrowLeft, Building2, Building, User, Mail, Phone, Globe, Sparkles } from "lucide-react";
 
 function CompanyProfileContent() {
   const { user, logout } = useAuth();
@@ -61,17 +61,7 @@ function CompanyProfileContent() {
   }, [profile]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex flex-col">
-        <GlobalNavbar currentApp="explore" user={user} onSignOut={logout} />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center space-y-3 font-sans">
-            <Spinner size="lg" />
-            <p className="text-sm text-[#6E6678] animate-pulse">Loading company profile...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <CompanyProfileSkeleton user={user} logout={logout} />;
   }
 
   if (fetchError) {
@@ -133,9 +123,9 @@ function CompanyProfileContent() {
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col font-sans antialiased relative">
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
-      <GlobalNavbar currentApp="explore" user={user} onSignOut={logout} />
+      <GlobalNavbar currentApp="company" user={user} onSignOut={logout} />
 
-      <main className="max-w-6xl w-full mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8 flex-1">
+      <main className="max-w-6xl w-full mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8 space-y-8 flex-1">
         {/* Navigation Top Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
           <div className="space-y-1">
@@ -156,7 +146,7 @@ function CompanyProfileContent() {
             </p>
           </div>
           <Link href="/company">
-            <Button variant="outline" size="sm">Back to Portal</Button>
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">Back to Portal</Button>
           </Link>
         </div>
 
@@ -199,7 +189,7 @@ function CompanyProfileContent() {
                     type="url"
                     value={website}
                     onChange={(e) => setWebsite(e.target.value)}
-                    placeholder="e.g. https://www.acme.com"
+                    placeholder="https://acme.example.com"
                     leftIcon={<Globe className="h-4 w-4 text-[#6E6678]" />}
                     disabled={saving}
                   />
@@ -211,7 +201,7 @@ function CompanyProfileContent() {
                       type="text"
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      placeholder="e.g. Germany"
+                      placeholder="e.g. Kenya"
                       disabled={saving}
                     />
                   </FormField>
@@ -221,20 +211,20 @@ function CompanyProfileContent() {
                       type="text"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      placeholder="e.g. Berlin"
+                      placeholder="e.g. Nairobi"
                       disabled={saving}
                     />
                   </FormField>
                 </div>
 
-                <FormField label="Company Description & Mission">
+                <FormField label="Company Overview & Mission">
                   <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Brief description about your company, culture, industry focus, and vision..."
+                    placeholder="Describe your engineering organization, mission, team culture, and technical stack..."
+                    rows={4}
                     maxLength={1000}
                     disabled={saving}
-                    rows={4}
                   />
                 </FormField>
               </CardContent>
@@ -299,6 +289,7 @@ function CompanyProfileContent() {
                 type="submit"
                 variant="primary"
                 size="lg"
+                className="w-full sm:w-auto"
                 isLoading={saving}
                 leftIcon={<Save className="h-4 w-4" />}
               >

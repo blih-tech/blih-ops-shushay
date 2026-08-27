@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {
   Button, Badge, Alert, Spinner, Input, Textarea, ConfirmDialog,
-  Card, CardHeader, CardTitle, CardContent, GlobalNavbar
+  Card, CardHeader, CardTitle, CardContent, GlobalNavbar, Skeleton
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -78,12 +78,9 @@ function VideoSection({ courseId, lesson, onUpdate }: { courseId: string; lesson
           onClick={() => fileRef.current?.click()}
           className="border-2 border-dashed border-[#D9CEDF] hover:border-[#1E5BFF]/50 bg-[#EEF3FF]/30 hover:bg-[#EEF3FF]/60 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2"
         >
-          <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-xs">
-            <Upload className="h-5 w-5" />
-          </div>
-          <p className="text-sm font-bold text-[#17131F] font-display">Upload Lesson Video</p>
-          <p className="text-xs font-mono text-[#6E6678]">MP4, WebM, or MOV · Max 500 MB</p>
-          {uploading && <Spinner size="sm" />}
+          <Upload className="h-6 w-6 text-[#6E6678]" />
+          <p className="text-sm font-bold text-[#17131F] font-display">Click to upload lecture video</p>
+          <p className="text-xs font-mono text-[#6E6678]">MP4 format up to 500MB supported</p>
         </div>
       )}
       <input
@@ -803,11 +800,33 @@ function EditCourseContent({ courseId }: { courseId: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
         <GlobalNavbar currentApp="courses" user={user} onSignOut={logout} />
-        <div className="flex-1 flex items-center justify-center">
-          <Spinner size="lg" />
-        </div>
+        <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1 animate-pulse">
+          <div className="flex items-center justify-between">
+            <Skeleton variant="rectangular" className="h-6 w-32 rounded-lg" />
+            <Skeleton variant="rectangular" className="h-10 w-24 rounded-xl" />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-6 space-y-6">
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+                <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
+                <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+                <Skeleton variant="rectangular" className="h-32 w-full rounded-2xl" />
+              </div>
+            </div>
+            <div className="lg:col-span-6 space-y-6">
+              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+                <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
+                <div className="space-y-3">
+                  <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+                  <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+                  <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
       </div>
     );
   }
@@ -860,9 +879,10 @@ function EditCourseContent({ courseId }: { courseId: string }) {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-start lg:self-center">
+          <div className="flex items-center gap-3 w-full sm:w-auto self-start lg:self-center">
             <Button
               variant={isPublished ? "outline" : "primary"}
+              className="w-full sm:w-auto"
               leftIcon={isPublished ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               isLoading={publishLoading}
               onClick={handlePublish}
@@ -879,9 +899,9 @@ function EditCourseContent({ courseId }: { courseId: string }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Main Lessons Column (8 cols) */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
                   <Layers className="h-5 w-5" />
                 </div>
                 <div>
@@ -895,6 +915,7 @@ function EditCourseContent({ courseId }: { courseId: string }) {
                 <Button
                   variant="primary"
                   size="sm"
+                  className="w-full sm:w-auto"
                   leftIcon={<Plus className="h-4 w-4" />}
                   onClick={() => setAddingLesson(true)}
                 >

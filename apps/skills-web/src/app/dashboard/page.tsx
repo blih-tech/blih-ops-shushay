@@ -8,26 +8,20 @@ import { useAuth } from "@/providers/AuthProvider";
 import {
   Button,
   Card,
-  CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
   Badge,
   Spinner,
   GlobalNavbar,
   SkillBar,
   MetricCard,
 } from "@/components/ui";
+import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
 import {
   BookOpen,
   Award,
-  Settings,
   Sparkles,
   ArrowRight,
-  TrendingUp,
-  Play,
-  CheckCircle2,
-  Clock,
 } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
@@ -47,7 +41,7 @@ function DashboardContent() {
   useEffect(() => {
     fetchPublicCourses()
       .then(setCourses)
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoadingCourses(false));
   }, []);
 
@@ -89,7 +83,7 @@ function DashboardContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Link href="/courses">
               <Button variant="primary" size="md" leftIcon={<BookOpen className="w-4 h-4" />}>
                 Explore Catalog
@@ -104,7 +98,7 @@ function DashboardContent() {
         </div>
 
         {/* Next Best Move Hero Card */}
-        <div className="bg-gradient-to-br from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(30,91,255,0.06)] relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_12px_40px_rgba(30,91,255,0.06)] relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-8 space-y-4">
               <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3 py-1 rounded-full uppercase tracking-wider font-semibold">
@@ -174,40 +168,44 @@ function DashboardContent() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {courses.slice(0, 3).map((course, idx) => (
-              <Card key={course.id} variant="interactive" className="flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
-                      <BookOpen className="w-5 h-5" />
+            {loadingCourses ? (
+              <DashboardCoursesSkeleton />
+            ) : (
+              courses.slice(0, 3).map((course, idx) => (
+                <Card key={course.id} variant="interactive" className="flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
+                        <BookOpen className="w-5 h-5" />
+                      </div>
+                      <Badge variant={idx === 0 ? "verified" : "secondary"} size="sm">
+                        {idx === 0 ? "In Progress" : "Available"}
+                      </Badge>
                     </div>
-                    <Badge variant={idx === 0 ? "verified" : "secondary"} size="sm">
-                      {idx === 0 ? "In Progress" : "Available"}
-                    </Badge>
+                    <CardTitle className="text-lg">{course.title}</CardTitle>
+                    <CardDescription className="line-clamp-2">{course.description}</CardDescription>
                   </div>
-                  <CardTitle className="text-lg">{course.title}</CardTitle>
-                  <CardDescription className="line-clamp-2">{course.description}</CardDescription>
-                </div>
 
-                <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-mono text-[#6E6678]">
-                    <span>Progress</span>
-                    <span>{idx === 0 ? "65%" : "0%"}</span>
+                  <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4 space-y-3">
+                    <div className="flex justify-between items-center text-xs font-mono text-[#6E6678]">
+                      <span>Progress</span>
+                      <span>{idx === 0 ? "65%" : "0%"}</span>
+                    </div>
+                    <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-[#1E5BFF] h-full rounded-full"
+                        style={{ width: idx === 0 ? "65%" : "0%" }}
+                      />
+                    </div>
+                    <Link href={`/courses/${course.id}/learn`} className="w-full block pt-1">
+                      <Button variant="outline" fullWidth size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                        {idx === 0 ? "Continue Lesson" : "Start Course"}
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
-                    <div
-                      className="bg-[#1E5BFF] h-full rounded-full"
-                      style={{ width: idx === 0 ? "65%" : "0%" }}
-                    />
-                  </div>
-                  <Link href={`/courses/${course.id}/learn`} className="w-full block pt-1">
-                    <Button variant="outline" fullWidth size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                      {idx === 0 ? "Continue Lesson" : "Start Course"}
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))
+            )}
           </div>
         </div>
       </main>

@@ -3,11 +3,11 @@
 import React, { use } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Briefcase, Building2, MapPin, DollarSign,
-  Clock, ShieldCheck, CheckCircle2, Award, Sparkles
+  ArrowLeft, Building2, MapPin, DollarSign,
+
 } from "lucide-react";
 import {
-  Button, Badge, Card, CardHeader, CardTitle, CardContent,
+  Button, Badge, Card,
   GlobalNavbar, SkillBar
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";

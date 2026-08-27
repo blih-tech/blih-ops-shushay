@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Plus, BookOpen, Pencil, Eye, EyeOff, GraduationCap, ArrowLeft } from "lucide-react";
 import {
-  Button, Badge, Alert, Skeleton, EmptyState, ConfirmDialog, Card, CardContent, GlobalNavbar, UniversalSearch
+  Button, Badge, Alert, ConfirmDialog, GlobalNavbar, UniversalSearch
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";

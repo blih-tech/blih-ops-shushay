@@ -104,9 +104,9 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
 
   return (
     <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] overflow-hidden font-sans bg-white">
-      <CardHeader className="px-6 py-6 sm:px-8 border-b border-[#D9CEDF] bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white flex flex-row items-center justify-between gap-4">
+      <CardHeader className="px-5 py-5 sm:px-8 sm:py-6 border-b border-[#D9CEDF] bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm">
+          <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm shrink-0">
             <Briefcase className="h-5 w-5" />
           </div>
           <div>
@@ -122,6 +122,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
           <Button
             variant="outline"
             size="sm"
+            className="w-full sm:w-auto"
             onClick={() => {
               resetForm();
               setIsAdding(true);

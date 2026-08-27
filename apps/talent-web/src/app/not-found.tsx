@@ -46,7 +46,7 @@ export default function NotFound() {
               </Button>
             </Link>
           </div>
-          
+
           <div className="pt-2">
             <button
               onClick={() => window.history.back()}

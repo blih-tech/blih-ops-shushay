@@ -5,9 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
   ArrowLeft,
-  BookOpen,
   Video,
-  FileText,
   HelpCircle,
   ClipboardList,
   ChevronDown,
@@ -16,7 +14,6 @@ import {
   CheckCircle2,
   Play,
   Clock,
-  Sparkles,
   ShieldCheck,
 } from "lucide-react";
 import {

@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  BookOpen, Users, Building2, ChevronRight, ShieldCheck,
-  Plus, Layers, FileCheck, Sparkles, ArrowUpRight
+  BookOpen, Users, Building2, ChevronRight,
+  Plus, Layers, ArrowUpRight
 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert, Skeleton } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminStats } from "@/lib/adminApi";
 import type { AdminStats } from "@/types/admin";
@@ -74,9 +74,13 @@ function AdminContent() {
                 <Users className="h-4 w-4" />
               </div>
             </div>
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {loading ? <Spinner size="sm" /> : stats?.totalTalents ?? 0}
-            </p>
+            {loading ? (
+              <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
+            ) : (
+              <p className="font-display text-3xl font-bold text-[#17131F]">
+                {stats?.totalTalents ?? 0}
+              </p>
+            )}
             <p className="text-xs text-[#6E6678]">Registered candidates</p>
           </div>
 
@@ -87,9 +91,13 @@ function AdminContent() {
                 <Building2 className="h-4 w-4" />
               </div>
             </div>
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {loading ? <Spinner size="sm" /> : stats?.totalCompanies ?? 0}
-            </p>
+            {loading ? (
+              <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
+            ) : (
+              <p className="font-display text-3xl font-bold text-[#17131F]">
+                {stats?.totalCompanies ?? 0}
+              </p>
+            )}
             <p className="text-xs text-[#6E6678]">Hiring organizations</p>
           </div>
 
@@ -100,9 +108,13 @@ function AdminContent() {
                 <BookOpen className="h-4 w-4" />
               </div>
             </div>
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {loading ? <Spinner size="sm" /> : stats?.totalCourses ?? 0}
-            </p>
+            {loading ? (
+              <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
+            ) : (
+              <p className="font-display text-3xl font-bold text-[#17131F]">
+                {stats?.totalCourses ?? 0}
+              </p>
+            )}
             <p className="text-xs text-[#6E6678]">{stats?.publishedCourses ?? 0} published catalog</p>
           </div>
 
@@ -113,9 +125,13 @@ function AdminContent() {
                 <Layers className="h-4 w-4" />
               </div>
             </div>
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {loading ? <Spinner size="sm" /> : stats?.totalLessons ?? 0}
-            </p>
+            {loading ? (
+              <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
+            ) : (
+              <p className="font-display text-3xl font-bold text-[#17131F]">
+                {stats?.totalLessons ?? 0}
+              </p>
+            )}
             <p className="text-xs text-[#6E6678]">Total lesson lectures</p>
           </div>
         </div>

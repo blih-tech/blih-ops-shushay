@@ -6,8 +6,6 @@ import {
   BookOpen,
   ChevronRight,
   GraduationCap,
-  Sparkles,
-  Award,
   Layers,
   ArrowRight,
 } from "lucide-react";
@@ -17,7 +15,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
   Button,
   Badge,
   Skeleton,

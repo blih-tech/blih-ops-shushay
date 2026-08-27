@@ -3,13 +3,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Search, User, MapPin, Phone, Globe,
-  Briefcase, GraduationCap, FileText, CheckCircle2,
-  ExternalLink, Mail, Eye
+  ArrowLeft, User, FileText, Eye
 } from "lucide-react";
 import {
-  Button, Badge, Alert, Spinner, Card, CardHeader, CardTitle, CardContent,
-  GlobalNavbar, UniversalSearch
+  Button, Badge, Alert, Card,
+  GlobalNavbar, UniversalSearch, Skeleton
 } from "@/components/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -93,8 +91,22 @@ function AdminTalentsContent() {
         </div>
 
         {loading ? (
-          <div className="py-20 flex justify-center items-center">
-            <Spinner size="lg" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i} className="p-6 space-y-4">
+                <div className="flex items-center gap-4">
+                  <Skeleton variant="circular" className="h-12 w-12" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton variant="rectangular" className="h-6 w-3/4 rounded-lg" />
+                    <Skeleton variant="rectangular" className="h-4 w-1/2 rounded-lg" />
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-[#D9CEDF] space-y-2">
+                  <Skeleton variant="rectangular" className="h-4 w-full rounded" />
+                  <Skeleton variant="rectangular" className="h-4 w-5/6 rounded" />
+                </div>
+              </Card>
+            ))}
           </div>
         ) : filteredTalents.length === 0 ? (
           <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
