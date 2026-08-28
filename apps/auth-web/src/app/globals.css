@@ -112,11 +112,11 @@ html {
 }
 
 @media (min-width: 1920px) {
-  html { font-size: 20px; } /* FHD / Wide Desktop (1920px+): +12.5% type scale */
+  html { font-size: 18px; } /* FHD / Wide Desktop (1920px+): +12.5% type scale */
 }
 
 @media (min-width: 2560px) {
-  html { font-size: 24px; } /* QHD / 4K (2560px+): +25% type scale */
+  html { font-size: 20px; } /* QHD / 4K (2560px+): +25% type scale */
 }
 
 /* Container overrides — fills ~90% of viewport at large breakpoints */

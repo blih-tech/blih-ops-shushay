@@ -3,37 +3,18 @@ import path from "path";
 import fs from "fs";
 import { AppError } from "./errorHandler";
 
-// Ensure directories exist
-const uploadDirs = [
-  "uploads/photos",
-  "uploads/cvs",
-  "uploads/logos",
-  "uploads/videos",
-  "uploads/documents",
-];
+// Ensure temporary upload directories exist
+const tmpDir = "uploads/tmp";
+if (!fs.existsSync(tmpDir)) {
+  fs.mkdirSync(tmpDir, { recursive: true });
+}
 
-uploadDirs.forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
+// Storage configurations
+const memoryStorage = multer.memoryStorage();
 
-// Configure storage
-const storage = multer.diskStorage({
+const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (file.fieldname === "photo") {
-      cb(null, "uploads/photos");
-    } else if (file.fieldname === "cv") {
-      cb(null, "uploads/cvs");
-    } else if (file.fieldname === "logo") {
-      cb(null, "uploads/logos");
-    } else if (file.fieldname === "video") {
-      cb(null, "uploads/videos");
-    } else if (file.fieldname === "document") {
-      cb(null, "uploads/documents");
-    } else {
-      cb(new AppError(400, "Invalid field name for file upload"), "");
-    }
+    cb(null, tmpDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
@@ -61,30 +42,6 @@ const pdfFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCal
   }
 };
 
-export const photoUpload = multer({
-  storage,
-  fileFilter: imageFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
-  }
-}).single("photo");
-
-export const cvUpload = multer({
-  storage,
-  fileFilter: pdfFilter,
-  limits: {
-    fileSize: 10 * 1024 * 1024 // 10 MB
-  }
-}).single("cv");
-
-export const logoUpload = multer({
-  storage,
-  fileFilter: imageFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
-  }
-}).single("logo");
-
 // Video filter — mp4, webm, quicktime
 const videoFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   const allowedMimeTypes = ["video/mp4", "video/webm", "video/quicktime"];
@@ -111,8 +68,33 @@ const documentFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilt
   }
 };
 
+// Exported Multer Upload Instances
+export const photoUpload = multer({
+  storage: memoryStorage,
+  fileFilter: imageFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5 MB
+  }
+}).single("photo");
+
+export const cvUpload = multer({
+  storage: memoryStorage,
+  fileFilter: pdfFilter,
+  limits: {
+    fileSize: 10 * 1024 * 1024 // 10 MB
+  }
+}).single("cv");
+
+export const logoUpload = multer({
+  storage: memoryStorage,
+  fileFilter: imageFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5 MB
+  }
+}).single("logo");
+
 export const videoUpload = multer({
-  storage,
+  storage: diskStorage,
   fileFilter: videoFilter,
   limits: {
     fileSize: 500 * 1024 * 1024 // 500 MB
@@ -120,10 +102,9 @@ export const videoUpload = multer({
 }).single("video");
 
 export const documentUpload = multer({
-  storage,
+  storage: memoryStorage,
   fileFilter: documentFilter,
   limits: {
     fileSize: 50 * 1024 * 1024 // 50 MB
   }
 }).single("document");
-

@@ -42,7 +42,12 @@ export async function updateProfile(userId: string, data: UpdateCompanyProfileIn
   });
 }
 
-export async function updateFile(userId: string, field: "logoUrl", fileUrl: string | null) {
+export async function updateFile(
+  userId: string,
+  field: "logoUrl",
+  fileUrl: string | null,
+  publicId: string | null = null
+) {
   const profile = await prisma.companyProfile.findUnique({
     where: { userId },
   });
@@ -51,10 +56,13 @@ export async function updateFile(userId: string, field: "logoUrl", fileUrl: stri
     throw new AppError(404, "Company profile not found");
   }
 
+  const publicIdField = "logoPublicId";
+
   return prisma.companyProfile.update({
     where: { userId },
     data: {
       [field]: fileUrl,
+      [publicIdField]: publicId,
     },
   });
 }

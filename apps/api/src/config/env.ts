@@ -22,4 +22,9 @@ export const env = {
       ],
   nodeEnv: process.env.NODE_ENV ?? "development",
   uploadsBaseUrl: process.env.UPLOADS_BASE_URL ?? "http://localhost:4000/uploads",
+  cloudinary: {
+    cloudName: required("CLOUDINARY_CLOUD_NAME"),
+    apiKey: required("CLOUDINARY_API_KEY"),
+    apiSecret: required("CLOUDINARY_API_SECRET"),
+  },
 };

@@ -51,7 +51,9 @@ model TalentProfile {
   skills       String[]
   bio          String?
   photoUrl     String?
+  photoPublicId String?
   cvUrl        String?
+  cvPublicId   String?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
   experience   Experience[]
@@ -100,6 +102,7 @@ model CompanyProfile {
   contactEmail      String?
   contactPhone      String?
   logoUrl           String?
+  logoPublicId      String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -133,6 +136,7 @@ model Lesson {
   content    String?         // Written content (markdown / plain text)
   order      Int
   videoUrl   String?
+  videoPublicId String?
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
   documents  LessonDocument[]
@@ -149,6 +153,7 @@ model LessonDocument {
   lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   name      String
   url       String
+  publicId  String?
   createdAt DateTime @default(now())
 
   @@index([lessonId])

@@ -21,12 +21,14 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
+    "@blih/validation": "workspace:*",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@types/pg": "^8.23.1",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -39,8 +41,7 @@
     "pg": "^8.23.0",
     "swagger-jsdoc": "^6.3.0",
     "swagger-ui-express": "^5.0.1",
-    "zod": "^3.23.8",
-    "@blih/validation": "workspace:*"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@prisma/config": "^7.9.1",

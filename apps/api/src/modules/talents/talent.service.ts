@@ -221,7 +221,12 @@ export async function deleteEducation(userId: string, id: string) {
   return { success: true };
 }
 
-export async function updateFile(userId: string, field: "photoUrl" | "cvUrl", fileUrl: string | null) {
+export async function updateFile(
+  userId: string,
+  field: "photoUrl" | "cvUrl",
+  fileUrl: string | null,
+  publicId: string | null = null
+) {
   const profile = await prisma.talentProfile.findUnique({
     where: { userId },
   });
@@ -230,10 +235,13 @@ export async function updateFile(userId: string, field: "photoUrl" | "cvUrl", fi
     throw new AppError(404, "Talent profile not found");
   }
 
+  const publicIdField = field === "photoUrl" ? "photoPublicId" : "cvPublicId";
+
   const updated = await prisma.talentProfile.update({
     where: { userId },
     data: {
       [field]: fileUrl,
+      [publicIdField]: publicId,
     },
     include: {
       experience: true,

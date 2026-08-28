@@ -19,10 +19,11 @@ const lessonWithContentSelect = {
   content: true,
   order: true,
   videoUrl: true,
+  videoPublicId: true,
   createdAt: true,
   updatedAt: true,
   documents: {
-    select: { id: true, name: true, url: true, createdAt: true },
+    select: { id: true, name: true, url: true, publicId: true, createdAt: true },
     orderBy: { createdAt: "asc" as const },
   },
   quiz: {
@@ -187,7 +188,8 @@ export async function deleteLesson(courseId: string, lessonId: string) {
     where: { id: lessonId },
     select: {
       videoUrl: true,
-      documents: { select: { url: true } },
+      videoPublicId: true,
+      documents: { select: { url: true, publicId: true } },
     },
   });
   if (!lesson) throw new AppError(404, "Lesson not found");
@@ -195,7 +197,8 @@ export async function deleteLesson(courseId: string, lessonId: string) {
   return {
     success: true,
     videoUrl: lesson.videoUrl,
-    documentUrls: lesson.documents.map((d) => d.url),
+    videoPublicId: lesson.videoPublicId,
+    documents: lesson.documents.map((d) => ({ url: d.url, publicId: d.publicId })),
   };
 }
 
@@ -231,19 +234,30 @@ export async function reorderLessons(courseId: string, data: ReorderLessonsInput
 
 // ─── Uploads ──────────────────────────────────────────────────────────────────
 
-export async function setLessonVideo(courseId: string, lessonId: string, videoUrl: string | null) {
+export async function setLessonVideo(
+  courseId: string,
+  lessonId: string,
+  videoUrl: string | null,
+  videoPublicId: string | null = null
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.lesson.update({
     where: { id: lessonId },
-    data: { videoUrl },
+    data: { videoUrl, videoPublicId },
     select: lessonWithContentSelect,
   });
 }
 
-export async function addLessonDocument(courseId: string, lessonId: string, name: string, url: string) {
+export async function addLessonDocument(
+  courseId: string,
+  lessonId: string,
+  name: string,
+  url: string,
+  publicId: string | null = null
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.lessonDocument.create({
-    data: { lessonId, name, url },
+    data: { lessonId, name, url, publicId },
     select: { id: true, name: true, url: true, createdAt: true },
   });
 }
@@ -253,7 +267,7 @@ export async function deleteLessonDocument(courseId: string, lessonId: string, d
   const doc = await prisma.lessonDocument.findUnique({ where: { id: documentId } });
   if (!doc || doc.lessonId !== lessonId) throw new AppError(404, "Document not found");
   await prisma.lessonDocument.delete({ where: { id: documentId } });
-  return { success: true, url: doc.url };
+  return { success: true, url: doc.url, publicId: doc.publicId };
 }
 
 // ─── Quiz ─────────────────────────────────────────────────────────────────────

@@ -6,18 +6,27 @@ import { AppError } from "../../middleware/errorHandler";
 import * as talentService from "./talent.service";
 import { photoUpload, cvUpload } from "../../middleware/upload";
 
-// Helper to delete old file
-async function deleteOldFile(fileUrl: string | null | undefined) {
-  if (!fileUrl) return;
-  try {
-    const urlParts = fileUrl.split("/uploads/");
-    if (urlParts.length === 2) {
-      const relativePath = urlParts[1];
-      const localPath = path.join("uploads", relativePath);
-      await fs.unlink(localPath);
+import { uploadBuffer, deleteFromCloudinary, CloudinaryFolders } from "../../services/cloudinary.service";
+
+// Helper to delete old file/asset
+async function deleteOldAsset(
+  fileUrl: string | null | undefined,
+  publicId: string | null | undefined,
+  resourceType: "image" | "video" | "raw"
+) {
+  if (publicId) {
+    await deleteFromCloudinary(publicId, resourceType);
+  } else if (fileUrl && fileUrl.includes("/uploads/")) {
+    try {
+      const urlParts = fileUrl.split("/uploads/");
+      if (urlParts.length === 2) {
+        const relativePath = urlParts[1];
+        const localPath = path.join("uploads", relativePath);
+        await fs.unlink(localPath);
+      }
+    } catch (err) {
+      console.warn("Could not delete old local file:", err);
     }
-  } catch (err) {
-    console.warn("Could not delete old file:", err);
   }
 }
 
@@ -47,24 +56,39 @@ export async function uploadPhoto(req: Request, res: Response, next: NextFunctio
       return next(err);
     }
 
+    let uploadedAsset: { secure_url: string; public_id: string } | null = null;
     try {
       if (!req.user) return next(new AppError(401, "Not authenticated"));
       if (!req.file) {
         return next(new AppError(400, "No photo file uploaded"));
       }
 
-      // Snort file url
-      const fileUrl = `${env.uploadsBaseUrl}/photos/${req.file.filename}`;
+      // Sanitize and use original filename with timestamp
+      const fileBaseName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, "_");
+      
+      // 1. Upload new asset first
+      uploadedAsset = await uploadBuffer(req.file.buffer, {
+        ...CloudinaryFolders.talentPhoto,
+        public_id: `${fileBaseName}-${Date.now()}`
+      });
 
-      // Retrieve profile to delete old photo
+      // Retrieve profile
       const profile = await talentService.getOrCreateProfile(req.user.id);
+
+      // 2. Persist new reference
+      const updated = await talentService.updateFile(req.user.id, "photoUrl", uploadedAsset.secure_url, uploadedAsset.public_id);
+
+      // 3. Delete old asset on success
       if (profile.photoUrl) {
-        await deleteOldFile(profile.photoUrl);
+        await deleteOldAsset(profile.photoUrl, profile.photoPublicId, "image");
       }
 
-      const updated = await talentService.updateFile(req.user.id, "photoUrl", fileUrl);
       res.json(updated);
     } catch (dbErr) {
+      // If DB update fails, delete newly uploaded asset
+      if (uploadedAsset) {
+        await deleteFromCloudinary(uploadedAsset.public_id, "image");
+      }
       next(dbErr);
     }
   });
@@ -76,10 +100,10 @@ export async function deletePhoto(req: Request, res: Response, next: NextFunctio
 
     const profile = await talentService.getOrCreateProfile(req.user.id);
     if (profile.photoUrl) {
-      await deleteOldFile(profile.photoUrl);
+      await deleteOldAsset(profile.photoUrl, profile.photoPublicId, "image");
     }
 
-    const updated = await talentService.updateFile(req.user.id, "photoUrl", null);
+    const updated = await talentService.updateFile(req.user.id, "photoUrl", null, null);
     res.json(updated);
   } catch (err) {
     next(err);
@@ -92,24 +116,39 @@ export async function uploadCv(req: Request, res: Response, next: NextFunction) 
       return next(err);
     }
 
+    let uploadedAsset: { secure_url: string; public_id: string } | null = null;
     try {
       if (!req.user) return next(new AppError(401, "Not authenticated"));
       if (!req.file) {
         return next(new AppError(400, "No CV file uploaded"));
       }
 
-      // Snort file url
-      const fileUrl = `${env.uploadsBaseUrl}/cvs/${req.file.filename}`;
+      // Sanitize and use original filename with timestamp
+      const fileBaseName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, "_");
 
-      // Retrieve profile to delete old CV
+      // 1. Upload new asset first
+      uploadedAsset = await uploadBuffer(req.file.buffer, {
+        ...CloudinaryFolders.talentCv,
+        public_id: `${fileBaseName}-${Date.now()}`
+      });
+
+      // Retrieve profile
       const profile = await talentService.getOrCreateProfile(req.user.id);
+
+      // 2. Persist new reference
+      const updated = await talentService.updateFile(req.user.id, "cvUrl", uploadedAsset.secure_url, uploadedAsset.public_id);
+
+      // 3. Delete old asset on success
       if (profile.cvUrl) {
-        await deleteOldFile(profile.cvUrl);
+        await deleteOldAsset(profile.cvUrl, profile.cvPublicId, "raw");
       }
 
-      const updated = await talentService.updateFile(req.user.id, "cvUrl", fileUrl);
       res.json(updated);
     } catch (dbErr) {
+      // If DB update fails, delete newly uploaded asset
+      if (uploadedAsset) {
+        await deleteFromCloudinary(uploadedAsset.public_id, "raw");
+      }
       next(dbErr);
     }
   });
@@ -121,10 +160,10 @@ export async function deleteCv(req: Request, res: Response, next: NextFunction) 
 
     const profile = await talentService.getOrCreateProfile(req.user.id);
     if (profile.cvUrl) {
-      await deleteOldFile(profile.cvUrl);
+      await deleteOldAsset(profile.cvUrl, profile.cvPublicId, "raw");
     }
 
-    const updated = await talentService.updateFile(req.user.id, "cvUrl", null);
+    const updated = await talentService.updateFile(req.user.id, "cvUrl", null, null);
     res.json(updated);
   } catch (err) {
     next(err);

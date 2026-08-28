@@ -13,13 +13,10 @@ import {
   Download,
   Briefcase,
   GraduationCap,
-  Calendar,
   User,
   CheckCircle2,
   Edit3,
   Eye,
-  ArrowLeft,
-  Sparkles,
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -46,9 +43,9 @@ function ProfilePreviewContent() {
 
   const sortedExperience = profile?.experience
     ? [...profile.experience].sort(
-        (a, b) =>
-          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-      )
+      (a, b) =>
+        new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+    )
     : [];
 
   const sortedEducation = profile?.education
@@ -84,7 +81,7 @@ function ProfilePreviewContent() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className="border-white/20 text-white hover:bg-white/10 text-xs"
+                  className="border-white/20 text-white  bg-white/10 hover:bg-white/20 text-xs"
                   leftIcon={<Download className="h-3.5 w-3.5" />}
                 >
                   Download CV
