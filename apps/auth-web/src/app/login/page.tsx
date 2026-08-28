@@ -57,7 +57,18 @@ function LoginForm() {
 
       // Successful login - determine redirect location
       if (returnTo) {
-        window.location.href = returnTo;
+        const { role } = data.user;
+        // If a COMPANY user logs in, redirect away from talent-only paths
+        if (role === "COMPANY" && returnTo.includes("/profile") && !returnTo.includes("/company")) {
+          window.location.href = `${TALENT_URL}/company`;
+        }
+        // If a TALENT user logs in, redirect away from company-only paths
+        else if (role === "TALENT" && returnTo.includes("/company")) {
+          window.location.href = `${TALENT_URL}/profile`;
+        } 
+        else {
+          window.location.href = returnTo;
+        }
       } else {
         const { role } = data.user;
         if (role === "ADMIN") {

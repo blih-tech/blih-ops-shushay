@@ -16,10 +16,16 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
-import { ExploreProfileMockup } from "@/components/explore/ExploreProfileMockup";
+import { HeroProfileMockup } from "@/components/explore/HeroProfileMockup";
 import { EcosystemCanvas } from "@/components/explore/EcosystemCanvas";
+import { TalentExplorerPreview } from "@/components/explore/TalentExplorerPreview";
+import { CareerPathwayPreview } from "@/components/explore/CareerPathwayPreview";
+import { SkillGraphPreview } from "@/components/explore/SkillGraphPreview";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function TalentHomePage() {
   const { user, logout } = useAuth();
@@ -43,6 +49,25 @@ export default function TalentHomePage() {
       { opacity: 0, x: 50, scale: 0.95 },
       { opacity: 1, x: 0, scale: 1, duration: 1, delay: 0.4, ease: "power3.out" }
     );
+
+    // Scroll trigger reveals for each primary section
+    gsap.utils.toArray(".scroll-reveal-section").forEach((section: any) => {
+      gsap.fromTo(
+        section,
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+            toggleActions: "play none none none"
+          }
+        }
+      );
+    });
   }, { scope: containerRef });
 
   const searchChips = user?.role === "COMPANY"
@@ -73,7 +98,7 @@ export default function TalentHomePage() {
         onSignOut={logout}
       />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-20 sm:space-y-28">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-24 sm:space-y-36">
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column */}
@@ -208,12 +233,29 @@ export default function TalentHomePage() {
 
           {/* Right Column: Live Decision Surface Preview */}
           <div className="preview-card-anim lg:col-span-5 relative">
-            <ExploreProfileMockup />
+            <HeroProfileMockup />
           </div>
         </div>
 
         {/* Continuous Growth Ecosystem Canvas */}
-        <EcosystemCanvas />
+        <div className="scroll-reveal-section">
+          <EcosystemCanvas />
+        </div>
+
+        {/* Talent Explorer Product Preview */}
+        <div className="scroll-reveal-section">
+          <TalentExplorerPreview />
+        </div>
+
+        {/* Career Pathway Experience */}
+        <div className="scroll-reveal-section">
+          <CareerPathwayPreview />
+        </div>
+
+        {/* Skill Graph Section */}
+        <div className="scroll-reveal-section">
+          <SkillGraphPreview />
+        </div>
 
         {/* Dynamic Role-Aware Action Banner */}
         <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-[0_12px_40px_rgba(30,91,255,0.05)]">
@@ -293,42 +335,51 @@ export default function TalentHomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-16">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <div className="flex gap-4 uppercase tracking-wider">
-          {isCompany ? (
-            <>
-              <Link href="/company/talents" className="hover:text-[#1E5BFF] transition-colors">
-                Talent Search
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/jobs" className="hover:text-[#1E5BFF] transition-colors">
-                Job Posts
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/subscription" className="hover:text-[#1E5BFF] transition-colors">
-                Subscription
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/profile" className="hover:text-[#1E5BFF] transition-colors">
-                Company Profile
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/profile" className="hover:text-[#1E5BFF] transition-colors">
-                Talent Profile
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/jobs" className="hover:text-[#1E5BFF] transition-colors">
-                Opportunities
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company" className="hover:text-[#1E5BFF] transition-colors">
-                For Companies
-              </Link>
-            </>
-          )}
+      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-[#D9CEDF]/60 flex flex-col items-start gap-4 mt-24 font-sans">
+        <h2 className="font-display text-[64px] font-bold text-[#1E5BFF] leading-none tracking-tight">
+          BLIH OPS
+        </h2>
+        <p className="font-mono text-xs text-[#6E6678]">
+          Skill evidence connected to real opportunities.
+        </p>
+        
+        <div className="w-full flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-6 pt-12 border-t border-[#D9CEDF]/20 mt-10">
+          <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
+          <div className="flex gap-4 uppercase tracking-wider">
+            {isCompany ? (
+              <>
+                <Link href="/company/talents" className="hover:text-[#1E5BFF] transition-colors">
+                  Talent Search
+                </Link>
+                <span className="text-[#D9CEDF]">·</span>
+                <Link href="/company/jobs" className="hover:text-[#1E5BFF] transition-colors">
+                  Job Posts
+                </Link>
+                <span className="text-[#D9CEDF]">·</span>
+                <Link href="/company/subscription" className="hover:text-[#1E5BFF] transition-colors">
+                  Subscription
+                </Link>
+                <span className="text-[#D9CEDF]">·</span>
+                <Link href="/company/profile" className="hover:text-[#1E5BFF] transition-colors">
+                  Company Profile
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link href="/profile" className="hover:text-[#1E5BFF] transition-colors">
+                  Talent Profile
+                </Link>
+                <span className="text-[#D9CEDF]">·</span>
+                <Link href="/jobs" className="hover:text-[#1E5BFF] transition-colors">
+                  Opportunities
+                </Link>
+                <span className="text-[#D9CEDF]">·</span>
+                <Link href="/company" className="hover:text-[#1E5BFF] transition-colors">
+                  For Companies
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </footer>
     </div>
