@@ -1,5 +1,6 @@
 import React from "react";
-import { Badge, SkillBar } from "../ui";
+import { Badge, SkillBar } from "@blih/ui";
+
 
 export interface CertificateCanvasProps {
   recipientName?: string;

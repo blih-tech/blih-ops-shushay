@@ -16,6 +16,7 @@ import {
   getCourseAdmin,
   createCourse,
   updateCourse,
+  deleteCourse,
   publishCourse,
   unpublishCourse,
   listCoursesPublic,
@@ -25,6 +26,7 @@ import {
   deleteLesson,
   reorderLessons,
   uploadLessonVideo,
+  deleteLessonVideo,
   uploadLessonDocument,
   deleteLessonDocument,
   upsertQuiz,
@@ -46,6 +48,7 @@ router.get("/admin", ...adminAuth, listCoursesAdmin);
 router.get("/admin/:courseId", ...adminAuth, getCourseAdmin);
 router.post("/", ...adminAuth, validate(createCourseSchema), createCourse);
 router.patch("/:courseId", ...adminAuth, validate(updateCourseSchema), updateCourse);
+router.delete("/:courseId", ...adminAuth, deleteCourse);
 router.post("/:courseId/publish", ...adminAuth, publishCourse);
 router.post("/:courseId/unpublish", ...adminAuth, unpublishCourse);
 
@@ -58,6 +61,7 @@ router.delete("/:courseId/lessons/:lessonId", ...adminAuth, deleteLesson);
 
 // Lesson uploads
 router.post("/:courseId/lessons/:lessonId/video", ...adminAuth, uploadLessonVideo);
+router.delete("/:courseId/lessons/:lessonId/video", ...adminAuth, deleteLessonVideo);
 router.post("/:courseId/lessons/:lessonId/documents", ...adminAuth, uploadLessonDocument);
 router.delete("/:courseId/lessons/:lessonId/documents/:documentId", ...adminAuth, deleteLessonDocument);
 

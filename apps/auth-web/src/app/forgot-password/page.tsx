@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import AuthLayout from "@/components/auth/AuthLayout";
-import { Button, Input, Alert } from "@/components/ui";
+import { Button, Input, Alert } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 

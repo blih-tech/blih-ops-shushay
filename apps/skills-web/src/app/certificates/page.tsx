@@ -13,7 +13,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import {
   Button,
   GlobalNavbar,
-} from "@/components/ui";
+} from "@blih/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";
 import { useAuth } from "@/providers/AuthProvider";
 

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, BookOpen, Plus } from "lucide-react";
-import { Button, Input, Textarea, Alert, Card, CardHeader, CardTitle, CardDescription, CardContent, GlobalNavbar, Badge } from "@/components/ui";
+import { Button, Input, Textarea, Alert, Card, CardHeader, CardTitle, CardDescription, CardContent, GlobalNavbar, Badge } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { createCourse } from "@/lib/courses";

@@ -1,9 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Input, PasswordInput, Alert } from "@/components/ui";
+import { Button, Input, PasswordInput, Alert } from "@blih/ui";
 import { Mail, User } from "lucide-react";
 import { Role } from "@/types/user";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 function GoogleIcon() {
   return (
@@ -43,6 +46,17 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({ email, password, role });
+  };
+
+  const handleGoogleSignup = () => {
+    const params = new URLSearchParams({ role });
+    // Preserve returnTo from the current page's query string if present
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const returnTo = searchParams.get("returnTo");
+      if (returnTo) params.set("returnTo", returnTo);
+    }
+    window.location.href = `${API_URL}/auth/google?${params.toString()}`;
   };
 
   return (
@@ -138,6 +152,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
 
       <button
         type="button"
+        onClick={handleGoogleSignup}
         className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#EEF3FF]/60 hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
       >
         <GoogleIcon />

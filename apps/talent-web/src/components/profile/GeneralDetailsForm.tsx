@@ -1,6 +1,6 @@
 import React from "react";
 import { User, Save, Phone, MapPin, Globe, Sparkles } from "lucide-react";
-import { FormField, Input, Select, Textarea, Card, CardContent, CardHeader, CardTitle, CardDescription, Button } from "@/components/ui";
+import { FormField, Input, Select, Textarea, Card, CardContent, CardHeader, CardTitle, CardDescription, Button } from "@blih/ui";
 import { SkillsInput } from "./SkillsInput";
 import { ProfileFormReturn } from "@/state/profile/profileForm";
 

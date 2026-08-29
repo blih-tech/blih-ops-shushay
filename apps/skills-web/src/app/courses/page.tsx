@@ -23,7 +23,7 @@ import {
   UniversalSearch,
   Chip,
   GlobalNavbar,
-} from "@/components/ui";
+} from "@blih/ui";
 import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
 import { useAuth } from "@/providers/AuthProvider";
@@ -96,6 +96,7 @@ function CourseCard({ course }: { course: PublicCourseListItem }) {
 
 export default function CourseCatalogPage() {
   const { user, logout } = useAuth();
+  const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -235,7 +236,7 @@ export default function CourseCatalogPage() {
             Dashboard
           </Link>
           <span className="text-[#D9CEDF]">·</span>
-          <a href="http://localhost:3002/jobs" className="hover:text-[#1E5BFF] transition-colors">
+          <a href={`${TALENT_URL}/jobs`} className="hover:text-[#1E5BFF] transition-colors">
             Opportunities
           </a>
         </div>

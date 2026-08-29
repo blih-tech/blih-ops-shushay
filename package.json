@@ -7,7 +7,14 @@
     "dev:api": "pnpm --filter @blih/api dev",
     "dev:auth": "pnpm --filter @blih/auth-web dev",
     "dev:skills": "pnpm --filter @blih/skills-web dev",
-    "dev:talent": "pnpm --filter @blih/talent-web dev"
+    "dev:talent": "pnpm --filter @blih/talent-web dev",
+    "build": "nx run-many -t build",
+    "typecheck": "nx run-many -t typecheck",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test",
+    "prisma:migrate": "pnpm --filter @blih/api run prisma:migrate",
+    "prisma:generate": "pnpm --filter @blih/api run prisma:generate",
+    "seed": "pnpm --filter @blih/api run seed"
   },
   "devDependencies": {
     "nx": "^20.0.0",

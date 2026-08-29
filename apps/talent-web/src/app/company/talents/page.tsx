@@ -8,18 +8,54 @@ import {
 } from "lucide-react";
 import {
   Button, Badge, Card,
-  GlobalNavbar, UniversalSearch
-} from "@/components/ui";
+  GlobalNavbar, UniversalSearch, Skeleton
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 
 import { mockTalents, type TalentProfileCard } from "@/data";
+
+function TalentCardSkeleton() {
+  return (
+    <Card className="border border-[#D9CEDF] rounded-3xl bg-white overflow-hidden p-6 flex flex-col justify-between h-[230px]">
+      <div className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3.5">
+            <Skeleton variant="rectangular" width={48} height={48} className="rounded-2xl" />
+            <div className="space-y-2">
+              <Skeleton variant="rectangular" width={120} height={18} className="rounded-md" />
+              <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
+            </div>
+          </div>
+          <Skeleton variant="rectangular" width={70} height={22} className="rounded-lg" />
+        </div>
+        <Skeleton variant="text" className="w-full" />
+        <div className="flex gap-2">
+          <Skeleton variant="rectangular" width={50} height={16} className="rounded-md" />
+          <Skeleton variant="rectangular" width={60} height={16} className="rounded-md" />
+          <Skeleton variant="rectangular" width={55} height={16} className="rounded-md" />
+        </div>
+      </div>
+      <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-between items-center">
+        <Skeleton variant="rectangular" width={40} height={12} className="rounded-md" />
+        <Skeleton variant="rectangular" width={90} height={28} className="rounded-md" />
+      </div>
+    </Card>
+  );
+}
 
 function CompanyTalentsSearchContent() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("All");
   const [selectedTalent, setSelectedTalent] = useState<TalentProfileCard | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const skillFilters = ["All", "React 19", "Next.js", "TypeScript", "Node.js", "PostgreSQL"];
 
@@ -91,70 +127,78 @@ function CompanyTalentsSearchContent() {
         </div>
 
         {/* Talent Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTalents.map((talent) => (
-            <Card
-              key={talent.id}
-              className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 transition-all"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs">
-                      {talent.name.charAt(0)}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <TalentCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
+            {filteredTalents.map((talent) => (
+              <Card
+                key={talent.id}
+                className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 hover:shadow-md transition-all duration-300"
+              >
+                <div className="p-6 space-y-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs">
+                        {talent.name.charAt(0)}
+                      </div>
+                      <div>
+                        <h3 className="font-display text-lg font-bold text-[#17131F]">{talent.name}</h3>
+                        <p className="text-xs font-mono text-[#1E5BFF] font-semibold">{talent.title}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-display text-lg font-bold text-[#17131F]">{talent.name}</h3>
-                      <p className="text-xs font-mono text-[#1E5BFF] font-semibold">{talent.title}</p>
+                    <div className="text-right">
+                      <span className="inline-block px-2.5 py-1 rounded-lg bg-[#E6F5F0] text-[#2E8F79] font-mono text-xs font-bold border border-[#2E8F79]/20">
+                        {talent.verifiedScore}% MATCH
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="inline-block px-2.5 py-1 rounded-lg bg-[#E6F5F0] text-[#2E8F79] font-mono text-xs font-bold border border-[#2E8F79]/20">
-                      {talent.verifiedScore}% MATCH
-                    </span>
+
+                  <p className="text-xs text-[#6E6678] font-sans line-clamp-2 leading-relaxed">
+                    {talent.bio}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {talent.skills.map((skill, si) => (
+                      <span
+                        key={si}
+                        className="px-2.5 py-0.5 rounded-lg bg-[#EEF3FF] border border-[#1E5BFF]/15 text-[11px] font-mono text-[#1E5BFF] font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#D9CEDF]/60 text-xs font-mono text-[#6E6678]">
+                    <div className="flex items-center gap-1.5 truncate">
+                      <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
+                      <span className="truncate">{talent.location}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[#17131F] font-bold">{talent.englishLevel}</span> English
+                    </div>
                   </div>
                 </div>
 
-                <p className="text-xs text-[#6E6678] font-sans line-clamp-2 leading-relaxed">
-                  {talent.bio}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {talent.skills.map((skill, si) => (
-                    <span
-                      key={si}
-                      className="px-2.5 py-0.5 rounded-lg bg-[#EEF3FF] border border-[#1E5BFF]/15 text-[11px] font-mono text-[#1E5BFF] font-medium"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
+                  <span className="text-xs font-mono text-[#6E6678]">{talent.experienceYears} exp</span>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<Eye className="h-3.5 w-3.5" />}
+                    onClick={() => setSelectedTalent(talent)}
+                  >
+                    View Profile
+                  </Button>
                 </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#D9CEDF]/60 text-xs font-mono text-[#6E6678]">
-                  <div className="flex items-center gap-1.5 truncate">
-                    <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                    <span className="truncate">{talent.location}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[#17131F] font-bold">{talent.englishLevel}</span> English
-                  </div>
-                </div>
-              </div>
-
-              <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
-                <span className="text-xs font-mono text-[#6E6678]">{talent.experienceYears} exp</span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  leftIcon={<Eye className="h-3.5 w-3.5" />}
-                  onClick={() => setSelectedTalent(talent)}
-                >
-                  View Profile
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Modal: View Full Talent Profile */}
         {selectedTalent && (

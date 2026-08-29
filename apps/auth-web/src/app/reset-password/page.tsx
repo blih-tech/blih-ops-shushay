@@ -4,7 +4,7 @@ import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
-import { Button, PasswordInput, Alert, Spinner } from "@/components/ui";
+import { Button, PasswordInput, Alert, Spinner } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 
 function ResetPasswordForm() {

@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { Role } from "@/types/user";
-import { Spinner, Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui";
+import { Spinner, Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blih/ui";
 import { ShieldAlert } from "lucide-react";
 
 interface AuthGuardProps {

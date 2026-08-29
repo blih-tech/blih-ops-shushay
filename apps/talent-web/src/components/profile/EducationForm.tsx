@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit2, Calendar, GraduationCap, Loader2, Check } from "lucide-react";
 import { Education } from "@/types/profile";
 import { addEducation, updateEducation, deleteEducation } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, FormField, Alert, Badge } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, FormField, Alert, Badge } from "@blih/ui";
 
 interface EducationFormProps {
   entries: Education[];

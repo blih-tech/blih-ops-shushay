@@ -17,7 +17,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui";
+} from "@blih/ui";
 import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
 import {

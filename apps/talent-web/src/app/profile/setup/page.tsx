@@ -11,7 +11,7 @@ import {
   uploadTalentCv,
   deleteTalentCv,
 } from "@/lib/talentApi";
-import { Alert, Spinner, Button, Card, CardContent, Badge, GlobalNavbar } from "@/components/ui";
+import { Alert, Spinner, Button, Card, CardContent, Badge, GlobalNavbar } from "@blih/ui";
 import { ProfileSetupSkeleton } from "@/components/profile/ProfileSkeleton";
 import { StepPersonalInfo } from "@/components/profile/setup/StepPersonalInfo";
 import { StepExpertise } from "@/components/profile/setup/StepExpertise";

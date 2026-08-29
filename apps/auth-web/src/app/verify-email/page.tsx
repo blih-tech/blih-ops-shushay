@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
-import { Alert, Button, Spinner } from "@/components/ui";
+import { Alert, Button, Spinner } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 
 function VerifyEmailContent() {

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { AlertTriangle, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button } from "@blih/ui";
 
 interface ProfileCompletionBannerProps {
   isComplete: boolean;

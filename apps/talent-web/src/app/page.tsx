@@ -10,7 +10,7 @@ import {
   UniversalSearch,
   Chip,
   GlobalNavbar,
-} from "@/components/ui";
+} from "@blih/ui";
 import {
   Sparkles,
   ArrowRight,

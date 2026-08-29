@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Badge, SkillBar } from "@/components/ui";
+import { Badge, SkillBar } from "@blih/ui";
 
 export function ExploreProfileMockup() {
   return (

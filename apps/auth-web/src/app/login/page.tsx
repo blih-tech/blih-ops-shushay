@@ -3,12 +3,13 @@
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Button, Input, PasswordInput, Alert, Badge, Spinner } from "@/components/ui";
+import { Button, Input, PasswordInput, Alert, Badge, Spinner } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
 const SKILLS_URL = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";
 const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 function GoogleIcon() {
   return (
@@ -41,6 +42,7 @@ function LoginForm() {
 
   const searchParams = useSearchParams();
   const returnTo = searchParams.get("returnTo");
+  const googleError = searchParams.get("error");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,19 +58,32 @@ function LoginForm() {
       });
 
       // Successful login - determine redirect location
+      // Successful login - determine redirect location
       if (returnTo) {
         const { role } = data.user;
-        // If a COMPANY user logs in, redirect away from talent-only paths
-        if (role === "COMPANY" && returnTo.includes("/profile") && !returnTo.includes("/company")) {
-          window.location.href = `${TALENT_URL}/company`;
+        let finalUrl = returnTo;
+        try {
+          const parsed = new URL(returnTo, TALENT_URL);
+          const path = parsed.pathname;
+
+          if (role === "COMPANY") {
+            const isTalentOnly =
+              path === "/profile" || path.startsWith("/profile/") ||
+              path === "/jobs" || path.startsWith("/jobs/") ||
+              path === "/applications" || path.startsWith("/applications/");
+            if (isTalentOnly) {
+              finalUrl = `${TALENT_URL}/company`;
+            }
+          } else if (role === "TALENT") {
+            const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+            if (isCompanyOnly) {
+              finalUrl = `${TALENT_URL}/profile`;
+            }
+          }
+        } catch {
+          finalUrl = role === "COMPANY" ? `${TALENT_URL}/company` : `${TALENT_URL}/profile`;
         }
-        // If a TALENT user logs in, redirect away from company-only paths
-        else if (role === "TALENT" && returnTo.includes("/company")) {
-          window.location.href = `${TALENT_URL}/profile`;
-        } 
-        else {
-          window.location.href = returnTo;
-        }
+        window.location.href = finalUrl;
       } else {
         const { role } = data.user;
         if (role === "ADMIN") {
@@ -86,9 +101,17 @@ function LoginForm() {
     }
   };
 
+  const handleGoogleLogin = () => {
+    const params = new URLSearchParams({ role: "TALENT" });
+    if (returnTo) params.set("returnTo", returnTo);
+    window.location.href = `${API_URL}/auth/google?${params.toString()}`;
+  };
+
   return (
     <div className="space-y-6">
-      {error && <Alert variant="error">{error}</Alert>}
+      {(error || googleError) && (
+        <Alert variant="error">{error || googleError}</Alert>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
@@ -144,6 +167,7 @@ function LoginForm() {
       {/* Google OAuth Button */}
       <button
         type="button"
+        onClick={handleGoogleLogin}
         className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#EEF3FF]/60 hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
       >
         <GoogleIcon />
@@ -167,7 +191,7 @@ export default function LoginPage() {
       {/* Top Header */}
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
         <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
-          <Link href="http://localhost:3002" className="flex items-baseline gap-2 group">
+          <Link href={TALENT_URL} className="flex items-baseline gap-2 group">
             <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
               BLIH OPS
             </span>

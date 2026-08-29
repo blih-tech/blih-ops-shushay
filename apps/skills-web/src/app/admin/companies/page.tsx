@@ -8,7 +8,7 @@ import {
 import {
   Button, Badge, Alert, Spinner, Card, CardHeader, CardTitle, CardContent,
   GlobalNavbar, UniversalSearch, Skeleton
-} from "@/components/ui";
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminCompanies } from "@/lib/adminApi";

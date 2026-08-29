@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Upload, FileText, X, Loader2, Download, CheckCircle2 } from "lucide-react";
-import { Button, Alert, Badge } from "@/components/ui";
+import { Button, Alert, Badge } from "@blih/ui";
 
 interface CvUploadProps {
   value?: string | null;

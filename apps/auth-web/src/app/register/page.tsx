@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button, Alert } from "@/components/ui";
+import { Button, Alert } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 
 function GoogleIcon() {
@@ -31,6 +31,7 @@ function GoogleIcon() {
 import { RegisterForm } from "@/components/RegisterForm";
 
 export default function RegisterPage() {
+  const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -55,7 +56,7 @@ export default function RegisterPage() {
   const navHeader = (
     <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
       <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
-        <Link href="http://localhost:3002" className="flex items-baseline gap-2 group">
+        <Link href={TALENT_URL} className="flex items-baseline gap-2 group">
           <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
             BLIH OPS
           </span>

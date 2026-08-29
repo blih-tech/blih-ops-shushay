@@ -107,6 +107,37 @@ export async function unpublishCourse(id: string) {
   return prisma.course.update({ where: { id }, data: { status: "DRAFT" } });
 }
 
+export async function deleteCourse(id: string) {
+  const course = await prisma.course.findUnique({
+    where: { id },
+    include: {
+      lessons: {
+        select: {
+          videoUrl: true,
+          videoPublicId: true,
+          documents: { select: { url: true, publicId: true } },
+        },
+      },
+    },
+  });
+  if (!course) throw new AppError(404, "Course not found");
+  
+  await prisma.course.delete({ where: { id } });
+
+  const videos = course.lessons
+    .filter((l) => l.videoUrl && l.videoPublicId)
+    .map((l) => ({ url: l.videoUrl!, publicId: l.videoPublicId! }));
+    
+  const documents: { url: string; publicId: string | null }[] = [];
+  for (const lesson of course.lessons) {
+    for (const doc of lesson.documents) {
+      documents.push({ url: doc.url, publicId: doc.publicId });
+    }
+  }
+
+  return { success: true, videos, documents };
+}
+
 // ─── Courses (public) ─────────────────────────────────────────────────────────
 
 export async function listCoursesPublic() {
@@ -268,6 +299,26 @@ export async function deleteLessonDocument(courseId: string, lessonId: string, d
   if (!doc || doc.lessonId !== lessonId) throw new AppError(404, "Document not found");
   await prisma.lessonDocument.delete({ where: { id: documentId } });
   return { success: true, url: doc.url, publicId: doc.publicId };
+}
+
+export async function deleteLessonVideo(courseId: string, lessonId: string) {
+  await assertLessonBelongsToCourse(courseId, lessonId);
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+    select: { videoUrl: true, videoPublicId: true },
+  });
+  if (!lesson) throw new AppError(404, "Lesson not found");
+  
+  await prisma.lesson.update({
+    where: { id: lessonId },
+    data: { videoUrl: null, videoPublicId: null },
+  });
+
+  return {
+    success: true,
+    videoUrl: lesson.videoUrl,
+    videoPublicId: lesson.videoPublicId,
+  };
 }
 
 // ─── Quiz ─────────────────────────────────────────────────────────────────────

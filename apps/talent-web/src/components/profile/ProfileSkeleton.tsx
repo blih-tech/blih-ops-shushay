@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { GlobalNavbar, Skeleton } from "@/components/ui";
+import { GlobalNavbar, Skeleton } from "@blih/ui";
 
 interface SkeletonProps {
   user: any;

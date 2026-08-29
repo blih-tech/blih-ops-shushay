@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronLeft, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button } from "@blih/ui";
 import { PhotoUpload } from "../PhotoUpload";
 import { CvUpload } from "../CvUpload";
 import { StepMediaProps } from "@/types/setup";

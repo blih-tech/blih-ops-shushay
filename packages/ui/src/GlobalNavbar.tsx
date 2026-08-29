@@ -354,26 +354,46 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors cursor-pointer"
+            className="relative w-10 h-10 flex items-center justify-center text-[#17131F] hover:bg-[#EEF3FF] active:scale-95 rounded-xl transition-all cursor-pointer border border-transparent hover:border-[#D9CEDF]/60"
             aria-label="Toggle menu"
+            aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className="sr-only">Toggle navigation menu</span>
+            <div className="relative w-5 h-5 flex items-center justify-center">
+              <Menu
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen ? "rotate-90 opacity-0 scale-75" : "rotate-0 opacity-100 scale-100"
+                }`}
+              />
+              <X
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]" : "-rotate-90 opacity-0 scale-75"
+                }`}
+              />
+            </div>
           </button>
         </div>
       </nav>
 
-      {/* Mobile dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden mt-2 bg-white border border-[#D9CEDF] rounded-2xl p-4 shadow-xl space-y-3 font-sans">
-          <div className="flex flex-col space-y-2">
+      {/* Mobile dropdown with smooth height & fade transition */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-out origin-top transform ${
+          mobileMenuOpen
+            ? "max-h-[640px] opacity-100 translate-y-0 scale-100 mt-2 pointer-events-auto"
+            : "max-h-0 opacity-0 -translate-y-3 scale-98 mt-0 pointer-events-none"
+        }`}
+      >
+        <div className="bg-white/95 backdrop-blur-xl border border-[#D9CEDF] rounded-2xl sm:rounded-3xl p-4 shadow-[0_20px_50px_rgba(23,19,31,0.1)] space-y-3 font-sans">
+          <div className="flex flex-col space-y-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className={`px-3 py-2 rounded-xl text-sm ${link.active
-                  ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold"
-                  : "text-[#17131F] hover:bg-[#EEF3FF]"
-                  }`}
+                className={`px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  link.active
+                    ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold translate-x-1"
+                    : "text-[#17131F] hover:bg-[#EEF3FF] hover:text-[#1E5BFF]"
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -381,16 +401,16 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             ))}
           </div>
 
-          <div className="pt-3 border-t border-[#D9CEDF] flex flex-col gap-2">
+          <div className="pt-3 border-t border-[#D9CEDF]/70 flex flex-col gap-2">
             {user ? (
               <div className="space-y-2.5">
                 <div className="p-3 bg-[#EEF3FF]/40 rounded-xl border border-[#D9CEDF]/50 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm shadow-sm">
                     {userInitial}
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-mono text-[#6E6678]">Signed in as</p>
-                    <p className="text-sm font-bold text-[#17131F] truncate">{user.email}</p>
+                    <p className="text-sm font-bold text-[#17131F] truncate font-display">{user.email}</p>
                   </div>
                 </div>
 
@@ -457,9 +477,15 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                 </div>
 
                 {onSignOut && (
-                  <Button variant="outline" fullWidth size="sm" onClick={onSignOut} className="text-[#EF4444] border-[#EF4444]/30 hover:bg-[#FFF0F0]">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out
+                  <Button
+                    variant="outline"
+                    fullWidth
+                    size="sm"
+                    onClick={onSignOut}
+                    leftIcon={<LogOut className="h-4 w-4 shrink-0" />}
+                    className="flex flex-row items-center justify-center gap-2 text-[#EF4444] border-[#EF4444]/30 hover:bg-[#FFF0F0] cursor-pointer"
+                  >
+                    <span>Sign Out</span>
                   </Button>
                 )}
               </div>
@@ -479,7 +505,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             )}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 };

@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, Compass, AlertTriangle } from "lucide-react";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function NotFound() {
@@ -30,7 +30,7 @@ export default function NotFound() {
             Page Not Found
           </CardTitle>
           <CardDescription className="text-sm mt-2 text-muted-foreground font-sans">
-            Sorry, we couldn't find the page you're looking for. It might have been moved or deleted.
+            Sorry, we couldn&apos;t find the page you&apos;re looking for. It might have been moved or deleted.
           </CardDescription>
         </CardHeader>
 

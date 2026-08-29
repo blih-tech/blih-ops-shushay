@@ -8,7 +8,7 @@ import {
 import {
   Button, Badge,
   GlobalNavbar
-} from "@/components/ui";
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 

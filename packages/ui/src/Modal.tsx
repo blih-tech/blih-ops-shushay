@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 
 export interface ModalProps {
@@ -20,6 +20,8 @@ export const Modal: React.FC<ModalProps> = ({
   footer,
   size = "md",
 }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -28,10 +30,18 @@ export const Modal: React.FC<ModalProps> = ({
     };
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
       window.addEventListener("keydown", handleKeyDown);
     }
     return () => {
-      document.body.style.overflow = "unset";
+      const otherDialogs = Array.from(
+        document.querySelectorAll('[role="dialog"][aria-modal="true"]')
+      ).filter((el) => el !== modalRef.current);
+      
+      if (otherDialogs.length === 0) {
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+      }
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -47,6 +57,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
+      ref={modalRef}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md animate-in fade-in duration-300"
       onClick={onClose}
       role="dialog"

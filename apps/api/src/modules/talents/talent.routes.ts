@@ -11,6 +11,7 @@ import {
 } from "./talent.schemas";
 import {
   getProfile,
+  getTalentProfileById,
   updateProfile,
   uploadPhoto,
   deletePhoto,
@@ -26,24 +27,30 @@ import {
 
 const router = Router();
 
-// Secure all routes in this router to TALENT role
-router.use(requireAuth, requireRole([Role.TALENT]));
+// General authentication gate
+router.use(requireAuth);
 
-router.get("/profile", getProfile);
-router.patch("/profile", validate(updateTalentProfileSchema), updateProfile);
+// Company & Admin accessible endpoints
+router.get("/:talentId", requireRole([Role.COMPANY, Role.ADMIN]), getTalentProfileById);
 
-router.post("/profile/photo", uploadPhoto);
-router.delete("/profile/photo", deletePhoto);
+// Talent-only write endpoints
+const talentOnly = requireRole([Role.TALENT]);
 
-router.post("/profile/cv", uploadCv);
-router.delete("/profile/cv", deleteCv);
+router.get("/profile", talentOnly, getProfile);
+router.patch("/profile", talentOnly, validate(updateTalentProfileSchema), updateProfile);
 
-router.post("/profile/experience", validate(createExperienceSchema), addExperience);
-router.patch("/profile/experience/:id", validate(updateExperienceSchema), updateExperience);
-router.delete("/profile/experience/:id", deleteExperience);
+router.post("/profile/photo", talentOnly, uploadPhoto);
+router.delete("/profile/photo", talentOnly, deletePhoto);
 
-router.post("/profile/education", validate(createEducationSchema), addEducation);
-router.patch("/profile/education/:id", validate(updateEducationSchema), updateEducation);
-router.delete("/profile/education/:id", deleteEducation);
+router.post("/profile/cv", talentOnly, uploadCv);
+router.delete("/profile/cv", talentOnly, deleteCv);
+
+router.post("/profile/experience", talentOnly, validate(createExperienceSchema), addExperience);
+router.patch("/profile/experience/:id", talentOnly, validate(updateExperienceSchema), updateExperience);
+router.delete("/profile/experience/:id", talentOnly, deleteExperience);
+
+router.post("/profile/education", talentOnly, validate(createEducationSchema), addEducation);
+router.patch("/profile/education/:id", talentOnly, validate(updateEducationSchema), updateEducation);
+router.delete("/profile/education/:id", talentOnly, deleteEducation);
 
 export default router;

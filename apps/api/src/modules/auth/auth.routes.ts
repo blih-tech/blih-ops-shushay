@@ -16,6 +16,8 @@ import {
   forgotPassword,
   resetPassword,
   me,
+  initiateGoogleAuth,
+  handleGoogleCallback,
 } from "./auth.controller";
 
 const router = Router();
@@ -28,4 +30,9 @@ router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
 router.post("/reset-password", validate(resetPasswordSchema), resetPassword);
 router.get("/me", requireAuth, me);
 
+// ── Google OAuth ────────────────────────────────────────────────────────────
+router.get("/google", initiateGoogleAuth);
+router.get("/google/callback", handleGoogleCallback);
+
 export default router;
+

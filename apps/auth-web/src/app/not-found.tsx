@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, LogIn, AlertTriangle } from "lucide-react";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blih/ui";
 
 export default function NotFound() {
   return (

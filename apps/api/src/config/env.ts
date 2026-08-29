@@ -6,6 +6,11 @@ function required(key: string): string {
   return value;
 }
 
+/** Returns the env var value or undefined if absent (non-breaking optional). */
+function optional(key: string): string | undefined {
+  return process.env[key] || undefined;
+}
+
 export const env = {
   port: process.env.PORT ?? "4000",
   databaseUrl: required("DATABASE_URL"),
@@ -26,5 +31,17 @@ export const env = {
     cloudName: required("CLOUDINARY_CLOUD_NAME"),
     apiKey: required("CLOUDINARY_API_KEY"),
     apiSecret: required("CLOUDINARY_API_SECRET"),
+  },
+  google: {
+    clientId: optional("GOOGLE_CLIENT_ID"),
+    clientSecret: optional("GOOGLE_CLIENT_SECRET"),
+    /**
+     * The redirect URI registered in Google Cloud Console.
+     * Defaults to localhost for development.
+     * Override with GOOGLE_CALLBACK_URL in production.
+     */
+    callbackUrl:
+      process.env.GOOGLE_CALLBACK_URL ??
+      "http://localhost:4000/api/v1/auth/google/callback",
   },
 };

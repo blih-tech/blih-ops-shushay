@@ -27,7 +27,7 @@ import {
   CardDescription,
   CardContent,
   GlobalNavbar,
-} from "@/components/ui";
+} from "@blih/ui";
 import { fetchPublicCourse } from "@/lib/courses";
 import type { PublicCourse, PublicLesson } from "@/types/course";
 import { useAuth } from "@/providers/AuthProvider";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, Skeleton } from "@/components/ui";
+import { Card, Skeleton } from "@blih/ui";
 
 export function DashboardCoursesSkeleton() {
   return (

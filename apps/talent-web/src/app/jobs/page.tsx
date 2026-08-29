@@ -7,29 +7,58 @@ import { useAuth } from "@/providers/AuthProvider";
 import {
   Button,
   Badge,
-
   UniversalSearch,
   Chip,
   GlobalNavbar,
   SkillBar,
-} from "@/components/ui";
+  Skeleton,
+  Card,
+} from "@blih/ui";
 import {
-
   MapPin,
   DollarSign,
   Sparkles,
-
   ArrowUpRight,
-
 } from "lucide-react";
 
 import { mockJobs, type JobPosting } from "@/data";
+
+function JobCardSkeleton() {
+  return (
+    <Card className="border border-[#D9CEDF] rounded-3xl bg-white p-5 sm:p-7 space-y-4 h-[180px] flex flex-col justify-between">
+      <div className="space-y-3">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-2 flex-1">
+            <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
+            <Skeleton variant="rectangular" width={180} height={20} className="rounded-md" />
+          </div>
+          <Skeleton variant="rectangular" width={75} height={22} className="rounded-lg" />
+        </div>
+        <Skeleton variant="text" className="w-full" />
+      </div>
+      <div className="pt-3 border-t border-[#D9CEDF]/50 flex justify-between items-center">
+        <div className="flex gap-4">
+          <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
+          <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
+        </div>
+        <Skeleton variant="rectangular" width={50} height={10} className="rounded-md" />
+      </div>
+    </Card>
+  );
+}
 
 function JobsFeedContent() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedJob, setSelectedJob] = useState<JobPosting>(mockJobs[0]);
   const [activeFilter, setActiveFilter] = useState("All Opportunities");
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, []);
+
 
   const filterChips = ["All Opportunities", "Frontend", "Fullstack", "Design Systems", "90%+ Match"];
 
@@ -100,58 +129,68 @@ function JobsFeedContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Job Cards List */}
           <div className="lg:col-span-7 space-y-4">
-            {filteredJobs.map((job) => {
-              const isSelected = selectedJob.id === job.id;
-              return (
-                <div
-                  key={job.id}
-                  onClick={() => setSelectedJob(job)}
-                  className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all cursor-pointer select-none space-y-4 ${isSelected
-                    ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
-                    : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-sm"
-                    }`}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
-                        {job.company}
-                      </span>
-                      <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
-                        {job.title}
-                      </h3>
-                    </div>
-
-                    <Badge
-                      variant={job.matchScore >= 90 ? "verified" : "primary"}
-                      size="md"
+            {loading ? (
+              <div className="space-y-4">
+                {[0, 1, 2, 3].map((i) => (
+                  <JobCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
+                {filteredJobs.map((job) => {
+                  const isSelected = selectedJob.id === job.id;
+                  return (
+                    <div
+                      key={job.id}
+                      onClick={() => setSelectedJob(job)}
+                      className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${isSelected
+                        ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                        : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
+                        }`}
                     >
-                      {job.matchScore}% Match
-                    </Badge>
-                  </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
+                            {job.company}
+                          </span>
+                          <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
+                            {job.title}
+                          </h3>
+                        </div>
 
-                  <p className="font-sans text-sm text-[#6E6678] line-clamp-2">
-                    {job.description}
-                  </p>
+                        <Badge
+                          variant={job.matchScore >= 90 ? "verified" : "primary"}
+                          size="md"
+                        >
+                          {job.matchScore}% Match
+                        </Badge>
+                      </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D9CEDF]/50 text-xs font-sans text-[#6E6678]">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="flex items-center gap-1 font-medium text-[#17131F]">
-                        <DollarSign className="w-3.5 h-3.5 text-[#2E8F79]" />
-                        {job.salary}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#1E5BFF]" />
-                        {job.location}
-                      </span>
+                      <p className="font-sans text-sm text-[#6E6678] line-clamp-2">
+                        {job.description}
+                      </p>
+
+                      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D9CEDF]/50 text-xs font-sans text-[#6E6678]">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="flex items-center gap-1 font-medium text-[#17131F]">
+                            <DollarSign className="w-3.5 h-3.5 text-[#2E8F79]" />
+                            {job.salary}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                            {job.location}
+                          </span>
+                        </div>
+
+                        <span className="font-mono text-[11px] text-[#6E6678]">
+                          {job.postedDate}
+                        </span>
+                      </div>
                     </div>
-
-                    <span className="font-mono text-[11px] text-[#6E6678]">
-                      {job.postedDate}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Right Column: "Your Match" Decision Panel & Quick Preview */}

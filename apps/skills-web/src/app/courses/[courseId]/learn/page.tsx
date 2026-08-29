@@ -20,7 +20,7 @@ import {
   Button,
   Badge,
   Alert,
-} from "@/components/ui";
+} from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
 import type { PublicCourse, PublicLesson } from "@/types/course";

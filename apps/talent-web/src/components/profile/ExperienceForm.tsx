@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit2, Calendar, Briefcase, Loader2, Check } from "lucide-react";
 import { Experience } from "@/types/profile";
 import { addExperience, updateExperience, deleteExperience } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Textarea, Checkbox, FormField, Alert, Badge } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Textarea, Checkbox, FormField, Alert, Badge } from "@blih/ui";
 
 interface ExperienceFormProps {
   entries: Experience[];

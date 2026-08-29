@@ -1,6 +1,6 @@
 import React from "react";
 import { User, ChevronRight } from "lucide-react";
-import { FormField, Input, Button } from "@/components/ui";
+import { FormField, Input, Button } from "@blih/ui";
 import { ProfileFormReturn } from "@/state/profile/profileForm";
 
 interface StepPersonalInfoProps {

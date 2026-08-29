@@ -13,7 +13,7 @@ import {
   Badge,
   GlobalNavbar,
   MetricCard,
-} from "@/components/ui";
+} from "@blih/ui";
 import {
   LogOut,
   Briefcase,

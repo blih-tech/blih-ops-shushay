@@ -24,7 +24,7 @@ export default function AuthLayout({ title, subtitle, children }: AuthLayoutProp
         <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
           <Link
             className="flex items-baseline gap-2 group"
-            href="http://localhost:3002"
+            href={process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002"}
           >
             <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
               Blih

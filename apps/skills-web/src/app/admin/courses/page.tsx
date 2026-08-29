@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Plus, BookOpen, Pencil, Eye, EyeOff, GraduationCap, ArrowLeft } from "lucide-react";
+import { Plus, BookOpen, Pencil, Eye, EyeOff, GraduationCap, ArrowLeft, Trash2 } from "lucide-react";
 import {
   Button, Badge, Alert, ConfirmDialog, GlobalNavbar, UniversalSearch
-} from "@/components/ui";
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
-import { fetchAdminCourses, publishCourse, unpublishCourse } from "@/lib/courses";
+import { fetchAdminCourses, publishCourse, unpublishCourse, deleteCourse } from "@/lib/courses";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
@@ -20,6 +20,7 @@ function CoursesContent() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [confirmCourse, setConfirmCourse] = useState<Course | null>(null);
+  const [deleteConfirmCourse, setDeleteConfirmCourse] = useState<Course | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -50,6 +51,19 @@ function CoursesContent() {
       setCourses((prev) => prev.map((c) => c.id === course.id ? { ...c, status: updated.status } : c));
     } catch (err: any) {
       setActionError(err.message ?? "Action failed");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function doDelete(course: Course) {
+    setActionLoading(course.id);
+    setActionError(null);
+    try {
+      await deleteCourse(course.id);
+      setCourses((prev) => prev.filter((c) => c.id !== course.id));
+    } catch (err: any) {
+      setActionError(err.message ?? "Delete failed");
     } finally {
       setActionLoading(null);
     }
@@ -183,6 +197,15 @@ function CoursesContent() {
                         Edit
                       </Button>
                     </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828] transition-colors"
+                      leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                      onClick={() => setDeleteConfirmCourse(course)}
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </div>
               );
@@ -206,6 +229,24 @@ function CoursesContent() {
             }
           }}
           onClose={() => setConfirmCourse(null)}
+        />
+
+        {/* Delete Confirmation Modal */}
+        <ConfirmDialog
+          isOpen={!!deleteConfirmCourse}
+          title="Delete Course"
+          message={`Are you sure you want to permanently delete "${deleteConfirmCourse?.title}"? This will delete all lessons, quizzes, assignments, and remove all files/videos from Cloudinary. This action cannot be undone.`}
+          confirmText="Delete Permanently"
+          cancelText="Cancel"
+          variant="destructive"
+          onConfirm={async () => {
+            if (deleteConfirmCourse) {
+              const c = deleteConfirmCourse;
+              setDeleteConfirmCourse(null);
+              await doDelete(c);
+            }
+          }}
+          onClose={() => setDeleteConfirmCourse(null)}
         />
       </main>
     </div>

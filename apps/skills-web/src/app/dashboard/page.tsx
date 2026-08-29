@@ -15,7 +15,7 @@ import {
   GlobalNavbar,
   SkillBar,
   MetricCard,
-} from "@/components/ui";
+} from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
 import {
   BookOpen,

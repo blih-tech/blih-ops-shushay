@@ -23,7 +23,7 @@ import {
   Alert,
   GlobalNavbar,
   Badge,
-} from "@/components/ui";
+} from "@blih/ui";
 import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
 import { LogoUpload } from "@/components/profile/LogoUpload";
 import { Save, ArrowLeft, Building2, Building, User, Mail, Phone, Globe, Sparkles } from "lucide-react";

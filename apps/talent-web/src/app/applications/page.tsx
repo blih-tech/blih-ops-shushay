@@ -9,7 +9,7 @@ import {
 import {
   Button, Badge, Card,
   GlobalNavbar
-} from "@/components/ui";
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { mockApplications } from "@/data";

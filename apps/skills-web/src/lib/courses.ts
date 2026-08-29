@@ -1,4 +1,4 @@
-﻿import { apiFetch, apiFetchFormData } from "./api";
+import { apiFetch, apiFetchFormData } from "./api";
 import type {
   Course,
   PublicCourse,
@@ -46,6 +46,10 @@ export function publishCourse(id: string): Promise<Course> {
 
 export function unpublishCourse(id: string): Promise<Course> {
   return apiFetch<Course>(`${BASE}/${id}/unpublish`, { method: "POST" });
+}
+
+export function deleteCourse(id: string): Promise<{ success: boolean }> {
+  return apiFetch<{ success: boolean }>(`${BASE}/${id}`, { method: "DELETE" });
 }
 
 // ─── Lessons ──────────────────────────────────────────────────────────────────
@@ -108,6 +112,10 @@ export function deleteLessonDocument(
     `${BASE}/${courseId}/lessons/${lessonId}/documents/${documentId}`,
     { method: "DELETE" }
   );
+}
+
+export function deleteLessonVideo(courseId: string, lessonId: string): Promise<{ success: boolean }> {
+  return apiFetch<{ success: boolean }>(`${BASE}/${courseId}/lessons/${lessonId}/video`, { method: "DELETE" });
 }
 
 // ─── Quiz ─────────────────────────────────────────────────────────────────────

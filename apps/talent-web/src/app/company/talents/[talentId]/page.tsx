@@ -3,7 +3,7 @@
 import React, { use, useRef } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Button, Badge, GlobalNavbar } from "@/components/ui";
+import { Button, Badge, GlobalNavbar } from "@blih/ui";
 import { ArrowLeft, CheckCircle2, Briefcase, Globe } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { mockTalents } from "@/data";

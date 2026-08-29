@@ -7,7 +7,7 @@ import {
   Plus, Layers, ArrowUpRight
 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert, Skeleton } from "@/components/ui";
+import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert, Skeleton } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminStats } from "@/lib/adminApi";
 import type { AdminStats } from "@/types/admin";

@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronRight, ArrowLeft } from "lucide-react";
-import { FormField, Select, Textarea, Button } from "@/components/ui";
+import { FormField, Select, Textarea, Button } from "@blih/ui";
 import { SkillsInput } from "../SkillsInput";
 import { ProfileFormReturn } from "@/state/profile/profileForm";
 

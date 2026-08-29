@@ -230,6 +230,85 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/talents/profile": {
+        get: {
+          summary: "Get logged-in talent's profile with detailed completion metrics",
+          tags: ["Talents"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          responses: {
+            "200": {
+              description: "Talent profile and profileCompletion score details",
+            },
+          },
+        },
+      },
+      "/talents/{talentId}": {
+        get: {
+          summary: "Get talent profile by ID (Gated to Active Companies and Admins)",
+          tags: ["Talents"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          parameters: [
+            {
+              name: "talentId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": { description: "Full talent profile detail record" },
+            "402": { description: "Payment Required - Active subscription needed" },
+            "403": { description: "Access Denied - Insufficient permissions" },
+            "404": { description: "Talent profile not found" },
+          },
+        },
+      },
+      "/courses/{courseId}": {
+        delete: {
+          summary: "Delete course by ID (Admin only, cascades to Cloudinary assets)",
+          tags: ["Courses"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          parameters: [
+            {
+              name: "courseId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": { description: "Course and related lessons/quizzes/materials deleted successfully" },
+            "403": { description: "Admin permissions required" },
+            "404": { description: "Course not found" },
+          },
+        },
+      },
+      "/courses/{courseId}/lessons/{lessonId}/video": {
+        delete: {
+          summary: "Delete lesson video (Admin only, removes from Cloudinary)",
+          tags: ["Courses"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          parameters: [
+            {
+              name: "courseId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+            {
+              name: "lessonId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": { description: "Lesson video reference and file deleted successfully" },
+            "403": { description: "Admin permissions required" },
+            "404": { description: "Lesson or course not found" },
+          },
+        },
+      },
     },
   },
   apis: [],

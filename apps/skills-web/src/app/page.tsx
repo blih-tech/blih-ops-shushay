@@ -9,7 +9,7 @@ import {
   UniversalSearch,
   Chip,
   GlobalNavbar,
-} from "@/components/ui";
+} from "@blih/ui";
 import {
   ArrowRight,
   Sparkles,
@@ -24,6 +24,7 @@ export default function SkillsHomePage() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
+  const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
   const [searchQuery, setSearchQuery] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -133,14 +134,18 @@ export default function SkillsHomePage() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Ecosystem Visual */}
-          <div className="preview-card-anim lg:col-span-5 relative">
-            <LandingProfileMockup />
+          {/* Right Column: Visual Interactive Graphic Mockup */}
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="preview-card-anim w-full max-w-[440px] transform hover:scale-[1.01] transition-transform duration-300">
+              <LandingProfileMockup />
+            </div>
           </div>
         </div>
 
-        {/* Ecosystem Lifecycle Strip */}
-        <GrowthCycleStrip />
+        {/* Growth Cycle Section */}
+        <div className="pt-8 border-t border-[#D9CEDF]/40">
+          <GrowthCycleStrip />
+        </div>
       </main>
 
       {/* Footer */}
@@ -151,11 +156,11 @@ export default function SkillsHomePage() {
             Courses
           </Link>
           <span className="text-[#D9CEDF]">·</span>
-          <a href="http://localhost:3002/jobs" className="hover:text-[#1E5BFF] transition-colors">
+          <a href={`${TALENT_URL}/jobs`} className="hover:text-[#1E5BFF] transition-colors">
             Opportunities
           </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a href="http://localhost:3002/profile" className="hover:text-[#1E5BFF] transition-colors">
+          <a href={`${TALENT_URL}/profile`} className="hover:text-[#1E5BFF] transition-colors">
             Talent
           </a>
         </div>

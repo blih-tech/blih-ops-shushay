@@ -23,7 +23,7 @@ import {
   Spinner,
   GlobalNavbar,
   Skeleton,
-} from "@/components/ui";
+} from "@blih/ui";
 import { PhotoUpload } from "@/components/profile/PhotoUpload";
 import { CvUpload } from "@/components/profile/CvUpload";
 import { GeneralDetailsForm } from "@/components/profile/GeneralDetailsForm";

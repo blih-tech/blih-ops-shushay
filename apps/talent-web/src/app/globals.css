@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
+@source "../../../../packages/ui";
 
 /* ─── blih_ops_ui_ux Design Tokens ───────────────────────────────────────── */
 :root {
@@ -93,11 +94,11 @@
   box-sizing: border-box;
 }
 
-/* Prevent horizontal overflow at every breakpoint */
+/* Prevent horizontal overflow at every breakpoint without breaking position: sticky */
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Typography scale — rem-based Tailwind utilities scale proportionally */

@@ -8,18 +8,48 @@ import {
   UpdateEducationInput,
 } from "./talent.schemas";
 
+export function getDetailedProfileCompletion(profile: any) {
+  if (!profile) {
+    return {
+      percentage: 0,
+      missingFields: ["fullName", "title", "phone", "country", "city", "englishLevel", "skills", "experience", "education", "cvUrl"],
+      isComplete: false,
+    };
+  }
+
+  const checklist = [
+    { field: "fullName", check: () => !!profile.fullName },
+    { field: "title", check: () => !!profile.title },
+    { field: "phone", check: () => !!profile.phone },
+    { field: "country", check: () => !!profile.country },
+    { field: "city", check: () => !!profile.city },
+    { field: "englishLevel", check: () => !!profile.englishLevel },
+    { field: "skills", check: () => Array.isArray(profile.skills) && profile.skills.length > 0 },
+    { field: "experience", check: () => Array.isArray(profile.experience) && profile.experience.length > 0 },
+    { field: "education", check: () => Array.isArray(profile.education) && profile.education.length > 0 },
+    { field: "cvUrl", check: () => !!profile.cvUrl },
+  ];
+
+  const missingFields: string[] = [];
+  let score = 0;
+
+  for (const item of checklist) {
+    if (item.check()) {
+      score += 10;
+    } else {
+      missingFields.push(item.field);
+    }
+  }
+
+  return {
+    percentage: score,
+    missingFields,
+    isComplete: score === 100,
+  };
+}
+
 export function computeIsComplete(profile: any): boolean {
-  if (!profile) return false;
-  return (
-    !!profile.fullName &&
-    !!profile.title &&
-    !!profile.phone &&
-    !!profile.country &&
-    !!profile.city &&
-    !!profile.englishLevel &&
-    Array.isArray(profile.skills) &&
-    profile.skills.length > 0
-  );
+  return getDetailedProfileCompletion(profile).isComplete;
 }
 
 export async function getOrCreateProfile(userId: string) {
@@ -44,9 +74,12 @@ export async function getOrCreateProfile(userId: string) {
     });
   }
 
+  const completion = getDetailedProfileCompletion(profile);
+
   return {
     ...profile,
-    isComplete: computeIsComplete(profile),
+    isComplete: completion.isComplete,
+    profileCompletion: completion,
   };
 }
 
@@ -77,9 +110,12 @@ export async function updateProfile(userId: string, data: UpdateTalentProfileInp
     },
   });
 
+  const completion = getDetailedProfileCompletion(updated);
+
   return {
     ...updated,
-    isComplete: computeIsComplete(updated),
+    isComplete: completion.isComplete,
+    profileCompletion: completion,
   };
 }
 
@@ -249,8 +285,58 @@ export async function updateFile(
     },
   });
 
+  const completion = getDetailedProfileCompletion(updated);
+
   return {
     ...updated,
-    isComplete: computeIsComplete(updated),
+    isComplete: completion.isComplete,
+    profileCompletion: completion,
+  };
+}
+
+export async function getTalentProfileById(talentId: string, requestUser: { id: string; role: string }) {
+  if (requestUser.role === "COMPANY") {
+    // Verify company active subscription
+    const company = await prisma.companyProfile.findUnique({
+      where: { userId: requestUser.id },
+      select: { subscriptionActive: true, subscriptionExpiresAt: true },
+    });
+    
+    if (!company) {
+      throw new AppError(403, "Access denied. Company profile not found.");
+    }
+    
+    const now = new Date();
+    const isSubscribed = company.subscriptionActive && company.subscriptionExpiresAt && company.subscriptionExpiresAt > now;
+    
+    if (!isSubscribed) {
+      throw new AppError(402, "Payment Required. An active subscription is required to view full talent profiles.");
+    }
+  } else if (requestUser.role !== "ADMIN") {
+    throw new AppError(403, "Access denied. Insufficient permissions.");
+  }
+
+  // Fetch full talent profile
+  const talent = await prisma.talentProfile.findUnique({
+    where: { id: talentId },
+    include: {
+      user: { select: { email: true } },
+      experience: true,
+      education: true,
+    },
+  });
+
+  if (!talent) {
+    throw new AppError(404, "Talent profile not found");
+  }
+
+  const completion = getDetailedProfileCompletion(talent);
+
+  // Attach email from user table to the profile for easy consumption
+  return {
+    ...talent,
+    email: talent.user.email,
+    isComplete: completion.isComplete,
+    profileCompletion: completion,
   };
 }

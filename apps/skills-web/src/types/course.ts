@@ -1,4 +1,4 @@
-﻿export type CourseStatus = "DRAFT" | "PUBLISHED";
+export type CourseStatus = "DRAFT" | "PUBLISHED";
 
 export interface LessonDocument {
   id: string;

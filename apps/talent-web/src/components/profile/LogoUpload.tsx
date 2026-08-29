@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Upload, X, Building, Loader2, ImageIcon } from "lucide-react";
-import { Button, Alert } from "@/components/ui";
+import { Button, Alert } from "@blih/ui";
 
 interface LogoUploadProps {
   value?: string | null;

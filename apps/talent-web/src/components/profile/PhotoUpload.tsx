@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Upload, X, User, Loader2, Camera } from "lucide-react";
-import { Button, Alert } from "@/components/ui";
+import { Button, Alert } from "@blih/ui";
 
 interface PhotoUploadProps {
   value?: string | null;

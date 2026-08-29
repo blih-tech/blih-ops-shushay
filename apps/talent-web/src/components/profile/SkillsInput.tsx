@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, Plus, Sparkles } from "lucide-react";
-import { Input, Button } from "@/components/ui";
+import { Input, Button } from "@blih/ui";
 
 interface SkillsInputProps {
   value: string[];

@@ -55,6 +55,21 @@ export async function unpublishCourse(req: Request, res: Response, next: NextFun
   try { res.json(await courseService.unpublishCourse(p(req, "courseId"))); } catch (err) { next(err); }
 }
 
+export async function deleteCourse(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await courseService.deleteCourse(p(req, "courseId"));
+    // Delete all videos from Cloudinary
+    for (const vid of result.videos) {
+      await deleteOldAsset(vid.url, vid.publicId, "video");
+    }
+    // Delete all documents from Cloudinary
+    for (const doc of result.documents) {
+      await deleteOldAsset(doc.url, doc.publicId, "raw");
+    }
+    res.json({ success: true });
+  } catch (err) { next(err); }
+}
+
 // ─── Public course handlers ───────────────────────────────────────────────────
 
 export async function listCoursesPublic(_req: Request, res: Response, next: NextFunction) {
@@ -183,6 +198,16 @@ export async function deleteLessonDocument(req: Request, res: Response, next: Ne
     const result = await courseService.deleteLessonDocument(p(req, "courseId"), p(req, "lessonId"), p(req, "documentId"));
     if (result.url) {
       await deleteOldAsset(result.url, result.publicId, "raw");
+    }
+    res.json({ success: true });
+  } catch (err) { next(err); }
+}
+
+export async function deleteLessonVideo(req: Request, res: Response, next: NextFunction) {
+  try {
+    const result = await courseService.deleteLessonVideo(p(req, "courseId"), p(req, "lessonId"));
+    if (result.videoUrl) {
+      await deleteOldAsset(result.videoUrl, result.videoPublicId, "video");
     }
     res.json({ success: true });
   } catch (err) { next(err); }

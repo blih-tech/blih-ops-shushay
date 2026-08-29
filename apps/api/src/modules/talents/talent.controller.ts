@@ -40,6 +40,16 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
   }
 }
 
+export async function getTalentProfileById(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) return next(new AppError(401, "Not authenticated"));
+    const profile = await talentService.getTalentProfileById(req.params.talentId as string, req.user);
+    res.json(profile);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function updateProfile(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));

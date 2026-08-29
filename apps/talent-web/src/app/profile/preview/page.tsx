@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
-import { Button, Badge, Alert, GlobalNavbar } from "@/components/ui";
+import { Button, Badge, Alert, GlobalNavbar } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
 import { Download, Edit3, Eye, CheckCircle2, Briefcase, GraduationCap, Globe } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
