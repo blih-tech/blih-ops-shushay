@@ -44,6 +44,7 @@ export function requireRole(allowedRoles: Role[]) {
     }
 
     if (!allowedRoles.includes(req.user.role)) {
+      console.warn(`[requireRole FAILED] User: ${req.user.email}, Role: ${req.user.role}, Allowed: ${allowedRoles}`);
       return next(new AppError(403, "Access denied. Insufficient permissions."));
     }
 

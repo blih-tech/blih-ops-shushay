@@ -30,14 +30,14 @@ const router = Router();
 // General authentication gate
 router.use(requireAuth);
 
-// Company & Admin accessible endpoints
-router.get("/:talentId", requireRole([Role.COMPANY, Role.ADMIN]), getTalentProfileById);
-
 // Talent-only write endpoints
 const talentOnly = requireRole([Role.TALENT]);
 
 router.get("/profile", talentOnly, getProfile);
 router.patch("/profile", talentOnly, validate(updateTalentProfileSchema), updateProfile);
+
+// Company & Admin accessible endpoints (wildcard matches last)
+router.get("/:talentId", requireRole([Role.COMPANY, Role.ADMIN]), getTalentProfileById);
 
 router.post("/profile/photo", talentOnly, uploadPhoto);
 router.delete("/profile/photo", talentOnly, deletePhoto);

@@ -94,6 +94,11 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   } else if (role === "COMPANY") {
     navLinks = [
       {
+        label: "Explore",
+        href: `${talentUrl}/`,
+        active: currentPath ? isMatch("/", true) : currentApp === "explore",
+      },
+      {
         label: "Hiring Hub",
         href: `${talentUrl}/company`,
         active: currentPath ? isMatch("/company", true) : currentApp === "company" || currentApp === "business",
@@ -113,14 +118,14 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
         href: `${talentUrl}/company/subscription`,
         active: currentPath ? isMatch("/company/subscription") : currentApp === "subscription",
       },
+    ];
+  } else if (role === "ADMIN") {
+    navLinks = [
       {
         label: "Explore",
         href: `${talentUrl}/`,
         active: currentPath ? isMatch("/", true) : currentApp === "explore",
       },
-    ];
-  } else if (role === "ADMIN") {
-    navLinks = [
       {
         label: "Admin Hub",
         href: `${skillsUrl}/admin`,
@@ -140,11 +145,6 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
         label: "Companies",
         href: `${skillsUrl}/admin/companies`,
         active: isMatch("/admin/companies"),
-      },
-      {
-        label: "Explore",
-        href: `${talentUrl}/`,
-        active: currentPath ? isMatch("/", true) : currentApp === "explore",
       },
     ];
   } else {
