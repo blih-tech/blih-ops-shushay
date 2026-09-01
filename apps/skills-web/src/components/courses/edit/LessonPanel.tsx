@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import {
-  ChevronDown, ChevronRight, ArrowUp, ArrowDown, Trash2, Pencil, Check, X, BookOpen, Save
+  ChevronDown,
+  ChevronRight,
+  ArrowUp,
+  ArrowDown,
+  Trash2,
+  Pencil,
+  Check,
+  X,
+  BookOpen,
+  Save,
 } from "lucide-react";
 import { Button, Alert, ConfirmDialog, Textarea } from "@blih/ui";
 import { updateLesson } from "@/lib/courses";
@@ -50,7 +59,9 @@ export function LessonPanel({
     setSaving(true);
     setSaveError(null);
     try {
-      const updated = await updateLesson(courseId, lesson.id, { title: titleVal.trim() });
+      const updated = await updateLesson(courseId, lesson.id, {
+        title: titleVal.trim(),
+      });
       onUpdate(updated);
       setEditingTitle(false);
     } catch (e: any) {
@@ -64,7 +75,9 @@ export function LessonPanel({
     setSaving(true);
     setSaveError(null);
     try {
-      const updated = await updateLesson(courseId, lesson.id, { content: contentVal.trim() || null });
+      const updated = await updateLesson(courseId, lesson.id, {
+        content: contentVal.trim() || null,
+      });
       onUpdate(updated);
       setEditingContent(false);
     } catch (e: any) {
@@ -97,7 +110,11 @@ export function LessonPanel({
                 autoFocus
                 className="flex-1 text-base font-bold bg-white border border-[#1E5BFF] rounded-xl px-3 py-1.5 focus:outline-none font-display text-[#17131F]"
               />
-              <button onClick={saveTitle} disabled={saving} className="p-1 text-[#1E5BFF] cursor-pointer">
+              <button
+                onClick={saveTitle}
+                disabled={saving}
+                className="p-1 text-[#1E5BFF] cursor-pointer"
+              >
                 <Check className="h-5 w-5" />
               </button>
               <button
@@ -142,7 +159,11 @@ export function LessonPanel({
             className="p-2 text-[#17131F] hover:bg-white rounded-xl cursor-pointer transition-colors"
             title={expanded ? "Collapse" : "Expand"}
           >
-            {expanded ? <ChevronDown className="h-5 w-5 text-[#1E5BFF]" /> : <ChevronRight className="h-5 w-5" />}
+            {expanded ? (
+              <ChevronDown className="h-5 w-5 text-[#1E5BFF]" />
+            ) : (
+              <ChevronRight className="h-5 w-5" />
+            )}
           </button>
           <button
             onClick={() => setConfirmDelete(true)}
@@ -157,10 +178,17 @@ export function LessonPanel({
       {/* Lesson body */}
       {expanded && (
         <div className="p-6 sm:p-8 border-t border-[#D9CEDF] space-y-6 bg-white">
-          {saveError && <Alert variant="error" onClose={() => setSaveError(null)}>{saveError}</Alert>}
+          {saveError && (
+            <Alert variant="error" onClose={() => setSaveError(null)}>
+              {saveError}
+            </Alert>
+          )}
 
           {/* Written content */}
-          <SectionCard title="Written Lesson Content" icon={<BookOpen className="h-4 w-4" />}>
+          <SectionCard
+            title="Written Lesson Content"
+            icon={<BookOpen className="h-4 w-4" />}
+          >
             {editingContent ? (
               <div className="space-y-3">
                 <Textarea
@@ -182,7 +210,13 @@ export function LessonPanel({
                   >
                     Cancel
                   </Button>
-                  <Button size="sm" variant="primary" leftIcon={<Save className="h-3.5 w-3.5" />} isLoading={saving} onClick={saveContent}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    leftIcon={<Save className="h-3.5 w-3.5" />}
+                    isLoading={saving}
+                    onClick={saveContent}
+                  >
                     Save Notes
                   </Button>
                 </div>
@@ -194,7 +228,9 @@ export function LessonPanel({
                     {lesson.content}
                   </pre>
                 ) : (
-                  <p className="text-xs font-mono text-[#6E6678] italic">No written lecture content added yet.</p>
+                  <p className="text-xs font-mono text-[#6E6678] italic">
+                    No written lecture content added yet.
+                  </p>
                 )}
                 <button
                   onClick={() => {
@@ -203,16 +239,34 @@ export function LessonPanel({
                   }}
                   className="text-xs font-mono text-[#1E5BFF] hover:underline mt-2.5 cursor-pointer block font-semibold"
                 >
-                  {lesson.content ? "Edit lecture content" : "+ Add written lecture notes"}
+                  {lesson.content
+                    ? "Edit lecture content"
+                    : "+ Add written lecture notes"}
                 </button>
               </div>
             )}
           </SectionCard>
 
-          <VideoSection courseId={courseId} lesson={lesson} onUpdate={onUpdate} />
-          <DocumentsSection courseId={courseId} lesson={lesson} onUpdate={onUpdate} />
-          <QuizSection courseId={courseId} lesson={lesson} onUpdate={onUpdate} />
-          <AssignmentSection courseId={courseId} lesson={lesson} onUpdate={onUpdate} />
+          <VideoSection
+            courseId={courseId}
+            lesson={lesson}
+            onUpdate={onUpdate}
+          />
+          <DocumentsSection
+            courseId={courseId}
+            lesson={lesson}
+            onUpdate={onUpdate}
+          />
+          <QuizSection
+            courseId={courseId}
+            lesson={lesson}
+            onUpdate={onUpdate}
+          />
+          <AssignmentSection
+            courseId={courseId}
+            lesson={lesson}
+            onUpdate={onUpdate}
+          />
         </div>
       )}
 

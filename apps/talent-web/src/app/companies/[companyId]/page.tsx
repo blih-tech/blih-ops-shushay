@@ -2,13 +2,8 @@
 
 import React, { use } from "react";
 import Link from "next/link";
-import {
-  ArrowLeft, Building2
-} from "lucide-react";
-import {
-  Button, Badge,
-  GlobalNavbar
-} from "@blih/ui";
+import { ArrowLeft, Building2 } from "lucide-react";
+import { Button, Badge, GlobalNavbar } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -48,7 +43,9 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
                   </h1>
                   <Badge variant="verified">Verified Employer</Badge>
                 </div>
-                <p className="text-xs font-mono text-[#6E6678]">Company ID: {companyId}</p>
+                <p className="text-xs font-mono text-[#6E6678]">
+                  Company ID: {companyId}
+                </p>
               </div>
             </div>
 
@@ -60,7 +57,8 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
           </div>
 
           <p className="text-sm text-[#6E6678] leading-relaxed font-sans pt-2 border-t border-[#D9CEDF]/60">
-            A fast-growing engineering group building evidence-backed digital products and distributed infrastructure across Africa and globally.
+            A fast-growing engineering group building evidence-backed digital
+            products and distributed infrastructure across Africa and globally.
           </p>
         </div>
       </main>

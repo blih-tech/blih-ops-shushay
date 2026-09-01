@@ -4,7 +4,19 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, BookOpen, Plus } from "lucide-react";
-import { Button, Input, Textarea, Alert, Card, CardHeader, CardTitle, CardDescription, CardContent, GlobalNavbar, Badge } from "@blih/ui";
+import {
+  Button,
+  Input,
+  Textarea,
+  Alert,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  GlobalNavbar,
+  Badge,
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { createCourse } from "@/lib/courses";
@@ -14,16 +26,21 @@ function NewCourseContent() {
   const { user, logout } = useAuth();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [errors, setErrors] = useState<{ title?: string; description?: string }>({});
+  const [errors, setErrors] = useState<{
+    title?: string;
+    description?: string;
+  }>({});
   const [submitting, setSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
   function validate() {
     const e: typeof errors = {};
     if (!title.trim()) e.title = "Title is required";
-    else if (title.trim().length > 200) e.title = "Title must be at most 200 characters";
+    else if (title.trim().length > 200)
+      e.title = "Title must be at most 200 characters";
     if (!description.trim()) e.description = "Description is required";
-    else if (description.trim().length > 2000) e.description = "Description must be at most 2000 characters";
+    else if (description.trim().length > 2000)
+      e.description = "Description must be at most 2000 characters";
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -34,7 +51,10 @@ function NewCourseContent() {
     setSubmitting(true);
     setApiError(null);
     try {
-      const course = await createCourse({ title: title.trim(), description: description.trim() });
+      const course = await createCourse({
+        title: title.trim(),
+        description: description.trim(),
+      });
       router.push("/admin/courses/" + course.id + "/edit");
     } catch (err: any) {
       setApiError(err.message ?? "Failed to create course");
@@ -65,12 +85,17 @@ function NewCourseContent() {
               <Badge variant="primary">DRAFT</Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              New courses initialize in draft mode. You can add video lessons, quizzes, and publish when ready.
+              New courses initialize in draft mode. You can add video lessons,
+              quizzes, and publish when ready.
             </p>
           </div>
         </div>
 
-        {apiError && <Alert variant="error" onClose={() => setApiError(null)}>{apiError}</Alert>}
+        {apiError && (
+          <Alert variant="error" onClose={() => setApiError(null)}>
+            {apiError}
+          </Alert>
+        )}
 
         <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden">
           <CardHeader className="p-6 sm:p-8 bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF]">
@@ -83,7 +108,8 @@ function NewCourseContent() {
                   Course Details
                 </CardTitle>
                 <CardDescription className="text-sm text-[#6E6678]">
-                  Basic metadata and syllabus overview presented to candidates in the catalog.
+                  Basic metadata and syllabus overview presented to candidates
+                  in the catalog.
                 </CardDescription>
               </div>
             </div>
@@ -116,7 +142,13 @@ function NewCourseContent() {
                     Cancel
                   </Button>
                 </Link>
-                <Button type="submit" variant="primary" size="lg" isLoading={submitting} leftIcon={<Plus className="h-4 w-4" />}>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  isLoading={submitting}
+                  leftIcon={<Plus className="h-4 w-4" />}
+                >
                   Create Course & Add Lessons
                 </Button>
               </div>

@@ -1,7 +1,20 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Menu, X, LogOut, User, Sparkles, ChevronDown, Settings, Shield, Briefcase, BookOpen, Layers, Building } from "lucide-react";
+import {
+  Menu,
+  X,
+  LogOut,
+  User,
+  Sparkles,
+  ChevronDown,
+  Settings,
+  Shield,
+  Briefcase,
+  BookOpen,
+  Layers,
+  Building,
+} from "lucide-react";
 import { Button } from "./Button";
 import { Badge } from "./Badge";
 
@@ -12,7 +25,20 @@ export interface NavLinkItem {
 }
 
 export interface GlobalNavbarProps {
-  currentApp?: "auth" | "skills" | "talent" | "talents" | "explore" | "courses" | "opportunities" | "jobs" | "business" | "dashboard" | "subscription" | "admin" | "company";
+  currentApp?:
+    | "auth"
+    | "skills"
+    | "talent"
+    | "talents"
+    | "explore"
+    | "courses"
+    | "opportunities"
+    | "jobs"
+    | "business"
+    | "dashboard"
+    | "subscription"
+    | "admin"
+    | "company";
   pathname?: string;
   user?: { email?: string; role?: string; photoUrl?: string } | null;
   onSignOut?: () => void;
@@ -55,7 +81,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
         setUserMenuOpen(false);
       }
     };
@@ -78,7 +107,9 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       {
         label: "Courses",
         href: `${skillsUrl}/courses`,
-        active: currentPath ? isMatch("/courses") && !isMatch("/admin") : currentApp === "courses",
+        active: currentPath
+          ? isMatch("/courses") && !isMatch("/admin")
+          : currentApp === "courses",
       },
       {
         label: "Opportunities",
@@ -88,7 +119,9 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       {
         label: "Dashboard",
         href: `${skillsUrl}/dashboard`,
-        active: currentPath ? isMatch("/dashboard") : currentApp === "dashboard",
+        active: currentPath
+          ? isMatch("/dashboard")
+          : currentApp === "dashboard",
       },
     ];
   } else if (role === "COMPANY") {
@@ -101,12 +134,16 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       {
         label: "Hiring Hub",
         href: `${talentUrl}/company`,
-        active: currentPath ? isMatch("/company", true) : currentApp === "company" || currentApp === "business",
+        active: currentPath
+          ? isMatch("/company", true)
+          : currentApp === "company" || currentApp === "business",
       },
       {
         label: "Talent Search",
         href: `${talentUrl}/company/talents`,
-        active: currentPath ? isMatch("/company/talents") : currentApp === "talents",
+        active: currentPath
+          ? isMatch("/company/talents")
+          : currentApp === "talents",
       },
       {
         label: "Job Posts",
@@ -116,7 +153,9 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       {
         label: "Subscription",
         href: `${talentUrl}/company/subscription`,
-        active: currentPath ? isMatch("/company/subscription") : currentApp === "subscription",
+        active: currentPath
+          ? isMatch("/company/subscription")
+          : currentApp === "subscription",
       },
     ];
   } else if (role === "ADMIN") {
@@ -158,7 +197,9 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       {
         label: "Courses",
         href: `${skillsUrl}/courses`,
-        active: currentPath ? isMatch("/courses") : currentApp === "courses" || currentApp === "skills",
+        active: currentPath
+          ? isMatch("/courses")
+          : currentApp === "courses" || currentApp === "skills",
       },
       {
         label: "Opportunities",
@@ -180,7 +221,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       <nav className="bg-white/95 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
-          <a href={talentUrl} className="flex items-baseline gap-2.5 group cursor-pointer">
+          <a
+            href={talentUrl}
+            className="flex items-baseline gap-2.5 group cursor-pointer"
+          >
             <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
               BLIH OPS
             </span>
@@ -196,10 +240,11 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <a
               key={link.label}
               href={link.href}
-              className={`font-sans text-sm transition-colors py-1 cursor-pointer ${link.active
-                ? "text-[#1E5BFF] font-bold border-b-2 border-[#1E5BFF]"
-                : "text-[#17131F] hover:text-[#1E5BFF] font-normal"
-                }`}
+              className={`font-sans text-sm transition-colors py-1 cursor-pointer ${
+                link.active
+                  ? "text-[#1E5BFF] font-bold border-b-2 border-[#1E5BFF]"
+                  : "text-[#17131F] hover:text-[#1E5BFF] font-normal"
+              }`}
             >
               {link.label}
             </a>
@@ -221,12 +266,18 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                 <div className="w-8 h-8 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-sm shadow-sm overflow-hidden">
                   {user.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={user.photoUrl} alt="Avatar" className="w-full h-full object-cover" />
+                    <img
+                      src={user.photoUrl}
+                      alt="Avatar"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span>{userInitial}</span>
                   )}
                 </div>
-                <ChevronDown className={`h-4 w-4 text-[#6E6678] transition-transform duration-200 ${userMenuOpen ? "rotate-180 text-[#1E5BFF]" : ""}`} />
+                <ChevronDown
+                  className={`h-4 w-4 text-[#6E6678] transition-transform duration-200 ${userMenuOpen ? "rotate-180 text-[#1E5BFF]" : ""}`}
+                />
               </button>
 
               {/* Floating Profile Popover Dropdown */}
@@ -239,8 +290,12 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                         {userInitial}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">Signed in as</p>
-                        <p className="text-sm font-bold text-[#17131F] truncate font-display">{user.email}</p>
+                        <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">
+                          Signed in as
+                        </p>
+                        <p className="text-sm font-bold text-[#17131F] truncate font-display">
+                          {user.email}
+                        </p>
                         {user.role && (
                           <div className="mt-1">
                             <Badge variant="primary" size="sm">
@@ -362,12 +417,16 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <div className="relative w-5 h-5 flex items-center justify-center">
               <Menu
                 className={`h-5 w-5 absolute transition-all duration-300 transform ${
-                  mobileMenuOpen ? "rotate-90 opacity-0 scale-75" : "rotate-0 opacity-100 scale-100"
+                  mobileMenuOpen
+                    ? "rotate-90 opacity-0 scale-75"
+                    : "rotate-0 opacity-100 scale-100"
                 }`}
               />
               <X
                 className={`h-5 w-5 absolute transition-all duration-300 transform ${
-                  mobileMenuOpen ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]" : "-rotate-90 opacity-0 scale-75"
+                  mobileMenuOpen
+                    ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]"
+                    : "-rotate-90 opacity-0 scale-75"
                 }`}
               />
             </div>
@@ -409,8 +468,12 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                     {userInitial}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-mono text-[#6E6678]">Signed in as</p>
-                    <p className="text-sm font-bold text-[#17131F] truncate font-display">{user.email}</p>
+                    <p className="text-xs font-mono text-[#6E6678]">
+                      Signed in as
+                    </p>
+                    <p className="text-sm font-bold text-[#17131F] truncate font-display">
+                      {user.email}
+                    </p>
                   </div>
                 </div>
 

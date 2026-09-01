@@ -1,5 +1,11 @@
 import React from "react";
-import { AlertCircle, CheckCircle2, AlertTriangle, Info, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle2,
+  AlertTriangle,
+  Info,
+  X,
+} from "lucide-react";
 
 export interface AlertProps {
   variant?: "error" | "success" | "warning" | "info";
@@ -47,8 +53,14 @@ export const Alert: React.FC<AlertProps> = ({
     >
       {currentVariant.icon}
       <div className="flex-1 min-w-0">
-        {title && <h4 className="font-display font-bold text-sm sm:text-base mb-1 leading-snug">{title}</h4>}
-        <div className="text-xs sm:text-sm leading-relaxed text-[#17131F]">{children}</div>
+        {title && (
+          <h4 className="font-display font-bold text-sm sm:text-base mb-1 leading-snug">
+            {title}
+          </h4>
+        )}
+        <div className="text-xs sm:text-sm leading-relaxed text-[#17131F]">
+          {children}
+        </div>
       </div>
       {onClose && (
         <button

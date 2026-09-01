@@ -20,21 +20,32 @@ const diskStorage = multer.diskStorage({
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
     cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-  }
+  },
 });
 
 // Image filter
-const imageFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const imageFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new AppError(400, "Only JPEG, PNG, and WebP images are allowed") as any, false);
+    cb(
+      new AppError(400, "Only JPEG, PNG, and WebP images are allowed") as any,
+      false,
+    );
   }
 };
 
 // PDF filter
-const pdfFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const pdfFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   if (file.mimetype === "application/pdf") {
     cb(null, true);
   } else {
@@ -43,17 +54,31 @@ const pdfFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCal
 };
 
 // Video filter — mp4, webm, quicktime
-const videoFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const videoFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   const allowedMimeTypes = ["video/mp4", "video/webm", "video/quicktime"];
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new AppError(400, "Only MP4, WebM, and MOV video files are allowed") as any, false);
+    cb(
+      new AppError(
+        400,
+        "Only MP4, WebM, and MOV video files are allowed",
+      ) as any,
+      false,
+    );
   }
 };
 
 // Document filter — pdf, docx, pptx
-const documentFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const documentFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   const allowedMimeTypes = [
     "application/pdf",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -64,7 +89,13 @@ const documentFilter = (req: any, file: Express.Multer.File, cb: multer.FileFilt
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new AppError(400, "Only PDF, DOCX, and PPTX document files are allowed") as any, false);
+    cb(
+      new AppError(
+        400,
+        "Only PDF, DOCX, and PPTX document files are allowed",
+      ) as any,
+      false,
+    );
   }
 };
 
@@ -73,38 +104,38 @@ export const photoUpload = multer({
   storage: memoryStorage,
   fileFilter: imageFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
-  }
+    fileSize: 5 * 1024 * 1024, // 5 MB
+  },
 }).single("photo");
 
 export const cvUpload = multer({
   storage: memoryStorage,
   fileFilter: pdfFilter,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10 MB
-  }
+    fileSize: 10 * 1024 * 1024, // 10 MB
+  },
 }).single("cv");
 
 export const logoUpload = multer({
   storage: memoryStorage,
   fileFilter: imageFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5 MB
-  }
+    fileSize: 5 * 1024 * 1024, // 5 MB
+  },
 }).single("logo");
 
 export const videoUpload = multer({
   storage: diskStorage,
   fileFilter: videoFilter,
   limits: {
-    fileSize: 500 * 1024 * 1024 // 500 MB
-  }
+    fileSize: 500 * 1024 * 1024, // 500 MB
+  },
 }).single("video");
 
 export const documentUpload = multer({
   storage: memoryStorage,
   fileFilter: documentFilter,
   limits: {
-    fileSize: 50 * 1024 * 1024 // 50 MB
-  }
+    fileSize: 50 * 1024 * 1024, // 50 MB
+  },
 }).single("document");

@@ -1,5 +1,9 @@
 import { apiFetch } from "./api";
-import type { AdminStats, AdminTalentItem, AdminCompanyItem } from "../types/admin";
+import type {
+  AdminStats,
+  AdminTalentItem,
+  AdminCompanyItem,
+} from "../types/admin";
 
 export async function fetchAdminStats(): Promise<AdminStats> {
   return apiFetch<AdminStats>("/admin/stats");

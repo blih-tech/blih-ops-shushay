@@ -1,7 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import {
-  fetchAdminCourse, updateCourse, publishCourse, unpublishCourse,
-  createLesson, deleteLesson, reorderLessons
+  fetchAdminCourse,
+  updateCourse,
+  publishCourse,
+  unpublishCourse,
+  createLesson,
+  deleteLesson,
+  reorderLessons,
 } from "@/lib/courses";
 import type { Course, Lesson } from "@/types/course";
 
@@ -48,8 +53,15 @@ export function useEditCourse(courseId: string) {
     setMetaSaving(true);
     setMetaError(null);
     try {
-      const updated = await updateCourse(courseId, { title: metaTitle.trim(), description: metaDesc.trim() });
-      setCourse((c) => (c ? { ...c, title: updated.title, description: updated.description } : c));
+      const updated = await updateCourse(courseId, {
+        title: metaTitle.trim(),
+        description: metaDesc.trim(),
+      });
+      setCourse((c) =>
+        c
+          ? { ...c, title: updated.title, description: updated.description }
+          : c,
+      );
       setEditingMeta(false);
     } catch (e: any) {
       setMetaError(e.message ?? "Failed to save");
@@ -95,7 +107,9 @@ export function useEditCourse(courseId: string) {
     setAddingLessonLoading(true);
     setAddLessonError(null);
     try {
-      const lesson = await createLesson(courseId, { title: newLessonTitle.trim() });
+      const lesson = await createLesson(courseId, {
+        title: newLessonTitle.trim(),
+      });
       setLessons((prev) => [...prev, lesson as Lesson]);
       setNewLessonTitle("");
       setAddingLesson(false);
@@ -118,11 +132,17 @@ export function useEditCourse(courseId: string) {
   async function handleMove(index: number, direction: "up" | "down") {
     const newLessons = [...lessons];
     const swap = direction === "up" ? index - 1 : index + 1;
-    [newLessons[index], newLessons[swap]] = [newLessons[swap], newLessons[index]];
+    [newLessons[index], newLessons[swap]] = [
+      newLessons[swap],
+      newLessons[index],
+    ];
     const withOrder = newLessons.map((l, i) => ({ ...l, order: i }));
     setLessons(withOrder);
     try {
-      await reorderLessons(courseId, withOrder.map((l) => ({ id: l.id, order: l.order })));
+      await reorderLessons(
+        courseId,
+        withOrder.map((l) => ({ id: l.id, order: l.order })),
+      );
     } catch (e: any) {
       setLoadError(e.message ?? "Reorder failed");
       load();
@@ -161,6 +181,6 @@ export function useEditCourse(courseId: string) {
     doUnpublish,
     handleAddLesson,
     handleDeleteLesson,
-    handleMove
+    handleMove,
   };
 }

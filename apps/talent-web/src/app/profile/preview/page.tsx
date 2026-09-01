@@ -6,7 +6,15 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
 import { Button, Badge, Alert, GlobalNavbar } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
-import { Download, Edit3, Eye, CheckCircle2, Briefcase, GraduationCap, Globe } from "lucide-react";
+import {
+  Download,
+  Edit3,
+  Eye,
+  CheckCircle2,
+  Briefcase,
+  GraduationCap,
+  Globe,
+} from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,25 +27,28 @@ function ProfilePreviewContent() {
   const { profile, loading, error } = useTalentProfile();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    // Scroll-triggered slide/scale reveal for profile cards & blocks
-    gsap.fromTo(
-      ".reveal-profile-block",
-      { opacity: 0, y: 40 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        ease: "power2.out",
-        stagger: 0.15,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 90%",
-          toggleActions: "play none none none"
-        }
-      }
-    );
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      // Scroll-triggered slide/scale reveal for profile cards & blocks
+      gsap.fromTo(
+        ".reveal-profile-block",
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          stagger: 0.15,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    },
+    { scope: containerRef },
+  );
 
   const formatDate = (dateStr: string) => {
     try {
@@ -55,7 +66,8 @@ function ProfilePreviewContent() {
 
   const sortedExperience = profile?.experience
     ? [...profile.experience].sort(
-        (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        (a, b) =>
+          new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
       )
     : [];
 
@@ -81,7 +93,10 @@ function ProfilePreviewContent() {
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white text-[#17131F] font-sans selection:bg-[#DDE7FF]">
+    <div
+      ref={containerRef}
+      className="min-h-screen bg-white text-[#17131F] font-sans selection:bg-[#DDE7FF]"
+    >
       <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
 
       {/* Preview mode banner */}
@@ -93,7 +108,8 @@ function ProfilePreviewContent() {
               Recruiter Preview Mode
             </span>
             <span className="text-[#6E6678] hidden sm:inline">
-              — This is how companies and hiring managers view your verified profile
+              — This is how companies and hiring managers view your verified
+              profile
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -124,7 +140,6 @@ function ProfilePreviewContent() {
       </div>
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16">
-        
         {/* Talent Profile Hero Section */}
         <section className="reveal-profile-block border-b border-[#E6EAF3] pb-12">
           <div className="space-y-6">
@@ -140,7 +155,14 @@ function ProfilePreviewContent() {
                   />
                 ) : (
                   <span className="font-display font-bold text-[34px] text-[#1E5BFF]">
-                    {profile?.fullName ? profile.fullName.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2) : "ST"}
+                    {profile?.fullName
+                      ? profile.fullName
+                          .split(" ")
+                          .map((w) => w[0])
+                          .join("")
+                          .toUpperCase()
+                          .slice(0, 2)
+                      : "ST"}
                   </span>
                 )}
                 {profile?.isComplete && (
@@ -159,7 +181,10 @@ function ProfilePreviewContent() {
                     {profile?.title || "Product Designer"}
                   </h3>
                   {profile?.englishLevel && (
-                    <Badge variant="outline" className="font-mono text-[10px] tracking-wide uppercase px-2 py-0.5">
+                    <Badge
+                      variant="outline"
+                      className="font-mono text-[10px] tracking-wide uppercase px-2 py-0.5"
+                    >
                       <Globe className="h-3 w-3 inline mr-1 text-[#1E5BFF]" />
                       English: {profile.englishLevel}
                     </Badge>
@@ -170,21 +195,33 @@ function ProfilePreviewContent() {
                 <div className="flex flex-col gap-y-1.5 text-sm text-[#6E6678] pt-2 font-mono">
                   {user?.email && (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">Email:</span>
-                      <span className="text-[#17131F] font-semibold">{user.email}</span>
+                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">
+                        Email:
+                      </span>
+                      <span className="text-[#17131F] font-semibold">
+                        {user.email}
+                      </span>
                     </div>
                   )}
                   {profile?.phone && (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">Phone:</span>
-                      <span className="text-[#17131F] font-semibold">{profile.phone}</span>
+                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">
+                        Phone:
+                      </span>
+                      <span className="text-[#17131F] font-semibold">
+                        {profile.phone}
+                      </span>
                     </div>
                   )}
                   {(profile?.city || profile?.country) && (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">Location:</span>
+                      <span className="text-[#1E5BFF] font-sans font-semibold w-16">
+                        Location:
+                      </span>
                       <span className="text-[#17131F] font-semibold">
-                        {[profile.city, profile.country].filter(Boolean).join(", ")}
+                        {[profile.city, profile.country]
+                          .filter(Boolean)
+                          .join(", ")}
                       </span>
                     </div>
                   )}
@@ -195,7 +232,9 @@ function ProfilePreviewContent() {
             {/* Specialization / Skills */}
             {profile?.skills && profile.skills.length > 0 && (
               <div className="space-y-2.5 pt-2">
-                <span className="font-sans text-xs font-bold text-[#6E6678] uppercase tracking-wider block">Core Capabilities</span>
+                <span className="font-sans text-xs font-bold text-[#6E6678] uppercase tracking-wider block">
+                  Core Capabilities
+                </span>
                 <div className="flex flex-wrap gap-2">
                   {profile.skills.map((skill) => (
                     <span
@@ -212,13 +251,14 @@ function ProfilePreviewContent() {
             {/* Bio Narrative */}
             {profile?.bio && (
               <div className="space-y-3 pt-4 border-t border-[#E6EAF3]/75">
-                <span className="font-sans text-xs font-bold text-[#6E6678] uppercase tracking-wider block">Biography</span>
+                <span className="font-sans text-xs font-bold text-[#6E6678] uppercase tracking-wider block">
+                  Biography
+                </span>
                 <p className="font-sans text-[18px] text-[#17131F] leading-relaxed font-normal whitespace-pre-line">
                   {profile.bio}
                 </p>
               </div>
             )}
-
           </div>
         </section>
 
@@ -231,7 +271,7 @@ function ProfilePreviewContent() {
                 Work Experience
               </h2>
             </div>
-            
+
             <div className="divide-y divide-[#E6EAF3] border-t border-b border-[#E6EAF3]">
               {sortedExperience.map((exp, idx) => (
                 <div key={exp.id || idx} className="py-6 space-y-2.5">
@@ -240,10 +280,17 @@ function ProfilePreviewContent() {
                       {exp.title}
                     </h4>
                     <span className="text-xs font-mono text-[#6E6678]">
-                      {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+                      {formatDate(exp.startDate)} –{" "}
+                      {exp.current
+                        ? "Present"
+                        : exp.endDate
+                          ? formatDate(exp.endDate)
+                          : ""}
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-[#1E5BFF]">{exp.company}</p>
+                  <p className="text-sm font-semibold text-[#1E5BFF]">
+                    {exp.company}
+                  </p>
                   {exp.description && (
                     <p className="text-sm text-[#6E6678] leading-relaxed whitespace-pre-line max-w-3xl pt-1">
                       {exp.description}
@@ -264,25 +311,27 @@ function ProfilePreviewContent() {
                 Education & Credentials
               </h2>
             </div>
-            
+
             <div className="divide-y divide-[#E6EAF3] border-t border-b border-[#E6EAF3]">
               {sortedEducation.map((edu, idx) => (
                 <div key={edu.id || idx} className="py-6 space-y-2">
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
                     <h4 className="font-sans text-lg font-bold text-[#17131F]">
-                      {edu.degree}{edu.field ? ` in ${edu.field}` : ""}
+                      {edu.degree}
+                      {edu.field ? ` in ${edu.field}` : ""}
                     </h4>
                     <span className="text-xs font-mono text-[#6E6678]">
                       {edu.startYear} – {edu.endYear || "Present"}
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-[#1E5BFF]">{edu.institution}</p>
+                  <p className="text-sm font-semibold text-[#1E5BFF]">
+                    {edu.institution}
+                  </p>
                 </div>
               ))}
             </div>
           </section>
         )}
-
       </main>
     </div>
   );

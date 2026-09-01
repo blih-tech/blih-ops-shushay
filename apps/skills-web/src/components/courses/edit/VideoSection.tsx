@@ -11,7 +11,11 @@ interface VideoSectionProps {
   onUpdate: (l: Lesson) => void;
 }
 
-export function VideoSection({ courseId, lesson, onUpdate }: VideoSectionProps) {
+export function VideoSection({
+  courseId,
+  lesson,
+  onUpdate,
+}: VideoSectionProps) {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +50,11 @@ export function VideoSection({ courseId, lesson, onUpdate }: VideoSectionProps) 
 
   return (
     <SectionCard title="Video Lesson" icon={<Video className="h-4 w-4" />}>
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
       {lesson.videoUrl ? (
         <div className="flex items-center justify-between gap-3 p-4 bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-2xl">
           <div className="flex items-center gap-3">
@@ -54,12 +62,21 @@ export function VideoSection({ courseId, lesson, onUpdate }: VideoSectionProps) 
               <CheckCircle2 className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-bold text-[#17131F] font-display">Video Attached & Processed</p>
-              <p className="text-xs font-mono text-[#6E6678]">Ready for learner streaming</p>
+              <p className="text-sm font-bold text-[#17131F] font-display">
+                Video Attached & Processed
+              </p>
+              <p className="text-xs font-mono text-[#6E6678]">
+                Ready for learner streaming
+              </p>
             </div>
           </div>
           <div className="flex gap-2 shrink-0">
-            <Button variant="outline" size="sm" isLoading={uploading} onClick={() => fileRef.current?.click()}>
+            <Button
+              variant="outline"
+              size="sm"
+              isLoading={uploading}
+              onClick={() => fileRef.current?.click()}
+            >
               Replace Video
             </Button>
             <Button
@@ -80,8 +97,12 @@ export function VideoSection({ courseId, lesson, onUpdate }: VideoSectionProps) 
           className="border-2 border-dashed border-[#D9CEDF] hover:border-[#1E5BFF]/50 bg-[#EEF3FF]/30 hover:bg-[#EEF3FF]/60 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2"
         >
           <Upload className="h-6 w-6 text-[#6E6678]" />
-          <p className="text-sm font-bold text-[#17131F] font-display">Click to upload lecture video</p>
-          <p className="text-xs font-mono text-[#6E6678]">MP4 format up to 500MB supported</p>
+          <p className="text-sm font-bold text-[#17131F] font-display">
+            Click to upload lecture video
+          </p>
+          <p className="text-xs font-mono text-[#6E6678]">
+            MP4 format up to 500MB supported
+          </p>
         </div>
       )}
       <input

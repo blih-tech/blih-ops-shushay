@@ -11,16 +11,29 @@ interface SkeletonProps {
 export function ProfileSkeleton({ user, logout }: SkeletonProps) {
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
-      <GlobalNavbar currentApp="talent" user={user ? { email: user.email, role: user.role } : null} onSignOut={logout} />
+      <GlobalNavbar
+        currentApp="talent"
+        user={user ? { email: user.email, role: user.role } : null}
+        onSignOut={logout}
+      />
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 animate-pulse">
         <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 md:p-12 space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/70">
             <div className="flex flex-col sm:flex-row sm:items-center gap-5">
               <Skeleton variant="circular" className="h-20 w-20 shrink-0" />
               <div className="space-y-2">
-                <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
-                <Skeleton variant="rectangular" className="h-4 w-32 rounded-lg" />
-                <Skeleton variant="rectangular" className="h-4 w-64 rounded-lg" />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-8 w-48 rounded-xl"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-4 w-32 rounded-lg"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-4 w-64 rounded-lg"
+                />
               </div>
             </div>
             <Skeleton variant="rectangular" className="h-10 w-28 rounded-xl" />
@@ -66,8 +79,14 @@ export function ProfilePreviewSkeleton({ user, logout }: SkeletonProps) {
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <Skeleton variant="circular" className="h-20 w-20 shrink-0" />
             <div className="space-y-2 flex-1 text-center sm:text-left">
-              <Skeleton variant="rectangular" className="h-8 w-48 mx-auto sm:mx-0 rounded-xl" />
-              <Skeleton variant="rectangular" className="h-4 w-32 mx-auto sm:mx-0 rounded-lg" />
+              <Skeleton
+                variant="rectangular"
+                className="h-8 w-48 mx-auto sm:mx-0 rounded-xl"
+              />
+              <Skeleton
+                variant="rectangular"
+                className="h-4 w-32 mx-auto sm:mx-0 rounded-lg"
+              />
             </div>
           </div>
           <div className="border-t border-[#D9CEDF] pt-6 space-y-4">
@@ -86,8 +105,14 @@ export function ProfileSetupSkeleton({ user, logout }: SkeletonProps) {
       <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
       <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 animate-pulse">
         <div className="text-center space-y-2">
-          <Skeleton variant="rectangular" className="h-10 w-64 mx-auto rounded-xl" />
-          <Skeleton variant="rectangular" className="h-4 w-48 mx-auto rounded-lg" />
+          <Skeleton
+            variant="rectangular"
+            className="h-10 w-64 mx-auto rounded-xl"
+          />
+          <Skeleton
+            variant="rectangular"
+            className="h-4 w-48 mx-auto rounded-lg"
+          />
         </div>
         <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-10 space-y-6">
           <div className="flex justify-between items-center gap-4 border-b border-[#D9CEDF] pb-6">
@@ -96,9 +121,18 @@ export function ProfileSetupSkeleton({ user, logout }: SkeletonProps) {
             <Skeleton variant="rectangular" className="h-6 w-24 rounded-lg" />
           </div>
           <div className="space-y-4">
-            <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
-            <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
-            <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+            <Skeleton
+              variant="rectangular"
+              className="h-12 w-full rounded-xl"
+            />
+            <Skeleton
+              variant="rectangular"
+              className="h-12 w-full rounded-xl"
+            />
+            <Skeleton
+              variant="rectangular"
+              className="h-12 w-full rounded-xl"
+            />
           </div>
         </div>
       </main>

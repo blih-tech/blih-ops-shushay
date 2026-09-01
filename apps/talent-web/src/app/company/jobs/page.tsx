@@ -1,13 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Plus, MapPin, DollarSign, Building2
-} from "lucide-react";
-import {
-  Button, Badge, Card,
-  GlobalNavbar
-} from "@blih/ui";
+import { Plus, MapPin, DollarSign, Building2 } from "lucide-react";
+import { Button, Badge, Card, GlobalNavbar } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -35,12 +30,18 @@ function CompanyJobsContent() {
               <Badge variant="primary">{jobs.length} ACTIVE</Badge>
             </div>
             <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-              Publish positions, specify verified skill criteria, and track candidate applications.
+              Publish positions, specify verified skill criteria, and track
+              candidate applications.
             </p>
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <Button variant="primary" size="sm" className="w-full sm:w-auto" leftIcon={<Plus className="h-4 w-4" />}>
+            <Button
+              variant="primary"
+              size="sm"
+              className="w-full sm:w-auto"
+              leftIcon={<Plus className="h-4 w-4" />}
+            >
               Create New Job Post
             </Button>
           </div>
@@ -56,27 +57,40 @@ function CompanyJobsContent() {
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F]">{job.title}</h3>
-                    <Badge variant="verified" size="sm">{job.status}</Badge>
-                    <span className="text-xs font-mono text-[#6E6678]">{job.type}</span>
+                    <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F]">
+                      {job.title}
+                    </h3>
+                    <Badge variant="verified" size="sm">
+                      {job.status}
+                    </Badge>
+                    <span className="text-xs font-mono text-[#6E6678]">
+                      {job.type}
+                    </span>
                   </div>
                   <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap pt-0.5">
                     <span className="flex items-center gap-1">
-                      <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" /> {job.department}
+                      <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />{" "}
+                      {job.department}
                     </span>
                     <span className="flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" /> {job.location}
+                      <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />{" "}
+                      {job.location}
                     </span>
                     <span className="flex items-center gap-1">
-                      <DollarSign className="h-3.5 w-3.5 text-[#2E8F79]" /> {job.salary}
+                      <DollarSign className="h-3.5 w-3.5 text-[#2E8F79]" />{" "}
+                      {job.salary}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start pt-2 sm:pt-0 border-t sm:border-t-0 border-[#D9CEDF]/50">
                   <div className="p-2.5 sm:p-3 bg-[#EEF3FF] border border-[#1E5BFF]/15 rounded-2xl text-center">
-                    <p className="font-display text-lg sm:text-xl font-bold text-[#1E5BFF]">{job.applicantsCount}</p>
-                    <p className="text-[10px] font-mono text-[#6E6678] uppercase">Applicants</p>
+                    <p className="font-display text-lg sm:text-xl font-bold text-[#1E5BFF]">
+                      {job.applicantsCount}
+                    </p>
+                    <p className="text-[10px] font-mono text-[#6E6678] uppercase">
+                      Applicants
+                    </p>
                   </div>
                   <Button variant="outline" size="sm">
                     Manage Role
@@ -95,7 +109,9 @@ function CompanyJobsContent() {
                     </span>
                   ))}
                 </div>
-                <span className="text-xs font-mono text-[#6E6678]">Posted {job.postedDate}</span>
+                <span className="text-xs font-mono text-[#6E6678]">
+                  Posted {job.postedDate}
+                </span>
               </div>
             </Card>
           ))}

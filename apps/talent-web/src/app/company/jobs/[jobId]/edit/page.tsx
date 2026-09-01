@@ -14,7 +14,9 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
         Edit Job Post
       </h1>
       <div className="p-8 bg-card border border-border rounded-xl">
-        <h3 className="text-md font-semibold text-foreground">Job ID: {jobId}</h3>
+        <h3 className="text-md font-semibold text-foreground">
+          Job ID: {jobId}
+        </h3>
       </div>
     </div>
   );

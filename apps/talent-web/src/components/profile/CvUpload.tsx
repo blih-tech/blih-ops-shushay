@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Upload, FileText, X, Loader2, Download, CheckCircle2 } from "lucide-react";
+import {
+  Upload,
+  FileText,
+  X,
+  Loader2,
+  Download,
+  CheckCircle2,
+} from "lucide-react";
 import { Button, Alert, Badge } from "@blih/ui";
 
 interface CvUploadProps {
@@ -8,7 +15,11 @@ interface CvUploadProps {
   onDelete: () => Promise<void>;
 }
 
-export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete }) => {
+export const CvUpload: React.FC<CvUploadProps> = ({
+  value,
+  onUpload,
+  onDelete,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -116,7 +127,13 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
               onClick={handleDelete}
               disabled={loading}
               className="text-[#EF4444] hover:bg-[#EF4444]/10 h-8 px-2.5"
-              leftIcon={loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
+              leftIcon={
+                loading ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <X className="h-3.5 w-3.5" />
+                )
+              }
             >
               Remove
             </Button>
@@ -126,7 +143,10 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
         /* Empty drop zone */
         <div
           onClick={() => !loading && fileInputRef.current?.click()}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${
@@ -148,7 +168,9 @@ export const CvUpload: React.FC<CvUploadProps> = ({ value, onUpload, onDelete })
           <p className="text-xs text-[#6E6678] font-sans mt-1">
             Click to browse or drag & drop a PDF document
           </p>
-          <p className="text-xs font-mono text-[#6E6678]/70 mt-1">PDF format · Max 10 MB</p>
+          <p className="text-xs font-mono text-[#6E6678]/70 mt-1">
+            PDF format · Max 10 MB
+          </p>
         </div>
       )}
 

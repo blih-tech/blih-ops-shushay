@@ -26,9 +26,24 @@ export function ExploreProfileMockup() {
         <span className="font-mono text-[11px] uppercase tracking-wider text-[#6E6678] block">
           Capability Breakdown
         </span>
-        <SkillBar name="React Systems" score={94} status="Verified" variant="primary" />
-        <SkillBar name="TypeScript" score={89} status="Verified" variant="primary" />
-        <SkillBar name="Accessibility" score={82} status="Developing" variant="coral" />
+        <SkillBar
+          name="React Systems"
+          score={94}
+          status="Verified"
+          variant="primary"
+        />
+        <SkillBar
+          name="TypeScript"
+          score={89}
+          status="Verified"
+          variant="primary"
+        />
+        <SkillBar
+          name="Accessibility"
+          score={82}
+          status="Developing"
+          variant="coral"
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-[#D9CEDF]/60">
@@ -44,17 +59,13 @@ export function ExploreProfileMockup() {
           <span className="font-display text-xl font-bold text-[#1E5BFF] block">
             12
           </span>
-          <span className="font-mono text-[10px] text-[#6E6678]">
-            Projects
-          </span>
+          <span className="font-mono text-[10px] text-[#6E6678]">Projects</span>
         </div>
         <div className="bg-[#EEF3FF] rounded-2xl p-3 text-center">
           <span className="font-display text-xl font-bold text-[#2E8F79] block">
             17
           </span>
-          <span className="font-mono text-[10px] text-[#6E6678]">
-            Reviews
-          </span>
+          <span className="font-mono text-[10px] text-[#6E6678]">Reviews</span>
         </div>
       </div>
     </div>

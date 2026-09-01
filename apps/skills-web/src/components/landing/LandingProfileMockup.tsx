@@ -63,9 +63,7 @@ export function LandingProfileMockup() {
           <span className="font-display text-xl font-bold text-[#1E5BFF] block">
             12
           </span>
-          <span className="font-mono text-[10px] text-[#6E6678]">
-            Projects
-          </span>
+          <span className="font-mono text-[10px] text-[#6E6678]">Projects</span>
         </div>
         <div className="bg-[#EEF3FF] rounded-2xl p-3 text-center">
           <span className="font-display text-xl font-bold text-[#2E8F79] block">

@@ -12,7 +12,9 @@ function VerifyEmailContent() {
   const token = searchParams.get("token");
 
   const [loading, setLoading] = useState(!!token);
-  const [error, setError] = useState<string | null>(token ? null : "Verification token is missing.");
+  const [error, setError] = useState<string | null>(
+    token ? null : "Verification token is missing.",
+  );
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
@@ -50,7 +52,8 @@ function VerifyEmailContent() {
     return (
       <div className="text-center space-y-4">
         <Alert variant="success" title="Email Verified">
-          Your email has been verified successfully. You can now sign in to your account.
+          Your email has been verified successfully. You can now sign in to your
+          account.
         </Alert>
         <div className="pt-4">
           <Link href="/login">
@@ -84,7 +87,13 @@ export default function VerifyEmailPage() {
       title="Verifying your account"
       subtitle="Please wait while we confirm your email verification"
     >
-      <Suspense fallback={<div className="text-center py-4 text-sm text-muted-foreground flex justify-center items-center gap-2"><Spinner size="sm" /> Loading token...</div>}>
+      <Suspense
+        fallback={
+          <div className="text-center py-4 text-sm text-muted-foreground flex justify-center items-center gap-2">
+            <Spinner size="sm" /> Loading token...
+          </div>
+        }
+      >
         <VerifyEmailContent />
       </Suspense>
     </AuthLayout>

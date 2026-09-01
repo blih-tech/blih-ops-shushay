@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
@@ -27,7 +33,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       onInput,
       ...props
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     const generatedId = React.useId();
     const textareaId = id || generatedId;
@@ -74,13 +80,15 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         if (typeof forwardedRef === "function") {
           forwardedRef(node);
         } else if (forwardedRef) {
-          (forwardedRef as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
+          (
+            forwardedRef as React.MutableRefObject<HTMLTextAreaElement | null>
+          ).current = node;
         }
         if (node) {
           setCharCount(node.value.length);
         }
       },
-      [forwardedRef]
+      [forwardedRef],
     );
 
     const baseStyles =
@@ -94,7 +102,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const isAtLimit = maxLength ? charCount >= maxLength : false;
 
     return (
-      <div className={`group space-y-1.5 font-sans ${fullWidth ? "w-full" : "inline-block"}`}>
+      <div
+        className={`group space-y-1.5 font-sans ${fullWidth ? "w-full" : "inline-block"}`}
+      >
         {label && (
           <label
             htmlFor={textareaId}
@@ -118,17 +128,29 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           onInput={handleInput}
           disabled={disabled}
           aria-invalid={!!error}
-          aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
+          aria-describedby={
+            error
+              ? `${textareaId}-error`
+              : helperText
+                ? `${textareaId}-helper`
+                : undefined
+          }
           className={`${baseStyles} ${stateStyles} ${className}`}
           {...props}
         />
         <div className="flex justify-between items-start mt-1 gap-2">
           {error ? (
-            <p id={`${textareaId}-error`} className="text-xs font-mono text-[#EF4444]">
+            <p
+              id={`${textareaId}-error`}
+              className="text-xs font-mono text-[#EF4444]"
+            >
               {error}
             </p>
           ) : helperText ? (
-            <p id={`${textareaId}-helper`} className="text-xs font-mono text-[#6E6678]">
+            <p
+              id={`${textareaId}-helper`}
+              className="text-xs font-mono text-[#6E6678]"
+            >
               {helperText}
             </p>
           ) : (
@@ -140,8 +162,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                 isAtLimit
                   ? "text-[#EF4444] font-bold"
                   : isNearLimit
-                  ? "text-[#FF8A5B] font-semibold"
-                  : "text-[#6E6678]"
+                    ? "text-[#FF8A5B] font-semibold"
+                    : "text-[#6E6678]"
               }`}
             >
               {charCount}
@@ -151,7 +173,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Textarea.displayName = "Textarea";

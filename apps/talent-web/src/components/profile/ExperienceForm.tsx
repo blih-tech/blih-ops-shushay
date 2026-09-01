@@ -1,15 +1,43 @@
 import React, { useState } from "react";
-import { Plus, Trash2, Edit2, Calendar, Briefcase, Loader2, Check } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Calendar,
+  Briefcase,
+  Loader2,
+  Check,
+} from "lucide-react";
 import { Experience } from "@/types/profile";
-import { addExperience, updateExperience, deleteExperience } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, Textarea, Checkbox, FormField, Alert, Badge } from "@blih/ui";
+import {
+  addExperience,
+  updateExperience,
+  deleteExperience,
+} from "@/lib/talentApi";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Input,
+  Textarea,
+  Checkbox,
+  FormField,
+  Alert,
+  Badge,
+} from "@blih/ui";
 
 interface ExperienceFormProps {
   entries: Experience[];
   onRefresh: () => void;
 }
 
-export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefresh }) => {
+export const ExperienceForm: React.FC<ExperienceFormProps> = ({
+  entries,
+  onRefresh,
+}) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,8 +66,12 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
     setIsAdding(false);
     setTitle(exp.title);
     setCompany(exp.company);
-    setStartDate(exp.startDate ? new Date(exp.startDate).toISOString().split("T")[0] : "");
-    setEndDate(exp.endDate ? new Date(exp.endDate).toISOString().split("T")[0] : "");
+    setStartDate(
+      exp.startDate ? new Date(exp.startDate).toISOString().split("T")[0] : "",
+    );
+    setEndDate(
+      exp.endDate ? new Date(exp.endDate).toISOString().split("T")[0] : "",
+    );
     setCurrent(exp.current);
     setDescription(exp.description || "");
   };
@@ -58,7 +90,11 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
       title,
       company,
       startDate: new Date(startDate).toISOString(),
-      endDate: current ? null : endDate ? new Date(endDate).toISOString() : null,
+      endDate: current
+        ? null
+        : endDate
+          ? new Date(endDate).toISOString()
+          : null,
       current,
       description: description.trim() || null,
     };
@@ -98,7 +134,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
     return new Date(dateStr).toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
-      timeZone: "UTC"
+      timeZone: "UTC",
     });
   };
 
@@ -208,7 +244,11 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                     if (isChecked) setEndDate("");
                   }}
                   disabled={loading}
-                  label={<span className="text-sm font-medium text-[#17131F] cursor-pointer select-none">I currently work here</span>}
+                  label={
+                    <span className="text-sm font-medium text-[#17131F] cursor-pointer select-none">
+                      I currently work here
+                    </span>
+                  }
                 />
               </div>
 
@@ -254,7 +294,8 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
         {/* Existing List */}
         {entries.length === 0 && !isAdding && !editingId ? (
           <div className="p-8 text-center text-sm text-[#6E6678]">
-            No experience records added yet. Click &quot;Add Experience&quot; to build your profile history.
+            No experience records added yet. Click &quot;Add Experience&quot; to
+            build your profile history.
           </div>
         ) : (
           entries.map((exp) => (
@@ -273,11 +314,18 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({ entries, onRefre
                     </Badge>
                   )}
                 </div>
-                <p className="text-sm font-semibold text-[#1E5BFF]">{exp.company}</p>
+                <p className="text-sm font-semibold text-[#1E5BFF]">
+                  {exp.company}
+                </p>
                 <div className="flex items-center gap-2 text-xs font-mono text-[#6E6678]">
                   <Calendar className="h-3.5 w-3.5" />
                   <span>
-                    {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+                    {formatDate(exp.startDate)} –{" "}
+                    {exp.current
+                      ? "Present"
+                      : exp.endDate
+                        ? formatDate(exp.endDate)
+                        : ""}
                   </span>
                 </div>
                 {exp.description && (

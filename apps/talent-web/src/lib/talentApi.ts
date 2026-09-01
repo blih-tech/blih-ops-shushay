@@ -5,7 +5,9 @@ export async function getTalentProfile(): Promise<TalentProfile> {
   return apiFetch<TalentProfile>("/talents/profile");
 }
 
-export async function updateTalentProfile(data: Partial<TalentProfile>): Promise<TalentProfile> {
+export async function updateTalentProfile(
+  data: Partial<TalentProfile>,
+): Promise<TalentProfile> {
   return apiFetch<TalentProfile>("/talents/profile", {
     method: "PATCH",
     body: JSON.stringify(data),
@@ -42,41 +44,55 @@ export async function deleteTalentCv(): Promise<TalentProfile> {
   });
 }
 
-export async function addExperience(data: Omit<Experience, "id" | "profileId">): Promise<Experience> {
+export async function addExperience(
+  data: Omit<Experience, "id" | "profileId">,
+): Promise<Experience> {
   return apiFetch<Experience>("/talents/profile/experience", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export async function updateExperience(id: string, data: Partial<Omit<Experience, "id" | "profileId">>): Promise<Experience> {
+export async function updateExperience(
+  id: string,
+  data: Partial<Omit<Experience, "id" | "profileId">>,
+): Promise<Experience> {
   return apiFetch<Experience>(`/talents/profile/experience/${id}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteExperience(id: string): Promise<{ success: boolean }> {
+export async function deleteExperience(
+  id: string,
+): Promise<{ success: boolean }> {
   return apiFetch<{ success: boolean }>(`/talents/profile/experience/${id}`, {
     method: "DELETE",
   });
 }
 
-export async function addEducation(data: Omit<Education, "id" | "profileId">): Promise<Education> {
+export async function addEducation(
+  data: Omit<Education, "id" | "profileId">,
+): Promise<Education> {
   return apiFetch<Education>("/talents/profile/education", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export async function updateEducation(id: string, data: Partial<Omit<Education, "id" | "profileId">>): Promise<Education> {
+export async function updateEducation(
+  id: string,
+  data: Partial<Omit<Education, "id" | "profileId">>,
+): Promise<Education> {
   return apiFetch<Education>(`/talents/profile/education/${id}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteEducation(id: string): Promise<{ success: boolean }> {
+export async function deleteEducation(
+  id: string,
+): Promise<{ success: boolean }> {
   return apiFetch<{ success: boolean }>(`/talents/profile/education/${id}`, {
     method: "DELETE",
   });

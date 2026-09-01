@@ -35,4 +35,3 @@ router.get("/google", initiateGoogleAuth);
 router.get("/google/callback", handleGoogleCallback);
 
 export default router;
-

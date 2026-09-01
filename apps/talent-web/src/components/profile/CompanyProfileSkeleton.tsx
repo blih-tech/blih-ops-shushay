@@ -8,7 +8,10 @@ interface CompanyProfileSkeletonProps {
   logout: () => void;
 }
 
-export function CompanyProfileSkeleton({ user, logout }: CompanyProfileSkeletonProps) {
+export function CompanyProfileSkeleton({
+  user,
+  logout,
+}: CompanyProfileSkeletonProps) {
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
       <GlobalNavbar currentApp="explore" user={user} onSignOut={logout} />

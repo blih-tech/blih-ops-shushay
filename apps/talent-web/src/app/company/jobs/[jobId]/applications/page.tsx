@@ -14,7 +14,9 @@ function CompanyJobApplicationsContent({ jobId }: { jobId: string }) {
         Review Applications
       </h1>
       <div className="p-8 bg-card border border-border rounded-xl">
-        <h3 className="text-md font-semibold text-foreground mb-2">Job Listing ID: {jobId}</h3>
+        <h3 className="text-md font-semibold text-foreground mb-2">
+          Job Listing ID: {jobId}
+        </h3>
         <p className="text-sm text-body">
           No applicants have applied for this position yet.
         </p>

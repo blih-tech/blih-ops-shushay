@@ -42,7 +42,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await apiFetch("/auth/logout", { method: "POST" });
       setUser(null);
       setIsLogoutModalOpen(false);
-      const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
+      const AUTH_URL =
+        process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
       window.location.href = `${AUTH_URL}/login`;
     } catch (err) {
       console.error("Logout failed", err);
@@ -64,10 +65,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         size="sm"
         footer={
           <>
-            <Button variant="outline" size="sm" className="w-24" onClick={() => setIsLogoutModalOpen(false)}>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-24"
+              onClick={() => setIsLogoutModalOpen(false)}
+            >
               Cancel
             </Button>
-            <Button variant="destructive" size="sm" className="w-24" onClick={confirmLogout}>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="w-24"
+              onClick={confirmLogout}
+            >
               Sign Out
             </Button>
           </>

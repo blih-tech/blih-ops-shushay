@@ -14,7 +14,10 @@ export const StepPersonalInfo: React.FC<StepPersonalInfoProps> = ({
   saving,
   onNext,
 }) => {
-  const { register, formState: { errors } } = form;
+  const {
+    register,
+    formState: { errors },
+  } = form;
 
   return (
     <form onSubmit={onNext} className="space-y-5 font-sans">
@@ -29,7 +32,11 @@ export const StepPersonalInfo: React.FC<StepPersonalInfoProps> = ({
         />
       </FormField>
 
-      <FormField label="Professional Title" required error={errors.title?.message}>
+      <FormField
+        label="Professional Title"
+        required
+        error={errors.title?.message}
+      >
         <Input
           type="text"
           placeholder="e.g. Fullstack Developer, UI/UX Designer"

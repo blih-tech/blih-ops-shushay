@@ -8,7 +8,11 @@ interface LogoUploadProps {
   onDelete: () => Promise<void>;
 }
 
-export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelete }) => {
+export const LogoUpload: React.FC<LogoUploadProps> = ({
+  value,
+  onUpload,
+  onDelete,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -73,19 +77,28 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
             : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
         } flex flex-col items-center justify-center overflow-hidden cursor-pointer group transition-all`}
         onClick={() => !loading && fileInputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
       >
         {value ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={value} alt="Company Logo" className="max-h-full max-w-full object-contain p-4" />
+            <img
+              src={value}
+              alt="Company Logo"
+              className="max-h-full max-w-full object-contain p-4"
+            />
             {/* Hover overlay */}
             {!loading && (
               <div className="absolute inset-0 bg-[#17131F]/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <ImageIcon className="h-6 w-6 text-white" />
-                <span className="text-xs font-mono text-white font-medium mt-1">Change Logo</span>
+                <span className="text-xs font-mono text-white font-medium mt-1">
+                  Change Logo
+                </span>
               </div>
             )}
           </>
@@ -94,8 +107,12 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
             <div className="w-12 h-12 rounded-2xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#1E5BFF] shadow-sm">
               <Building className="h-6 w-6" />
             </div>
-            <p className="text-sm font-bold font-display text-[#17131F]">Upload Company Logo</p>
-            <p className="text-xs text-[#6E6678] font-sans">Click or drag an image here</p>
+            <p className="text-sm font-bold font-display text-[#17131F]">
+              Upload Company Logo
+            </p>
+            <p className="text-xs text-[#6E6678] font-sans">
+              Click or drag an image here
+            </p>
           </div>
         )}
 
@@ -132,7 +149,9 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({ value, onUpload, onDelet
         )}
       </div>
 
-      <p className="text-xs font-mono text-[#6E6678] text-center">JPG, PNG, or WebP · Max 5 MB</p>
+      <p className="text-xs font-mono text-[#6E6678] text-center">
+        JPG, PNG, or WebP · Max 5 MB
+      </p>
 
       <input
         ref={fileInputRef}

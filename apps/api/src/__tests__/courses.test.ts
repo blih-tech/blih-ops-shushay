@@ -13,7 +13,9 @@ import { Role } from "@prisma/client";
 // ─── Auth helpers ──────────────────────────────────────────────────────────────
 
 function makeToken(role: Role, id = "test-user-id") {
-  return jwt.sign({ userId: id, email: "test@blih.com", role }, env.jwtSecret, { expiresIn: "1h" });
+  return jwt.sign({ userId: id, email: "test@blih.com", role }, env.jwtSecret, {
+    expiresIn: "1h",
+  });
 }
 
 function adminCookie() {
@@ -55,13 +57,14 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await prisma.course.deleteMany({ where: { title: { startsWith: "[TEST]" } } });
+  await prisma.course.deleteMany({
+    where: { title: { startsWith: "[TEST]" } },
+  });
   await prisma.user.deleteMany({
     where: { id: { in: ["admin-user-id", "talent-user-id"] } },
   });
   await prisma.$disconnect();
 });
-
 
 // ─── Authorization ────────────────────────────────────────────────────────────
 
@@ -85,7 +88,9 @@ describe("Course authorization", () => {
   });
 
   it("POST /api/v1/courses returns 401 without auth", async () => {
-    const res = await request(app).post("/api/v1/courses").send({ title: "x", description: "y" });
+    const res = await request(app)
+      .post("/api/v1/courses")
+      .send({ title: "x", description: "y" });
     expect(res.status).toBe(401);
   });
 });
@@ -99,7 +104,10 @@ describe("Course CRUD", () => {
     const res = await request(app)
       .post("/api/v1/courses")
       .set("Cookie", adminCookie())
-      .send({ title: "[TEST] Course 1", description: "A test course description." });
+      .send({
+        title: "[TEST] Course 1",
+        description: "A test course description.",
+      });
     expect(res.status).toBe(201);
     expect(res.body.title).toBe("[TEST] Course 1");
     expect(res.body.status).toBe("DRAFT");
@@ -194,7 +202,12 @@ describe("Course CRUD", () => {
     const res = await request(app)
       .post("/api/v1/courses/" + courseId + "/lessons/reorder")
       .set("Cookie", adminCookie())
-      .send({ lessons: [{ id: lessonId, order: 1 }, { id: lesson2Id, order: 0 }] });
+      .send({
+        lessons: [
+          { id: lessonId, order: 1 },
+          { id: lesson2Id, order: 0 },
+        ],
+      });
     expect(res.status).toBe(200);
     expect(res.body[0].id).toBe(lesson2Id);
   });
@@ -207,7 +220,13 @@ describe("Course CRUD", () => {
       .set("Cookie", adminCookie())
       .send({
         title: "Chapter Quiz",
-        questions: [{ text: "What is 2+2?", options: ["3", "4", "5"], correctOptionIndex: 1 }],
+        questions: [
+          {
+            text: "What is 2+2?",
+            options: ["3", "4", "5"],
+            correctOptionIndex: 1,
+          },
+        ],
       });
     expect(res.status).toBe(200);
     expect(res.body.title).toBe("Chapter Quiz");
@@ -217,7 +236,9 @@ describe("Course CRUD", () => {
 
   it("creates an assignment", async () => {
     const res = await request(app)
-      .put("/api/v1/courses/" + courseId + "/lessons/" + lessonId + "/assignment")
+      .put(
+        "/api/v1/courses/" + courseId + "/lessons/" + lessonId + "/assignment",
+      )
       .set("Cookie", adminCookie())
       .send({ title: "Practice Exercise", instructions: "Do the thing." });
     expect(res.status).toBe(200);

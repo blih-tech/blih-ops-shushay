@@ -3,7 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, LogIn, AlertTriangle } from "lucide-react";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blih/ui";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@blih/ui";
 
 export default function NotFound() {
   return (
@@ -20,7 +27,8 @@ export default function NotFound() {
             Page Not Found
           </CardTitle>
           <CardDescription className="text-sm mt-2 text-muted-foreground font-sans">
-            Sorry, the page you are looking for does not exist. It might have been moved or deleted.
+            Sorry, the page you are looking for does not exist. It might have
+            been moved or deleted.
           </CardDescription>
         </CardHeader>
 
@@ -36,7 +44,7 @@ export default function NotFound() {
               </Button>
             </Link>
           </div>
-          
+
           <div className="pt-2">
             <button
               onClick={() => window.history.back()}

@@ -16,18 +16,7 @@ import {
   Clock,
   ShieldCheck,
 } from "lucide-react";
-import {
-  Button,
-  Badge,
-  Alert,
-  Skeleton,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  GlobalNavbar,
-} from "@blih/ui";
+import { Button, Badge, Alert, Skeleton, Card, GlobalNavbar } from "@blih/ui";
 import { fetchPublicCourse } from "@/lib/courses";
 import type { PublicCourse, PublicLesson } from "@/types/course";
 import { useAuth } from "@/providers/AuthProvider";
@@ -81,12 +70,30 @@ function LessonRow({ lesson, index }: { lesson: PublicLesson; index: number }) {
       {open && (
         <div className="px-5 pb-5 pt-2 border-t border-[#D9CEDF]/60 bg-[#EEF3FF]/40 space-y-3">
           <div className="flex flex-wrap gap-2">
-            {hasVideo && <Badge variant="primary" size="sm">Video Lesson</Badge>}
-            {docCount > 0 && <Badge variant="secondary" size="sm">{docCount} Document{docCount > 1 ? "s" : ""}</Badge>}
-            {hasQuiz && <Badge variant="verified" size="sm">Quiz: {lesson.quiz!.title}</Badge>}
-            {hasAssignment && <Badge variant="coral" size="sm">Assignment: {lesson.assignment!.title}</Badge>}
+            {hasVideo && (
+              <Badge variant="primary" size="sm">
+                Video Lesson
+              </Badge>
+            )}
+            {docCount > 0 && (
+              <Badge variant="secondary" size="sm">
+                {docCount} Document{docCount > 1 ? "s" : ""}
+              </Badge>
+            )}
+            {hasQuiz && (
+              <Badge variant="verified" size="sm">
+                Quiz: {lesson.quiz!.title}
+              </Badge>
+            )}
+            {hasAssignment && (
+              <Badge variant="coral" size="sm">
+                Assignment: {lesson.assignment!.title}
+              </Badge>
+            )}
             {!hasVideo && docCount === 0 && !hasQuiz && !hasAssignment && (
-              <span className="text-xs text-[#6E6678] font-sans">Reading & Theory Material</span>
+              <span className="text-xs text-[#6E6678] font-sans">
+                Reading & Theory Material
+              </span>
             )}
           </div>
         </div>
@@ -113,13 +120,30 @@ export default function PublicCourseDetailPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar currentApp="skills" user={user ? { email: user.email, role: user.role } : null} onSignOut={logout} />
+        <GlobalNavbar
+          currentApp="skills"
+          user={user ? { email: user.email, role: user.role } : null}
+          onSignOut={logout}
+        />
         <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-          <Skeleton variant="rectangular" height={32} className="w-48 rounded-xl" />
-          <Skeleton variant="rectangular" height={260} className="rounded-3xl" />
+          <Skeleton
+            variant="rectangular"
+            height={32}
+            className="w-48 rounded-xl"
+          />
+          <Skeleton
+            variant="rectangular"
+            height={260}
+            className="rounded-3xl"
+          />
           <div className="space-y-3">
             {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} variant="rectangular" height={64} className="rounded-2xl" />
+              <Skeleton
+                key={i}
+                variant="rectangular"
+                height={64}
+                className="rounded-2xl"
+              />
             ))}
           </div>
         </main>
@@ -130,10 +154,17 @@ export default function PublicCourseDetailPage() {
   if (error || !course) {
     return (
       <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar currentApp="skills" user={user ? { email: user.email, role: user.role } : null} onSignOut={logout} />
+        <GlobalNavbar
+          currentApp="skills"
+          user={user ? { email: user.email, role: user.role } : null}
+          onSignOut={logout}
+        />
         <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-6">
           <Link href="/courses">
-            <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />}>
+            <Button
+              variant="ghost"
+              leftIcon={<ArrowLeft className="h-4 w-4" />}
+            >
               Back to Catalog
             </Button>
           </Link>
@@ -158,7 +189,11 @@ export default function PublicCourseDetailPage() {
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
         <Link href="/courses" className="inline-block">
-          <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
+          <Button
+            variant="ghost"
+            leftIcon={<ArrowLeft className="h-4 w-4" />}
+            size="sm"
+          >
             Back to Course Catalog
           </Button>
         </Link>
@@ -264,8 +299,15 @@ export default function PublicCourseDetailPage() {
               </div>
 
               <div className="space-y-3">
-                <Link href={`/courses/${course.id}/learn`} className="w-full block">
-                  <Button size="lg" fullWidth leftIcon={<Play className="w-4 h-4 fill-current" />}>
+                <Link
+                  href={`/courses/${course.id}/learn`}
+                  className="w-full block"
+                >
+                  <Button
+                    size="lg"
+                    fullWidth
+                    leftIcon={<Play className="w-4 h-4 fill-current" />}
+                  >
                     Start Learning Now
                   </Button>
                 </Link>
@@ -296,7 +338,8 @@ export default function PublicCourseDetailPage() {
                 </span>
               </div>
               <p className="font-sans text-xs text-[#6E6678] leading-relaxed">
-                Completing this course and passing its assessment issues a cryptographic certificate record verified by Blih Ops.
+                Completing this course and passing its assessment issues a
+                cryptographic certificate record verified by Blih Ops.
               </p>
             </div>
           </div>
@@ -306,7 +349,10 @@ export default function PublicCourseDetailPage() {
       {/* Footer */}
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
         <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <Link href="/courses" className="hover:text-[#1E5BFF] transition-colors uppercase tracking-wider">
+        <Link
+          href="/courses"
+          className="hover:text-[#1E5BFF] transition-colors uppercase tracking-wider"
+        >
           All Courses
         </Link>
       </footer>

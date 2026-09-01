@@ -1,15 +1,41 @@
 import React, { useState } from "react";
-import { Plus, Trash2, Edit2, Calendar, GraduationCap, Loader2, Check } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Calendar,
+  GraduationCap,
+  Loader2,
+  Check,
+} from "lucide-react";
 import { Education } from "@/types/profile";
-import { addEducation, updateEducation, deleteEducation } from "@/lib/talentApi";
-import { Button, Card, CardHeader, CardTitle, CardDescription, CardContent, Input, FormField, Alert, Badge } from "@blih/ui";
+import {
+  addEducation,
+  updateEducation,
+  deleteEducation,
+} from "@/lib/talentApi";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Input,
+  FormField,
+  Alert,
+  Badge,
+} from "@blih/ui";
 
 interface EducationFormProps {
   entries: Education[];
   onRefresh: () => void;
 }
 
-export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh }) => {
+export const EducationForm: React.FC<EducationFormProps> = ({
+  entries,
+  onRefresh,
+}) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +108,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this education entry?")) return;
+    if (!confirm("Are you sure you want to delete this education entry?"))
+      return;
     setLoading(true);
     setError(null);
     try {
@@ -107,7 +134,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
               Education & Degrees
             </CardTitle>
             <CardDescription className="text-sm text-[#6E6678] font-sans">
-              Your academic background, certifications, and institutions attended.
+              Your academic background, certifications, and institutions
+              attended.
             </CardDescription>
           </div>
         </div>
@@ -187,7 +215,9 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   <Input
                     type="number"
                     value={startYear}
-                    onChange={(e) => setStartYear(e.target.value ? Number(e.target.value) : "")}
+                    onChange={(e) =>
+                      setStartYear(e.target.value ? Number(e.target.value) : "")
+                    }
                     placeholder="e.g. 2019"
                     min={1950}
                     max={2035}
@@ -199,7 +229,9 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                   <Input
                     type="number"
                     value={endYear}
-                    onChange={(e) => setEndYear(e.target.value ? Number(e.target.value) : "")}
+                    onChange={(e) =>
+                      setEndYear(e.target.value ? Number(e.target.value) : "")
+                    }
                     placeholder="e.g. 2023"
                     min={1950}
                     max={2035}
@@ -239,7 +271,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
         {/* Existing List */}
         {entries.length === 0 && !isAdding && !editingId ? (
           <div className="p-8 text-center text-sm text-[#6E6678]">
-            No education records added yet. Click &quot;Add Education&quot; to list your degrees and certifications.
+            No education records added yet. Click &quot;Add Education&quot; to
+            list your degrees and certifications.
           </div>
         ) : (
           entries.map((edu) => (
@@ -251,10 +284,14 @@ export const EducationForm: React.FC<EducationFormProps> = ({ entries, onRefresh
                 <h4 className="font-display font-bold text-lg text-[#17131F]">
                   {edu.degree} {edu.field ? `in ${edu.field}` : ""}
                 </h4>
-                <p className="text-sm font-semibold text-[#1E5BFF]">{edu.institution}</p>
+                <p className="text-sm font-semibold text-[#1E5BFF]">
+                  {edu.institution}
+                </p>
                 <div className="flex items-center gap-2 text-xs font-mono text-[#6E6678]">
                   <Calendar className="h-3.5 w-3.5" />
-                  <span>{edu.startYear} – {edu.endYear || "Present"}</span>
+                  <span>
+                    {edu.startYear} – {edu.endYear || "Present"}
+                  </span>
                 </div>
               </div>
 

@@ -25,7 +25,12 @@ export const StepExpertise: React.FC<StepExpertiseProps> = ({
   onBack,
   onNext,
 }) => {
-  const { register, watch, setValue, formState: { errors } } = form;
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
 
   const englishLevel = watch("englishLevel");
   const skills = watch("skills") || [];
@@ -33,10 +38,18 @@ export const StepExpertise: React.FC<StepExpertiseProps> = ({
 
   return (
     <form onSubmit={onNext} className="space-y-6 font-sans">
-      <FormField label="English Level" required error={errors.englishLevel?.message}>
+      <FormField
+        label="English Level"
+        required
+        error={errors.englishLevel?.message}
+      >
         <Select
           value={englishLevel || ""}
-          onChange={(e) => setValue("englishLevel", e.target.value as any, { shouldValidate: true })}
+          onChange={(e) =>
+            setValue("englishLevel", e.target.value as any, {
+              shouldValidate: true,
+            })
+          }
           placeholder="Select proficiency level"
           options={ENGLISH_LEVELS}
           disabled={saving}
@@ -46,7 +59,9 @@ export const StepExpertise: React.FC<StepExpertiseProps> = ({
 
       <SkillsInput
         value={skills}
-        onChange={(newSkills) => setValue("skills", newSkills, { shouldValidate: true })}
+        onChange={(newSkills) =>
+          setValue("skills", newSkills, { shouldValidate: true })
+        }
         disabled={saving}
         error={errors.skills?.message}
       />

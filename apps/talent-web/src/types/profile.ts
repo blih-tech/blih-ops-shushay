@@ -1,4 +1,9 @@
-export type EnglishLevel = "BASIC" | "CONVERSATIONAL" | "PROFESSIONAL" | "FLUENT" | "NATIVE";
+export type EnglishLevel =
+  | "BASIC"
+  | "CONVERSATIONAL"
+  | "PROFESSIONAL"
+  | "FLUENT"
+  | "NATIVE";
 
 export interface Experience {
   id: string;

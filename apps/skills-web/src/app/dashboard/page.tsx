@@ -17,12 +17,7 @@ import {
   MetricCard,
 } from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
-import {
-  BookOpen,
-  Award,
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { BookOpen, Award, Sparkles, ArrowRight } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
 
@@ -41,7 +36,7 @@ function DashboardContent() {
   useEffect(() => {
     fetchPublicCourses()
       .then(setCourses)
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setLoadingCourses(false));
   }, []);
 
@@ -79,18 +74,28 @@ function DashboardContent() {
               {user?.role && <Badge variant="primary">{user.role}</Badge>}
             </div>
             <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-              Welcome back, <strong className="text-[#17131F]">{user?.email}</strong>. Here is your next growth move.
+              Welcome back,{" "}
+              <strong className="text-[#17131F]">{user?.email}</strong>. Here is
+              your next growth move.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/courses">
-              <Button variant="primary" size="md" leftIcon={<BookOpen className="w-4 h-4" />}>
+              <Button
+                variant="primary"
+                size="md"
+                leftIcon={<BookOpen className="w-4 h-4" />}
+              >
                 Explore Catalog
               </Button>
             </Link>
             <Link href="/certificates">
-              <Button variant="outline" size="md" leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}>
+              <Button
+                variant="outline"
+                size="md"
+                leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}
+              >
                 My Credentials
               </Button>
             </Link>
@@ -109,12 +114,18 @@ function DashboardContent() {
                 Take the React Product Systems Assessment
               </h2>
               <p className="font-sans text-sm sm:text-base text-[#6E6678] leading-relaxed max-w-2xl">
-                Proving your capability with a score above 85% elevates your visibility to hiring companies and attaches verified proof to your public profile.
+                Proving your capability with a score above 85% elevates your
+                visibility to hiring companies and attaches verified proof to
+                your public profile.
               </p>
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 {courses.length > 0 ? (
                   <Link href={`/courses/${courses[0].id}/learn`}>
-                    <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button
+                      size="lg"
+                      variant="primary"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
                       Resume Learning Track
                     </Button>
                   </Link>
@@ -143,7 +154,12 @@ function DashboardContent() {
                   Boost in Opportunity Match
                 </span>
               </div>
-              <SkillBar name="React Systems" score={92} status="Target: 92+" variant="primary" />
+              <SkillBar
+                name="React Systems"
+                score={92}
+                status="Target: 92+"
+                variant="primary"
+              />
             </div>
           </div>
         </div>
@@ -152,8 +168,16 @@ function DashboardContent() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <MetricCard value="2" label="Active Courses" variant="surface" />
           <MetricCard value="1" label="Earned Credentials" variant="surface" />
-          <MetricCard value="94" label="Top Capability Score" variant="primary" />
-          <MetricCard value="100%" label="Verification Status" variant="surface" />
+          <MetricCard
+            value="94"
+            label="Top Capability Score"
+            variant="primary"
+          />
+          <MetricCard
+            value="100%"
+            label="Verification Status"
+            variant="surface"
+          />
         </div>
 
         {/* Active Learning & Catalog Rows */}
@@ -162,7 +186,10 @@ function DashboardContent() {
             <h2 className="font-display text-2xl font-bold text-[#17131F]">
               Your Learning Tracks
             </h2>
-            <Link href="/courses" className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] hover:underline">
+            <Link
+              href="/courses"
+              className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] hover:underline"
+            >
               View All Courses →
             </Link>
           </div>
@@ -172,18 +199,27 @@ function DashboardContent() {
               <DashboardCoursesSkeleton />
             ) : (
               courses.slice(0, 3).map((course, idx) => (
-                <Card key={course.id} variant="interactive" className="flex flex-col justify-between">
+                <Card
+                  key={course.id}
+                  variant="interactive"
+                  className="flex flex-col justify-between"
+                >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
                         <BookOpen className="w-5 h-5" />
                       </div>
-                      <Badge variant={idx === 0 ? "verified" : "secondary"} size="sm">
+                      <Badge
+                        variant={idx === 0 ? "verified" : "secondary"}
+                        size="sm"
+                      >
                         {idx === 0 ? "In Progress" : "Available"}
                       </Badge>
                     </div>
                     <CardTitle className="text-lg">{course.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">{course.description}</CardDescription>
+                    <CardDescription className="line-clamp-2">
+                      {course.description}
+                    </CardDescription>
                   </div>
 
                   <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4 space-y-3">
@@ -197,8 +233,16 @@ function DashboardContent() {
                         style={{ width: idx === 0 ? "65%" : "0%" }}
                       />
                     </div>
-                    <Link href={`/courses/${course.id}/learn`} className="w-full block pt-1">
-                      <Button variant="outline" fullWidth size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                    <Link
+                      href={`/courses/${course.id}/learn`}
+                      className="w-full block pt-1"
+                    >
+                      <Button
+                        variant="outline"
+                        fullWidth
+                        size="sm"
+                        rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                      >
                         {idx === 0 ? "Continue Lesson" : "Start Course"}
                       </Button>
                     </Link>
@@ -213,7 +257,10 @@ function DashboardContent() {
       {/* Footer */}
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
         <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <Link href="/courses" className="hover:text-[#1E5BFF] transition-colors uppercase tracking-wider">
+        <Link
+          href="/courses"
+          className="hover:text-[#1E5BFF] transition-colors uppercase tracking-wider"
+        >
           Browse Courses
         </Link>
       </footer>

@@ -3,11 +3,16 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  BookOpen, Users, Building2, ChevronRight,
-  Plus, Layers, ArrowUpRight
+  BookOpen,
+  Users,
+  Building2,
+  ChevronRight,
+  Plus,
+  Layers,
+  ArrowUpRight,
 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Button, Card, CardHeader, CardTitle, CardDescription, GlobalNavbar, Badge, Spinner, Alert, Skeleton } from "@blih/ui";
+import { Button, Card, GlobalNavbar, Badge, Alert, Skeleton } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminStats } from "@/lib/adminApi";
 import type { AdminStats } from "@/types/admin";
@@ -50,13 +55,18 @@ function AdminContent() {
               <Badge variant="primary">ADMIN PORTAL</Badge>
             </div>
             <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-              Oversee course curriculum, verify candidate evidence profiles, and manage hiring company authorizations.
+              Oversee course curriculum, verify candidate evidence profiles, and
+              manage hiring company authorizations.
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <Link href="/admin/courses/new">
-              <Button size="sm" variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
+              <Button
+                size="sm"
+                variant="primary"
+                leftIcon={<Plus className="h-4 w-4" />}
+              >
                 Create New Course
               </Button>
             </Link>
@@ -69,7 +79,9 @@ function AdminContent() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-[#6E6678] uppercase">Talents</span>
+              <span className="font-mono text-xs text-[#6E6678] uppercase">
+                Talents
+              </span>
               <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
                 <Users className="h-4 w-4" />
               </div>
@@ -86,7 +98,9 @@ function AdminContent() {
 
           <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-[#6E6678] uppercase">Companies</span>
+              <span className="font-mono text-xs text-[#6E6678] uppercase">
+                Companies
+              </span>
               <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#2E8F79] flex items-center justify-center">
                 <Building2 className="h-4 w-4" />
               </div>
@@ -103,7 +117,9 @@ function AdminContent() {
 
           <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-[#6E6678] uppercase">Courses</span>
+              <span className="font-mono text-xs text-[#6E6678] uppercase">
+                Courses
+              </span>
               <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#FF8A5B] flex items-center justify-center">
                 <BookOpen className="h-4 w-4" />
               </div>
@@ -115,12 +131,16 @@ function AdminContent() {
                 {stats?.totalCourses ?? 0}
               </p>
             )}
-            <p className="text-xs text-[#6E6678]">{stats?.publishedCourses ?? 0} published catalog</p>
+            <p className="text-xs text-[#6E6678]">
+              {stats?.publishedCourses ?? 0} published catalog
+            </p>
           </div>
 
           <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-mono text-xs text-[#6E6678] uppercase">Modules</span>
+              <span className="font-mono text-xs text-[#6E6678] uppercase">
+                Modules
+              </span>
               <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
                 <Layers className="h-4 w-4" />
               </div>
@@ -156,7 +176,8 @@ function AdminContent() {
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </h3>
                     <p className="text-sm text-[#6E6678] font-sans mt-1.5 leading-relaxed">
-                      Author courses, structure lesson modules, upload high-def video lectures, and build interactive quizzes.
+                      Author courses, structure lesson modules, upload high-def
+                      video lectures, and build interactive quizzes.
                     </p>
                   </div>
                 </div>
@@ -180,7 +201,8 @@ function AdminContent() {
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </h3>
                     <p className="text-sm text-[#6E6678] font-sans mt-1.5 leading-relaxed">
-                      Inspect candidate records, download CV attachments, review verified skills, and monitor talent onboarding.
+                      Inspect candidate records, download CV attachments, review
+                      verified skills, and monitor talent onboarding.
                     </p>
                   </div>
                 </div>
@@ -204,7 +226,8 @@ function AdminContent() {
                       <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </h3>
                     <p className="text-sm text-[#6E6678] font-sans mt-1.5 leading-relaxed">
-                      Track registered hiring organizations, contact details, company profiles, and subscription plans.
+                      Track registered hiring organizations, contact details,
+                      company profiles, and subscription plans.
                     </p>
                   </div>
                 </div>

@@ -10,42 +10,45 @@ gsap.registerPlugin(ScrollTrigger);
 export function CareerPathwayPreview() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    // Animate readiness progress bar when scrolled into view
-    gsap.fromTo(
-      ".readiness-progress",
-      { width: 0 },
-      {
-        width: "68%",
-        duration: 1.5,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none"
-        }
-      }
-    );
+  useGSAP(
+    () => {
+      // Animate readiness progress bar when scrolled into view
+      gsap.fromTo(
+        ".readiness-progress",
+        { width: 0 },
+        {
+          width: "68%",
+          duration: 1.5,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
 
-    // Staggered entry of cards when scrolled into view
-    gsap.fromTo(
-      ".pathway-card",
-      { opacity: 0, scale: 0.8, y: 35 },
-      {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.7,
-        ease: "back.out(1.2)",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 80%",
-          toggleActions: "play none none none"
-        }
-      }
-    );
-  }, { scope: containerRef });
+      // Staggered entry of cards when scrolled into view
+      gsap.fromTo(
+        ".pathway-card",
+        { opacity: 0, scale: 0.8, y: 35 },
+        {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 0.7,
+          ease: "back.out(1.2)",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    },
+    { scope: containerRef },
+  );
 
   const onCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     gsap.to(e.currentTarget, {
@@ -54,7 +57,7 @@ export function CareerPathwayPreview() {
       boxShadow: "0 20px 40px rgba(30,91,255,0.08)",
       borderColor: "#1E5BFF",
       duration: 0.3,
-      ease: "power2.out"
+      ease: "power2.out",
     });
   };
 
@@ -66,7 +69,7 @@ export function CareerPathwayPreview() {
       boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
       borderColor: isDark ? "#17131F" : "#E4E8F2",
       duration: 0.3,
-      ease: "power2.out"
+      ease: "power2.out",
     });
   };
 
@@ -80,12 +83,15 @@ export function CareerPathwayPreview() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7">
             <h2 className="font-display text-4xl sm:text-[44px] font-bold tracking-tight text-[#17131F] leading-tight">
-              Learning paths that<br />unlock opportunities.
+              Learning paths that
+              <br />
+              unlock opportunities.
             </h2>
           </div>
           <div className="lg:col-span-5">
             <p className="font-sans text-base text-[#6E6678] leading-relaxed">
-              A BLIH OPS pathway is not a syllabus. It turns learning into practice, practice into proof, and proof into matching roles.
+              A BLIH OPS pathway is not a syllabus. It turns learning into
+              practice, practice into proof, and proof into matching roles.
             </p>
           </div>
         </div>
@@ -93,7 +99,6 @@ export function CareerPathwayPreview() {
 
       {/* Main layout: Readiness on left, Pathway board on right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
         {/* Left column: Integrated readiness summary */}
         <div className="lg:col-span-4 bg-[#EEF3FF] border border-[#D9CEDF]/60 rounded-[28px] p-6 space-y-6">
           <div className="space-y-2">
@@ -101,34 +106,48 @@ export function CareerPathwayPreview() {
               Frontend Engineer Readiness — 68%
             </span>
             <div className="w-full bg-[#DDE7FF] h-2.5 rounded-full overflow-hidden">
-              <div className="readiness-progress bg-[#1E5BFF] h-full rounded-full" style={{ width: 0 }} />
+              <div
+                className="readiness-progress bg-[#1E5BFF] h-full rounded-full"
+                style={{ width: 0 }}
+              />
             </div>
           </div>
 
           <div className="space-y-5 pt-4 border-t border-[#D9CEDF]/40">
             {/* Strong */}
             <div className="space-y-1">
-              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">Strong in</span>
-              <span className="text-sm font-semibold text-[#17131F] block">HTML & CSS · JavaScript</span>
+              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">
+                Strong in
+              </span>
+              <span className="text-sm font-semibold text-[#17131F] block">
+                HTML & CSS · JavaScript
+              </span>
             </div>
 
             {/* Developing */}
             <div className="space-y-1">
-              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">Developing</span>
-              <span className="text-sm font-semibold text-[#1E5BFF] block">React</span>
+              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">
+                Developing
+              </span>
+              <span className="text-sm font-semibold text-[#1E5BFF] block">
+                React
+              </span>
             </div>
 
             {/* Needs proof */}
             <div className="space-y-1">
-              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">Needs proof</span>
-              <span className="text-sm font-semibold text-[#17131F] block">Testing · Accessibility</span>
+              <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block">
+                Needs proof
+              </span>
+              <span className="text-sm font-semibold text-[#17131F] block">
+                Testing · Accessibility
+              </span>
             </div>
           </div>
         </div>
 
         {/* Right column: Immersive pathway product surface */}
         <div className="lg:col-span-8 bg-white border border-[#E4E8F2] rounded-[36px] p-6 sm:p-8 shadow-[0_28px_64px_rgba(30,91,255,0.07)] space-y-8 relative">
-          
           {/* Surface Header */}
           <div className="border-b border-[#E4E8F2] pb-6">
             <h3 className="font-display text-3xl sm:text-[44px] font-bold text-[#17131F] leading-tight">
@@ -141,7 +160,6 @@ export function CareerPathwayPreview() {
 
           {/* Interactive grid elements matching coordinates */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            
             {/* Foundation Phase completed block */}
             <div
               onMouseEnter={onCardEnter}
@@ -149,15 +167,25 @@ export function CareerPathwayPreview() {
               className="pathway-card bg-[#F7F9FF] border border-[#D9CEDF]/40 rounded-[26px] p-5 flex flex-col justify-between h-[210px]"
               style={{ opacity: 0 }}
             >
-              <h4 className="font-display text-2xl font-bold text-[#17131F]">Foundation</h4>
+              <h4 className="font-display text-2xl font-bold text-[#17131F]">
+                Foundation
+              </h4>
               <div className="space-y-2">
                 <div className="bg-white rounded-xl px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#17131F]">HTML & CSS</span>
-                  <span className="text-xs font-mono font-bold text-[#1E5BFF]">✓</span>
+                  <span className="text-xs font-semibold text-[#17131F]">
+                    HTML & CSS
+                  </span>
+                  <span className="text-xs font-mono font-bold text-[#1E5BFF]">
+                    ✓
+                  </span>
                 </div>
                 <div className="bg-white rounded-xl px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#17131F]">JavaScript</span>
-                  <span className="text-xs font-mono font-bold text-[#1E5BFF]">✓</span>
+                  <span className="text-xs font-semibold text-[#17131F]">
+                    JavaScript
+                  </span>
+                  <span className="text-xs font-mono font-bold text-[#1E5BFF]">
+                    ✓
+                  </span>
                 </div>
               </div>
             </div>
@@ -170,7 +198,9 @@ export function CareerPathwayPreview() {
               style={{ opacity: 0 }}
             >
               <div>
-                <h4 className="font-display text-3xl font-bold text-[#1E5BFF]">Build</h4>
+                <h4 className="font-display text-3xl font-bold text-[#1E5BFF]">
+                  Build
+                </h4>
                 <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider font-semibold block mt-1">
                   React — Developing
                 </span>
@@ -182,8 +212,12 @@ export function CareerPathwayPreview() {
                 </div>
               </div>
               <div className="flex items-end justify-between mt-4">
-                <span className="font-mono text-xs text-[#1E5BFF] font-bold">Continue Project →</span>
-                <span className="font-display text-3xl font-bold text-[#1E5BFF] leading-none">72%</span>
+                <span className="font-mono text-xs text-[#1E5BFF] font-bold">
+                  Continue Project →
+                </span>
+                <span className="font-display text-3xl font-bold text-[#1E5BFF] leading-none">
+                  72%
+                </span>
               </div>
             </div>
 
@@ -195,15 +229,21 @@ export function CareerPathwayPreview() {
               style={{ opacity: 0 }}
             >
               <div>
-                <h4 className="font-display text-2xl font-bold text-left">Prove</h4>
+                <h4 className="font-display text-2xl font-bold text-left">
+                  Prove
+                </h4>
                 <div className="flex items-center justify-center my-5">
                   {/* Timer circle matching specifications */}
                   <div className="w-[82px] h-[82px] rounded-full bg-white flex items-center justify-center border-[7px] border-[#1E5BFF] shadow-sm">
-                    <span className="font-display text-2xl font-bold text-[#1E5BFF]">15m</span>
+                    <span className="font-display text-2xl font-bold text-[#1E5BFF]">
+                      15m
+                    </span>
                   </div>
                 </div>
                 <p className="font-mono text-[11px] text-[#DDE7FF] text-left uppercase tracking-wider leading-snug">
-                  Skill Checkpoint<br />React Verified
+                  Skill Checkpoint
+                  <br />
+                  React Verified
                 </p>
               </div>
               <div className="pt-2 text-left">
@@ -221,10 +261,16 @@ export function CareerPathwayPreview() {
               style={{ opacity: 0 }}
             >
               <div>
-                <span className="font-mono text-[10px] text-[#1E5BFF] uppercase tracking-wider font-semibold block">React skill proof</span>
-                <h4 className="font-display text-2xl font-bold text-[#1E5BFF] leading-none mt-1">Verified</h4>
+                <span className="font-mono text-[10px] text-[#1E5BFF] uppercase tracking-wider font-semibold block">
+                  React skill proof
+                </span>
+                <h4 className="font-display text-2xl font-bold text-[#1E5BFF] leading-none mt-1">
+                  Verified
+                </h4>
               </div>
-              <span className="font-mono text-[10px] text-[#6E6678] font-bold">View Skill Proof</span>
+              <span className="font-mono text-[10px] text-[#6E6678] font-bold">
+                View Skill Proof
+              </span>
             </div>
 
             {/* Opportunity payoff unlocked */}
@@ -235,26 +281,30 @@ export function CareerPathwayPreview() {
               style={{ opacity: 0 }}
             >
               <div>
-                <span className="font-mono text-[10px] text-[#1E5BFF] uppercase tracking-wider font-semibold block">Opportunity unlocked</span>
-                <h4 className="font-display text-2xl font-bold text-[#17131F] mt-1 leading-tight">Junior Frontend Engineer</h4>
+                <span className="font-mono text-[10px] text-[#1E5BFF] uppercase tracking-wider font-semibold block">
+                  Opportunity unlocked
+                </span>
+                <h4 className="font-display text-2xl font-bold text-[#17131F] mt-1 leading-tight">
+                  Junior Frontend Engineer
+                </h4>
                 <p className="font-mono text-[9px] text-[#6E6678] mt-1 tracking-wide">
                   243 matching opportunities · 81% current match
                 </p>
               </div>
-              <span className="font-mono text-[10px] text-[#1E5BFF] font-bold self-end hover:underline cursor-pointer">Explore Roles</span>
+              <span className="font-mono text-[10px] text-[#1E5BFF] font-bold self-end hover:underline cursor-pointer">
+                Explore Roles
+              </span>
             </div>
-
           </div>
 
           {/* Bottom causal note */}
           <div className="border-t border-[#E4E8F2] pt-4 text-center">
             <span className="font-mono text-[10px] text-[#6E6678] uppercase tracking-wider">
-              The opportunity is unlocked by the proof created through learning and project work — no roadmap line required.
+              The opportunity is unlocked by the proof created through learning
+              and project work — no roadmap line required.
             </span>
           </div>
-
         </div>
-
       </div>
     </div>
   );

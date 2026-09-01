@@ -23,7 +23,7 @@ import {
 export async function register(
   req: Request<{}, {}, RegisterInput>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { email, password, role } = req.body;
@@ -59,7 +59,8 @@ export async function register(
     console.log("==================================================\n");
 
     res.status(201).json({
-      message: "Registration successful. Please check your email to verify your account.",
+      message:
+        "Registration successful. Please check your email to verify your account.",
     });
   } catch (err) {
     next(err);
@@ -69,7 +70,7 @@ export async function register(
 export async function login(
   req: Request<{}, {}, LoginInput>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { email, password } = req.body;
@@ -82,7 +83,9 @@ export async function login(
     });
 
     if (!user) {
-      console.warn(`[AUTH LOGIN FAILED] No user found for: "${normalizedEmail}"`);
+      console.warn(
+        `[AUTH LOGIN FAILED] No user found for: "${normalizedEmail}"`,
+      );
       return next(new AppError(401, "Invalid email or password"));
     }
 
@@ -90,19 +93,28 @@ export async function login(
       ? await bcrypt.compare(password, user.passwordHash)
       : false;
     if (!isMatch) {
-      console.warn(`[AUTH LOGIN FAILED] Password mismatch for: "${normalizedEmail}"`);
+      console.warn(
+        `[AUTH LOGIN FAILED] Password mismatch for: "${normalizedEmail}"`,
+      );
       return next(new AppError(401, "Invalid email or password"));
     }
 
     if (!user.emailVerified) {
-      console.warn(`[AUTH LOGIN FAILED] Unverified email for: "${normalizedEmail}"`);
-      return next(new AppError(401, "Please verify your email address before logging in."));
+      console.warn(
+        `[AUTH LOGIN FAILED] Unverified email for: "${normalizedEmail}"`,
+      );
+      return next(
+        new AppError(
+          401,
+          "Please verify your email address before logging in.",
+        ),
+      );
     }
 
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       env.jwtSecret,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     res.cookie("token", token, {
@@ -140,7 +152,7 @@ export async function logout(_req: Request, res: Response, next: NextFunction) {
 export async function verifyEmail(
   req: Request<{}, {}, VerifyEmailInput>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { token } = req.body;
@@ -170,7 +182,7 @@ export async function verifyEmail(
 export async function forgotPassword(
   req: Request<{}, {}, ForgotPasswordInput>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { email } = req.body;
@@ -202,7 +214,8 @@ export async function forgotPassword(
 
     // Always return success to prevent user enumeration
     res.json({
-      message: "If the email is registered, a password reset link has been sent.",
+      message:
+        "If the email is registered, a password reset link has been sent.",
     });
   } catch (err) {
     next(err);
@@ -212,7 +225,7 @@ export async function forgotPassword(
 export async function resetPassword(
   req: Request<{}, {}, ResetPasswordInput>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { token, password } = req.body;
@@ -239,7 +252,9 @@ export async function resetPassword(
       },
     });
 
-    res.json({ message: "Password has been reset successfully. You can now log in." });
+    res.json({
+      message: "Password has been reset successfully. You can now log in.",
+    });
   } catch (err) {
     next(err);
   }
@@ -270,7 +285,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 export function initiateGoogleAuth(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { clientId, clientSecret } = env.google;
@@ -278,20 +293,26 @@ export function initiateGoogleAuth(
       return next(
         new AppError(
           501,
-          "Google authentication is not configured on this server."
-        )
+          "Google authentication is not configured on this server.",
+        ),
       );
     }
 
     const role = (req.query.role as string) ?? "TALENT";
     if (role !== "TALENT" && role !== "COMPANY") {
-      return next(new AppError(400, "Invalid role. Must be TALENT or COMPANY."));
+      return next(
+        new AppError(400, "Invalid role. Must be TALENT or COMPANY."),
+      );
     }
 
     const returnTo = (req.query.returnTo as string) ?? undefined;
     const nonce = crypto.randomBytes(16).toString("hex");
 
-    const state = encodeState({ role: role as "TALENT" | "COMPANY", returnTo, nonce });
+    const state = encodeState({
+      role: role as "TALENT" | "COMPANY",
+      returnTo,
+      nonce,
+    });
     const url = buildGoogleAuthUrl(state);
 
     res.redirect(url);
@@ -313,18 +334,15 @@ export function initiateGoogleAuth(
 export async function handleGoogleCallback(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   // Determine a safe fallback URL for error redirects
   const TALENT_URL =
     process.env.NEXT_PUBLIC_TALENT_URL ?? "http://localhost:3002";
-  const AUTH_URL =
-    process.env.AUTH_URL ?? "http://localhost:3003";
+  const AUTH_URL = process.env.AUTH_URL ?? "http://localhost:3003";
 
   const errorRedirect = (message: string) =>
-    res.redirect(
-      `${AUTH_URL}/login?error=${encodeURIComponent(message)}`
-    );
+    res.redirect(`${AUTH_URL}/login?error=${encodeURIComponent(message)}`);
 
   try {
     const { clientId, clientSecret } = env.google;
@@ -362,7 +380,9 @@ export async function handleGoogleCallback(
       tokens = await exchangeCodeForTokens(code);
     } catch (err: any) {
       console.error("[GOOGLE OAUTH] Token exchange failed:", err.message);
-      return errorRedirect("Failed to authenticate with Google. Please try again.");
+      return errorRedirect(
+        "Failed to authenticate with Google. Please try again.",
+      );
     }
 
     // ── 4. Fetch Google user profile ──────────────────────────────────────────
@@ -371,7 +391,9 @@ export async function handleGoogleCallback(
       googleProfile = await fetchGoogleUserProfile(tokens.access_token);
     } catch (err: any) {
       console.error("[GOOGLE OAUTH] Profile fetch failed:", err.message);
-      return errorRedirect("Could not retrieve your Google profile. Please try again.");
+      return errorRedirect(
+        "Could not retrieve your Google profile. Please try again.",
+      );
     }
 
     const { sub: googleId, email, name } = googleProfile;
@@ -382,7 +404,9 @@ export async function handleGoogleCallback(
 
     if (!user) {
       // Check if there's an existing email/password account with this email
-      user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+      user = await prisma.user.findUnique({
+        where: { email: normalizedEmail },
+      });
 
       if (user) {
         // Link Google account to existing email/password account
@@ -390,7 +414,9 @@ export async function handleGoogleCallback(
           where: { id: user.id },
           data: { googleId },
         });
-        console.log(`[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`);
+        console.log(
+          `[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`,
+        );
       } else {
         // Brand-new Google user — create account + profile
         const role = oauthState.role;
@@ -423,7 +449,9 @@ export async function handleGoogleCallback(
           });
         }
 
-        console.log(`[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`);
+        console.log(
+          `[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`,
+        );
       }
     }
 
@@ -431,7 +459,7 @@ export async function handleGoogleCallback(
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       env.jwtSecret,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     res.cookie("token", token, {
@@ -451,26 +479,34 @@ export async function handleGoogleCallback(
         const path = destUrl.pathname;
         if (user.role === "COMPANY") {
           const isTalentOnly =
-            path === "/profile" || path.startsWith("/profile/") ||
-            path === "/jobs" || path.startsWith("/jobs/") ||
-            path === "/applications" || path.startsWith("/applications/");
+            path === "/profile" ||
+            path.startsWith("/profile/") ||
+            path === "/jobs" ||
+            path.startsWith("/jobs/") ||
+            path === "/applications" ||
+            path.startsWith("/applications/");
           if (isTalentOnly) {
             destination = `${TALENT_URL}/company`;
           }
         } else if (user.role === "TALENT") {
-          const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+          const isCompanyOnly =
+            path === "/company" || path.startsWith("/company/");
           if (isCompanyOnly) {
             destination = `${TALENT_URL}/profile`;
           }
         }
       } catch {
-        destination = user.role === "COMPANY" ? `${TALENT_URL}/company` : `${TALENT_URL}/profile`;
+        destination =
+          user.role === "COMPANY"
+            ? `${TALENT_URL}/company`
+            : `${TALENT_URL}/profile`;
       }
     }
 
     if (!destination) {
       if (user.role === "ADMIN") {
-        const SKILLS_URL = process.env.NEXT_PUBLIC_SKILLS_URL ?? "http://localhost:3001";
+        const SKILLS_URL =
+          process.env.NEXT_PUBLIC_SKILLS_URL ?? "http://localhost:3001";
         destination = `${SKILLS_URL}/admin`;
       } else if (user.role === "COMPANY") {
         destination = `${TALENT_URL}/company`;
@@ -491,12 +527,18 @@ export async function handleGoogleCallback(
         }
       });
       if (!isAllowed) {
-        destination = user.role === "COMPANY" ? `${TALENT_URL}/company` : `${TALENT_URL}/profile`;
+        destination =
+          user.role === "COMPANY"
+            ? `${TALENT_URL}/company`
+            : `${TALENT_URL}/profile`;
       } else {
         destination = destUrl.toString();
       }
     } catch {
-      destination = user.role === "COMPANY" ? `${TALENT_URL}/company` : `${TALENT_URL}/profile`;
+      destination =
+        user.role === "COMPANY"
+          ? `${TALENT_URL}/company`
+          : `${TALENT_URL}/profile`;
     }
 
     res.redirect(destination);

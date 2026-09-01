@@ -1,10 +1,27 @@
 import React from "react";
 import Link from "next/link";
 import {
-  ArrowLeft, Pencil, Eye, EyeOff, Save, Plus, BookOpen, Layers
+  ArrowLeft,
+  Pencil,
+  Eye,
+  EyeOff,
+  Save,
+  Plus,
+  BookOpen,
+  Layers,
 } from "lucide-react";
 import {
-  Button, Badge, Alert, ConfirmDialog, Card, CardHeader, CardTitle, CardContent, GlobalNavbar, Input, Textarea
+  Button,
+  Badge,
+  Alert,
+  ConfirmDialog,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  GlobalNavbar,
+  Input,
+  Textarea,
 } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { LessonPanel } from "./LessonPanel";
@@ -49,7 +66,7 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
     doUnpublish,
     handleAddLesson,
     handleDeleteLesson,
-    handleMove
+    handleMove,
   } = useEditCourse(courseId);
 
   if (loading) {
@@ -62,7 +79,11 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
         <GlobalNavbar currentApp="courses" user={user} onSignOut={logout} />
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-4 flex-1">
           <Link href="/admin/courses">
-            <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
+            <Button
+              variant="ghost"
+              leftIcon={<ArrowLeft className="h-4 w-4" />}
+              size="sm"
+            >
               Back to Courses
             </Button>
           </Link>
@@ -100,7 +121,8 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
               </Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Manage curriculum structure, video lectures, assessments, and learning resources.
+              Manage curriculum structure, video lectures, assessments, and
+              learning resources.
             </p>
           </div>
 
@@ -108,7 +130,13 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             <Button
               variant={isPublished ? "outline" : "primary"}
               className="w-full sm:w-auto"
-              leftIcon={isPublished ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              leftIcon={
+                isPublished ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )
+              }
               isLoading={publishLoading}
               onClick={handlePublish}
             >
@@ -117,8 +145,16 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
           </div>
         </div>
 
-        {publishError && <Alert variant="error" onClose={() => setPublishError(null)}>{publishError}</Alert>}
-        {loadError && <Alert variant="error" onClose={() => setPublishError(null)}>{loadError}</Alert>}
+        {publishError && (
+          <Alert variant="error" onClose={() => setPublishError(null)}>
+            {publishError}
+          </Alert>
+        )}
+        {loadError && (
+          <Alert variant="error" onClose={() => setPublishError(null)}>
+            {loadError}
+          </Alert>
+        )}
 
         {/* 2-Column Responsive Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -133,7 +169,9 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                   <h2 className="font-display text-2xl font-bold text-[#17131F]">
                     Course Curriculum
                   </h2>
-                  <p className="text-xs font-mono text-[#6E6678]">{lessons.length} Modules in sequence</p>
+                  <p className="text-xs font-mono text-[#6E6678]">
+                    {lessons.length} Modules in sequence
+                  </p>
                 </div>
               </div>
               {!addingLesson && (
@@ -152,10 +190,21 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             {addingLesson && (
               <div className="border-2 border-[#1E5BFF] bg-[#EEF3FF]/40 rounded-3xl p-6 space-y-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-display font-bold text-lg text-[#17131F]">New Lesson Module</h4>
-                  <Badge variant="primary" size="sm">STEP {lessons.length + 1}</Badge>
+                  <h4 className="font-display font-bold text-lg text-[#17131F]">
+                    New Lesson Module
+                  </h4>
+                  <Badge variant="primary" size="sm">
+                    STEP {lessons.length + 1}
+                  </Badge>
                 </div>
-                {addLessonError && <Alert variant="error" onClose={() => setAddLessonError(null)}>{addLessonError}</Alert>}
+                {addLessonError && (
+                  <Alert
+                    variant="error"
+                    onClose={() => setAddLessonError(null)}
+                  >
+                    {addLessonError}
+                  </Alert>
+                )}
                 <Input
                   label="Module Title"
                   value={newLessonTitle}
@@ -182,7 +231,12 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                   >
                     Cancel
                   </Button>
-                  <Button size="sm" variant="primary" isLoading={addingLessonLoading} onClick={handleAddLesson}>
+                  <Button
+                    size="sm"
+                    variant="primary"
+                    isLoading={addingLessonLoading}
+                    onClick={handleAddLesson}
+                  >
                     Create Lesson
                   </Button>
                 </div>
@@ -194,9 +248,12 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                 <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto shadow-xs">
                   <BookOpen className="h-6 w-6" />
                 </div>
-                <h3 className="font-display font-bold text-lg text-[#17131F]">No curriculum modules yet</h3>
+                <h3 className="font-display font-bold text-lg text-[#17131F]">
+                  No curriculum modules yet
+                </h3>
                 <p className="text-sm text-[#6E6678] font-sans max-w-sm mx-auto">
-                  Click &quot;Add Lesson&quot; to begin building chapters, video lectures, and quizzes for this course.
+                  Click &quot;Add Lesson&quot; to begin building chapters, video
+                  lectures, and quizzes for this course.
                 </p>
                 <Button
                   variant="primary"
@@ -218,7 +275,9 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                   lessonIndex={index}
                   totalLessons={lessons.length}
                   onUpdate={(updated) =>
-                    setLessons((prev) => prev.map((l) => (l.id === updated.id ? updated : l)))
+                    setLessons((prev) =>
+                      prev.map((l) => (l.id === updated.id ? updated : l)),
+                    )
                   }
                   onDelete={() => handleDeleteLesson(lesson.id)}
                   onMoveUp={() => handleMove(index, "up")}
@@ -234,7 +293,9 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden">
               <CardHeader className="p-6 bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF]">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl font-bold font-display text-[#17131F]">Course Overview</CardTitle>
+                  <CardTitle className="text-xl font-bold font-display text-[#17131F]">
+                    Course Overview
+                  </CardTitle>
                   {!editingMeta && (
                     <button
                       onClick={() => {
@@ -253,7 +314,11 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
               <CardContent className="p-6 space-y-4 bg-white">
                 {editingMeta ? (
                   <div className="space-y-4">
-                    {metaError && <Alert variant="error" onClose={() => setMetaError(null)}>{metaError}</Alert>}
+                    {metaError && (
+                      <Alert variant="error" onClose={() => setMetaError(null)}>
+                        {metaError}
+                      </Alert>
+                    )}
                     <Input
                       label="Title"
                       value={metaTitle}
@@ -269,10 +334,21 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                       placeholder="Course description..."
                     />
                     <div className="flex justify-end gap-2 pt-1">
-                      <Button size="sm" variant="ghost" onClick={() => setEditingMeta(false)} disabled={metaSaving}>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setEditingMeta(false)}
+                        disabled={metaSaving}
+                      >
                         Cancel
                       </Button>
-                      <Button size="sm" variant="primary" leftIcon={<Save className="h-3.5 w-3.5" />} isLoading={metaSaving} onClick={saveMeta}>
+                      <Button
+                        size="sm"
+                        variant="primary"
+                        leftIcon={<Save className="h-3.5 w-3.5" />}
+                        isLoading={metaSaving}
+                        onClick={saveMeta}
+                      >
                         Save Details
                       </Button>
                     </div>
@@ -280,12 +356,20 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                 ) : (
                   <div className="space-y-3 font-sans">
                     <div>
-                      <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">Title</p>
-                      <p className="text-base font-bold text-[#17131F] font-display mt-0.5">{course.title}</p>
+                      <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">
+                        Title
+                      </p>
+                      <p className="text-base font-bold text-[#17131F] font-display mt-0.5">
+                        {course.title}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">Description</p>
-                      <p className="text-sm text-[#6E6678] mt-0.5 leading-relaxed">{course.description}</p>
+                      <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">
+                        Description
+                      </p>
+                      <p className="text-sm text-[#6E6678] mt-0.5 leading-relaxed">
+                        {course.description}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -294,26 +378,38 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
 
             {/* Quick Stats Panel */}
             <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white p-6 space-y-4">
-              <h3 className="font-display font-bold text-lg text-[#17131F]">Curriculum Metrics</h3>
+              <h3 className="font-display font-bold text-lg text-[#17131F]">
+                Curriculum Metrics
+              </h3>
               <div className="grid grid-cols-2 gap-3 font-sans">
                 <div className="p-3.5 bg-[#EEF3FF]/50 border border-[#D9CEDF]/70 rounded-2xl">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">Lessons</p>
-                  <p className="text-2xl font-bold font-display text-[#1E5BFF] mt-1">{lessons.length}</p>
+                  <p className="text-xs font-mono text-[#6E6678] uppercase">
+                    Lessons
+                  </p>
+                  <p className="text-2xl font-bold font-display text-[#1E5BFF] mt-1">
+                    {lessons.length}
+                  </p>
                 </div>
                 <div className="p-3.5 bg-[#EEF3FF]/50 border border-[#D9CEDF]/70 rounded-2xl">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">Videos</p>
+                  <p className="text-xs font-mono text-[#6E6678] uppercase">
+                    Videos
+                  </p>
                   <p className="text-2xl font-bold font-display text-[#2E8F79] mt-1">
                     {lessons.filter((l) => l.videoUrl).length}
                   </p>
                 </div>
                 <div className="p-3.5 bg-[#EEF3FF]/50 border border-[#D9CEDF]/70 rounded-2xl">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">Quizzes</p>
+                  <p className="text-xs font-mono text-[#6E6678] uppercase">
+                    Quizzes
+                  </p>
                   <p className="text-2xl font-bold font-display text-[#FF8A5B] mt-1">
                     {lessons.filter((l) => l.quiz).length}
                   </p>
                 </div>
                 <div className="p-3.5 bg-[#EEF3FF]/50 border border-[#D9CEDF]/70 rounded-2xl">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">Assignments</p>
+                  <p className="text-xs font-mono text-[#6E6678] uppercase">
+                    Assignments
+                  </p>
                   <p className="text-2xl font-bold font-display text-[#17131F] mt-1">
                     {lessons.filter((l) => l.assignment).length}
                   </p>

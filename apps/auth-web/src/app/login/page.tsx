@@ -7,9 +7,12 @@ import { Button, Input, PasswordInput, Alert, Badge, Spinner } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
-const SKILLS_URL = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";
-const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+const SKILLS_URL =
+  process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";
+const TALENT_URL =
+  process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 function GoogleIcon() {
   return (
@@ -51,7 +54,11 @@ function LoginForm() {
 
     try {
       const data = await apiFetch<{
-        user: { id: string; email: string; role: "TALENT" | "COMPANY" | "ADMIN" };
+        user: {
+          id: string;
+          email: string;
+          role: "TALENT" | "COMPANY" | "ADMIN";
+        };
       }>("/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
@@ -68,20 +75,27 @@ function LoginForm() {
 
           if (role === "COMPANY") {
             const isTalentOnly =
-              path === "/profile" || path.startsWith("/profile/") ||
-              path === "/jobs" || path.startsWith("/jobs/") ||
-              path === "/applications" || path.startsWith("/applications/");
+              path === "/profile" ||
+              path.startsWith("/profile/") ||
+              path === "/jobs" ||
+              path.startsWith("/jobs/") ||
+              path === "/applications" ||
+              path.startsWith("/applications/");
             if (isTalentOnly) {
               finalUrl = `${TALENT_URL}/company`;
             }
           } else if (role === "TALENT") {
-            const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+            const isCompanyOnly =
+              path === "/company" || path.startsWith("/company/");
             if (isCompanyOnly) {
               finalUrl = `${TALENT_URL}/profile`;
             }
           }
         } catch {
-          finalUrl = role === "COMPANY" ? `${TALENT_URL}/company` : `${TALENT_URL}/profile`;
+          finalUrl =
+            role === "COMPANY"
+              ? `${TALENT_URL}/company`
+              : `${TALENT_URL}/profile`;
         }
         window.location.href = finalUrl;
       } else {
@@ -119,7 +133,9 @@ function LoginForm() {
           type="email"
           required
           value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
           placeholder="sara@blih.example"
           leftIcon={<Mail className="h-4 w-4" />}
         />
@@ -139,18 +155,15 @@ function LoginForm() {
           <PasswordInput
             required
             value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
             placeholder="••••••••"
           />
         </div>
 
         <div className="pt-2">
-          <Button
-            type="submit"
-            fullWidth
-            size="lg"
-            isLoading={loading}
-          >
+          <Button type="submit" fullWidth size="lg" isLoading={loading}>
             {loading ? "Signing in..." : "Sign in"}
           </Button>
         </div>
@@ -176,7 +189,8 @@ function LoginForm() {
 
       {/* Security Note */}
       <p className="font-sans text-xs text-[#6E6678] text-center leading-relaxed pt-2">
-        Protected sign-in. Employers only see public profile information and evidence you choose to share.
+        Protected sign-in. Employers only see public profile information and
+        evidence you choose to share.
       </p>
     </div>
   );
@@ -215,7 +229,8 @@ export default function LoginPage() {
                 Pick up where your skills and opportunities meet.
               </h1>
               <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-                Sign in to continue learning, update your evidence, apply to matched opportunities and manage Talent Pro.
+                Sign in to continue learning, update your evidence, apply to
+                matched opportunities and manage Talent Pro.
               </p>
             </div>
 
@@ -241,7 +256,8 @@ export default function LoginPage() {
                   Sign in
                 </h2>
                 <p className="font-sans text-sm text-[#6E6678]">
-                  Access your BLIH OPS learning, profile evidence and opportunity workspace.
+                  Access your BLIH OPS learning, profile evidence and
+                  opportunity workspace.
                 </p>
               </div>
 
@@ -263,11 +279,17 @@ export default function LoginPage() {
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-auto">
         <p>© 2026 BLIH OPS. All rights reserved.</p>
         <div className="flex gap-4 uppercase tracking-wider">
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Privacy Policy</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Privacy Policy
+          </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Terms of Service</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Terms of Service
+          </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Support</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Support
+          </a>
         </div>
       </footer>
     </div>

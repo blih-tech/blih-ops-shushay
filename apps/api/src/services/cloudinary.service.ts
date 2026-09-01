@@ -19,19 +19,24 @@ export interface CloudinaryUploadResult {
  */
 export function uploadStream(
   stream: Readable,
-  options: { folder: string; resource_type: "image" | "video" | "raw"; public_id?: string }
+  options: {
+    folder: string;
+    resource_type: "image" | "video" | "raw";
+    public_id?: string;
+  },
 ): Promise<CloudinaryUploadResult> {
   return new Promise((resolve, reject) => {
     const upload = cloudinary.uploader.upload_stream(
       options,
       (error, result) => {
         if (error) return reject(error);
-        if (!result) return reject(new Error("Cloudinary upload returned empty result"));
+        if (!result)
+          return reject(new Error("Cloudinary upload returned empty result"));
         resolve({
           secure_url: result.secure_url,
           public_id: result.public_id,
         });
-      }
+      },
     );
     stream.pipe(upload);
   });
@@ -42,7 +47,11 @@ export function uploadStream(
  */
 export function uploadBuffer(
   buffer: Buffer,
-  options: { folder: string; resource_type: "image" | "video" | "raw"; public_id?: string }
+  options: {
+    folder: string;
+    resource_type: "image" | "video" | "raw";
+    public_id?: string;
+  },
 ): Promise<CloudinaryUploadResult> {
   const readable = new Readable();
   readable.push(buffer);
@@ -55,7 +64,7 @@ export function uploadBuffer(
  */
 export async function deleteFromCloudinary(
   publicId: string | null | undefined,
-  resourceType: "image" | "video" | "raw"
+  resourceType: "image" | "video" | "raw",
 ): Promise<void> {
   if (!publicId) return;
   try {
@@ -74,11 +83,29 @@ export async function deleteFromCloudinary(
  * Logical folders and resource types mappings
  */
 export const CloudinaryFolders = {
-  talentPhoto: { folder: "blih/talents/photos", resource_type: "image" as const },
+  talentPhoto: {
+    folder: "blih/talents/photos",
+    resource_type: "image" as const,
+  },
   talentCv: { folder: "blih/talents/cvs", resource_type: "raw" as const }, // Upload PDFs as raw documents
-  companyLogo: { folder: "blih/companies/logos", resource_type: "image" as const },
-  companyDocument: { folder: "blih/companies/documents", resource_type: "raw" as const },
-  courseVideo: { folder: "blih/courses/videos", resource_type: "video" as const },
-  courseDocument: { folder: "blih/courses/documents", resource_type: "raw" as const },
-  courseThumbnail: { folder: "blih/courses/thumbnails", resource_type: "image" as const },
+  companyLogo: {
+    folder: "blih/companies/logos",
+    resource_type: "image" as const,
+  },
+  companyDocument: {
+    folder: "blih/companies/documents",
+    resource_type: "raw" as const,
+  },
+  courseVideo: {
+    folder: "blih/courses/videos",
+    resource_type: "video" as const,
+  },
+  courseDocument: {
+    folder: "blih/courses/documents",
+    resource_type: "raw" as const,
+  },
+  courseThumbnail: {
+    folder: "blih/courses/thumbnails",
+    resource_type: "image" as const,
+  },
 };

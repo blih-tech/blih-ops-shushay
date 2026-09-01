@@ -10,7 +10,11 @@ interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
-export default function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
+export default function AuthLayout({
+  title,
+  subtitle,
+  children,
+}: AuthLayoutProps) {
   const pathname = usePathname();
   const isRegisterPage = pathname === "/register";
 
@@ -64,11 +68,17 @@ export default function AuthLayout({ title, subtitle, children }: AuthLayoutProp
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono mt-auto gap-4">
         <p>© 2026 Blih Ecosystem. All rights reserved.</p>
         <div className="flex gap-4 uppercase tracking-wider">
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Privacy Policy</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Privacy Policy
+          </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Terms of Service</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Terms of Service
+          </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a className="hover:text-[#1E5BFF] transition-colors" href="#">Support</a>
+          <a className="hover:text-[#1E5BFF] transition-colors" href="#">
+            Support
+          </a>
         </div>
       </footer>
     </div>

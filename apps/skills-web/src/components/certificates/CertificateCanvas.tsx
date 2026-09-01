@@ -1,7 +1,6 @@
 import React from "react";
 import { Badge, SkillBar } from "@blih/ui";
 
-
 export interface CertificateCanvasProps {
   recipientName?: string;
   courseName?: string;
@@ -45,7 +44,8 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
           {recipientName}
         </h2>
         <p className="font-sans text-sm sm:text-base text-[#6E6678] leading-relaxed max-w-xl mx-auto">
-          has successfully demonstrated production competency and passed all verified practical assessments in
+          has successfully demonstrated production competency and passed all
+          verified practical assessments in
         </p>
         <div className="py-2">
           <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#1E5BFF]">
@@ -59,19 +59,33 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
         <span className="font-mono text-[11px] uppercase tracking-wider text-[#6E6678] block text-center">
           Verified Competency Breakdown
         </span>
-        <SkillBar name="Architecture & State" score={score} status="Verified" variant="primary" />
-        <SkillBar name="Practical Assessment" score={92} status="Verified" variant="verified" />
+        <SkillBar
+          name="Architecture & State"
+          score={score}
+          status="Verified"
+          variant="primary"
+        />
+        <SkillBar
+          name="Practical Assessment"
+          score={92}
+          status="Verified"
+          variant="verified"
+        />
       </div>
 
       {/* Certificate Footer / Proof Signature */}
       <div className="flex flex-col sm:flex-row items-center justify-between border-t border-[#D9CEDF]/80 pt-6 gap-4 text-xs font-mono text-[#6E6678]">
         <div>
-          <span className="block font-semibold text-[#17131F]">Issued by Blih Ops Evaluation</span>
+          <span className="block font-semibold text-[#17131F]">
+            Issued by Blih Ops Evaluation
+          </span>
           <span>Date: {issueDate}</span>
         </div>
 
         <div className="text-center sm:text-right">
-          <span className="block font-semibold text-[#17131F]">Credential ID:</span>
+          <span className="block font-semibold text-[#17131F]">
+            Credential ID:
+          </span>
           <span className="text-[#1E5BFF]">{credentialId}</span>
         </div>
       </div>

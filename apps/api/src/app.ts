@@ -15,7 +15,7 @@ const app = express();
 app.use(
   helmet({
     contentSecurityPolicy: false,
-  })
+  }),
 );
 app.use(cors({ origin: env.corsOrigins, credentials: true }));
 app.use(cookieParser());

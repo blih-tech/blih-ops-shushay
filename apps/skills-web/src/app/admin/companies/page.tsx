@@ -2,12 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArrowLeft, Building2, MapPin, Phone, Globe } from "lucide-react";
 import {
-  ArrowLeft, Building2, MapPin, Phone, Globe,
-} from "lucide-react";
-import {
-  Button, Badge, Alert, Spinner, Card, CardHeader, CardTitle, CardContent,
-  GlobalNavbar, UniversalSearch, Skeleton
+  Button,
+  Badge,
+  Alert,
+  Spinner,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  GlobalNavbar,
+  UniversalSearch,
+  Skeleton,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -73,7 +80,8 @@ function AdminCompaniesContent() {
               <Badge variant="primary">{companies.length} REGISTERED</Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Monitor hiring company profiles, organization descriptions, websites, and point-of-contact details.
+              Monitor hiring company profiles, organization descriptions,
+              websites, and point-of-contact details.
             </p>
           </div>
         </div>
@@ -96,13 +104,25 @@ function AdminCompaniesContent() {
                 <div className="flex items-center gap-4">
                   <Skeleton variant="circular" className="h-12 w-12" />
                   <div className="space-y-2 flex-1">
-                    <Skeleton variant="rectangular" className="h-6 w-3/4 rounded-lg" />
-                    <Skeleton variant="rectangular" className="h-4 w-1/2 rounded-lg" />
+                    <Skeleton
+                      variant="rectangular"
+                      className="h-6 w-3/4 rounded-lg"
+                    />
+                    <Skeleton
+                      variant="rectangular"
+                      className="h-4 w-1/2 rounded-lg"
+                    />
                   </div>
                 </div>
                 <div className="pt-4 border-t border-[#D9CEDF] space-y-2">
-                  <Skeleton variant="rectangular" className="h-4 w-full rounded" />
-                  <Skeleton variant="rectangular" className="h-4 w-5/6 rounded" />
+                  <Skeleton
+                    variant="rectangular"
+                    className="h-4 w-full rounded"
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    className="h-4 w-5/6 rounded"
+                  />
                 </div>
               </Card>
             ))}
@@ -112,9 +132,13 @@ function AdminCompaniesContent() {
             <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
               <Building2 className="h-6 w-6" />
             </div>
-            <h3 className="font-display font-bold text-lg text-[#17131F]">No companies registered</h3>
+            <h3 className="font-display font-bold text-lg text-[#17131F]">
+              No companies registered
+            </h3>
             <p className="text-sm text-[#6E6678] max-w-sm mx-auto">
-              {searchQuery ? "No companies match your search query." : "Hiring company accounts will appear here."}
+              {searchQuery
+                ? "No companies match your search query."
+                : "Hiring company accounts will appear here."}
             </p>
           </div>
         ) : (
@@ -129,16 +153,26 @@ function AdminCompaniesContent() {
                     <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-lg overflow-hidden shrink-0 shadow-xs">
                       {comp.logoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={comp.logoUrl} alt="Logo" className="w-full h-full object-cover" />
+                        <img
+                          src={comp.logoUrl}
+                          alt="Logo"
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
-                        <span>{(comp.companyName || comp.user.email).charAt(0).toUpperCase()}</span>
+                        <span>
+                          {(comp.companyName || comp.user.email)
+                            .charAt(0)
+                            .toUpperCase()}
+                        </span>
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="font-display text-lg font-bold text-[#17131F] truncate">
                         {comp.companyName || "Hiring Organization"}
                       </h3>
-                      <p className="text-xs text-[#6E6678] truncate">{comp.user.email}</p>
+                      <p className="text-xs text-[#6E6678] truncate">
+                        {comp.user.email}
+                      </p>
                     </div>
                   </div>
 
@@ -152,13 +186,25 @@ function AdminCompaniesContent() {
                     {comp.city && (
                       <p className="flex items-center gap-2">
                         <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                        <span>{comp.city}{comp.country ? `, ${comp.country}` : ""}</span>
+                        <span>
+                          {comp.city}
+                          {comp.country ? `, ${comp.country}` : ""}
+                        </span>
                       </p>
                     )}
                     {comp.website && (
                       <p className="flex items-center gap-2 truncate">
                         <Globe className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                        <a href={comp.website.startsWith("http") ? comp.website : `https://${comp.website}`} target="_blank" rel="noreferrer" className="text-[#1E5BFF] hover:underline truncate">
+                        <a
+                          href={
+                            comp.website.startsWith("http")
+                              ? comp.website
+                              : `https://${comp.website}`
+                          }
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#1E5BFF] hover:underline truncate"
+                        >
                           {comp.website}
                         </a>
                       </p>
@@ -173,8 +219,12 @@ function AdminCompaniesContent() {
                 </div>
 
                 <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between text-xs font-mono text-[#6E6678]">
-                  <span>Member since {new Date(comp.createdAt).getFullYear()}</span>
-                  <Badge variant="verified" size="sm">ACTIVE</Badge>
+                  <span>
+                    Member since {new Date(comp.createdAt).getFullYear()}
+                  </span>
+                  <Badge variant="verified" size="sm">
+                    ACTIVE
+                  </Badge>
                 </div>
               </Card>
             ))}

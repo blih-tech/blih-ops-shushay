@@ -2,18 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import {
-
-  ShieldCheck,
-  Download,
-  Share2,
-  ArrowLeft,
-} from "lucide-react";
+import { ShieldCheck, Download, Share2, ArrowLeft } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import {
-  Button,
-  GlobalNavbar,
-} from "@blih/ui";
+import { Button, GlobalNavbar } from "@blih/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -42,16 +33,29 @@ export default function CertificatesPage() {
         <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+              <Button
+                variant="ghost"
+                size="sm"
+                leftIcon={<ArrowLeft className="w-4 h-4" />}
+              >
                 Back to Dashboard
               </Button>
             </Link>
 
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={handleShare} leftIcon={<Share2 className="w-4 h-4" />}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShare}
+                leftIcon={<Share2 className="w-4 h-4" />}
+              >
                 {copied ? "Link Copied!" : "Share Credential"}
               </Button>
-              <Button variant="primary" size="sm" leftIcon={<Download className="w-4 h-4" />}>
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Download className="w-4 h-4" />}
+              >
                 Download PDF Record
               </Button>
             </div>
@@ -66,13 +70,18 @@ export default function CertificatesPage() {
               Verified Digital Credentials
             </h1>
             <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-              All certificates issued through Blih Skills are cryptographically verifiable and indexed on your talent profile.
+              All certificates issued through Blih Skills are cryptographically
+              verifiable and indexed on your talent profile.
             </p>
           </div>
 
           {/* Certificate Render Canvas */}
           <CertificateCanvas
-            recipientName={user?.email ? user.email.split("@")[0].toUpperCase() : "TALENT MEMBER"}
+            recipientName={
+              user?.email
+                ? user.email.split("@")[0].toUpperCase()
+                : "TALENT MEMBER"
+            }
             courseName="React Product Systems & Enterprise Architecture"
             score={94}
           />

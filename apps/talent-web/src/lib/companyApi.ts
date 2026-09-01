@@ -5,7 +5,9 @@ export async function getCompanyProfile(): Promise<CompanyProfile> {
   return apiFetch<CompanyProfile>("/companies/profile");
 }
 
-export async function updateCompanyProfile(data: Partial<CompanyProfile>): Promise<CompanyProfile> {
+export async function updateCompanyProfile(
+  data: Partial<CompanyProfile>,
+): Promise<CompanyProfile> {
   return apiFetch<CompanyProfile>("/companies/profile", {
     method: "PATCH",
     body: JSON.stringify(data),

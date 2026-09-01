@@ -26,11 +26,7 @@ export const StepMedia: React.FC<StepMediaProps> = ({
 
       <div className="border-t border-border my-6 pt-6" />
 
-      <CvUpload
-        value={cvUrl}
-        onUpload={onCvUpload}
-        onDelete={onCvDelete}
-      />
+      <CvUpload value={cvUrl} onUpload={onCvUpload} onDelete={onCvDelete} />
 
       <div className="flex justify-between pt-4 border-t border-border mt-6">
         <Button

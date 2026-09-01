@@ -35,9 +35,9 @@ export const Modal: React.FC<ModalProps> = ({
     }
     return () => {
       const otherDialogs = Array.from(
-        document.querySelectorAll('[role="dialog"][aria-modal="true"]')
+        document.querySelectorAll('[role="dialog"][aria-modal="true"]'),
       ).filter((el) => el !== modalRef.current);
-      
+
       if (otherDialogs.length === 0) {
         document.body.style.overflow = "";
         document.documentElement.style.overflow = "";
@@ -71,11 +71,18 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="p-6 sm:p-8 pb-4 flex justify-between items-start gap-4">
           <div>
             {title && (
-              <h3 id="modal-title" className="font-display text-2xl font-bold tracking-tight text-[#17131F] leading-snug">
+              <h3
+                id="modal-title"
+                className="font-display text-2xl font-bold tracking-tight text-[#17131F] leading-snug"
+              >
                 {title}
               </h3>
             )}
-            {description && <p className="text-xs sm:text-sm text-[#6E6678] mt-1.5 leading-relaxed font-sans">{description}</p>}
+            {description && (
+              <p className="text-xs sm:text-sm text-[#6E6678] mt-1.5 leading-relaxed font-sans">
+                {description}
+              </p>
+            )}
           </div>
           <button
             type="button"
@@ -87,7 +94,11 @@ export const Modal: React.FC<ModalProps> = ({
           </button>
         </div>
 
-        {children && <div className="px-6 sm:px-8 py-2 overflow-y-auto flex-1 text-[#17131F] font-sans">{children}</div>}
+        {children && (
+          <div className="px-6 sm:px-8 py-2 overflow-y-auto flex-1 text-[#17131F] font-sans">
+            {children}
+          </div>
+        )}
 
         {footer ? (
           <div className="p-6 sm:p-8 pt-4 flex flex-col sm:flex-row justify-end gap-3 bg-white border-t border-[#D9CEDF]/50">

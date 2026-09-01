@@ -14,12 +14,7 @@ import {
   Skeleton,
   Card,
 } from "@blih/ui";
-import {
-  MapPin,
-  DollarSign,
-  Sparkles,
-  ArrowUpRight,
-} from "lucide-react";
+import { MapPin, DollarSign, Sparkles, ArrowUpRight } from "lucide-react";
 
 import { mockJobs, type JobPosting } from "@/data";
 
@@ -29,19 +24,49 @@ function JobCardSkeleton() {
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2 flex-1">
-            <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
-            <Skeleton variant="rectangular" width={180} height={20} className="rounded-md" />
+            <Skeleton
+              variant="rectangular"
+              width={60}
+              height={12}
+              className="rounded-md"
+            />
+            <Skeleton
+              variant="rectangular"
+              width={180}
+              height={20}
+              className="rounded-md"
+            />
           </div>
-          <Skeleton variant="rectangular" width={75} height={22} className="rounded-lg" />
+          <Skeleton
+            variant="rectangular"
+            width={75}
+            height={22}
+            className="rounded-lg"
+          />
         </div>
         <Skeleton variant="text" className="w-full" />
       </div>
       <div className="pt-3 border-t border-[#D9CEDF]/50 flex justify-between items-center">
         <div className="flex gap-4">
-          <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
-          <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
+          <Skeleton
+            variant="rectangular"
+            width={80}
+            height={12}
+            className="rounded-md"
+          />
+          <Skeleton
+            variant="rectangular"
+            width={60}
+            height={12}
+            className="rounded-md"
+          />
         </div>
-        <Skeleton variant="rectangular" width={50} height={10} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={50}
+          height={10}
+          className="rounded-md"
+        />
       </div>
     </Card>
   );
@@ -59,8 +84,13 @@ function JobsFeedContent() {
     return () => clearTimeout(timer);
   }, []);
 
-
-  const filterChips = ["All Opportunities", "Frontend", "Fullstack", "Design Systems", "90%+ Match"];
+  const filterChips = [
+    "All Opportunities",
+    "Frontend",
+    "Fullstack",
+    "Design Systems",
+    "90%+ Match",
+  ];
 
   const filteredJobs = mockJobs.filter((job) => {
     if (activeFilter === "90%+ Match" && job.matchScore < 90) return false;
@@ -98,7 +128,8 @@ function JobsFeedContent() {
             Evidence-Matched Roles
           </h1>
           <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-            Discover remote opportunities scored directly against your verified capability profile.
+            Discover remote opportunities scored directly against your verified
+            capability profile.
           </p>
         </div>
 
@@ -143,10 +174,11 @@ function JobsFeedContent() {
                     <div
                       key={job.id}
                       onClick={() => setSelectedJob(job)}
-                      className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${isSelected
-                        ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
-                        : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
-                        }`}
+                      className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
+                        isSelected
+                          ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                          : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div>
@@ -159,7 +191,9 @@ function JobsFeedContent() {
                         </div>
 
                         <Badge
-                          variant={job.matchScore >= 90 ? "verified" : "primary"}
+                          variant={
+                            job.matchScore >= 90 ? "verified" : "primary"
+                          }
                           size="md"
                         >
                           {job.matchScore}% Match
@@ -238,11 +272,16 @@ function JobsFeedContent() {
               </div>
 
               <div className="pt-2 space-y-3">
-                <Button size="lg" fullWidth rightIcon={<ArrowUpRight className="w-4 h-4" />}>
+                <Button
+                  size="lg"
+                  fullWidth
+                  rightIcon={<ArrowUpRight className="w-4 h-4" />}
+                >
                   Apply with Verified Skill Profile
                 </Button>
                 <p className="text-center font-mono text-[11px] text-[#6E6678]">
-                  Your verified assessment proof and portfolio will be submitted directly.
+                  Your verified assessment proof and portfolio will be submitted
+                  directly.
                 </p>
               </div>
             </div>

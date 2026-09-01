@@ -23,14 +23,32 @@ const lessonWithContentSelect = {
   createdAt: true,
   updatedAt: true,
   documents: {
-    select: { id: true, name: true, url: true, publicId: true, createdAt: true },
+    select: {
+      id: true,
+      name: true,
+      url: true,
+      publicId: true,
+      createdAt: true,
+    },
     orderBy: { createdAt: "asc" as const },
   },
   quiz: {
-    select: { id: true, title: true, questions: true, createdAt: true, updatedAt: true },
+    select: {
+      id: true,
+      title: true,
+      questions: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   },
   assignment: {
-    select: { id: true, title: true, instructions: true, createdAt: true, updatedAt: true },
+    select: {
+      id: true,
+      title: true,
+      instructions: true,
+      createdAt: true,
+      updatedAt: true,
+    },
   },
 };
 
@@ -45,7 +63,8 @@ async function assertCourseExists(id: string) {
 async function assertLessonBelongsToCourse(courseId: string, lessonId: string) {
   const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } });
   if (!lesson) throw new AppError(404, "Lesson not found");
-  if (lesson.courseId !== courseId) throw new AppError(404, "Lesson not found in this course");
+  if (lesson.courseId !== courseId)
+    throw new AppError(404, "Lesson not found in this course");
   return lesson;
 }
 
@@ -121,13 +140,13 @@ export async function deleteCourse(id: string) {
     },
   });
   if (!course) throw new AppError(404, "Course not found");
-  
+
   await prisma.course.delete({ where: { id } });
 
   const videos = course.lessons
     .filter((l) => l.videoUrl && l.videoPublicId)
     .map((l) => ({ url: l.videoUrl!, publicId: l.videoPublicId! }));
-    
+
   const documents: { url: string; publicId: string | null }[] = [];
   for (const lesson of course.lessons) {
     for (const doc of lesson.documents) {
@@ -201,7 +220,11 @@ export async function createLesson(courseId: string, data: CreateLessonInput) {
   });
 }
 
-export async function updateLesson(courseId: string, lessonId: string, data: UpdateLessonInput) {
+export async function updateLesson(
+  courseId: string,
+  lessonId: string,
+  data: UpdateLessonInput,
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.lesson.update({
     where: { id: lessonId },
@@ -229,11 +252,17 @@ export async function deleteLesson(courseId: string, lessonId: string) {
     success: true,
     videoUrl: lesson.videoUrl,
     videoPublicId: lesson.videoPublicId,
-    documents: lesson.documents.map((d) => ({ url: d.url, publicId: d.publicId })),
+    documents: lesson.documents.map((d) => ({
+      url: d.url,
+      publicId: d.publicId,
+    })),
   };
 }
 
-export async function reorderLessons(courseId: string, data: ReorderLessonsInput) {
+export async function reorderLessons(
+  courseId: string,
+  data: ReorderLessonsInput,
+) {
   await assertCourseExists(courseId);
 
   // Validate all provided IDs belong to this course
@@ -244,15 +273,21 @@ export async function reorderLessons(courseId: string, data: ReorderLessonsInput
   const existingIds = new Set(existingLessons.map((l) => l.id));
   for (const item of data.lessons) {
     if (!existingIds.has(item.id)) {
-      throw new AppError(400, `Lesson ${item.id} does not belong to this course`);
+      throw new AppError(
+        400,
+        `Lesson ${item.id} does not belong to this course`,
+      );
     }
   }
 
   // Batch update
   await prisma.$transaction(
     data.lessons.map((item) =>
-      prisma.lesson.update({ where: { id: item.id }, data: { order: item.order } })
-    )
+      prisma.lesson.update({
+        where: { id: item.id },
+        data: { order: item.order },
+      }),
+    ),
   );
 
   // Return ordered lessons
@@ -269,7 +304,7 @@ export async function setLessonVideo(
   courseId: string,
   lessonId: string,
   videoUrl: string | null,
-  videoPublicId: string | null = null
+  videoPublicId: string | null = null,
 ) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.lesson.update({
@@ -284,7 +319,7 @@ export async function addLessonDocument(
   lessonId: string,
   name: string,
   url: string,
-  publicId: string | null = null
+  publicId: string | null = null,
 ) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.lessonDocument.create({
@@ -293,10 +328,17 @@ export async function addLessonDocument(
   });
 }
 
-export async function deleteLessonDocument(courseId: string, lessonId: string, documentId: string) {
+export async function deleteLessonDocument(
+  courseId: string,
+  lessonId: string,
+  documentId: string,
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
-  const doc = await prisma.lessonDocument.findUnique({ where: { id: documentId } });
-  if (!doc || doc.lessonId !== lessonId) throw new AppError(404, "Document not found");
+  const doc = await prisma.lessonDocument.findUnique({
+    where: { id: documentId },
+  });
+  if (!doc || doc.lessonId !== lessonId)
+    throw new AppError(404, "Document not found");
   await prisma.lessonDocument.delete({ where: { id: documentId } });
   return { success: true, url: doc.url, publicId: doc.publicId };
 }
@@ -308,7 +350,7 @@ export async function deleteLessonVideo(courseId: string, lessonId: string) {
     select: { videoUrl: true, videoPublicId: true },
   });
   if (!lesson) throw new AppError(404, "Lesson not found");
-  
+
   await prisma.lesson.update({
     where: { id: lessonId },
     data: { videoUrl: null, videoPublicId: null },
@@ -323,7 +365,11 @@ export async function deleteLessonVideo(courseId: string, lessonId: string) {
 
 // ─── Quiz ─────────────────────────────────────────────────────────────────────
 
-export async function upsertQuiz(courseId: string, lessonId: string, data: UpsertQuizInput) {
+export async function upsertQuiz(
+  courseId: string,
+  lessonId: string,
+  data: UpsertQuizInput,
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.quiz.upsert({
     where: { lessonId },
@@ -334,7 +380,11 @@ export async function upsertQuiz(courseId: string, lessonId: string, data: Upser
 
 // ─── Assignment ───────────────────────────────────────────────────────────────
 
-export async function upsertAssignment(courseId: string, lessonId: string, data: UpsertAssignmentInput) {
+export async function upsertAssignment(
+  courseId: string,
+  lessonId: string,
+  data: UpsertAssignmentInput,
+) {
   await assertLessonBelongsToCourse(courseId, lessonId);
   return prisma.assignment.upsert({
     where: { lessonId },

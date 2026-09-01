@@ -6,7 +6,8 @@ const options: swaggerJsdoc.Options = {
     info: {
       title: "Blih Operations API Documentation",
       version: "1.0.0",
-      description: "API specifications for Blih Ecosystem (Auth, Skills, Talent, and Management)",
+      description:
+        "API specifications for Blih Ecosystem (Auth, Skills, Talent, and Management)",
       contact: {
         name: "Blih Ops Engineering",
       },
@@ -86,9 +87,21 @@ const options: swaggerJsdoc.Options = {
                   type: "object",
                   required: ["email", "password", "role"],
                   properties: {
-                    email: { type: "string", format: "email", example: "user@example.com" },
-                    password: { type: "string", minimum: 6, example: "Secret123!" },
-                    role: { type: "string", enum: ["TALENT", "COMPANY"], example: "TALENT" },
+                    email: {
+                      type: "string",
+                      format: "email",
+                      example: "user@example.com",
+                    },
+                    password: {
+                      type: "string",
+                      minimum: 6,
+                      example: "Secret123!",
+                    },
+                    role: {
+                      type: "string",
+                      enum: ["TALENT", "COMPANY"],
+                      example: "TALENT",
+                    },
                   },
                 },
               },
@@ -116,7 +129,11 @@ const options: swaggerJsdoc.Options = {
                   type: "object",
                   required: ["email", "password"],
                   properties: {
-                    email: { type: "string", format: "email", example: "user@example.com" },
+                    email: {
+                      type: "string",
+                      format: "email",
+                      example: "user@example.com",
+                    },
                     password: { type: "string", example: "Secret123!" },
                   },
                 },
@@ -170,7 +187,11 @@ const options: swaggerJsdoc.Options = {
                   type: "object",
                   required: ["email"],
                   properties: {
-                    email: { type: "string", format: "email", example: "user@example.com" },
+                    email: {
+                      type: "string",
+                      format: "email",
+                      example: "user@example.com",
+                    },
                   },
                 },
               },
@@ -194,7 +215,11 @@ const options: swaggerJsdoc.Options = {
                   required: ["token", "password"],
                   properties: {
                     token: { type: "string", example: "reset-token-uuid" },
-                    password: { type: "string", minimum: 6, example: "NewPassword123!" },
+                    password: {
+                      type: "string",
+                      minimum: 6,
+                      example: "NewPassword123!",
+                    },
                   },
                 },
               },
@@ -232,7 +257,8 @@ const options: swaggerJsdoc.Options = {
       },
       "/talents/profile": {
         get: {
-          summary: "Get logged-in talent's profile with detailed completion metrics",
+          summary:
+            "Get logged-in talent's profile with detailed completion metrics",
           tags: ["Talents"],
           security: [{ cookieAuth: [] }, { bearerAuth: [] }],
           responses: {
@@ -244,7 +270,8 @@ const options: swaggerJsdoc.Options = {
       },
       "/talents/{talentId}": {
         get: {
-          summary: "Get talent profile by ID (Gated to Active Companies and Admins)",
+          summary:
+            "Get talent profile by ID (Gated to Active Companies and Admins)",
           tags: ["Talents"],
           security: [{ cookieAuth: [] }, { bearerAuth: [] }],
           parameters: [
@@ -257,7 +284,9 @@ const options: swaggerJsdoc.Options = {
           ],
           responses: {
             "200": { description: "Full talent profile detail record" },
-            "402": { description: "Payment Required - Active subscription needed" },
+            "402": {
+              description: "Payment Required - Active subscription needed",
+            },
             "403": { description: "Access Denied - Insufficient permissions" },
             "404": { description: "Talent profile not found" },
           },
@@ -265,7 +294,8 @@ const options: swaggerJsdoc.Options = {
       },
       "/courses/{courseId}": {
         delete: {
-          summary: "Delete course by ID (Admin only, cascades to Cloudinary assets)",
+          summary:
+            "Delete course by ID (Admin only, cascades to Cloudinary assets)",
           tags: ["Courses"],
           security: [{ cookieAuth: [] }, { bearerAuth: [] }],
           parameters: [
@@ -277,7 +307,10 @@ const options: swaggerJsdoc.Options = {
             },
           ],
           responses: {
-            "200": { description: "Course and related lessons/quizzes/materials deleted successfully" },
+            "200": {
+              description:
+                "Course and related lessons/quizzes/materials deleted successfully",
+            },
             "403": { description: "Admin permissions required" },
             "404": { description: "Course not found" },
           },
@@ -303,7 +336,10 @@ const options: swaggerJsdoc.Options = {
             },
           ],
           responses: {
-            "200": { description: "Lesson video reference and file deleted successfully" },
+            "200": {
+              description:
+                "Lesson video reference and file deleted successfully",
+            },
             "403": { description: "Admin permissions required" },
             "404": { description: "Lesson or course not found" },
           },

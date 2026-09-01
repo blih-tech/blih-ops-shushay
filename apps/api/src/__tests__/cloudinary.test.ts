@@ -23,7 +23,7 @@ jest.mock("cloudinary", () => ({
               public_id: `${options.folder || "temp"}/test-id`,
             });
           }),
-          pipe: jest.fn(function(this: any, dest: any) {
+          pipe: jest.fn(function (this: any, dest: any) {
             setTimeout(() => {
               callback(null, {
                 secure_url: `https://res.cloudinary.com/demo/image/upload/v12345/${options.folder || "temp"}/test-id.png`,
@@ -31,7 +31,7 @@ jest.mock("cloudinary", () => ({
               });
             }, 10);
             return dest;
-          })
+          }),
         };
       },
       destroy: (publicId: string, options: any, callback?: any) => {
@@ -45,7 +45,11 @@ jest.mock("cloudinary", () => ({
 
 // Helper tokens
 function makeToken(role: Role, id: string) {
-  return jwt.sign({ userId: id, email: `${role.toLowerCase()}@blih.com`, role }, env.jwtSecret, { expiresIn: "1h" });
+  return jwt.sign(
+    { userId: id, email: `${role.toLowerCase()}@blih.com`, role },
+    env.jwtSecret,
+    { expiresIn: "1h" },
+  );
 }
 
 describe("Cloudinary Upload & Delete Flow Tests", () => {
@@ -115,7 +119,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
   afterAll(async () => {
     // Cleanup
     await prisma.course.deleteMany({ where: { id: courseId } });
-    await prisma.user.deleteMany({ where: { id: { in: [talentUserId, companyUserId, adminUserId] } } });
+    await prisma.user.deleteMany({
+      where: { id: { in: [talentUserId, companyUserId, adminUserId] } },
+    });
     await prisma.$disconnect();
   });
 
@@ -128,7 +134,8 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
     it("uploads and deletes profile photo via Cloudinary successfully", async () => {
       mockUploadStream.mockImplementation((options, callback) => {
         callback(null, {
-          secure_url: "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/photo.png",
+          secure_url:
+            "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/photo.png",
           public_id: "blih/talents/photos/photo",
         });
         return { end: jest.fn(), pipe: jest.fn() };
@@ -140,12 +147,17 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
         .attach("photo", Buffer.from("fake-image-bytes"), "photo.png");
 
       expect(res.status).toBe(200);
-      expect(res.body.photoUrl).toBe("https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/photo.png");
+      expect(res.body.photoUrl).toBe(
+        "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/photo.png",
+      );
 
       // Verify Cloudinary options
       expect(mockUploadStream).toHaveBeenCalledWith(
-        expect.objectContaining({ folder: "blih/talents/photos", resource_type: "image" }),
-        expect.any(Function)
+        expect.objectContaining({
+          folder: "blih/talents/photos",
+          resource_type: "image",
+        }),
+        expect.any(Function),
       );
 
       // Now test deletion
@@ -155,13 +167,16 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
 
       expect(delRes.status).toBe(200);
       expect(delRes.body.photoUrl).toBeNull();
-      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/photos/photo", { resource_type: "image" });
+      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/photos/photo", {
+        resource_type: "image",
+      });
     });
 
     it("uploads and deletes CV via Cloudinary successfully", async () => {
       mockUploadStream.mockImplementation((options, callback) => {
         callback(null, {
-          secure_url: "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/cvs/cv.pdf",
+          secure_url:
+            "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/cvs/cv.pdf",
           public_id: "blih/talents/cvs/cv",
         });
         return { end: jest.fn(), pipe: jest.fn() };
@@ -173,7 +188,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
         .attach("cv", Buffer.from("%PDF-1.4 fake pdf"), "cv.pdf");
 
       expect(res.status).toBe(200);
-      expect(res.body.cvUrl).toBe("https://res.cloudinary.com/demo/image/upload/v1/blih/talents/cvs/cv.pdf");
+      expect(res.body.cvUrl).toBe(
+        "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/cvs/cv.pdf",
+      );
 
       // Delete CV
       const delRes = await request(app)
@@ -181,7 +198,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
         .set("Cookie", ["token=" + makeToken(Role.TALENT, talentUserId)]);
 
       expect(delRes.status).toBe(200);
-      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/cvs/cv", { resource_type: "raw" });
+      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/cvs/cv", {
+        resource_type: "raw",
+      });
     });
   });
 
@@ -189,7 +208,8 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
     it("uploads and deletes company logo via Cloudinary successfully", async () => {
       mockUploadStream.mockImplementation((options, callback) => {
         callback(null, {
-          secure_url: "https://res.cloudinary.com/demo/image/upload/v1/blih/companies/logos/logo.png",
+          secure_url:
+            "https://res.cloudinary.com/demo/image/upload/v1/blih/companies/logos/logo.png",
           public_id: "blih/companies/logos/logo",
         });
         return { end: jest.fn(), pipe: jest.fn() };
@@ -201,7 +221,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
         .attach("logo", Buffer.from("fake-logo-bytes"), "logo.png");
 
       expect(res.status).toBe(200);
-      expect(res.body.logoUrl).toBe("https://res.cloudinary.com/demo/image/upload/v1/blih/companies/logos/logo.png");
+      expect(res.body.logoUrl).toBe(
+        "https://res.cloudinary.com/demo/image/upload/v1/blih/companies/logos/logo.png",
+      );
 
       // Delete logo
       const delRes = await request(app)
@@ -209,7 +231,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
         .set("Cookie", ["token=" + makeToken(Role.COMPANY, companyUserId)]);
 
       expect(delRes.status).toBe(200);
-      expect(mockDestroy).toHaveBeenCalledWith("blih/companies/logos/logo", { resource_type: "image" });
+      expect(mockDestroy).toHaveBeenCalledWith("blih/companies/logos/logo", {
+        resource_type: "image",
+      });
     });
   });
 
@@ -248,11 +272,14 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
     it("deletes newly uploaded asset from Cloudinary if database save throws error", async () => {
       // Mock db save to fail
       const originalUpdate = prisma.talentProfile.update;
-      prisma.talentProfile.update = jest.fn().mockRejectedValue(new Error("Fake DB Save Error"));
+      prisma.talentProfile.update = jest
+        .fn()
+        .mockRejectedValue(new Error("Fake DB Save Error"));
 
       mockUploadStream.mockImplementation((options, callback) => {
         callback(null, {
-          secure_url: "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/orphan.png",
+          secure_url:
+            "https://res.cloudinary.com/demo/image/upload/v1/blih/talents/photos/orphan.png",
           public_id: "blih/talents/photos/orphan",
         });
         return { end: jest.fn(), pipe: jest.fn() };
@@ -265,7 +292,9 @@ describe("Cloudinary Upload & Delete Flow Tests", () => {
 
       expect(res.status).toBe(500); // DB failure returns 500 error
       // Verify destroy was called to cleanup the orphan
-      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/photos/orphan", { resource_type: "image" });
+      expect(mockDestroy).toHaveBeenCalledWith("blih/talents/photos/orphan", {
+        resource_type: "image",
+      });
 
       // Restore original prisma method
       prisma.talentProfile.update = originalUpdate;

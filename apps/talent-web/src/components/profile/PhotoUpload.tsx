@@ -8,7 +8,11 @@ interface PhotoUploadProps {
   onDelete: () => Promise<void>;
 }
 
-export const PhotoUpload: React.FC<PhotoUploadProps> = ({ value, onUpload, onDelete }) => {
+export const PhotoUpload: React.FC<PhotoUploadProps> = ({
+  value,
+  onUpload,
+  onDelete,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,13 +76,20 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ value, onUpload, onDel
             isDragging ? "border-[#1E5BFF] scale-105" : "border-[#1E5BFF]/20"
           } bg-[#EEF3FF] flex items-center justify-center overflow-hidden cursor-pointer group transition-all shadow-sm`}
           onClick={() => !loading && fileInputRef.current?.click()}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setIsDragging(true);
+          }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
         >
           {value ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={value} alt="Profile Photo" className="h-full w-full object-cover" />
+            <img
+              src={value}
+              alt="Profile Photo"
+              className="h-full w-full object-cover"
+            />
           ) : (
             <User className="h-12 w-12 text-[#1E5BFF]/50" />
           )}
@@ -87,7 +98,9 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({ value, onUpload, onDel
           {!loading && (
             <div className="absolute inset-0 bg-[#17131F]/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
               <Camera className="h-6 w-6 text-white" />
-              <span className="text-[11px] font-mono text-white font-medium mt-1">{value ? "Change" : "Upload"}</span>
+              <span className="text-[11px] font-mono text-white font-medium mt-1">
+                {value ? "Change" : "Upload"}
+              </span>
             </div>
           )}
 

@@ -8,15 +8,10 @@ import { useTalentProfile } from "@/hooks/useTalentProfile";
 import {
   Button,
   Badge,
-  Spinner,
   Alert,
   GlobalNavbar,
   SkillBar,
   MetricCard,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
 } from "@blih/ui";
 import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
@@ -29,27 +24,29 @@ import {
   FileText,
   Briefcase,
   GraduationCap,
-  CheckCircle2,
-  Code2,
   ExternalLink,
-  AlertCircle,
   Download,
-  Award,
-  Sparkles,
-  ShieldCheck,
 } from "lucide-react";
 
 function ProfileContent() {
   const { user, logout } = useAuth();
   const { profile, loading, error } = useTalentProfile();
 
-  const formatExperienceDate = (startDate?: string | null, endDate?: string | null, current?: boolean) => {
+  const formatExperienceDate = (
+    startDate?: string | null,
+    endDate?: string | null,
+    current?: boolean,
+  ) => {
     if (!startDate) return "Recent";
     const parse = (d: string) => {
       try {
         const date = new Date(d);
         if (isNaN(date.getTime())) return d;
-        return date.toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" });
+        return date.toLocaleDateString("en-US", {
+          month: "short",
+          year: "numeric",
+          timeZone: "UTC",
+        });
       } catch {
         return d;
       }
@@ -68,7 +65,11 @@ function ProfileContent() {
   if (error) {
     return (
       <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar currentApp="talent" user={user ? { email: user.email, role: user.role } : null} onSignOut={logout} />
+        <GlobalNavbar
+          currentApp="talent"
+          user={user ? { email: user.email, role: user.role } : null}
+          onSignOut={logout}
+        />
         <div className="max-w-md mx-auto mt-16 px-4">
           <Alert variant="error" title="Profile Error">
             {error}
@@ -110,17 +111,24 @@ function ProfileContent() {
                     alt="Profile photo"
                     className="h-full w-full object-cover"
                   />
+                ) : profile?.fullName ? (
+                  profile.fullName
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()
                 ) : (
-                  profile?.fullName
-                    ? profile.fullName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
-                    : <User className="h-8 w-8 text-[#1E5BFF]" />
+                  <User className="h-8 w-8 text-[#1E5BFF]" />
                 )}
               </div>
 
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-3">
                   <h1 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#17131F]">
-                    {profile?.fullName || user?.email?.split("@")[0] || "Verified Talent"}
+                    {profile?.fullName ||
+                      user?.email?.split("@")[0] ||
+                      "Verified Talent"}
                   </h1>
                   {profile?.isComplete ? (
                     <Badge variant="verified" size="md">
@@ -157,12 +165,20 @@ function ProfileContent() {
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3">
               <Link href="/profile/preview">
-                <Button variant="outline" size="md" leftIcon={<Eye className="h-4 w-4" />}>
+                <Button
+                  variant="outline"
+                  size="md"
+                  leftIcon={<Eye className="h-4 w-4" />}
+                >
                   Public Preview
                 </Button>
               </Link>
               <Link href="/profile/edit">
-                <Button variant="primary" size="md" leftIcon={<Edit3 className="h-4 w-4" />}>
+                <Button
+                  variant="primary"
+                  size="md"
+                  leftIcon={<Edit3 className="h-4 w-4" />}
+                >
                   Edit Profile
                 </Button>
               </Link>
@@ -183,10 +199,22 @@ function ProfileContent() {
 
           {/* Evidence Metrics Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <MetricCard value={expCount} label="Work History" variant="surface" />
+            <MetricCard
+              value={expCount}
+              label="Work History"
+              variant="surface"
+            />
             <MetricCard value={eduCount} label="Education" variant="surface" />
-            <MetricCard value={skillCount || 4} label="Verified Skills" variant="primary" />
-            <MetricCard value="100%" label="Evidence Calibrated" variant="surface" />
+            <MetricCard
+              value={skillCount || 4}
+              label="Verified Skills"
+              variant="primary"
+            />
+            <MetricCard
+              value="100%"
+              label="Evidence Calibrated"
+              variant="surface"
+            />
           </div>
         </div>
 
@@ -201,19 +229,42 @@ function ProfileContent() {
                 Evidence-Backed Capabilities
               </h2>
             </div>
-            <Link href="/profile/edit" className="font-mono text-xs text-[#1E5BFF] hover:underline flex items-center gap-1">
+            <Link
+              href="/profile/edit"
+              className="font-mono text-xs text-[#1E5BFF] hover:underline flex items-center gap-1"
+            >
               Add Skills <ExternalLink className="h-3.5 w-3.5" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <SkillBar name="Frontend & React Systems" score={94} status="Verified" variant="primary" />
-              <SkillBar name="TypeScript & Architecture" score={89} status="Verified" variant="primary" />
+              <SkillBar
+                name="Frontend & React Systems"
+                score={94}
+                status="Verified"
+                variant="primary"
+              />
+              <SkillBar
+                name="TypeScript & Architecture"
+                score={89}
+                status="Verified"
+                variant="primary"
+              />
             </div>
             <div className="space-y-3">
-              <SkillBar name="API Integration & State" score={88} status="Verified" variant="primary" />
-              <SkillBar name="UI Systems & Accessibility" score={82} status="Developing" variant="coral" />
+              <SkillBar
+                name="API Integration & State"
+                score={88}
+                status="Verified"
+                variant="primary"
+              />
+              <SkillBar
+                name="UI Systems & Accessibility"
+                score={82}
+                status="Developing"
+                variant="coral"
+              />
             </div>
           </div>
 
@@ -246,7 +297,10 @@ function ProfileContent() {
 
             <div className="space-y-6">
               {profile.experience.map((exp: any, index: number) => (
-                <div key={index} className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0">
+                <div
+                  key={index}
+                  className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
+                >
                   <div className="w-10 h-10 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0 border border-[#1E5BFF]/15">
                     <Briefcase className="w-5 h-5" />
                   </div>
@@ -256,7 +310,11 @@ function ProfileContent() {
                         {exp.title || "Role Title"}
                       </h4>
                       <span className="font-mono text-xs text-[#1E5BFF] bg-[#EEF3FF] px-3 py-1 rounded-full border border-[#1E5BFF]/20 self-start sm:self-auto font-medium">
-                        {formatExperienceDate(exp.startDate, exp.endDate, exp.current)}
+                        {formatExperienceDate(
+                          exp.startDate,
+                          exp.endDate,
+                          exp.current,
+                        )}
                       </span>
                     </div>
                     <p className="font-sans text-sm text-[#6E6678] font-semibold">
@@ -288,7 +346,10 @@ function ProfileContent() {
 
             <div className="space-y-6">
               {profile.education.map((edu: any, index: number) => (
-                <div key={index} className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0">
+                <div
+                  key={index}
+                  className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
+                >
                   <div className="w-10 h-10 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0 border border-[#2E8F79]/20">
                     <GraduationCap className="w-5 h-5" />
                   </div>
@@ -298,7 +359,9 @@ function ProfileContent() {
                         {edu.degree} {edu.field ? `in ${edu.field}` : ""}
                       </h4>
                       <span className="font-mono text-xs text-[#2E8F79] bg-[#E6F5F0] px-3 py-1 rounded-full border border-[#2E8F79]/20 self-start sm:self-auto font-medium">
-                        {edu.startYear ? `${edu.startYear} – ${edu.endYear || "Present"}` : edu.year || "Completed"}
+                        {edu.startYear
+                          ? `${edu.startYear} – ${edu.endYear || "Present"}`
+                          : edu.year || "Completed"}
                       </span>
                     </div>
                     <p className="font-sans text-sm text-[#6E6678]">
@@ -329,7 +392,11 @@ function ProfileContent() {
             </div>
 
             <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" leftIcon={<Download className="w-4 h-4" />}>
+              <Button
+                variant="outline"
+                size="sm"
+                leftIcon={<Download className="w-4 h-4" />}
+              >
                 View / Download CV
               </Button>
             </a>

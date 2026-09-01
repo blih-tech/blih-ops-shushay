@@ -1,6 +1,17 @@
 import React from "react";
 import { User, Save, Phone, MapPin, Globe, Sparkles } from "lucide-react";
-import { FormField, Input, Select, Textarea, Card, CardContent, CardHeader, CardTitle, CardDescription, Button } from "@blih/ui";
+import {
+  FormField,
+  Input,
+  Select,
+  Textarea,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Button,
+} from "@blih/ui";
 import { SkillsInput } from "./SkillsInput";
 import { ProfileFormReturn } from "@/state/profile/profileForm";
 
@@ -23,7 +34,12 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
   saving,
   onSubmit,
 }) => {
-  const { register, watch, setValue, formState: { errors } } = form;
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
 
   const englishLevel = watch("englishLevel");
   const skills = watch("skills") || [];
@@ -42,7 +58,8 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
                 General Profile Details
               </CardTitle>
               <CardDescription className="text-sm text-[#6E6678] font-sans">
-                Your professional identity, contact reachability, and capability tags.
+                Your professional identity, contact reachability, and capability
+                tags.
               </CardDescription>
             </div>
           </div>
@@ -50,7 +67,11 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
 
         <CardContent className="p-6 sm:p-8 space-y-6 bg-white">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <FormField label="Full Name" required error={errors.fullName?.message}>
+            <FormField
+              label="Full Name"
+              required
+              error={errors.fullName?.message}
+            >
               <Input
                 type="text"
                 placeholder="e.g. Sara Tesfaye"
@@ -61,7 +82,11 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
               />
             </FormField>
 
-            <FormField label="Professional Title" required error={errors.title?.message}>
+            <FormField
+              label="Professional Title"
+              required
+              error={errors.title?.message}
+            >
               <Input
                 type="text"
                 placeholder="e.g. Senior Frontend Systems Engineer"
@@ -74,7 +99,11 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <FormField label="Phone Number" required error={errors.phone?.message}>
+            <FormField
+              label="Phone Number"
+              required
+              error={errors.phone?.message}
+            >
               <Input
                 type="tel"
                 placeholder="e.g. +251 91 123 4567"
@@ -86,10 +115,18 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
               />
             </FormField>
 
-            <FormField label="English Proficiency" required error={errors.englishLevel?.message}>
+            <FormField
+              label="English Proficiency"
+              required
+              error={errors.englishLevel?.message}
+            >
               <Select
                 value={englishLevel || ""}
-                onChange={(e) => setValue("englishLevel", e.target.value as any, { shouldValidate: true })}
+                onChange={(e) =>
+                  setValue("englishLevel", e.target.value as any, {
+                    shouldValidate: true,
+                  })
+                }
                 placeholder="Select English level"
                 options={ENGLISH_LEVELS}
                 disabled={saving}
@@ -126,12 +163,17 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
 
           <SkillsInput
             value={skills}
-            onChange={(newSkills) => setValue("skills", newSkills, { shouldValidate: true })}
+            onChange={(newSkills) =>
+              setValue("skills", newSkills, { shouldValidate: true })
+            }
             disabled={saving}
             error={errors.skills?.message}
           />
 
-          <FormField label="About & Technical Overview" error={errors.bio?.message}>
+          <FormField
+            label="About & Technical Overview"
+            error={errors.bio?.message}
+          >
             <Textarea
               placeholder="Highlight your core engineering expertise, architectural decisions, and career objectives..."
               maxLength={500}

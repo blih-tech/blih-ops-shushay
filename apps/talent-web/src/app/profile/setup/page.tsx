@@ -11,13 +11,19 @@ import {
   uploadTalentCv,
   deleteTalentCv,
 } from "@/lib/talentApi";
-import { Alert, Spinner, Button, Card, CardContent, Badge, GlobalNavbar } from "@blih/ui";
+import { Alert, Card, CardContent, GlobalNavbar } from "@blih/ui";
 import { ProfileSetupSkeleton } from "@/components/profile/ProfileSkeleton";
 import { StepPersonalInfo } from "@/components/profile/setup/StepPersonalInfo";
 import { StepExpertise } from "@/components/profile/setup/StepExpertise";
 import { StepMedia } from "@/components/profile/setup/StepMedia";
 import { useProfileFormState } from "@/state/profile/profileForm";
-import { LogOut, User, Sparkles, Image as ImageIcon, ChevronRight, Check, ArrowRight } from "lucide-react";
+import {
+  User,
+  Sparkles,
+  Image as ImageIcon,
+  ChevronRight,
+  Check,
+} from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 
 function ProfileSetupContent() {
@@ -53,7 +59,13 @@ function ProfileSetupContent() {
     setError(null);
 
     if (step === 1) {
-      const valid = await trigger(["fullName", "title", "phone", "country", "city"]);
+      const valid = await trigger([
+        "fullName",
+        "title",
+        "phone",
+        "country",
+        "city",
+      ]);
       if (!valid) return;
       setStep(2);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -80,7 +92,10 @@ function ProfileSetupContent() {
         await refetch();
         router.push("/profile");
       } catch (err: any) {
-        setError(err?.message || "Failed to complete profile onboarding. Please try again.");
+        setError(
+          err?.message ||
+            "Failed to complete profile onboarding. Please try again.",
+        );
       } finally {
         setSaving(false);
       }
@@ -108,9 +123,24 @@ function ProfileSetupContent() {
   };
 
   const steps = [
-    { id: 1, title: "Personal Details", icon: User, desc: "Name, title & contact" },
-    { id: 2, title: "Skills & English", icon: Sparkles, desc: "Proficiency & stack" },
-    { id: 3, title: "Media & Files", icon: ImageIcon, desc: "Photo & resume CV" },
+    {
+      id: 1,
+      title: "Personal Details",
+      icon: User,
+      desc: "Name, title & contact",
+    },
+    {
+      id: 2,
+      title: "Skills & English",
+      icon: Sparkles,
+      desc: "Proficiency & stack",
+    },
+    {
+      id: 3,
+      title: "Media & Files",
+      icon: ImageIcon,
+      desc: "Photo & resume CV",
+    },
   ];
 
   return (
@@ -122,7 +152,11 @@ function ProfileSetupContent() {
 
       {/* Main wizard area */}
       <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
-        {error && <Alert variant="error" className="mb-6">{error}</Alert>}
+        {error && (
+          <Alert variant="error" className="mb-6">
+            {error}
+          </Alert>
+        )}
 
         <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
           {/* Stepper rail */}
@@ -156,8 +190,8 @@ function ProfileSetupContent() {
                         isActive
                           ? "bg-[#EEF3FF] border border-[#1E5BFF]/30 text-[#1E5BFF]"
                           : isCompleted
-                          ? "text-[#17131F]"
-                          : "text-[#6E6678]"
+                            ? "text-[#17131F]"
+                            : "text-[#6E6678]"
                       }`}
                     >
                       <div
@@ -165,8 +199,8 @@ function ProfileSetupContent() {
                           isActive
                             ? "bg-[#1E5BFF] text-white"
                             : isCompleted
-                            ? "bg-[#2E8F79] text-white"
-                            : "bg-white border border-[#D9CEDF] text-[#6E6678]"
+                              ? "bg-[#2E8F79] text-white"
+                              : "bg-white border border-[#D9CEDF] text-[#6E6678]"
                         }`}
                       >
                         {isCompleted ? <Check className="h-5 w-5" /> : s.id}
@@ -200,9 +234,12 @@ function ProfileSetupContent() {
                   {step === 3 && "Media & Curriculum Vitae"}
                 </h3>
                 <p className="text-sm text-[#6E6678] font-sans mt-1">
-                  {step === 1 && "Provide your official contact details and current location."}
-                  {step === 2 && "Select your English proficiency level and list your core capabilities."}
-                  {step === 3 && "Upload your professional headshot and PDF curriculum vitae."}
+                  {step === 1 &&
+                    "Provide your official contact details and current location."}
+                  {step === 2 &&
+                    "Select your English proficiency level and list your core capabilities."}
+                  {step === 3 &&
+                    "Upload your professional headshot and PDF curriculum vitae."}
                 </p>
               </div>
 

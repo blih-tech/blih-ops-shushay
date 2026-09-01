@@ -32,7 +32,11 @@ function GoogleIcon() {
 }
 
 interface RegisterFormProps {
-  onSubmit: (data: { email: string; password: string; role: Role }) => Promise<void>;
+  onSubmit: (data: {
+    email: string;
+    password: string;
+    role: Role;
+  }) => Promise<void>;
   loading: boolean;
   error: string | null;
 }
@@ -66,7 +70,8 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           Create your free account
         </h2>
         <p className="font-sans text-sm text-[#6E6678]">
-          Free includes learning discovery, profile building, opportunities, applications and certificates.
+          Free includes learning discovery, profile building, opportunities,
+          applications and certificates.
         </p>
       </div>
 
@@ -77,7 +82,9 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           label="Full name"
           type="text"
           value={fullName}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFullName(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setFullName(e.target.value)
+          }
           placeholder="Sara Tesfaye"
           leftIcon={<User className="h-4 w-4" />}
         />
@@ -87,7 +94,9 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           type="email"
           required
           value={email}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setEmail(e.target.value)
+          }
           placeholder="sara@blih.example"
           leftIcon={<Mail className="h-4 w-4" />}
         />
@@ -97,7 +106,9 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           required
           minLength={6}
           value={password}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setPassword(e.target.value)
+          }
           placeholder="••••••••••"
         />
 
@@ -132,12 +143,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
         </div>
 
         <div className="pt-2">
-          <Button
-            type="submit"
-            fullWidth
-            size="lg"
-            isLoading={loading}
-          >
+          <Button type="submit" fullWidth size="lg" isLoading={loading}>
             {loading ? "Creating account..." : "Create account"}
           </Button>
         </div>
@@ -160,7 +166,8 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
       </button>
 
       <p className="font-sans text-xs text-[#6E6678] text-center leading-relaxed">
-        By creating an account, you agree to BLIH OPS terms. You can upgrade to Talent Pro later; Free remains useful.
+        By creating an account, you agree to BLIH OPS terms. You can upgrade to
+        Talent Pro later; Free remains useful.
       </p>
     </div>
   );

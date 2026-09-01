@@ -2,13 +2,32 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Plus, BookOpen, Pencil, Eye, EyeOff, GraduationCap, ArrowLeft, Trash2 } from "lucide-react";
 import {
-  Button, Badge, Alert, ConfirmDialog, GlobalNavbar, UniversalSearch
+  Plus,
+  BookOpen,
+  Pencil,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  ArrowLeft,
+  Trash2,
+} from "lucide-react";
+import {
+  Button,
+  Badge,
+  Alert,
+  ConfirmDialog,
+  GlobalNavbar,
+  UniversalSearch,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
-import { fetchAdminCourses, publishCourse, unpublishCourse, deleteCourse } from "@/lib/courses";
+import {
+  fetchAdminCourses,
+  publishCourse,
+  unpublishCourse,
+  deleteCourse,
+} from "@/lib/courses";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
@@ -20,7 +39,9 @@ function CoursesContent() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [confirmCourse, setConfirmCourse] = useState<Course | null>(null);
-  const [deleteConfirmCourse, setDeleteConfirmCourse] = useState<Course | null>(null);
+  const [deleteConfirmCourse, setDeleteConfirmCourse] = useState<Course | null>(
+    null,
+  );
 
   const load = useCallback(() => {
     setLoading(true);
@@ -31,7 +52,9 @@ function CoursesContent() {
       .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function handlePublishToggle(course: Course) {
     if (course.status === "PUBLISHED") {
@@ -45,10 +68,15 @@ function CoursesContent() {
     setActionLoading(course.id);
     setActionError(null);
     try {
-      const updated = course.status === "PUBLISHED"
-        ? await unpublishCourse(course.id)
-        : await publishCourse(course.id);
-      setCourses((prev) => prev.map((c) => c.id === course.id ? { ...c, status: updated.status } : c));
+      const updated =
+        course.status === "PUBLISHED"
+          ? await unpublishCourse(course.id)
+          : await publishCourse(course.id);
+      setCourses((prev) =>
+        prev.map((c) =>
+          c.id === course.id ? { ...c, status: updated.status } : c,
+        ),
+      );
     } catch (err: any) {
       setActionError(err.message ?? "Action failed");
     } finally {
@@ -85,7 +113,11 @@ function CoursesContent() {
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
         <Link href="/admin">
-          <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
+          <Button
+            variant="ghost"
+            leftIcon={<ArrowLeft className="h-4 w-4" />}
+            size="sm"
+          >
             Back to Admin Portal
           </Button>
         </Link>
@@ -108,8 +140,16 @@ function CoursesContent() {
         </div>
 
         {/* Errors */}
-        {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
-        {actionError && <Alert variant="error" onClose={() => setActionError(null)}>{actionError}</Alert>}
+        {error && (
+          <Alert variant="error" onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
+        {actionError && (
+          <Alert variant="error" onClose={() => setActionError(null)}>
+            {actionError}
+          </Alert>
+        )}
 
         {/* Search Bar */}
         <div className="w-full">
@@ -124,7 +164,10 @@ function CoursesContent() {
         {loading && (
           <div className="space-y-4">
             {[0, 1, 2].map((i) => (
-              <div key={i} className="h-20 bg-[#EEF3FF]/60 rounded-2xl animate-pulse" />
+              <div
+                key={i}
+                className="h-20 bg-[#EEF3FF]/60 rounded-2xl animate-pulse"
+              />
             ))}
           </div>
         )}
@@ -139,11 +182,18 @@ function CoursesContent() {
               {searchQuery ? "No matching courses found" : "No courses yet"}
             </h3>
             <p className="text-sm text-[#6E6678]">
-              {searchQuery ? "Try a different search term." : "Create your first course to get started."}
+              {searchQuery
+                ? "Try a different search term."
+                : "Create your first course to get started."}
             </p>
             {!searchQuery && (
               <Link href="/admin/courses/new">
-                <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>Create Course</Button>
+                <Button
+                  variant="primary"
+                  leftIcon={<Plus className="h-4 w-4" />}
+                >
+                  Create Course
+                </Button>
               </Link>
             )}
           </div>
@@ -171,11 +221,15 @@ function CoursesContent() {
                         {course.title}
                       </h3>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant={isPublished ? "verified" : "secondary"} size="sm">
+                        <Badge
+                          variant={isPublished ? "verified" : "secondary"}
+                          size="sm"
+                        >
                           {isPublished ? "Published" : "Draft"}
                         </Badge>
                         <span className="text-xs font-mono text-[#6E6678]">
-                          {lessonCount} {lessonCount === 1 ? "lesson" : "lessons"}
+                          {lessonCount}{" "}
+                          {lessonCount === 1 ? "lesson" : "lessons"}
                         </span>
                       </div>
                     </div>
@@ -188,12 +242,22 @@ function CoursesContent() {
                       size="sm"
                       isLoading={isActing}
                       onClick={() => handlePublishToggle(course)}
-                      leftIcon={isPublished ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                      leftIcon={
+                        isPublished ? (
+                          <EyeOff className="h-3.5 w-3.5" />
+                        ) : (
+                          <Eye className="h-3.5 w-3.5" />
+                        )
+                      }
                     >
                       {isPublished ? "Unpublish" : "Publish"}
                     </Button>
                     <Link href={`/admin/courses/${course.id}/edit`}>
-                      <Button variant="ghost" size="sm" leftIcon={<Pencil className="h-3.5 w-3.5" />}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        leftIcon={<Pencil className="h-3.5 w-3.5" />}
+                      >
                         Edit
                       </Button>
                     </Link>

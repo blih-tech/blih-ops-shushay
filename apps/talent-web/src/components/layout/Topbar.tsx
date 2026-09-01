@@ -57,7 +57,9 @@ export function Topbar({ onMenuClick, actions }: TopbarProps) {
       </div>
 
       {/* Contextual actions slot */}
-      {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+      {actions && (
+        <div className="flex items-center gap-2 shrink-0">{actions}</div>
+      )}
     </header>
   );
 }

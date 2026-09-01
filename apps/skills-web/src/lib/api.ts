@@ -1,12 +1,19 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string, public details?: unknown) {
+  constructor(
+    public status: number,
+    message: string,
+    public details?: unknown,
+  ) {
     super(message);
   }
 }
 
-export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...options,
     credentials: "include",
@@ -18,14 +25,22 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, body?.error?.message ?? "Request failed", body?.error?.details);
+    throw new ApiError(
+      res.status,
+      body?.error?.message ?? "Request failed",
+      body?.error?.details,
+    );
   }
 
   return res.json();
 }
 
 /** For multipart/form-data uploads — do NOT set Content-Type (browser sets boundary). */
-export async function apiFetchFormData<T>(path: string, formData: FormData, method = "POST"): Promise<T> {
+export async function apiFetchFormData<T>(
+  path: string,
+  formData: FormData,
+  method = "POST",
+): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     method,
     credentials: "include",
@@ -34,7 +49,11 @@ export async function apiFetchFormData<T>(path: string, formData: FormData, meth
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, body?.error?.message ?? "Upload failed", body?.error?.details);
+    throw new ApiError(
+      res.status,
+      body?.error?.message ?? "Upload failed",
+      body?.error?.details,
+    );
   }
 
   return res.json();

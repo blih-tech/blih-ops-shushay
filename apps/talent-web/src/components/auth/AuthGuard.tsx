@@ -3,7 +3,15 @@
 import React, { useEffect } from "react";
 import { useAuth } from "@/providers/AuthProvider";
 import { Role } from "@/types/user";
-import { Spinner, Button, Card, CardHeader, CardTitle, CardDescription, CardContent } from "@blih/ui";
+import {
+  Spinner,
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@blih/ui";
 import { ShieldAlert } from "lucide-react";
 
 interface AuthGuardProps {
@@ -46,9 +54,12 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
             <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FFF0F0] text-[#EF4444] border border-[#EF4444]/20 flex items-center justify-center mb-3">
               <ShieldAlert className="h-7 w-7" />
             </div>
-            <CardTitle className="text-2xl font-bold font-display text-[#17131F]">Access Restricted</CardTitle>
+            <CardTitle className="text-2xl font-bold font-display text-[#17131F]">
+              Access Restricted
+            </CardTitle>
             <CardDescription className="text-sm text-[#6E6678] font-sans mt-1">
-              You do not have the required role permissions to access this workspace.
+              You do not have the required role permissions to access this
+              workspace.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 pt-4">

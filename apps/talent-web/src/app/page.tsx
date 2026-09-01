@@ -4,17 +4,8 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
-import {
-  Button,
-  Badge,
-  UniversalSearch,
-  Chip,
-  GlobalNavbar,
-} from "@blih/ui";
-import {
-  Sparkles,
-  ArrowRight,
-} from "lucide-react";
+import { Button, Badge, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
+import { Sparkles, ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -31,48 +22,66 @@ export default function TalentHomePage() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
-  const SKILLS_URL = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";
+  const SKILLS_URL =
+    process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001";
   const [searchQuery, setSearchQuery] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    // Staggered fade-up hero elements
-    gsap.fromTo(
-      ".hero-anim-item",
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" }
-    );
-    // Smooth side reveal for the live card preview
-    gsap.fromTo(
-      ".preview-card-anim",
-      { opacity: 0, x: 50, scale: 0.95 },
-      { opacity: 1, x: 0, scale: 1, duration: 1, delay: 0.4, ease: "power3.out" }
-    );
-
-    // Scroll trigger reveals for each primary section
-    gsap.utils.toArray(".scroll-reveal-section").forEach((section: any) => {
+  useGSAP(
+    () => {
+      // Staggered fade-up hero elements
       gsap.fromTo(
-        section,
-        { opacity: 0, y: 60 },
+        ".hero-anim-item",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" },
+      );
+      // Smooth side reveal for the live card preview
+      gsap.fromTo(
+        ".preview-card-anim",
+        { opacity: 0, x: 50, scale: 0.95 },
         {
           opacity: 1,
-          y: 0,
-          duration: 0.9,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 80%",
-            toggleActions: "play none none none"
-          }
-        }
+          x: 0,
+          scale: 1,
+          duration: 1,
+          delay: 0.4,
+          ease: "power3.out",
+        },
       );
-    });
-  }, { scope: containerRef });
 
-  const searchChips = user?.role === "COMPANY"
-    ? ["React 19", "Next.js", "Fullstack", "Node.js", "UI/UX Specialist"]
-    : ["React Developer", "Product Designer", "Financial Analyst", "Fullstack Engineer", "UI/UX Specialist"];
+      // Scroll trigger reveals for each primary section
+      gsap.utils.toArray(".scroll-reveal-section").forEach((section: any) => {
+        gsap.fromTo(
+          section,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
+          },
+        );
+      });
+    },
+    { scope: containerRef },
+  );
+
+  const searchChips =
+    user?.role === "COMPANY"
+      ? ["React 19", "Next.js", "Fullstack", "Node.js", "UI/UX Specialist"]
+      : [
+          "React Developer",
+          "Product Designer",
+          "Financial Analyst",
+          "Fullstack Engineer",
+          "UI/UX Specialist",
+        ];
 
   const handleSearch = (query: string) => {
     if (user?.role === "COMPANY") {
@@ -87,7 +96,10 @@ export default function TalentHomePage() {
   const isTalent = user?.role === "TALENT";
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
+    <div
+      ref={containerRef}
+      className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]"
+    >
       {/* Background ambient lighting */}
       <div className="absolute top-0 inset-x-0 h-[640px] bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
@@ -178,7 +190,10 @@ export default function TalentHomePage() {
               {isCompany ? (
                 <>
                   <Link href="/company/talents">
-                    <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button
+                      size="lg"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
                       Search Verified Talents
                     </Button>
                   </Link>
@@ -191,7 +206,10 @@ export default function TalentHomePage() {
               ) : isAdmin ? (
                 <>
                   <Link href="/admin/courses">
-                    <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button
+                      size="lg"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
                       Edit Course Catalog
                     </Button>
                   </Link>
@@ -204,7 +222,10 @@ export default function TalentHomePage() {
               ) : isTalent ? (
                 <>
                   <Link href="/profile">
-                    <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button
+                      size="lg"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
                       View My Skill Profile
                     </Button>
                   </Link>
@@ -217,7 +238,10 @@ export default function TalentHomePage() {
               ) : (
                 <>
                   <a href={`${AUTH_URL}/register`}>
-                    <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button
+                      size="lg"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
+                    >
                       Start Building Your Profile
                     </Button>
                   </a>
@@ -269,13 +293,17 @@ export default function TalentHomePage() {
                   Find and hire pre-vetted African engineering talent
                 </h2>
                 <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Review evidence-backed scorecards, calibrate technical fit, and contact qualified candidates directly.
+                  Review evidence-backed scorecards, calibrate technical fit,
+                  and contact qualified candidates directly.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
                 <Link href="/company/talents" className="w-full sm:w-auto">
-                  <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button
+                    size="lg"
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
                     Search Talent Catalog
                   </Button>
                 </Link>
@@ -296,13 +324,18 @@ export default function TalentHomePage() {
                   Manage curriculum, talents, and hiring authorizations
                 </h2>
                 <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Oversee track publications, verify evidence profiles, and maintain platform quality.
+                  Oversee track publications, verify evidence profiles, and
+                  maintain platform quality.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                 <a href={`${SKILLS_URL}/admin`} className="w-full sm:w-auto">
-                  <Button size="lg" fullWidth rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button
+                    size="lg"
+                    fullWidth
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
                     Go to Admin Portal
                   </Button>
                 </a>
@@ -318,13 +351,18 @@ export default function TalentHomePage() {
                   Explore verified roles matched to your abilities
                 </h2>
                 <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Browse open positions with upfront salary ranges, remote arrangements, and required skill benchmarks.
+                  Browse open positions with upfront salary ranges, remote
+                  arrangements, and required skill benchmarks.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                 <Link href="/jobs" className="w-full sm:w-auto">
-                  <Button size="lg" fullWidth rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button
+                    size="lg"
+                    fullWidth
+                    rightIcon={<ArrowRight className="w-4 h-4" />}
+                  >
                     Browse Opportunities
                   </Button>
                 </Link>
@@ -342,39 +380,60 @@ export default function TalentHomePage() {
         <p className="font-mono text-xs text-[#6E6678]">
           Skill evidence connected to real opportunities.
         </p>
-        
+
         <div className="w-full flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-6 pt-12 border-t border-[#D9CEDF]/20 mt-10">
           <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
           <div className="flex gap-4 uppercase tracking-wider">
             {isCompany ? (
               <>
-                <Link href="/company/talents" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/company/talents"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Talent Search
                 </Link>
                 <span className="text-[#D9CEDF]">·</span>
-                <Link href="/company/jobs" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/company/jobs"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Job Posts
                 </Link>
                 <span className="text-[#D9CEDF]">·</span>
-                <Link href="/company/subscription" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/company/subscription"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Subscription
                 </Link>
                 <span className="text-[#D9CEDF]">·</span>
-                <Link href="/company/profile" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/company/profile"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Company Profile
                 </Link>
               </>
             ) : (
               <>
-                <Link href="/profile" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/profile"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Talent Profile
                 </Link>
                 <span className="text-[#D9CEDF]">·</span>
-                <Link href="/jobs" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/jobs"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   Opportunities
                 </Link>
                 <span className="text-[#D9CEDF]">·</span>
-                <Link href="/company" className="hover:text-[#1E5BFF] transition-colors">
+                <Link
+                  href="/company"
+                  className="hover:text-[#1E5BFF] transition-colors"
+                >
                   For Companies
                 </Link>
               </>

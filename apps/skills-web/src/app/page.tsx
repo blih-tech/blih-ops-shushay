@@ -4,16 +4,8 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
-import {
-  Button,
-  UniversalSearch,
-  Chip,
-  GlobalNavbar,
-} from "@blih/ui";
-import {
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
+import { Button, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -24,23 +16,34 @@ export default function SkillsHomePage() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
-  const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+  const TALENT_URL =
+    process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
   const [searchQuery, setSearchQuery] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    gsap.fromTo(
-      ".hero-anim-item",
-      { opacity: 0, y: 30 },
-      { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" }
-    );
-    gsap.fromTo(
-      ".preview-card-anim",
-      { opacity: 0, x: 50, scale: 0.95 },
-      { opacity: 1, x: 0, scale: 1, duration: 1, delay: 0.4, ease: "power3.out" }
-    );
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".hero-anim-item",
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" },
+      );
+      gsap.fromTo(
+        ".preview-card-anim",
+        { opacity: 0, x: 50, scale: 0.95 },
+        {
+          opacity: 1,
+          x: 0,
+          scale: 1,
+          duration: 1,
+          delay: 0.4,
+          ease: "power3.out",
+        },
+      );
+    },
+    { scope: containerRef },
+  );
 
   const searchChips = [
     "React Developer",
@@ -55,7 +58,10 @@ export default function SkillsHomePage() {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
+    <div
+      ref={containerRef}
+      className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]"
+    >
       {/* Background ambient lighting */}
       <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
@@ -83,7 +89,9 @@ export default function SkillsHomePage() {
             </h1>
 
             <p className="hero-anim-item font-sans text-lg sm:text-xl text-[#6E6678] leading-relaxed max-w-xl">
-              Learn what matters, prove what you can do through real assessments, and turn your verified abilities into real career momentum.
+              Learn what matters, prove what you can do through real
+              assessments, and turn your verified abilities into real career
+              momentum.
             </p>
 
             {/* Universal Search */}
@@ -114,7 +122,10 @@ export default function SkillsHomePage() {
             {/* CTAs */}
             <div className="hero-anim-item flex flex-wrap items-center gap-4 pt-4">
               <Link href="/courses">
-                <Button size="lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                <Button
+                  size="lg"
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                >
                   Explore Course Catalog
                 </Button>
               </Link>
@@ -152,15 +163,24 @@ export default function SkillsHomePage() {
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4">
         <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
         <div className="flex gap-4 uppercase tracking-wider">
-          <Link href="/courses" className="hover:text-[#1E5BFF] transition-colors">
+          <Link
+            href="/courses"
+            className="hover:text-[#1E5BFF] transition-colors"
+          >
             Courses
           </Link>
           <span className="text-[#D9CEDF]">·</span>
-          <a href={`${TALENT_URL}/jobs`} className="hover:text-[#1E5BFF] transition-colors">
+          <a
+            href={`${TALENT_URL}/jobs`}
+            className="hover:text-[#1E5BFF] transition-colors"
+          >
             Opportunities
           </a>
           <span className="text-[#D9CEDF]">·</span>
-          <a href={`${TALENT_URL}/profile`} className="hover:text-[#1E5BFF] transition-colors">
+          <a
+            href={`${TALENT_URL}/profile`}
+            className="hover:text-[#1E5BFF] transition-colors"
+          >
             Talent
           </a>
         </div>

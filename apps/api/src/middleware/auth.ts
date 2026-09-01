@@ -6,7 +6,11 @@ import prisma from "../config/prisma";
 import { AppError } from "./errorHandler";
 import { JwtPayload } from "../types/auth.types";
 
-export async function requireAuth(req: Request, _res: Response, next: NextFunction) {
+export async function requireAuth(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
   try {
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
@@ -44,8 +48,12 @@ export function requireRole(allowedRoles: Role[]) {
     }
 
     if (!allowedRoles.includes(req.user.role)) {
-      console.warn(`[requireRole FAILED] User: ${req.user.email}, Role: ${req.user.role}, Allowed: ${allowedRoles}`);
-      return next(new AppError(403, "Access denied. Insufficient permissions."));
+      console.warn(
+        `[requireRole FAILED] User: ${req.user.email}, Role: ${req.user.role}, Allowed: ${allowedRoles}`,
+      );
+      return next(
+        new AppError(403, "Access denied. Insufficient permissions."),
+      );
     }
 
     next();

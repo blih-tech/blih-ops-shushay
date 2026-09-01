@@ -12,7 +12,18 @@ export function getDetailedProfileCompletion(profile: any) {
   if (!profile) {
     return {
       percentage: 0,
-      missingFields: ["fullName", "title", "phone", "country", "city", "englishLevel", "skills", "experience", "education", "cvUrl"],
+      missingFields: [
+        "fullName",
+        "title",
+        "phone",
+        "country",
+        "city",
+        "englishLevel",
+        "skills",
+        "experience",
+        "education",
+        "cvUrl",
+      ],
       isComplete: false,
     };
   }
@@ -24,9 +35,20 @@ export function getDetailedProfileCompletion(profile: any) {
     { field: "country", check: () => !!profile.country },
     { field: "city", check: () => !!profile.city },
     { field: "englishLevel", check: () => !!profile.englishLevel },
-    { field: "skills", check: () => Array.isArray(profile.skills) && profile.skills.length > 0 },
-    { field: "experience", check: () => Array.isArray(profile.experience) && profile.experience.length > 0 },
-    { field: "education", check: () => Array.isArray(profile.education) && profile.education.length > 0 },
+    {
+      field: "skills",
+      check: () => Array.isArray(profile.skills) && profile.skills.length > 0,
+    },
+    {
+      field: "experience",
+      check: () =>
+        Array.isArray(profile.experience) && profile.experience.length > 0,
+    },
+    {
+      field: "education",
+      check: () =>
+        Array.isArray(profile.education) && profile.education.length > 0,
+    },
     { field: "cvUrl", check: () => !!profile.cvUrl },
   ];
 
@@ -83,7 +105,10 @@ export async function getOrCreateProfile(userId: string) {
   };
 }
 
-export async function updateProfile(userId: string, data: UpdateTalentProfileInput) {
+export async function updateProfile(
+  userId: string,
+  data: UpdateTalentProfileInput,
+) {
   const profile = await prisma.talentProfile.findUnique({
     where: { userId },
   });
@@ -100,7 +125,8 @@ export async function updateProfile(userId: string, data: UpdateTalentProfileInp
       phone: data.phone !== undefined ? data.phone : undefined,
       country: data.country !== undefined ? data.country : undefined,
       city: data.city !== undefined ? data.city : undefined,
-      englishLevel: data.englishLevel !== undefined ? data.englishLevel : undefined,
+      englishLevel:
+        data.englishLevel !== undefined ? data.englishLevel : undefined,
       skills: data.skills !== undefined ? data.skills : undefined,
       bio: data.bio !== undefined ? data.bio : undefined,
     },
@@ -119,7 +145,10 @@ export async function updateProfile(userId: string, data: UpdateTalentProfileInp
   };
 }
 
-export async function addExperience(userId: string, data: CreateExperienceInput) {
+export async function addExperience(
+  userId: string,
+  data: CreateExperienceInput,
+) {
   const profile = await prisma.talentProfile.findUnique({
     where: { userId },
   });
@@ -141,7 +170,11 @@ export async function addExperience(userId: string, data: CreateExperienceInput)
   });
 }
 
-export async function updateExperience(userId: string, id: string, data: UpdateExperienceInput) {
+export async function updateExperience(
+  userId: string,
+  id: string,
+  data: UpdateExperienceInput,
+) {
   const exp = await prisma.experience.findUnique({
     where: { id },
     include: { profile: true },
@@ -160,10 +193,17 @@ export async function updateExperience(userId: string, id: string, data: UpdateE
     data: {
       title: data.title !== undefined ? data.title : undefined,
       company: data.company !== undefined ? data.company : undefined,
-      startDate: data.startDate !== undefined ? new Date(data.startDate) : undefined,
-      endDate: data.endDate !== undefined ? (data.endDate ? new Date(data.endDate) : null) : undefined,
+      startDate:
+        data.startDate !== undefined ? new Date(data.startDate) : undefined,
+      endDate:
+        data.endDate !== undefined
+          ? data.endDate
+            ? new Date(data.endDate)
+            : null
+          : undefined,
       current: data.current !== undefined ? data.current : undefined,
-      description: data.description !== undefined ? data.description : undefined,
+      description:
+        data.description !== undefined ? data.description : undefined,
     },
   });
 }
@@ -210,7 +250,11 @@ export async function addEducation(userId: string, data: CreateEducationInput) {
   });
 }
 
-export async function updateEducation(userId: string, id: string, data: UpdateEducationInput) {
+export async function updateEducation(
+  userId: string,
+  id: string,
+  data: UpdateEducationInput,
+) {
   const edu = await prisma.education.findUnique({
     where: { id },
     include: { profile: true },
@@ -227,7 +271,8 @@ export async function updateEducation(userId: string, id: string, data: UpdateEd
   return prisma.education.update({
     where: { id },
     data: {
-      institution: data.institution !== undefined ? data.institution : undefined,
+      institution:
+        data.institution !== undefined ? data.institution : undefined,
       degree: data.degree !== undefined ? data.degree : undefined,
       field: data.field !== undefined ? data.field : undefined,
       startYear: data.startYear !== undefined ? data.startYear : undefined,
@@ -261,7 +306,7 @@ export async function updateFile(
   userId: string,
   field: "photoUrl" | "cvUrl",
   fileUrl: string | null,
-  publicId: string | null = null
+  publicId: string | null = null,
 ) {
   const profile = await prisma.talentProfile.findUnique({
     where: { userId },
@@ -294,23 +339,32 @@ export async function updateFile(
   };
 }
 
-export async function getTalentProfileById(talentId: string, requestUser: { id: string; role: string }) {
+export async function getTalentProfileById(
+  talentId: string,
+  requestUser: { id: string; role: string },
+) {
   if (requestUser.role === "COMPANY") {
     // Verify company active subscription
     const company = await prisma.companyProfile.findUnique({
       where: { userId: requestUser.id },
       select: { subscriptionActive: true, subscriptionExpiresAt: true },
     });
-    
+
     if (!company) {
       throw new AppError(403, "Access denied. Company profile not found.");
     }
-    
+
     const now = new Date();
-    const isSubscribed = company.subscriptionActive && company.subscriptionExpiresAt && company.subscriptionExpiresAt > now;
-    
+    const isSubscribed =
+      company.subscriptionActive &&
+      company.subscriptionExpiresAt &&
+      company.subscriptionExpiresAt > now;
+
     if (!isSubscribed) {
-      throw new AppError(402, "Payment Required. An active subscription is required to view full talent profiles.");
+      throw new AppError(
+        402,
+        "Payment Required. An active subscription is required to view full talent profiles.",
+      );
     }
   } else if (requestUser.role !== "ADMIN") {
     throw new AppError(403, "Access denied. Insufficient permissions.");

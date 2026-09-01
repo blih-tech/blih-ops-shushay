@@ -29,7 +29,9 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     <div
       className={`rounded-2xl p-4 sm:p-5 flex flex-col justify-center items-center text-center gap-1 transition-all ${variantStyles[variant]} ${className}`}
     >
-      <span className={`font-display text-2xl sm:text-3xl font-bold tracking-tight ${valueColors[variant]}`}>
+      <span
+        className={`font-display text-2xl sm:text-3xl font-bold tracking-tight ${valueColors[variant]}`}
+      >
         {value}
       </span>
       <span className="font-mono text-[10px] sm:text-xs text-[#6E6678] uppercase tracking-wider">

@@ -17,12 +17,13 @@ import * as googleService from "../services/google.service";
 jest.mock("../services/google.service", () => {
   // Keep real encode/decode so state round-trips correctly in tests
   const real = jest.requireActual<typeof import("../services/google.service")>(
-    "../services/google.service"
+    "../services/google.service",
   );
   return {
     ...real,
-    buildGoogleAuthUrl: jest.fn((state: string) =>
-      `https://accounts.google.com/o/oauth2/v2/auth?mock=1&state=${state}`
+    buildGoogleAuthUrl: jest.fn(
+      (state: string) =>
+        `https://accounts.google.com/o/oauth2/v2/auth?mock=1&state=${state}`,
     ),
     exchangeCodeForTokens: jest.fn(),
     fetchGoogleUserProfile: jest.fn(),
@@ -47,13 +48,19 @@ function mockTokensOk() {
 
 function mockTokensFail() {
   mockExchangeTokens.mockRejectedValueOnce(
-    new Error("Google token exchange failed: 400 {\"error\":\"invalid_grant\"}")
+    new Error('Google token exchange failed: 400 {"error":"invalid_grant"}'),
   );
 }
 
-function mockProfileOk(overrides: Partial<{
-  sub: string; email: string; name: string; picture: string; email_verified: boolean;
-}> = {}) {
+function mockProfileOk(
+  overrides: Partial<{
+    sub: string;
+    email: string;
+    name: string;
+    picture: string;
+    email_verified: boolean;
+  }> = {},
+) {
   mockFetchProfile.mockResolvedValueOnce({
     sub: "google-uid-default",
     email: "testgoogle@example.com",
@@ -66,7 +73,11 @@ function mockProfileOk(overrides: Partial<{
 
 /** Build a valid base64url-encoded state for tests */
 function buildState(role: "TALENT" | "COMPANY" = "TALENT", returnTo?: string) {
-  return googleService.encodeState({ role, returnTo, nonce: "test-nonce-12345" });
+  return googleService.encodeState({
+    role,
+    returnTo,
+    nonce: "test-nonce-12345",
+  });
 }
 
 // ─── Setup & Cleanup ───────────────────────────────────────────────────────────
@@ -152,14 +163,21 @@ describe("GET /api/v1/auth/google/callback", () => {
 
   it("should create a new TALENT user and set token cookie on first login", async () => {
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.new@example.com", sub: "google-new-uid" });
+    mockProfileOk({
+      email: "testgoogle.new@example.com",
+      sub: "google-new-uid",
+    });
 
     const res = await request(app)
-      .get(`/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`)
+      .get(
+        `/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`,
+      )
       .redirects(0);
 
     expect(res.status).toBe(302);
-    const setCookie = res.headers["set-cookie"] as unknown as string[] | undefined;
+    const setCookie = res.headers["set-cookie"] as unknown as
+      | string[]
+      | undefined;
     expect(setCookie).toBeDefined();
     expect(setCookie!.some((c) => c.startsWith("token="))).toBe(true);
 
@@ -178,10 +196,16 @@ describe("GET /api/v1/auth/google/callback", () => {
 
   it("should create a new COMPANY user with companyProfile", async () => {
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.company@example.com", sub: "google-company-uid", name: "Acme Corp" });
+    mockProfileOk({
+      email: "testgoogle.company@example.com",
+      sub: "google-company-uid",
+      name: "Acme Corp",
+    });
 
     const res = await request(app)
-      .get(`/api/v1/auth/google/callback?code=validcode&state=${buildState("COMPANY")}`)
+      .get(
+        `/api/v1/auth/google/callback?code=validcode&state=${buildState("COMPANY")}`,
+      )
       .redirects(0);
 
     expect(res.status).toBe(302);
@@ -207,15 +231,22 @@ describe("GET /api/v1/auth/google/callback", () => {
     });
 
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.existing@example.com", sub: "google-link-uid" });
+    mockProfileOk({
+      email: "testgoogle.existing@example.com",
+      sub: "google-link-uid",
+    });
 
     const res = await request(app)
-      .get(`/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`)
+      .get(
+        `/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`,
+      )
       .redirects(0);
 
     expect(res.status).toBe(302);
 
-    const updated = await prisma.user.findUnique({ where: { id: existing.id } });
+    const updated = await prisma.user.findUnique({
+      where: { id: existing.id },
+    });
     expect(updated?.googleId).toBe("google-link-uid");
     // Existing password hash preserved
     expect(updated?.passwordHash).toBe("$2b$10$hashedpassword");
@@ -233,10 +264,15 @@ describe("GET /api/v1/auth/google/callback", () => {
     });
 
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.returning@example.com", sub: "google-returning-uid" });
+    mockProfileOk({
+      email: "testgoogle.returning@example.com",
+      sub: "google-returning-uid",
+    });
 
     const res = await request(app)
-      .get(`/api/v1/auth/google/callback?code=validcode&state=${buildState("COMPANY")}`)
+      .get(
+        `/api/v1/auth/google/callback?code=validcode&state=${buildState("COMPANY")}`,
+      )
       .redirects(0);
 
     expect(res.status).toBe(302);
@@ -252,10 +288,15 @@ describe("GET /api/v1/auth/google/callback", () => {
 
   it("should redirect TALENT user to /profile dashboard by default", async () => {
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.talent.dest@example.com", sub: "google-talent-dest" });
+    mockProfileOk({
+      email: "testgoogle.talent.dest@example.com",
+      sub: "google-talent-dest",
+    });
 
     const res = await request(app)
-      .get(`/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`)
+      .get(
+        `/api/v1/auth/google/callback?code=validcode&state=${buildState("TALENT")}`,
+      )
       .redirects(0);
 
     expect(res.status).toBe(302);
@@ -264,7 +305,10 @@ describe("GET /api/v1/auth/google/callback", () => {
 
   it("should respect a valid returnTo URL in state", async () => {
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.returnto@example.com", sub: "google-returnto-uid" });
+    mockProfileOk({
+      email: "testgoogle.returnto@example.com",
+      sub: "google-returnto-uid",
+    });
 
     const returnTo = "http://localhost:3002/profile/preview";
     const state = buildState("TALENT", returnTo);
@@ -279,7 +323,10 @@ describe("GET /api/v1/auth/google/callback", () => {
 
   it("should reject a cross-origin returnTo URL and fallback to /profile", async () => {
     mockTokensOk();
-    mockProfileOk({ email: "testgoogle.xss@example.com", sub: "google-xss-uid" });
+    mockProfileOk({
+      email: "testgoogle.xss@example.com",
+      sub: "google-xss-uid",
+    });
 
     const maliciousReturnTo = "https://evil.example.com/steal";
     const state = buildState("TALENT", maliciousReturnTo);
@@ -293,4 +340,3 @@ describe("GET /api/v1/auth/google/callback", () => {
     expect(res.headers.location).toContain("/profile");
   });
 });
-

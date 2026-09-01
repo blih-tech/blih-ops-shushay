@@ -16,7 +16,9 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(existing?.title ?? "");
   const [questions, setQuestions] = useState<QuizQuestion[]>(
-    (existing?.questions as QuizQuestion[] | undefined) ?? [{ text: "", options: ["", ""], correctOptionIndex: 0 }]
+    (existing?.questions as QuizQuestion[] | undefined) ?? [
+      { text: "", options: ["", ""], correctOptionIndex: 0 },
+    ],
   );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,10 +39,20 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
 
   if (!editing && !existing) {
     return (
-      <SectionCard title="Assessment Quiz" icon={<HelpCircle className="h-4 w-4" />}>
+      <SectionCard
+        title="Assessment Quiz"
+        icon={<HelpCircle className="h-4 w-4" />}
+      >
         <div className="flex items-center justify-between">
-          <p className="text-xs font-mono text-[#6E6678]">No quiz configured for this lesson.</p>
-          <Button variant="outline" size="sm" leftIcon={<Plus className="h-3.5 w-3.5" />} onClick={() => setEditing(true)}>
+          <p className="text-xs font-mono text-[#6E6678]">
+            No quiz configured for this lesson.
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            leftIcon={<Plus className="h-3.5 w-3.5" />}
+            onClick={() => setEditing(true)}
+          >
             Add Quiz
           </Button>
         </div>
@@ -50,11 +62,19 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
 
   if (!editing && existing) {
     return (
-      <SectionCard title="Assessment Quiz" icon={<HelpCircle className="h-4 w-4" />}>
+      <SectionCard
+        title="Assessment Quiz"
+        icon={<HelpCircle className="h-4 w-4" />}
+      >
         <div className="flex items-center justify-between p-3.5 bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-xl">
           <div>
-            <p className="text-sm font-bold text-[#17131F] font-display">{existing.title}</p>
-            <p className="text-xs font-mono text-[#6E6678]">{(existing.questions as QuizQuestion[]).length} Questions configured</p>
+            <p className="text-sm font-bold text-[#17131F] font-display">
+              {existing.title}
+            </p>
+            <p className="text-xs font-mono text-[#6E6678]">
+              {(existing.questions as QuizQuestion[]).length} Questions
+              configured
+            </p>
           </div>
           <Button
             variant="outline"
@@ -74,8 +94,15 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
   }
 
   return (
-    <SectionCard title="Assessment Quiz Builder" icon={<HelpCircle className="h-4 w-4" />}>
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+    <SectionCard
+      title="Assessment Quiz Builder"
+      icon={<HelpCircle className="h-4 w-4" />}
+    >
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
       <Input
         label="Quiz Title"
         value={title}
@@ -84,7 +111,10 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
       />
       <div className="space-y-4 pt-2">
         {questions.map((q, qi) => (
-          <div key={qi} className="border border-[#D9CEDF] bg-[#EEF3FF]/20 rounded-2xl p-4 space-y-3">
+          <div
+            key={qi}
+            className="border border-[#D9CEDF] bg-[#EEF3FF]/20 rounded-2xl p-4 space-y-3"
+          >
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold text-[#1E5BFF] bg-white border border-[#D9CEDF] px-2 py-1 rounded-lg shrink-0">
                 Q{qi + 1}
@@ -101,7 +131,9 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
               />
               {questions.length > 1 && (
                 <button
-                  onClick={() => setQuestions(questions.filter((_, i) => i !== qi))}
+                  onClick={() =>
+                    setQuestions(questions.filter((_, i) => i !== qi))
+                  }
                   className="text-[#6E6678] hover:text-[#EF4444] p-1.5 rounded-lg cursor-pointer"
                   title="Remove question"
                 >
@@ -119,19 +151,27 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
                       u[qi] = { ...u[qi], correctOptionIndex: oi };
                       setQuestions(u);
                     }}
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${q.correctOptionIndex === oi
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                      q.correctOptionIndex === oi
                         ? "border-[#1E5BFF] bg-[#1E5BFF]"
                         : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/50"
-                      }`}
+                    }`}
                     title="Mark as correct answer"
                   >
-                    {q.correctOptionIndex === oi && <div className="w-2 h-2 rounded-full bg-white" />}
+                    {q.correctOptionIndex === oi && (
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    )}
                   </button>
                   <input
                     value={opt}
                     onChange={(e) => {
                       const u = [...questions];
-                      u[qi] = { ...u[qi], options: u[qi].options.map((o, i) => (i === oi ? e.target.value : o)) };
+                      u[qi] = {
+                        ...u[qi],
+                        options: u[qi].options.map((o, i) =>
+                          i === oi ? e.target.value : o,
+                        ),
+                      };
                       setQuestions(u);
                     }}
                     placeholder={`Option ${oi + 1}`}
@@ -145,7 +185,10 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
                         u[qi] = {
                           ...u[qi],
                           options: opts,
-                          correctOptionIndex: Math.min(u[qi].correctOptionIndex, opts.length - 1),
+                          correctOptionIndex: Math.min(
+                            u[qi].correctOptionIndex,
+                            opts.length - 1,
+                          ),
                         };
                         setQuestions(u);
                       }}
@@ -179,15 +222,31 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
           variant="outline"
           size="sm"
           leftIcon={<Plus className="h-3.5 w-3.5" />}
-          onClick={() => setQuestions([...questions, { text: "", options: ["", ""], correctOptionIndex: 0 }])}
+          onClick={() =>
+            setQuestions([
+              ...questions,
+              { text: "", options: ["", ""], correctOptionIndex: 0 },
+            ])
+          }
         >
           Add Question
         </Button>
         <div className="flex gap-2">
-          <Button size="sm" variant="ghost" onClick={() => setEditing(false)} disabled={saving}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => setEditing(false)}
+            disabled={saving}
+          >
             Cancel
           </Button>
-          <Button size="sm" variant="primary" leftIcon={<Save className="h-3.5 w-3.5" />} isLoading={saving} onClick={save}>
+          <Button
+            size="sm"
+            variant="primary"
+            leftIcon={<Save className="h-3.5 w-3.5" />}
+            isLoading={saving}
+            onClick={save}
+          >
             Save Quiz
           </Button>
         </div>

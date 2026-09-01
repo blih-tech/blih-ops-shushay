@@ -30,6 +30,6 @@ export function useCompanyProfile() {
     loading,
     error,
     refetch: fetchProfile,
-    setProfile
+    setProfile,
   };
 }

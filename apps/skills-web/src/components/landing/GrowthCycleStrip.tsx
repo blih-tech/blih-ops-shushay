@@ -23,7 +23,8 @@ export function GrowthCycleStrip() {
             Learn
           </h3>
           <p className="font-sans text-sm text-[#6E6678]">
-            Master practical modern stacks with industry-calibrated courses and coding exercises.
+            Master practical modern stacks with industry-calibrated courses and
+            coding exercises.
           </p>
         </div>
 
@@ -35,7 +36,8 @@ export function GrowthCycleStrip() {
             Practice
           </h3>
           <p className="font-sans text-sm text-[#6E6678]">
-            Build real application briefs with test suites, architectural decisions, and portfolio work.
+            Build real application briefs with test suites, architectural
+            decisions, and portfolio work.
           </p>
         </div>
 
@@ -47,7 +49,8 @@ export function GrowthCycleStrip() {
             Prove
           </h3>
           <p className="font-sans text-sm text-[#6E6678]">
-            Take rigorous skill assessments and generate verifiable digital certificates with score records.
+            Take rigorous skill assessments and generate verifiable digital
+            certificates with score records.
           </p>
         </div>
 
@@ -59,7 +62,8 @@ export function GrowthCycleStrip() {
             Get Hired
           </h3>
           <p className="font-sans text-sm text-[#6E6678]">
-            Match automatically with companies hiring for proven capabilities on Blih Talent.
+            Match automatically with companies hiring for proven capabilities on
+            Blih Talent.
           </p>
         </div>
       </div>

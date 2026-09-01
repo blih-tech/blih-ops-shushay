@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { X, Plus, Sparkles } from "lucide-react";
+import { X, Plus } from "lucide-react";
 import { Input, Button } from "@blih/ui";
 
 interface SkillsInputProps {
@@ -9,13 +9,18 @@ interface SkillsInputProps {
   disabled?: boolean;
 }
 
-export const SkillsInput: React.FC<SkillsInputProps> = ({ value, onChange, error, disabled }) => {
+export const SkillsInput: React.FC<SkillsInputProps> = ({
+  value,
+  onChange,
+  error,
+  disabled,
+}) => {
   const [inputValue, setInputValue] = useState("");
 
   const addSkill = (skill: string) => {
     const cleaned = skill.trim();
     if (!cleaned || disabled) return;
-    if (!value.some(s => s.toLowerCase() === cleaned.toLowerCase())) {
+    if (!value.some((s) => s.toLowerCase() === cleaned.toLowerCase())) {
       onChange([...value, cleaned]);
     }
     setInputValue("");
@@ -30,7 +35,7 @@ export const SkillsInput: React.FC<SkillsInputProps> = ({ value, onChange, error
 
   const handleRemove = (skillToRemove: string) => {
     if (disabled) return;
-    onChange(value.filter(s => s !== skillToRemove));
+    onChange(value.filter((s) => s !== skillToRemove));
   };
 
   return (

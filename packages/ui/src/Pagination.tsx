@@ -18,7 +18,10 @@ export const Pagination: React.FC<PaginationProps> = ({
   if (totalPages <= 1) return null;
 
   return (
-    <nav className={`flex items-center justify-between gap-4 font-sans text-sm ${className}`} aria-label="Pagination">
+    <nav
+      className={`flex items-center justify-between gap-4 font-sans text-sm ${className}`}
+      aria-label="Pagination"
+    >
       <Button
         variant="outline"
         size="sm"
@@ -29,7 +32,9 @@ export const Pagination: React.FC<PaginationProps> = ({
         Previous
       </Button>
       <span className="text-xs xl:text-sm text-muted-foreground">
-        Page <strong className="text-foreground font-semibold">{currentPage}</strong> of{" "}
+        Page{" "}
+        <strong className="text-foreground font-semibold">{currentPage}</strong>{" "}
+        of{" "}
         <strong className="text-foreground font-semibold">{totalPages}</strong>
       </span>
       <Button

@@ -7,7 +7,10 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "onChange"> {
+export interface SelectProps extends Omit<
+  React.SelectHTMLAttributes<HTMLSelectElement>,
+  "onChange"
+> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -33,7 +36,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       name,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -42,18 +45,24 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
     // Find the currently selected option label
     const selectedOption = options.find((opt) => opt.value === value);
-    const displayLabel = selectedOption ? selectedOption.label : (placeholder || "Select option");
+    const displayLabel = selectedOption
+      ? selectedOption.label
+      : placeholder || "Select option";
     const isPlaceholderActive = !selectedOption;
 
     // Handle click outside to close dropdown
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(event.target as Node)
+        ) {
           setIsOpen(false);
         }
       };
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleSelectOption = (optValue: string) => {
@@ -89,8 +98,8 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               error
                 ? "text-[#EF4444]"
                 : isOpen
-                ? "text-[#1E5BFF] font-semibold"
-                : "text-[#6E6678] group-focus-within:text-[#1E5BFF] group-focus-within:font-semibold"
+                  ? "text-[#1E5BFF] font-semibold"
+                  : "text-[#6E6678] group-focus-within:text-[#1E5BFF] group-focus-within:font-semibold"
             }`}
           >
             {label}
@@ -108,12 +117,22 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >
-            <span className={isPlaceholderActive ? "text-[#6E6678]/60 font-normal" : "text-[#17131F] font-medium"}>
+            <span
+              className={
+                isPlaceholderActive
+                  ? "text-[#6E6678]/60 font-normal"
+                  : "text-[#17131F] font-medium"
+              }
+            >
               {displayLabel}
             </span>
-            <ChevronDown className={`h-4 w-4 transition-all duration-200 ${
-              isOpen ? "rotate-180 text-[#1E5BFF]" : "text-[#6E6678] group-hover:text-[#1E5BFF]"
-            }`} />
+            <ChevronDown
+              className={`h-4 w-4 transition-all duration-200 ${
+                isOpen
+                  ? "rotate-180 text-[#1E5BFF]"
+                  : "text-[#6E6678] group-hover:text-[#1E5BFF]"
+              }`}
+            />
           </button>
         </div>
 
@@ -141,12 +160,14 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                     isSelected
                       ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold shadow-xs"
                       : opt.disabled
-                      ? "opacity-40 cursor-not-allowed"
-                      : "text-[#17131F] hover:bg-[#EEF3FF]/70"
+                        ? "opacity-40 cursor-not-allowed"
+                        : "text-[#17131F] hover:bg-[#EEF3FF]/70"
                   }`}
                 >
                   <span>{opt.label}</span>
-                  {isSelected && <Check className="h-4 w-4 text-[#1E5BFF] shrink-0" />}
+                  {isSelected && (
+                    <Check className="h-4 w-4 text-[#1E5BFF] shrink-0" />
+                  )}
                 </button>
               );
             })}
@@ -158,7 +179,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           name={name}
           value={value}
-          onChange={(e) => props.onChange && props.onChange({ target: { value: e.target.value, name } })}
+          onChange={(e) =>
+            props.onChange &&
+            props.onChange({ target: { value: e.target.value, name } })
+          }
           className="hidden"
           disabled={disabled}
         >
@@ -171,17 +195,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         </select>
 
         {error ? (
-          <p className="text-xs font-mono text-[#EF4444] mt-1">
-            {error}
-          </p>
+          <p className="text-xs font-mono text-[#EF4444] mt-1">{error}</p>
         ) : helperText ? (
-          <p className="text-xs font-mono text-[#6E6678] mt-1">
-            {helperText}
-          </p>
+          <p className="text-xs font-mono text-[#6E6678] mt-1">{helperText}</p>
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 Select.displayName = "Select";

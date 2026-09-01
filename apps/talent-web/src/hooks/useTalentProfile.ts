@@ -30,6 +30,6 @@ export function useTalentProfile() {
     loading,
     error,
     refetch: fetchProfile,
-    setProfile
+    setProfile,
   };
 }

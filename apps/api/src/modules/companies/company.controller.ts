@@ -1,18 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
-import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
 import * as companyService from "./company.service";
 import { logoUpload } from "../../middleware/upload";
 
-import { uploadBuffer, deleteFromCloudinary, CloudinaryFolders } from "../../services/cloudinary.service";
+import {
+  uploadBuffer,
+  deleteFromCloudinary,
+  CloudinaryFolders,
+} from "../../services/cloudinary.service";
 
 // Helper to delete old file/asset
 async function deleteOldAsset(
   fileUrl: string | null | undefined,
   publicId: string | null | undefined,
-  resourceType: "image" | "video" | "raw"
+  resourceType: "image" | "video" | "raw",
 ) {
   if (publicId) {
     await deleteFromCloudinary(publicId, resourceType);
@@ -30,7 +33,11 @@ async function deleteOldAsset(
   }
 }
 
-export async function getProfile(req: Request, res: Response, next: NextFunction) {
+export async function getProfile(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
     const profile = await companyService.getOrCreateProfile(req.user.id);
@@ -40,7 +47,11 @@ export async function getProfile(req: Request, res: Response, next: NextFunction
   }
 }
 
-export async function updateProfile(req: Request, res: Response, next: NextFunction) {
+export async function updateProfile(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
     const updated = await companyService.updateProfile(req.user.id, req.body);
@@ -50,7 +61,11 @@ export async function updateProfile(req: Request, res: Response, next: NextFunct
   }
 }
 
-export async function uploadLogo(req: Request, res: Response, next: NextFunction) {
+export async function uploadLogo(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   logoUpload(req, res, async (err: any) => {
     if (err) {
       return next(err);
@@ -64,19 +79,26 @@ export async function uploadLogo(req: Request, res: Response, next: NextFunction
       }
 
       // Sanitize and use original filename with timestamp
-      const fileBaseName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, "_");
+      const fileBaseName = path
+        .parse(req.file.originalname)
+        .name.replace(/[^a-zA-Z0-9-_]/g, "_");
 
       // 1. Upload new logo to Cloudinary first
       uploadedAsset = await uploadBuffer(req.file.buffer, {
         ...CloudinaryFolders.companyLogo,
-        public_id: `${fileBaseName}-${Date.now()}`
+        public_id: `${fileBaseName}-${Date.now()}`,
       });
 
       // Retrieve profile
       const profile = await companyService.getOrCreateProfile(req.user.id);
 
       // 2. Persist new reference
-      const updated = await companyService.updateFile(req.user.id, "logoUrl", uploadedAsset.secure_url, uploadedAsset.public_id);
+      const updated = await companyService.updateFile(
+        req.user.id,
+        "logoUrl",
+        uploadedAsset.secure_url,
+        uploadedAsset.public_id,
+      );
 
       // 3. Delete old logo on success
       if (profile.logoUrl) {
@@ -94,7 +116,11 @@ export async function uploadLogo(req: Request, res: Response, next: NextFunction
   });
 }
 
-export async function deleteLogo(req: Request, res: Response, next: NextFunction) {
+export async function deleteLogo(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
 
@@ -103,7 +129,12 @@ export async function deleteLogo(req: Request, res: Response, next: NextFunction
       await deleteOldAsset(profile.logoUrl, profile.logoPublicId, "image");
     }
 
-    const updated = await companyService.updateFile(req.user.id, "logoUrl", null, null);
+    const updated = await companyService.updateFile(
+      req.user.id,
+      "logoUrl",
+      null,
+      null,
+    );
     res.json(updated);
   } catch (err) {
     next(err);

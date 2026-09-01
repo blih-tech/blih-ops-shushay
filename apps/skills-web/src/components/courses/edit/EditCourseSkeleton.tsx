@@ -6,7 +6,10 @@ interface EditCourseSkeletonProps {
   onSignOut: () => void;
 }
 
-export function EditCourseSkeleton({ user, onSignOut }: EditCourseSkeletonProps) {
+export function EditCourseSkeleton({
+  user,
+  onSignOut,
+}: EditCourseSkeletonProps) {
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
       <GlobalNavbar currentApp="courses" user={user} onSignOut={onSignOut} />
@@ -19,17 +22,32 @@ export function EditCourseSkeleton({ user, onSignOut }: EditCourseSkeletonProps)
           <div className="lg:col-span-6 space-y-6">
             <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
               <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
-              <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
-              <Skeleton variant="rectangular" className="h-32 w-full rounded-2xl" />
+              <Skeleton
+                variant="rectangular"
+                className="h-12 w-full rounded-xl"
+              />
+              <Skeleton
+                variant="rectangular"
+                className="h-32 w-full rounded-2xl"
+              />
             </div>
           </div>
           <div className="lg:col-span-6 space-y-6">
             <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
               <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
               <div className="space-y-3">
-                <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
-                <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
-                <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-12 w-full rounded-xl"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-12 w-full rounded-xl"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  className="h-12 w-full rounded-xl"
+                />
               </div>
             </div>
           </div>

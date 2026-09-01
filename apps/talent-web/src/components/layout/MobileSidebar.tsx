@@ -19,7 +19,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       document.documentElement.style.overflow = "hidden";
     } else {
       const otherDialogs = Array.from(
-        document.querySelectorAll('[role="dialog"][aria-modal="true"]')
+        document.querySelectorAll('[role="dialog"][aria-modal="true"]'),
       ).filter((el) => el !== sidebarRef.current);
 
       if (otherDialogs.length === 0) {
@@ -29,7 +29,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
     }
     return () => {
       const otherDialogs = Array.from(
-        document.querySelectorAll('[role="dialog"][aria-modal="true"]')
+        document.querySelectorAll('[role="dialog"][aria-modal="true"]'),
       ).filter((el) => el !== sidebarRef.current);
 
       if (otherDialogs.length === 0) {
@@ -42,7 +42,12 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   if (!isOpen) return null;
 
   return (
-    <div ref={sidebarRef} className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
+    <div
+      ref={sidebarRef}
+      className="fixed inset-0 z-50 lg:hidden"
+      role="dialog"
+      aria-modal="true"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-foreground/20 backdrop-blur-sm animate-in fade-in duration-300"

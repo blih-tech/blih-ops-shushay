@@ -2,11 +2,15 @@ import { Request, Response, NextFunction } from "express";
 import path from "path";
 import fs from "fs";
 import fsPromises from "fs/promises";
-import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
 import { videoUpload, documentUpload } from "../../middleware/upload";
 import * as courseService from "./course.service";
-import { uploadStream, uploadBuffer, deleteFromCloudinary, CloudinaryFolders } from "../../services/cloudinary.service";
+import {
+  uploadStream,
+  uploadBuffer,
+  deleteFromCloudinary,
+  CloudinaryFolders,
+} from "../../services/cloudinary.service";
 
 // Helper: safely extract a route param as string
 function p(req: Request, key: string): string {
@@ -17,45 +21,100 @@ function p(req: Request, key: string): string {
 async function deleteOldAsset(
   fileUrl: string | null | undefined,
   publicId: string | null | undefined,
-  resourceType: "image" | "video" | "raw"
+  resourceType: "image" | "video" | "raw",
 ) {
   if (publicId) {
     await deleteFromCloudinary(publicId, resourceType);
   } else if (fileUrl && fileUrl.includes("/uploads/")) {
     try {
       const parts = fileUrl.split("/uploads/");
-      if (parts.length === 2) await fsPromises.unlink(path.join("uploads", parts[1]));
-    } catch { /* non-fatal */ }
+      if (parts.length === 2)
+        await fsPromises.unlink(path.join("uploads", parts[1]));
+    } catch {
+      /* non-fatal */
+    }
   }
 }
 
 // ─── Admin course handlers ────────────────────────────────────────────────────
 
-export async function listCoursesAdmin(_req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.listCoursesAdmin()); } catch (err) { next(err); }
+export async function listCoursesAdmin(
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.listCoursesAdmin());
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function getCourseAdmin(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.getCourseAdmin(p(req, "courseId"))); } catch (err) { next(err); }
+export async function getCourseAdmin(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.getCourseAdmin(p(req, "courseId")));
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function createCourse(req: Request, res: Response, next: NextFunction) {
-  try { res.status(201).json(await courseService.createCourse(req.body)); } catch (err) { next(err); }
+export async function createCourse(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.status(201).json(await courseService.createCourse(req.body));
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function updateCourse(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.updateCourse(p(req, "courseId"), req.body)); } catch (err) { next(err); }
+export async function updateCourse(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.updateCourse(p(req, "courseId"), req.body));
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function publishCourse(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.publishCourse(p(req, "courseId"))); } catch (err) { next(err); }
+export async function publishCourse(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.publishCourse(p(req, "courseId")));
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function unpublishCourse(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.unpublishCourse(p(req, "courseId"))); } catch (err) { next(err); }
+export async function unpublishCourse(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.unpublishCourse(p(req, "courseId")));
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function deleteCourse(req: Request, res: Response, next: NextFunction) {
+export async function deleteCourse(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const result = await courseService.deleteCourse(p(req, "courseId"));
     // Delete all videos from Cloudinary
@@ -67,32 +126,81 @@ export async function deleteCourse(req: Request, res: Response, next: NextFuncti
       await deleteOldAsset(doc.url, doc.publicId, "raw");
     }
     res.json({ success: true });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 }
 
 // ─── Public course handlers ───────────────────────────────────────────────────
 
-export async function listCoursesPublic(_req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.listCoursesPublic()); } catch (err) { next(err); }
+export async function listCoursesPublic(
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.listCoursesPublic());
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function getCoursePublic(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.getCoursePublic(p(req, "courseId"))); } catch (err) { next(err); }
+export async function getCoursePublic(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.getCoursePublic(p(req, "courseId")));
+  } catch (err) {
+    next(err);
+  }
 }
 
 // ─── Lesson handlers ─────────────────────────────────────────────────────────
 
-export async function createLesson(req: Request, res: Response, next: NextFunction) {
-  try { res.status(201).json(await courseService.createLesson(p(req, "courseId"), req.body)); } catch (err) { next(err); }
-}
-
-export async function updateLesson(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.updateLesson(p(req, "courseId"), p(req, "lessonId"), req.body)); } catch (err) { next(err); }
-}
-
-export async function deleteLesson(req: Request, res: Response, next: NextFunction) {
+export async function createLesson(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
-    const result = await courseService.deleteLesson(p(req, "courseId"), p(req, "lessonId"));
+    res
+      .status(201)
+      .json(await courseService.createLesson(p(req, "courseId"), req.body));
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateLesson(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(
+      await courseService.updateLesson(
+        p(req, "courseId"),
+        p(req, "lessonId"),
+        req.body,
+      ),
+    );
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteLesson(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const result = await courseService.deleteLesson(
+      p(req, "courseId"),
+      p(req, "lessonId"),
+    );
     if (result.videoUrl) {
       await deleteOldAsset(result.videoUrl, result.videoPublicId, "video");
     }
@@ -102,16 +210,30 @@ export async function deleteLesson(req: Request, res: Response, next: NextFuncti
       }
     }
     res.json({ success: true });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function reorderLessons(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.reorderLessons(p(req, "courseId"), req.body)); } catch (err) { next(err); }
+export async function reorderLessons(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.reorderLessons(p(req, "courseId"), req.body));
+  } catch (err) {
+    next(err);
+  }
 }
 
 // ─── Upload handlers ─────────────────────────────────────────────────────────
 
-export function uploadLessonVideo(req: Request, res: Response, next: NextFunction) {
+export function uploadLessonVideo(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   videoUpload(req, res, async (err: any) => {
     if (err) return next(err);
     let uploadedAsset: { secure_url: string; public_id: string } | null = null;
@@ -123,20 +245,29 @@ export function uploadLessonVideo(req: Request, res: Response, next: NextFunctio
       const lessonId = p(req, "lessonId");
 
       // Sanitize and use original filename with timestamp
-      const fileBaseName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, "_");
+      const fileBaseName = path
+        .parse(req.file.originalname)
+        .name.replace(/[^a-zA-Z0-9-_]/g, "_");
 
       // Use a readable stream to pipe video to Cloudinary
       const videoStream = fs.createReadStream(localFilePath);
       uploadedAsset = await uploadStream(videoStream, {
         ...CloudinaryFolders.courseVideo,
-        public_id: `${fileBaseName}-${Date.now()}`
+        public_id: `${fileBaseName}-${Date.now()}`,
       });
 
       const existing = await courseService.getCourseAdmin(courseId);
-      const lesson = (existing?.lessons ?? []).find((l: any) => l.id === lessonId);
+      const lesson = (existing?.lessons ?? []).find(
+        (l: any) => l.id === lessonId,
+      );
 
       // Save references to DB
-      const updated = await courseService.setLessonVideo(courseId, lessonId, uploadedAsset.secure_url, uploadedAsset.public_id);
+      const updated = await courseService.setLessonVideo(
+        courseId,
+        lessonId,
+        uploadedAsset.secure_url,
+        uploadedAsset.public_id,
+      );
 
       // Delete old asset
       if (lesson?.videoUrl) {
@@ -163,26 +294,39 @@ export function uploadLessonVideo(req: Request, res: Response, next: NextFunctio
   });
 }
 
-export function uploadLessonDocument(req: Request, res: Response, next: NextFunction) {
+export function uploadLessonDocument(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   documentUpload(req, res, async (err: any) => {
     if (err) return next(err);
     let uploadedAsset: { secure_url: string; public_id: string } | null = null;
     try {
-      if (!req.file) return next(new AppError(400, "No document file uploaded"));
+      if (!req.file)
+        return next(new AppError(400, "No document file uploaded"));
       const courseId = p(req, "courseId");
       const lessonId = p(req, "lessonId");
 
       // Sanitize and use original filename with timestamp
-      const fileBaseName = path.parse(req.file.originalname).name.replace(/[^a-zA-Z0-9-_]/g, "_");
+      const fileBaseName = path
+        .parse(req.file.originalname)
+        .name.replace(/[^a-zA-Z0-9-_]/g, "_");
 
       // Upload memory buffer to Cloudinary
       uploadedAsset = await uploadBuffer(req.file.buffer, {
         ...CloudinaryFolders.courseDocument,
-        public_id: `${fileBaseName}-${Date.now()}`
+        public_id: `${fileBaseName}-${Date.now()}`,
       });
 
       const name: string = req.body.name || req.file.originalname;
-      const updated = await courseService.addLessonDocument(courseId, lessonId, name, uploadedAsset.secure_url, uploadedAsset.public_id);
+      const updated = await courseService.addLessonDocument(
+        courseId,
+        lessonId,
+        name,
+        uploadedAsset.secure_url,
+        uploadedAsset.public_id,
+      );
       res.status(201).json(updated);
     } catch (dbErr) {
       if (uploadedAsset) {
@@ -193,32 +337,79 @@ export function uploadLessonDocument(req: Request, res: Response, next: NextFunc
   });
 }
 
-export async function deleteLessonDocument(req: Request, res: Response, next: NextFunction) {
+export async function deleteLessonDocument(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
-    const result = await courseService.deleteLessonDocument(p(req, "courseId"), p(req, "lessonId"), p(req, "documentId"));
+    const result = await courseService.deleteLessonDocument(
+      p(req, "courseId"),
+      p(req, "lessonId"),
+      p(req, "documentId"),
+    );
     if (result.url) {
       await deleteOldAsset(result.url, result.publicId, "raw");
     }
     res.json({ success: true });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function deleteLessonVideo(req: Request, res: Response, next: NextFunction) {
+export async function deleteLessonVideo(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   try {
-    const result = await courseService.deleteLessonVideo(p(req, "courseId"), p(req, "lessonId"));
+    const result = await courseService.deleteLessonVideo(
+      p(req, "courseId"),
+      p(req, "lessonId"),
+    );
     if (result.videoUrl) {
       await deleteOldAsset(result.videoUrl, result.videoPublicId, "video");
     }
     res.json({ success: true });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 }
 
 // ─── Quiz / Assignment handlers ───────────────────────────────────────────────
 
-export async function upsertQuiz(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.upsertQuiz(p(req, "courseId"), p(req, "lessonId"), req.body)); } catch (err) { next(err); }
+export async function upsertQuiz(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(
+      await courseService.upsertQuiz(
+        p(req, "courseId"),
+        p(req, "lessonId"),
+        req.body,
+      ),
+    );
+  } catch (err) {
+    next(err);
+  }
 }
 
-export async function upsertAssignment(req: Request, res: Response, next: NextFunction) {
-  try { res.json(await courseService.upsertAssignment(p(req, "courseId"), p(req, "lessonId"), req.body)); } catch (err) { next(err); }
+export async function upsertAssignment(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(
+      await courseService.upsertAssignment(
+        p(req, "courseId"),
+        p(req, "lessonId"),
+        req.body,
+      ),
+    );
+  } catch (err) {
+    next(err);
+  }
 }

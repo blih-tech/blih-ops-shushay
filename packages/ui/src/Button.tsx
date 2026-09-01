@@ -2,7 +2,14 @@ import React from "react";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "coral" | "destructive" | "dark";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "outline"
+    | "ghost"
+    | "coral"
+    | "destructive"
+    | "dark";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -25,18 +32,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       type = "button",
       ...props
     },
-    ref
+    ref,
   ) => {
     const baseStyles =
       "inline-flex items-center justify-center whitespace-nowrap font-sans font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E5BFF]/20 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none rounded-xl cursor-pointer select-none active:scale-[0.98]";
 
     const variants = {
-      primary: "bg-[#1E5BFF] text-white hover:bg-[#1546CC] active:bg-[#0F35A0] border border-transparent shadow-[0_2px_10px_rgba(30,91,255,0.2)]",
-      secondary: "bg-[#EEF3FF] text-[#1E5BFF] hover:bg-[#DDE7FF] border border-[#1E5BFF]/20",
-      outline: "border border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF]/30",
+      primary:
+        "bg-[#1E5BFF] text-white hover:bg-[#1546CC] active:bg-[#0F35A0] border border-transparent shadow-[0_2px_10px_rgba(30,91,255,0.2)]",
+      secondary:
+        "bg-[#EEF3FF] text-[#1E5BFF] hover:bg-[#DDE7FF] border border-[#1E5BFF]/20",
+      outline:
+        "border border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF]/30",
       ghost: "text-[#17131F] hover:bg-[#EEF3FF] border border-transparent",
-      coral: "bg-[#FF8A5B] text-white hover:bg-[#E57648] active:bg-[#CC6338] border border-transparent shadow-[0_2px_10px_rgba(255,138,91,0.2)]",
-      destructive: "bg-[#EF4444] text-white hover:bg-[#DC2626] border border-transparent shadow-[0_2px_10px_rgba(239,68,68,0.2)]",
+      coral:
+        "bg-[#FF8A5B] text-white hover:bg-[#E57648] active:bg-[#CC6338] border border-transparent shadow-[0_2px_10px_rgba(255,138,91,0.2)]",
+      destructive:
+        "bg-[#EF4444] text-white hover:bg-[#DC2626] border border-transparent shadow-[0_2px_10px_rgba(239,68,68,0.2)]",
       dark: "bg-[#17131F] text-white hover:bg-[#252030] border border-transparent shadow-sm",
     };
 
@@ -62,10 +74,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span className="inline-flex shrink-0">{leftIcon}</span>
         ) : null}
         <span>{children}</span>
-        {!isLoading && rightIcon ? <span className="inline-flex shrink-0">{rightIcon}</span> : null}
+        {!isLoading && rightIcon ? (
+          <span className="inline-flex shrink-0">{rightIcon}</span>
+        ) : null}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

@@ -32,13 +32,21 @@ function CourseCardSkeleton() {
   return (
     <Card className="flex flex-col bg-white border border-[#D9CEDF] rounded-3xl p-6">
       <CardHeader className="p-0 pb-4">
-        <Skeleton variant="rectangular" height={24} className="w-3/4 mb-3 rounded-xl" />
+        <Skeleton
+          variant="rectangular"
+          height={24}
+          className="w-3/4 mb-3 rounded-xl"
+        />
         <Skeleton variant="text" className="w-full mb-1" />
         <Skeleton variant="text" className="w-5/6" />
       </CardHeader>
       <CardContent className="p-0 flex-1" />
       <div className="pt-4 border-t border-[#D9CEDF]/50">
-        <Skeleton variant="rectangular" height={44} className="w-full rounded-2xl" />
+        <Skeleton
+          variant="rectangular"
+          height={44}
+          className="w-full rounded-2xl"
+        />
       </div>
     </Card>
   );
@@ -84,7 +92,9 @@ function CourseCard({ course }: { course: PublicCourseListItem }) {
           <Button
             variant="outline"
             fullWidth
-            rightIcon={<ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />}
+            rightIcon={
+              <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            }
           >
             Explore Curriculum
           </Button>
@@ -96,14 +106,22 @@ function CourseCard({ course }: { course: PublicCourseListItem }) {
 
 export default function CourseCatalogPage() {
   const { user, logout } = useAuth();
-  const TALENT_URL = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+  const TALENT_URL =
+    process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = ["All", "Frontend Systems", "TypeScript", "UI & Design", "Backend", "Career Path"];
+  const categories = [
+    "All",
+    "Frontend Systems",
+    "TypeScript",
+    "UI & Design",
+    "Backend",
+    "Career Path",
+  ];
 
   useEffect(() => {
     fetchPublicCourses()
@@ -143,7 +161,8 @@ export default function CourseCatalogPage() {
             Course Catalog
           </h1>
           <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-            Practical, expert-led courses with hands-on projects and verified digital credentials to strengthen your Skill Profile.
+            Practical, expert-led courses with hands-on projects and verified
+            digital credentials to strengthen your Skill Profile.
           </p>
         </div>
 
@@ -194,7 +213,13 @@ export default function CourseCatalogPage() {
             title="No courses matched your query"
             description="Try changing your search terms or explore all available tracks."
             action={
-              <Button variant="secondary" onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setSearchQuery("");
+                  setActiveCategory("All");
+                }}
+              >
                 Clear Filters
               </Button>
             }
@@ -217,11 +242,16 @@ export default function CourseCatalogPage() {
               Looking to fast-track your remote career?
             </h3>
             <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-              Combine multiple courses into a verified specialization track and stand out to hiring companies.
+              Combine multiple courses into a verified specialization track and
+              stand out to hiring companies.
             </p>
           </div>
           <Link href="/dashboard">
-            <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-4 h-4" />}>
+            <Button
+              size="lg"
+              variant="primary"
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+            >
               View Recommended Path
             </Button>
           </Link>
@@ -232,11 +262,17 @@ export default function CourseCatalogPage() {
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
         <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
         <div className="flex gap-4 uppercase tracking-wider">
-          <Link href="/dashboard" className="hover:text-[#1E5BFF] transition-colors">
+          <Link
+            href="/dashboard"
+            className="hover:text-[#1E5BFF] transition-colors"
+          >
             Dashboard
           </Link>
           <span className="text-[#D9CEDF]">·</span>
-          <a href={`${TALENT_URL}/jobs`} className="hover:text-[#1E5BFF] transition-colors">
+          <a
+            href={`${TALENT_URL}/jobs`}
+            className="hover:text-[#1E5BFF] transition-colors"
+          >
             Opportunities
           </a>
         </div>

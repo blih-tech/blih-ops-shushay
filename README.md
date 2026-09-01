@@ -52,6 +52,7 @@ blih-ops/
 ### Prerequisites
 
 Ensure you have the following installed on your local machine:
+
 - [Node.js](https://nodejs.org/en/) (v18 or higher)
 - [pnpm](https://pnpm.io/) (v9 or higher)
 - [PostgreSQL](https://www.postgresql.org/) (Running locally or via Docker)
@@ -59,6 +60,7 @@ Ensure you have the following installed on your local machine:
 ### Installation
 
 1. **Clone the repository and install dependencies:**
+
    ```bash
    git clone https://github.com/your-org/blih-ops.git
    cd blih-ops
@@ -67,11 +69,13 @@ Ensure you have the following installed on your local machine:
 
 2. **Configure Environment Variables:**
    For the API backend:
+
    ```bash
    cd apps/api
    cp .env.example .env
    ```
-   *Update your `.env` file with your local PostgreSQL `DATABASE_URL` (e.g., `postgresql://postgres:postgres@localhost:5432/blih_dev?schema=public`).*
+
+   _Update your `.env` file with your local PostgreSQL `DATABASE_URL` (e.g., `postgresql://postgres:postgres@localhost:5432/blih_dev?schema=public`)._
 
    For the frontend apps (`apps/auth-web`, `apps/skills-web`, `apps/talent-web`), duplicate their `.env.local.example` files to `.env.local`.
 
@@ -120,7 +124,8 @@ This monorepo utilizes Nx to orchestrate tasks across all applications and share
 
 ## 🤝 Contributing
 
-When contributing to this repository, please ensure that your code adheres to the existing architectural patterns. 
+When contributing to this repository, please ensure that your code adheres to the existing architectural patterns.
+
 - UI components intended for reuse across multiple platforms should be placed in `packages/ui`.
 - Type definitions and validation schemas shared between the frontend and backend should be updated in `packages/types` and `packages/validation`.
 

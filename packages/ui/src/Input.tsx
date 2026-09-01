@@ -1,7 +1,6 @@
 import React from "react";
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -24,12 +23,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
-    const inputId = id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+    const inputId =
+      id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
 
     return (
-      <div className={`group space-y-1.5 font-sans ${fullWidth ? "w-full" : ""}`}>
+      <div
+        className={`group space-y-1.5 font-sans ${fullWidth ? "w-full" : ""}`}
+      >
         {label && (
           <label
             htmlFor={inputId}
@@ -44,11 +46,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative w-full">
           {leftIcon && (
-            <div className={`absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-all duration-200 ${
-              error
-                ? "text-[#EF4444]"
-                : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
-            }`}>
+            <div
+              className={`absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-all duration-200 ${
+                error
+                  ? "text-[#EF4444]"
+                  : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
+              }`}
+            >
               {leftIcon}
             </div>
           )}
@@ -73,21 +77,27 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className={`absolute inset-y-0 right-0 pr-3.5 flex items-center transition-colors duration-200 ${
-              error ? "text-[#EF4444]" : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
-            }`}>
+            <div
+              className={`absolute inset-y-0 right-0 pr-3.5 flex items-center transition-colors duration-200 ${
+                error
+                  ? "text-[#EF4444]"
+                  : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
+              }`}
+            >
               {rightIcon}
             </div>
           )}
         </div>
         {error ? (
-          <p className="text-xs font-mono text-[#EF4444] mt-1 flex items-center gap-1">{error}</p>
+          <p className="text-xs font-mono text-[#EF4444] mt-1 flex items-center gap-1">
+            {error}
+          </p>
         ) : helperText ? (
           <p className="text-xs font-mono text-[#6E6678] mt-1">{helperText}</p>
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

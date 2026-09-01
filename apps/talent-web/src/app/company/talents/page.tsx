@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 
+import { MapPin, Filter, FileText, Eye } from "lucide-react";
 import {
-  MapPin, Filter,
-  FileText, Eye
-} from "lucide-react";
-import {
-  Button, Badge, Card,
-  GlobalNavbar, UniversalSearch, Skeleton
+  Button,
+  Badge,
+  Card,
+  GlobalNavbar,
+  UniversalSearch,
+  Skeleton,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
@@ -21,24 +22,69 @@ function TalentCardSkeleton() {
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3.5">
-            <Skeleton variant="rectangular" width={48} height={48} className="rounded-2xl" />
+            <Skeleton
+              variant="rectangular"
+              width={48}
+              height={48}
+              className="rounded-2xl"
+            />
             <div className="space-y-2">
-              <Skeleton variant="rectangular" width={120} height={18} className="rounded-md" />
-              <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
+              <Skeleton
+                variant="rectangular"
+                width={120}
+                height={18}
+                className="rounded-md"
+              />
+              <Skeleton
+                variant="rectangular"
+                width={80}
+                height={12}
+                className="rounded-md"
+              />
             </div>
           </div>
-          <Skeleton variant="rectangular" width={70} height={22} className="rounded-lg" />
+          <Skeleton
+            variant="rectangular"
+            width={70}
+            height={22}
+            className="rounded-lg"
+          />
         </div>
         <Skeleton variant="text" className="w-full" />
         <div className="flex gap-2">
-          <Skeleton variant="rectangular" width={50} height={16} className="rounded-md" />
-          <Skeleton variant="rectangular" width={60} height={16} className="rounded-md" />
-          <Skeleton variant="rectangular" width={55} height={16} className="rounded-md" />
+          <Skeleton
+            variant="rectangular"
+            width={50}
+            height={16}
+            className="rounded-md"
+          />
+          <Skeleton
+            variant="rectangular"
+            width={60}
+            height={16}
+            className="rounded-md"
+          />
+          <Skeleton
+            variant="rectangular"
+            width={55}
+            height={16}
+            className="rounded-md"
+          />
         </div>
       </div>
       <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-between items-center">
-        <Skeleton variant="rectangular" width={40} height={12} className="rounded-md" />
-        <Skeleton variant="rectangular" width={90} height={28} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={40}
+          height={12}
+          className="rounded-md"
+        />
+        <Skeleton
+          variant="rectangular"
+          width={90}
+          height={28}
+          className="rounded-md"
+        />
       </div>
     </Card>
   );
@@ -48,7 +94,8 @@ function CompanyTalentsSearchContent() {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("All");
-  const [selectedTalent, setSelectedTalent] = useState<TalentProfileCard | null>(null);
+  const [selectedTalent, setSelectedTalent] =
+    useState<TalentProfileCard | null>(null);
   const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
@@ -56,11 +103,21 @@ function CompanyTalentsSearchContent() {
     return () => clearTimeout(timer);
   }, []);
 
-
-  const skillFilters = ["All", "React 19", "Next.js", "TypeScript", "Node.js", "PostgreSQL"];
+  const skillFilters = [
+    "All",
+    "React 19",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "PostgreSQL",
+  ];
 
   const filteredTalents = mockTalents.filter((talent) => {
-    if (activeSkillFilter !== "All" && !talent.skills.includes(activeSkillFilter)) return false;
+    if (
+      activeSkillFilter !== "All" &&
+      !talent.skills.includes(activeSkillFilter)
+    )
+      return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       return (
@@ -91,7 +148,8 @@ function CompanyTalentsSearchContent() {
               <Badge variant="verified">VERIFIED PROFILES</Badge>
             </div>
             <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-              Discover, filter, and review verified candidates backed by evidence and course completions.
+              Discover, filter, and review verified candidates backed by
+              evidence and course completions.
             </p>
           </div>
         </div>
@@ -115,10 +173,11 @@ function CompanyTalentsSearchContent() {
                 key={skill}
                 type="button"
                 onClick={() => setActiveSkillFilter(skill)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${activeSkillFilter === skill
-                  ? "bg-[#1E5BFF] text-white shadow-xs"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF] border border-[#D9CEDF]/70"
-                  }`}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${
+                  activeSkillFilter === skill
+                    ? "bg-[#1E5BFF] text-white shadow-xs"
+                    : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF] border border-[#D9CEDF]/70"
+                }`}
               >
                 {skill}
               </button>
@@ -147,8 +206,12 @@ function CompanyTalentsSearchContent() {
                         {talent.name.charAt(0)}
                       </div>
                       <div>
-                        <h3 className="font-display text-lg font-bold text-[#17131F]">{talent.name}</h3>
-                        <p className="text-xs font-mono text-[#1E5BFF] font-semibold">{talent.title}</p>
+                        <h3 className="font-display text-lg font-bold text-[#17131F]">
+                          {talent.name}
+                        </h3>
+                        <p className="text-xs font-mono text-[#1E5BFF] font-semibold">
+                          {talent.title}
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
@@ -179,13 +242,18 @@ function CompanyTalentsSearchContent() {
                       <span className="truncate">{talent.location}</span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[#17131F] font-bold">{talent.englishLevel}</span> English
+                      <span className="text-[#17131F] font-bold">
+                        {talent.englishLevel}
+                      </span>{" "}
+                      English
                     </div>
                   </div>
                 </div>
 
                 <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
-                  <span className="text-xs font-mono text-[#6E6678]">{talent.experienceYears} exp</span>
+                  <span className="text-xs font-mono text-[#6E6678]">
+                    {talent.experienceYears} exp
+                  </span>
                   <Button
                     size="sm"
                     variant="ghost"
@@ -210,9 +278,15 @@ function CompanyTalentsSearchContent() {
                     {selectedTalent.name.charAt(0)}
                   </div>
                   <div>
-                    <h2 className="font-display text-2xl font-bold text-[#17131F]">{selectedTalent.name}</h2>
-                    <p className="text-sm font-mono text-[#1E5BFF] font-medium">{selectedTalent.title}</p>
-                    <p className="text-xs text-[#6E6678]">{selectedTalent.location}</p>
+                    <h2 className="font-display text-2xl font-bold text-[#17131F]">
+                      {selectedTalent.name}
+                    </h2>
+                    <p className="text-sm font-mono text-[#1E5BFF] font-medium">
+                      {selectedTalent.title}
+                    </p>
+                    <p className="text-xs text-[#6E6678]">
+                      {selectedTalent.location}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -224,14 +298,18 @@ function CompanyTalentsSearchContent() {
               </div>
 
               <div className="space-y-1">
-                <p className="text-xs font-mono text-[#6E6678] uppercase">Candidate Biography</p>
+                <p className="text-xs font-mono text-[#6E6678] uppercase">
+                  Candidate Biography
+                </p>
                 <p className="text-sm text-[#17131F] leading-relaxed bg-[#EEF3FF]/40 p-4 rounded-2xl border border-[#D9CEDF]/70">
                   {selectedTalent.bio}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs font-mono text-[#6E6678] uppercase">Verified Competencies</p>
+                <p className="text-xs font-mono text-[#6E6678] uppercase">
+                  Verified Competencies
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedTalent.skills.map((skill, si) => (
                     <span
@@ -245,10 +323,18 @@ function CompanyTalentsSearchContent() {
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t border-[#D9CEDF]">
-                <Button variant="outline" size="sm" leftIcon={<FileText className="h-4 w-4" />}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<FileText className="h-4 w-4" />}
+                >
                   Download Resume
                 </Button>
-                <Button variant="primary" size="sm" onClick={() => setSelectedTalent(null)}>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setSelectedTalent(null)}
+                >
                   Close
                 </Button>
               </div>

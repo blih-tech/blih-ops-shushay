@@ -7,7 +7,9 @@ interface ProfileCompletionBannerProps {
   isComplete: boolean;
 }
 
-export const ProfileCompletionBanner: React.FC<ProfileCompletionBannerProps> = ({ isComplete }) => {
+export const ProfileCompletionBanner: React.FC<
+  ProfileCompletionBannerProps
+> = ({ isComplete }) => {
   if (isComplete) return null;
 
   return (
@@ -21,7 +23,8 @@ export const ProfileCompletionBanner: React.FC<ProfileCompletionBannerProps> = (
             Profile Incomplete
           </h4>
           <p className="text-xs sm:text-sm text-amber-800 leading-relaxed">
-            Please finish setting up your profile so that companies can find you and you can apply for jobs.
+            Please finish setting up your profile so that companies can find you
+            and you can apply for jobs.
           </p>
         </div>
       </div>

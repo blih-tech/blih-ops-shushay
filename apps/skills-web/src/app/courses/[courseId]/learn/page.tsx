@@ -16,11 +16,7 @@ import {
   Maximize2,
 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import {
-  Button,
-  Badge,
-  Alert,
-} from "@blih/ui";
+import { Button, Badge, Alert } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
 import type { PublicCourse, PublicLesson } from "@/types/course";
@@ -34,8 +30,12 @@ function LearnContent({ courseId }: { courseId: string }) {
   const [course, setCourse] = useState<PublicCourse | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeLessonIndex, setActiveLessonIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<"video" | "reading" | "quiz" | "exercise">("video");
-  const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<
+    "video" | "reading" | "quiz" | "exercise"
+  >("video");
+  const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(
+    null,
+  );
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<number[]>([0]);
 
@@ -44,13 +44,15 @@ function LearnContent({ courseId }: { courseId: string }) {
       .then((data) => {
         setCourse(data);
       })
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [courseId]);
 
   const activeLesson = course?.lessons?.[activeLessonIndex];
   const totalLessons = course?.lessons?.length || 1;
-  const progressPercent = Math.round(((completedLessons.length) / totalLessons) * 100);
+  const progressPercent = Math.round(
+    (completedLessons.length / totalLessons) * 100,
+  );
 
   const handleCompleteCurrent = () => {
     if (!completedLessons.includes(activeLessonIndex)) {
@@ -69,7 +71,11 @@ function LearnContent({ courseId }: { courseId: string }) {
       <header className="bg-white border-b border-[#D9CEDF] sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-4">
           <Link href={`/courses/${courseId}`}>
-            <Button variant="ghost" size="sm" leftIcon={<ArrowLeft className="w-4 h-4" />}>
+            <Button
+              variant="ghost"
+              size="sm"
+              leftIcon={<ArrowLeft className="w-4 h-4" />}
+            >
               Back to Course
             </Button>
           </Link>
@@ -79,7 +85,8 @@ function LearnContent({ courseId }: { courseId: string }) {
               {course?.title || "Course Workspace"}
             </h1>
             <p className="font-mono text-xs text-[#6E6678]">
-              Lesson {activeLessonIndex + 1} of {totalLessons} · {activeLesson?.title || "Overview"}
+              Lesson {activeLessonIndex + 1} of {totalLessons} ·{" "}
+              {activeLesson?.title || "Overview"}
             </p>
           </div>
         </div>
@@ -99,7 +106,11 @@ function LearnContent({ courseId }: { courseId: string }) {
           </div>
 
           <Link href="/certificates">
-            <Button variant="outline" size="sm" leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}>
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}
+            >
               Credential Status
             </Button>
           </Link>
@@ -114,40 +125,44 @@ function LearnContent({ courseId }: { courseId: string }) {
           <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-[#D9CEDF]">
             <button
               onClick={() => setActiveTab("video")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "video"
-                ? "bg-[#1E5BFF] text-white"
-                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-                }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
+                activeTab === "video"
+                  ? "bg-[#1E5BFF] text-white"
+                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+              }`}
             >
               <Play className="w-3.5 h-3.5" />
               <span>Video Masterclass</span>
             </button>
             <button
               onClick={() => setActiveTab("reading")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "reading"
-                ? "bg-[#1E5BFF] text-white"
-                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-                }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
+                activeTab === "reading"
+                  ? "bg-[#1E5BFF] text-white"
+                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+              }`}
             >
               <FileText className="w-3.5 h-3.5" />
               <span>Architecture & Theory</span>
             </button>
             <button
               onClick={() => setActiveTab("quiz")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "quiz"
-                ? "bg-[#1E5BFF] text-white"
-                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-                }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
+                activeTab === "quiz"
+                  ? "bg-[#1E5BFF] text-white"
+                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+              }`}
             >
               <HelpCircle className="w-3.5 h-3.5" />
               <span>Assessment Quiz</span>
             </button>
             <button
               onClick={() => setActiveTab("exercise")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${activeTab === "exercise"
-                ? "bg-[#1E5BFF] text-white"
-                : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
-                }`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-medium transition-colors cursor-pointer ${
+                activeTab === "exercise"
+                  ? "bg-[#1E5BFF] text-white"
+                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF]"
+              }`}
             >
               <Code className="w-3.5 h-3.5" />
               <span>Practical Exercise</span>
@@ -188,7 +203,9 @@ function LearnContent({ courseId }: { courseId: string }) {
                   Lesson Objective
                 </h3>
                 <p className="font-sans text-sm sm:text-base text-[#6E6678] leading-relaxed">
-                  In this module, you will understand the fundamental principles, design patterns, and state requirements necessary to meet enterprise quality benchmarks.
+                  In this module, you will understand the fundamental
+                  principles, design patterns, and state requirements necessary
+                  to meet enterprise quality benchmarks.
                 </p>
               </div>
             </div>
@@ -201,16 +218,23 @@ function LearnContent({ courseId }: { courseId: string }) {
               </h2>
               <div className="prose max-w-none text-[#17131F] font-sans space-y-4 leading-relaxed">
                 <p className="text-base text-[#6E6678]">
-                  Production systems require high reliability, test coverage, and clear component boundaries. When architecting your solution:
+                  Production systems require high reliability, test coverage,
+                  and clear component boundaries. When architecting your
+                  solution:
                 </p>
                 <div className="bg-[#EEF3FF] border-l-4 border-[#1E5BFF] p-4 rounded-r-2xl text-sm font-sans space-y-1">
-                  <strong className="text-[#17131F] block">Core Architectural Rule:</strong>
+                  <strong className="text-[#17131F] block">
+                    Core Architectural Rule:
+                  </strong>
                   <p className="text-[#6E6678]">
-                    Always separate business logic and side effects from pure rendering layers. This makes validation, automated testing, and verification straightforward.
+                    Always separate business logic and side effects from pure
+                    rendering layers. This makes validation, automated testing,
+                    and verification straightforward.
                   </p>
                 </div>
                 <p className="text-base text-[#6E6678]">
-                  Review the implementation guidelines and proceed to the verification quiz below once you have understood the patterns.
+                  Review the implementation guidelines and proceed to the
+                  verification quiz below once you have understood the patterns.
                 </p>
               </div>
             </div>
@@ -228,7 +252,8 @@ function LearnContent({ courseId }: { courseId: string }) {
               </div>
 
               <h3 className="font-display text-xl sm:text-2xl font-bold text-[#17131F]">
-                What is the primary benefit of decoupled architecture in scalable applications?
+                What is the primary benefit of decoupled architecture in
+                scalable applications?
               </h3>
 
               <div className="space-y-3 pt-2">
@@ -241,10 +266,11 @@ function LearnContent({ courseId }: { courseId: string }) {
                   <button
                     key={idx}
                     onClick={() => !quizSubmitted && setSelectedQuizOption(idx)}
-                    className={`w-full text-left p-4 rounded-2xl border font-sans text-sm sm:text-base transition-all cursor-pointer flex items-center justify-between ${selectedQuizOption === idx
-                      ? "border-[#1E5BFF] bg-[#DDE7FF]/50 text-[#1E5BFF] font-medium"
-                      : "border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF]"
-                      }`}
+                    className={`w-full text-left p-4 rounded-2xl border font-sans text-sm sm:text-base transition-all cursor-pointer flex items-center justify-between ${
+                      selectedQuizOption === idx
+                        ? "border-[#1E5BFF] bg-[#DDE7FF]/50 text-[#1E5BFF] font-medium"
+                        : "border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF]"
+                    }`}
                   >
                     <span>{option}</span>
                     <span className="w-5 h-5 rounded-full border border-[#D9CEDF] flex items-center justify-center text-xs font-mono">
@@ -256,7 +282,9 @@ function LearnContent({ courseId }: { courseId: string }) {
 
               {quizSubmitted ? (
                 <div className="space-y-4 pt-2">
-                  <Alert variant={selectedQuizOption === 1 ? "success" : "error"}>
+                  <Alert
+                    variant={selectedQuizOption === 1 ? "success" : "error"}
+                  >
                     {selectedQuizOption === 1
                       ? "Correct! Isolating side effects ensures robust testability and modularity."
                       : "Incorrect. The correct answer is B: It isolates side effects and increases testability."}
@@ -288,10 +316,18 @@ function LearnContent({ courseId }: { courseId: string }) {
               </div>
 
               <div className="bg-[#17131F] rounded-2xl p-4 font-mono text-xs text-white space-y-2">
-                <div className="text-[#2E8F79]">✓ Test 1: Component renders with correct props (12ms)</div>
-                <div className="text-[#2E8F79]">✓ Test 2: Handles async state transitions cleanly (24ms)</div>
-                <div className="text-[#2E8F79]">✓ Test 3: Type safety contracts pass strict validation (8ms)</div>
-                <div className="pt-2 text-white/50">All 3 unit test suites passed successfully.</div>
+                <div className="text-[#2E8F79]">
+                  ✓ Test 1: Component renders with correct props (12ms)
+                </div>
+                <div className="text-[#2E8F79]">
+                  ✓ Test 2: Handles async state transitions cleanly (24ms)
+                </div>
+                <div className="text-[#2E8F79]">
+                  ✓ Test 3: Type safety contracts pass strict validation (8ms)
+                </div>
+                <div className="pt-2 text-white/50">
+                  All 3 unit test suites passed successfully.
+                </div>
               </div>
 
               <div className="flex items-center justify-between pt-2">
@@ -355,21 +391,27 @@ function LearnContent({ courseId }: { courseId: string }) {
                       setSelectedQuizOption(null);
                       setQuizSubmitted(false);
                     }}
-                    className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${isActive
-                      ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
-                      : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
-                      }`}
+                    className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                      isActive
+                        ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
+                        : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
+                    }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div
-                        className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${isCompleted
-                          ? "bg-[#E6F5F0] text-[#2E8F79]"
-                          : isActive
-                            ? "bg-[#1E5BFF] text-white"
-                            : "bg-[#EEF3FF] text-[#6E6678]"
-                          }`}
+                        className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                          isCompleted
+                            ? "bg-[#E6F5F0] text-[#2E8F79]"
+                            : isActive
+                              ? "bg-[#1E5BFF] text-white"
+                              : "bg-[#EEF3FF] text-[#6E6678]"
+                        }`}
                       >
-                        {isCompleted ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                        {isCompleted ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : (
+                          idx + 1
+                        )}
                       </div>
                       <span className="font-sans text-xs sm:text-sm font-medium truncate">
                         {lesson.title}
@@ -400,7 +442,8 @@ function LearnContent({ courseId }: { courseId: string }) {
               </span>
             </div>
             <p className="font-sans text-xs text-[#6E6678] leading-relaxed">
-              Completing all quizzes and exercises in this track will add a verified capability badge to your public Blih Talent profile.
+              Completing all quizzes and exercises in this track will add a
+              verified capability badge to your public Blih Talent profile.
             </p>
           </div>
         </div>

@@ -21,11 +21,14 @@ function ResetPasswordForm() {
     return (
       <div className="text-center space-y-4">
         <Alert variant="error" title="Invalid Request">
-          Missing password reset token. Please check the link from your email or request a new one.
+          Missing password reset token. Please check the link from your email or
+          request a new one.
         </Alert>
         <div className="pt-2">
           <Link href="/forgot-password">
-            <Button variant="outline" fullWidth>Request new link</Button>
+            <Button variant="outline" fullWidth>
+              Request new link
+            </Button>
           </Link>
         </div>
       </div>
@@ -59,11 +62,14 @@ function ResetPasswordForm() {
     return (
       <div className="text-center space-y-4 font-sans">
         <Alert variant="success" title="Password Reset Complete">
-          Your password has been successfully updated. You can now sign in with your new credentials.
+          Your password has been successfully updated. You can now sign in with
+          your new credentials.
         </Alert>
         <div className="pt-4">
           <Link href="/login">
-            <Button fullWidth size="lg">Sign In</Button>
+            <Button fullWidth size="lg">
+              Sign In
+            </Button>
           </Link>
         </div>
       </div>
@@ -79,7 +85,9 @@ function ResetPasswordForm() {
         required
         minLength={6}
         value={password}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setPassword(e.target.value)
+        }
         placeholder="••••••••"
       />
 
@@ -88,17 +96,14 @@ function ResetPasswordForm() {
         required
         minLength={6}
         value={confirmPassword}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setConfirmPassword(e.target.value)
+        }
         placeholder="••••••••"
       />
 
       <div className="pt-2">
-        <Button
-          type="submit"
-          fullWidth
-          size="lg"
-          isLoading={loading}
-        >
+        <Button type="submit" fullWidth size="lg" isLoading={loading}>
           {loading ? "Resetting password..." : "Reset Password"}
         </Button>
       </div>
@@ -112,7 +117,13 @@ export default function ResetPasswordPage() {
       title="Create new password"
       subtitle="Enter a new secure password for your Blih account"
     >
-      <Suspense fallback={<div className="text-center py-4 text-sm text-[#6E6678] flex justify-center items-center gap-2"><Spinner size="sm" /> Loading form...</div>}>
+      <Suspense
+        fallback={
+          <div className="text-center py-4 text-sm text-[#6E6678] flex justify-center items-center gap-2">
+            <Spinner size="sm" /> Loading form...
+          </div>
+        }
+      >
         <ResetPasswordForm />
       </Suspense>
     </AuthLayout>

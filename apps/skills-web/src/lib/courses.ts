@@ -32,12 +32,21 @@ export function fetchAdminCourse(id: string): Promise<Course> {
   return apiFetch<Course>(`${BASE}/admin/${id}`);
 }
 
-export function createCourse(data: { title: string; description: string }): Promise<Course> {
+export function createCourse(data: {
+  title: string;
+  description: string;
+}): Promise<Course> {
   return apiFetch<Course>(BASE, { method: "POST", body: JSON.stringify(data) });
 }
 
-export function updateCourse(id: string, data: { title?: string; description?: string }): Promise<Course> {
-  return apiFetch<Course>(`${BASE}/${id}`, { method: "PATCH", body: JSON.stringify(data) });
+export function updateCourse(
+  id: string,
+  data: { title?: string; description?: string },
+): Promise<Course> {
+  return apiFetch<Course>(`${BASE}/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 }
 
 export function publishCourse(id: string): Promise<Course> {
@@ -54,14 +63,20 @@ export function deleteCourse(id: string): Promise<{ success: boolean }> {
 
 // ─── Lessons ──────────────────────────────────────────────────────────────────
 
-export function createLesson(courseId: string, data: { title: string; content?: string | null }): Promise<Lesson> {
-  return apiFetch<Lesson>(`${BASE}/${courseId}/lessons`, { method: "POST", body: JSON.stringify(data) });
+export function createLesson(
+  courseId: string,
+  data: { title: string; content?: string | null },
+): Promise<Lesson> {
+  return apiFetch<Lesson>(`${BASE}/${courseId}/lessons`, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
 }
 
 export function updateLesson(
   courseId: string,
   lessonId: string,
-  data: { title?: string; content?: string | null }
+  data: { title?: string; content?: string | null },
 ): Promise<Lesson> {
   return apiFetch<Lesson>(`${BASE}/${courseId}/lessons/${lessonId}`, {
     method: "PATCH",
@@ -69,13 +84,19 @@ export function updateLesson(
   });
 }
 
-export function deleteLesson(courseId: string, lessonId: string): Promise<{ success: boolean }> {
-  return apiFetch<{ success: boolean }>(`${BASE}/${courseId}/lessons/${lessonId}`, { method: "DELETE" });
+export function deleteLesson(
+  courseId: string,
+  lessonId: string,
+): Promise<{ success: boolean }> {
+  return apiFetch<{ success: boolean }>(
+    `${BASE}/${courseId}/lessons/${lessonId}`,
+    { method: "DELETE" },
+  );
 }
 
 export function reorderLessons(
   courseId: string,
-  lessons: Array<{ id: string; order: number }>
+  lessons: Array<{ id: string; order: number }>,
 ): Promise<Lesson[]> {
   return apiFetch<Lesson[]>(`${BASE}/${courseId}/lessons/reorder`, {
     method: "POST",
@@ -85,37 +106,53 @@ export function reorderLessons(
 
 // ─── Uploads ──────────────────────────────────────────────────────────────────
 
-export function uploadLessonVideo(courseId: string, lessonId: string, file: File): Promise<Lesson> {
+export function uploadLessonVideo(
+  courseId: string,
+  lessonId: string,
+  file: File,
+): Promise<Lesson> {
   const form = new FormData();
   form.append("video", file);
-  return apiFetchFormData<Lesson>(`${BASE}/${courseId}/lessons/${lessonId}/video`, form);
+  return apiFetchFormData<Lesson>(
+    `${BASE}/${courseId}/lessons/${lessonId}/video`,
+    form,
+  );
 }
 
 export function uploadLessonDocument(
   courseId: string,
   lessonId: string,
   file: File,
-  name?: string
+  name?: string,
 ): Promise<LessonDocument> {
   const form = new FormData();
   form.append("document", file);
   if (name) form.append("name", name);
-  return apiFetchFormData<LessonDocument>(`${BASE}/${courseId}/lessons/${lessonId}/documents`, form);
+  return apiFetchFormData<LessonDocument>(
+    `${BASE}/${courseId}/lessons/${lessonId}/documents`,
+    form,
+  );
 }
 
 export function deleteLessonDocument(
   courseId: string,
   lessonId: string,
-  documentId: string
+  documentId: string,
 ): Promise<{ success: boolean }> {
   return apiFetch<{ success: boolean }>(
     `${BASE}/${courseId}/lessons/${lessonId}/documents/${documentId}`,
-    { method: "DELETE" }
+    { method: "DELETE" },
   );
 }
 
-export function deleteLessonVideo(courseId: string, lessonId: string): Promise<{ success: boolean }> {
-  return apiFetch<{ success: boolean }>(`${BASE}/${courseId}/lessons/${lessonId}/video`, { method: "DELETE" });
+export function deleteLessonVideo(
+  courseId: string,
+  lessonId: string,
+): Promise<{ success: boolean }> {
+  return apiFetch<{ success: boolean }>(
+    `${BASE}/${courseId}/lessons/${lessonId}/video`,
+    { method: "DELETE" },
+  );
 }
 
 // ─── Quiz ─────────────────────────────────────────────────────────────────────
@@ -123,7 +160,7 @@ export function deleteLessonVideo(courseId: string, lessonId: string): Promise<{
 export function upsertQuiz(
   courseId: string,
   lessonId: string,
-  data: { title: string; questions: QuizQuestion[] }
+  data: { title: string; questions: QuizQuestion[] },
 ): Promise<Quiz> {
   return apiFetch<Quiz>(`${BASE}/${courseId}/lessons/${lessonId}/quiz`, {
     method: "PUT",
@@ -136,10 +173,13 @@ export function upsertQuiz(
 export function upsertAssignment(
   courseId: string,
   lessonId: string,
-  data: { title: string; instructions: string }
+  data: { title: string; instructions: string },
 ): Promise<Assignment> {
-  return apiFetch<Assignment>(`${BASE}/${courseId}/lessons/${lessonId}/assignment`, {
-    method: "PUT",
-    body: JSON.stringify(data),
-  });
+  return apiFetch<Assignment>(
+    `${BASE}/${courseId}/lessons/${lessonId}/assignment`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+    },
+  );
 }

@@ -26,7 +26,17 @@ import {
 } from "@blih/ui";
 import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
 import { LogoUpload } from "@/components/profile/LogoUpload";
-import { Save, ArrowLeft, Building2, Building, User, Mail, Phone, Globe, Sparkles } from "lucide-react";
+import {
+  Save,
+  ArrowLeft,
+  Building2,
+  Building,
+  User,
+  Mail,
+  Phone,
+  Globe,
+  Sparkles,
+} from "lucide-react";
 
 function CompanyProfileContent() {
   const { user, logout } = useAuth();
@@ -79,8 +89,16 @@ function CompanyProfileContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!companyName.trim() || !country.trim() || !city.trim() || !contactName.trim() || !contactEmail.trim()) {
-      setError("Please fill in all required fields (Company name, Location, Contact name & email).");
+    if (
+      !companyName.trim() ||
+      !country.trim() ||
+      !city.trim() ||
+      !contactName.trim() ||
+      !contactEmail.trim()
+    ) {
+      setError(
+        "Please fill in all required fields (Company name, Location, Contact name & email).",
+      );
       return;
     }
 
@@ -142,18 +160,24 @@ function CompanyProfileContent() {
               <Badge variant="primary">COMPANY</Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Manage your company information and brand assets presented to candidates.
+              Manage your company information and brand assets presented to
+              candidates.
             </p>
           </div>
           <Link href="/company">
-            <Button variant="outline" size="sm" className="w-full sm:w-auto">Back to Portal</Button>
+            <Button variant="outline" size="sm" className="w-full sm:w-auto">
+              Back to Portal
+            </Button>
           </Link>
         </div>
 
         {error && <Alert variant="error">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
+        >
           {/* Main Info Fields */}
           <div className="lg:col-span-8 space-y-8">
             <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden">

@@ -47,26 +47,71 @@ const adminAuth = [requireAuth, requireRole([Role.ADMIN])];
 router.get("/admin", ...adminAuth, listCoursesAdmin);
 router.get("/admin/:courseId", ...adminAuth, getCourseAdmin);
 router.post("/", ...adminAuth, validate(createCourseSchema), createCourse);
-router.patch("/:courseId", ...adminAuth, validate(updateCourseSchema), updateCourse);
+router.patch(
+  "/:courseId",
+  ...adminAuth,
+  validate(updateCourseSchema),
+  updateCourse,
+);
 router.delete("/:courseId", ...adminAuth, deleteCourse);
 router.post("/:courseId/publish", ...adminAuth, publishCourse);
 router.post("/:courseId/unpublish", ...adminAuth, unpublishCourse);
 
 // Lesson management
-router.post("/:courseId/lessons", ...adminAuth, validate(createLessonSchema), createLesson);
-router.post("/:courseId/lessons/reorder", ...adminAuth, validate(reorderLessonsSchema), reorderLessons);
-router.patch("/:courseId/lessons/:lessonId", ...adminAuth, validate(updateLessonSchema), updateLesson);
+router.post(
+  "/:courseId/lessons",
+  ...adminAuth,
+  validate(createLessonSchema),
+  createLesson,
+);
+router.post(
+  "/:courseId/lessons/reorder",
+  ...adminAuth,
+  validate(reorderLessonsSchema),
+  reorderLessons,
+);
+router.patch(
+  "/:courseId/lessons/:lessonId",
+  ...adminAuth,
+  validate(updateLessonSchema),
+  updateLesson,
+);
 router.delete("/:courseId/lessons/:lessonId", ...adminAuth, deleteLesson);
 
-
 // Lesson uploads
-router.post("/:courseId/lessons/:lessonId/video", ...adminAuth, uploadLessonVideo);
-router.delete("/:courseId/lessons/:lessonId/video", ...adminAuth, deleteLessonVideo);
-router.post("/:courseId/lessons/:lessonId/documents", ...adminAuth, uploadLessonDocument);
-router.delete("/:courseId/lessons/:lessonId/documents/:documentId", ...adminAuth, deleteLessonDocument);
+router.post(
+  "/:courseId/lessons/:lessonId/video",
+  ...adminAuth,
+  uploadLessonVideo,
+);
+router.delete(
+  "/:courseId/lessons/:lessonId/video",
+  ...adminAuth,
+  deleteLessonVideo,
+);
+router.post(
+  "/:courseId/lessons/:lessonId/documents",
+  ...adminAuth,
+  uploadLessonDocument,
+);
+router.delete(
+  "/:courseId/lessons/:lessonId/documents/:documentId",
+  ...adminAuth,
+  deleteLessonDocument,
+);
 
 // Quiz and assignment
-router.put("/:courseId/lessons/:lessonId/quiz", ...adminAuth, validate(upsertQuizSchema), upsertQuiz);
-router.put("/:courseId/lessons/:lessonId/assignment", ...adminAuth, validate(upsertAssignmentSchema), upsertAssignment);
+router.put(
+  "/:courseId/lessons/:lessonId/quiz",
+  ...adminAuth,
+  validate(upsertQuizSchema),
+  upsertQuiz,
+);
+router.put(
+  "/:courseId/lessons/:lessonId/assignment",
+  ...adminAuth,
+  validate(upsertAssignmentSchema),
+  upsertAssignment,
+);
 
 export default router;

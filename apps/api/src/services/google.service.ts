@@ -15,7 +15,6 @@
 import https from "https";
 import { env } from "../config/env";
 
-
 export interface GoogleTokenResponse {
   access_token: string;
   id_token: string;
@@ -25,7 +24,7 @@ export interface GoogleTokenResponse {
 }
 
 export interface GoogleUserProfile {
-  sub: string;           // Google user ID (unique, stable)
+  sub: string; // Google user ID (unique, stable)
   email: string;
   email_verified: boolean;
   name: string;
@@ -56,7 +55,7 @@ export function encodeState(state: OAuthState): string {
 export function decodeState(encoded: string): OAuthState {
   try {
     const parsed = JSON.parse(
-      Buffer.from(encoded, "base64url").toString("utf-8")
+      Buffer.from(encoded, "base64url").toString("utf-8"),
     ) as OAuthState;
     if (!parsed.role || !parsed.nonce) {
       throw new Error("Missing required state fields");
@@ -69,14 +68,26 @@ export function decodeState(encoded: string): OAuthState {
 
 // ─── Internal HTTP helpers (avoids node-fetch ESM incompatibility) ────────────
 
-function httpsPost(url: string, body: string, headers: Record<string, string>): Promise<{ ok: boolean; status: number; json: () => Promise<any>; text: () => Promise<string> }> {
+function httpsPost(
+  url: string,
+  body: string,
+  headers: Record<string, string>,
+): Promise<{
+  ok: boolean;
+  status: number;
+  json: () => Promise<any>;
+  text: () => Promise<string>;
+}> {
   return new Promise((resolve, reject) => {
     const { hostname, pathname, search } = new URL(url);
     const options = {
       hostname,
       path: pathname + search,
       method: "POST",
-      headers: { ...headers, "Content-Length": String(Buffer.byteLength(body)) },
+      headers: {
+        ...headers,
+        "Content-Length": String(Buffer.byteLength(body)),
+      },
     };
     const req = https.request(options, (res) => {
       const chunks: Buffer[] = [];
@@ -97,10 +108,23 @@ function httpsPost(url: string, body: string, headers: Record<string, string>): 
   });
 }
 
-function httpsGet(url: string, headers: Record<string, string>): Promise<{ ok: boolean; status: number; json: () => Promise<any>; text: () => Promise<string> }> {
+function httpsGet(
+  url: string,
+  headers: Record<string, string>,
+): Promise<{
+  ok: boolean;
+  status: number;
+  json: () => Promise<any>;
+  text: () => Promise<string>;
+}> {
   return new Promise((resolve, reject) => {
     const { hostname, pathname, search } = new URL(url);
-    const options = { hostname, path: pathname + search, method: "GET", headers };
+    const options = {
+      hostname,
+      path: pathname + search,
+      method: "GET",
+      headers,
+    };
     const req = https.request(options, (res) => {
       const chunks: Buffer[] = [];
       res.on("data", (d: Buffer) => chunks.push(d));
@@ -123,7 +147,7 @@ function httpsGet(url: string, headers: Record<string, string>): Promise<{ ok: b
  * Exchange the Google authorization code for access/id tokens.
  */
 export async function exchangeCodeForTokens(
-  code: string
+  code: string,
 ): Promise<GoogleTokenResponse> {
   const { clientId, clientSecret, callbackUrl } = env.google;
 
@@ -138,7 +162,7 @@ export async function exchangeCodeForTokens(
   const response = await httpsPost(
     "https://oauth2.googleapis.com/token",
     body,
-    { "Content-Type": "application/x-www-form-urlencoded" }
+    { "Content-Type": "application/x-www-form-urlencoded" },
   );
 
   if (!response.ok) {
@@ -153,17 +177,17 @@ export async function exchangeCodeForTokens(
  * Fetch the authenticated user's profile from Google using the access token.
  */
 export async function fetchGoogleUserProfile(
-  accessToken: string
+  accessToken: string,
 ): Promise<GoogleUserProfile> {
   const response = await httpsGet(
     "https://www.googleapis.com/oauth2/v3/userinfo",
-    { Authorization: `Bearer ${accessToken}` }
+    { Authorization: `Bearer ${accessToken}` },
   );
 
   if (!response.ok) {
     const text = await response.text();
     throw new Error(
-      `Failed to fetch Google user profile: ${response.status} ${text}`
+      `Failed to fetch Google user profile: ${response.status} ${text}`,
     );
   }
 
