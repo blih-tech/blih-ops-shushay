@@ -3,7 +3,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   updateTalentProfileSchema,
   UpdateTalentProfileInput,
-} from "@/shared/talent.schemas";
+} from "@blih/validation";
+
 import { TalentProfile } from "@/types/profile";
 import { useEffect } from "react";
 

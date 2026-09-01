@@ -1,14 +1,7 @@
-export interface TalentProfileCard {
-  id: string;
-  name: string;
-  title: string;
-  location: string;
-  englishLevel: string;
-  skills: string[];
-  bio: string;
-  experienceYears: string;
-  verifiedScore: number;
-}
+import type { TalentProfileCard } from "@/types/talent-card";
+
+export type { TalentProfileCard };
+
 
 export const mockTalents: TalentProfileCard[] = [
   {

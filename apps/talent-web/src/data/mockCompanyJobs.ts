@@ -1,15 +1,7 @@
-export interface CompanyJobItem {
-  id: string;
-  title: string;
-  department: string;
-  location: string;
-  type: string;
-  salary: string;
-  applicantsCount: number;
-  status: "ACTIVE" | "PAUSED" | "CLOSED";
-  postedDate: string;
-  requiredSkills: string[];
-}
+import type { CompanyJobItem } from "@/types/job";
+
+export type { CompanyJobItem };
+
 
 export const mockCompanyJobs: CompanyJobItem[] = [
   {

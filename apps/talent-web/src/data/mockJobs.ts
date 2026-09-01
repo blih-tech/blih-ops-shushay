@@ -1,15 +1,7 @@
-export interface JobPosting {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  salary: string;
-  matchScore: number;
-  tags: string[];
-  description: string;
-  postedDate: string;
-  requiredSkills: { name: string; score: number }[];
-}
+import type { JobPosting } from "@/types/job";
+
+export type { JobPosting };
+
 
 export const mockJobs: JobPosting[] = [
   {

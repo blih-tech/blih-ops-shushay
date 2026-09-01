@@ -130,3 +130,5 @@ export type CreateExperienceInput = z.infer<typeof createExperienceSchema>;
 export type UpdateExperienceInput = z.infer<typeof updateExperienceSchema>;
 export type CreateEducationInput = z.infer<typeof createEducationSchema>;
 export type UpdateEducationInput = z.infer<typeof updateEducationSchema>;
+
+

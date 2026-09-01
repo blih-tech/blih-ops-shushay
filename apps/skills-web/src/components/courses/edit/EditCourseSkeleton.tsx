@@ -1,10 +1,13 @@
 import React from "react";
 import { GlobalNavbar, Skeleton } from "@blih/ui";
+import { User } from "@blih/types";
 
 interface EditCourseSkeletonProps {
-  user: any;
+  user: User | null;
   onSignOut: () => void;
 }
+
+
 
 export function EditCourseSkeleton({
   user,

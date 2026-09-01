@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
-import { User } from "@/types/user";
+import { User } from "@blih/types";
+
 import { Modal } from "@blih/ui";
 import { Button } from "@blih/ui";
 

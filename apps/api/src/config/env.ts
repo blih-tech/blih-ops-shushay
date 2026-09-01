@@ -32,7 +32,9 @@ export const env = {
     apiKey: required("CLOUDINARY_API_KEY"),
     apiSecret: required("CLOUDINARY_API_SECRET"),
   },
+  authUrl: process.env.AUTH_URL ?? "http://localhost:3003",
   google: {
+
     clientId: optional("GOOGLE_CLIENT_ID"),
     clientSecret: optional("GOOGLE_CLIENT_SECRET"),
     /**

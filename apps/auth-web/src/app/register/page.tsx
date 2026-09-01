@@ -5,11 +5,11 @@ import Link from "next/link";
 import { Button, Alert } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 
-import { RegisterForm } from "@/components/RegisterForm";
+import { TALENT_URL } from "@/lib/urls";
+import { RegisterForm } from "@/components/auth/RegisterForm";
 
 export default function RegisterPage() {
-  const TALENT_URL =
-    process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
