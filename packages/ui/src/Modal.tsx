@@ -23,28 +23,34 @@ export const Modal: React.FC<ModalProps> = ({
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!isOpen) return;
+
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === "Escape") {
         onClose();
       }
     };
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.documentElement.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKeyDown);
-    }
-    return () => {
-      const otherDialogs = Array.from(
-        document.querySelectorAll('[role="dialog"][aria-modal="true"]'),
-      ).filter((el) => el !== modalRef.current);
 
-      if (otherDialogs.length === 0) {
-        document.body.style.overflow = "";
-        document.documentElement.style.overflow = "";
-      }
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      const remainingModals = document.querySelectorAll(
+        '[role="dialog"][aria-modal="true"]',
+      );
+      if (remainingModals.length <= 1) {
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
+      }
     };
   }, [isOpen, onClose]);
+
 
   if (!isOpen) return null;
 

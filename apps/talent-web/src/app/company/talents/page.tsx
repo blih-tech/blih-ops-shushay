@@ -7,6 +7,7 @@ import {
   Button,
   Badge,
   Card,
+  Modal,
   GlobalNavbar,
   UniversalSearch,
   Skeleton,
@@ -269,9 +270,13 @@ function CompanyTalentsSearchContent() {
         )}
 
         {/* Modal: View Full Talent Profile */}
-        {selectedTalent && (
-          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white border border-[#D9CEDF] rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+        <Modal
+          isOpen={!!selectedTalent}
+          onClose={() => setSelectedTalent(null)}
+          size="lg"
+        >
+          {selectedTalent && (
+            <div className="space-y-6">
               <div className="flex items-start justify-between pb-4 border-b border-[#D9CEDF]">
                 <div className="flex items-center gap-3.5">
                   <div className="w-14 h-14 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-xl shadow-sm">
@@ -289,12 +294,6 @@ function CompanyTalentsSearchContent() {
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={() => setSelectedTalent(null)}
-                  className="p-2 text-[#6E6678] hover:text-[#17131F] hover:bg-[#EEF3FF] rounded-xl cursor-pointer"
-                >
-                  ✕
-                </button>
               </div>
 
               <div className="space-y-1">
@@ -339,8 +338,8 @@ function CompanyTalentsSearchContent() {
                 </Button>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </Modal>
       </main>
     </div>
   );
