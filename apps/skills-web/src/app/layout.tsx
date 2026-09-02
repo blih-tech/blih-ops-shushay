@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Blih Skills — Practical Remote-Ready Learning",
   description:
     "Learn practical remote-work skills, prove your abilities with assessments, and earn verified credentials.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -21,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"

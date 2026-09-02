@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Blih Talent — Evidence-Backed Professional Growth",
   description:
     "Connect verified, remote-ready talents with European and global companies through evidence-backed capability profiles.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -21,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"

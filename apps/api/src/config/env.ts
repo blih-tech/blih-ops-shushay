@@ -40,6 +40,7 @@ export const env = {
     apiUrl: process.env.CHAPA_API_URL || "https://api.chapa.co/v1",
     webhookSecret: process.env.CHAPA_WEBHOOK_SECRET,
   },
+
   google: {
 
     clientId: optional("GOOGLE_CLIENT_ID"),

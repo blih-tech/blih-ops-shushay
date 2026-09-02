@@ -205,6 +205,7 @@ function AdminTalentsContent() {
   );
 }
 
+
 export default function AdminTalentsPage() {
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>

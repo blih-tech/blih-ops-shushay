@@ -9,6 +9,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Blih Auth — Skill & Talent",
   description: "Central authentication for Blih platforms",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -19,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
