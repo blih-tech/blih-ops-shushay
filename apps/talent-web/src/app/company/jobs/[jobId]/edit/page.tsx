@@ -1,5 +1,3 @@
-"use client";
-
 import React, { use } from "react";
 import AuthGuard from "@/components/auth/AuthGuard";
 

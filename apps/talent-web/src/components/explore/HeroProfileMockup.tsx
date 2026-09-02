@@ -38,12 +38,6 @@ export function HeroProfileMockup() {
         },
       });
 
-      // Flowing dash current on connection paths
-      gsap.fromTo(
-        ".connector-path",
-        { strokeDashoffset: 24 },
-        { strokeDashoffset: 0, duration: 1.2, repeat: -1, ease: "none" },
-      );
 
       // Initial scale/fade reveal of the profile surface
       gsap.fromTo(
@@ -108,15 +102,14 @@ export function HeroProfileMockup() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-[520px] h-[620px] mx-auto select-none font-sans"
+      className="relative w-full max-w-[520px] h-[580px] sm:h-[620px] mx-auto select-none font-sans"
     >
-      {/* Skill Profile Surface Card */}
-      <div className="profile-card absolute left-[70px] top-[80px] w-[380px] h-[460px] bg-white border border-[#D9CEDF] rounded-[28px] p-8 shadow-[0_26px_60px_rgba(23,19,31,0.1)] flex flex-col justify-between z-10 transition-shadow hover:shadow-[0_32px_75px_rgba(30,91,255,0.12)]">
+      <div className="profile-card absolute left-0 right-0 mx-auto sm:mx-0 sm:right-auto sm:left-[70px] top-[60px] sm:top-[80px] w-[90%] sm:w-[380px] h-[460px] bg-white border border-[#D9CEDF] rounded-[28px] p-6 sm:p-8 shadow-[0_26px_60px_rgba(23,19,31,0.1)] flex flex-col justify-between z-10 transition-shadow hover:shadow-[0_32px_75px_rgba(30,91,255,0.12)]">
         <div>
           {/* Profile Header */}
           <div className="space-y-1 mb-8">
             <h3 className="font-display text-[32px] font-bold text-[#17131F] leading-tight">
-              Sara Tesfaye
+              Mikeal Tadesse
             </h3>
             <span className="font-mono text-[11px] text-[#1E5BFF] uppercase tracking-wider block font-semibold">
               Product Designer · verified profile
@@ -177,7 +170,7 @@ export function HeroProfileMockup() {
 
         {/* Evidence Strip */}
         <div className="grid grid-cols-4 gap-1.5 pt-6 border-t border-[#D9CEDF]/60">
-          <div className="bg-[#EEF3FF] rounded-2xl p-2 text-center flex flex-col justify-center items-center h-[70px]">
+          <div className="bg-[#EEF3FF] rounded-lg p-1.5 sm:p-2 text-center flex flex-col justify-center items-center h-[60px] sm:h-[70px]">
             <span className="font-display text-lg font-bold text-[#1E5BFF] block leading-none">
               12
             </span>
@@ -185,7 +178,7 @@ export function HeroProfileMockup() {
               projects
             </span>
           </div>
-          <div className="bg-[#EEF3FF] rounded-2xl p-2 text-center flex flex-col justify-center items-center h-[70px]">
+          <div className="bg-[#EEF3FF] rounded-lg p-2 text-center flex flex-col justify-center items-center h-[70px]">
             <span className="font-display text-lg font-bold text-[#1E5BFF] block leading-none">
               4
             </span>
@@ -193,7 +186,7 @@ export function HeroProfileMockup() {
               assessments
             </span>
           </div>
-          <div className="bg-[#EEF3FF] rounded-2xl p-2 text-center flex flex-col justify-center items-center h-[70px]">
+          <div className="bg-[#EEF3FF] rounded-lg p-2 text-center flex flex-col justify-center items-center h-[70px]">
             <span className="font-display text-lg font-bold text-[#1E5BFF] block leading-none">
               3
             </span>
@@ -201,7 +194,7 @@ export function HeroProfileMockup() {
               certs
             </span>
           </div>
-          <div className="bg-[#EEF3FF] rounded-2xl p-2 text-center flex flex-col justify-center items-center h-[70px]">
+          <div className="bg-[#EEF3FF] rounded-lg p-2 text-center flex flex-col justify-center items-center h-[70px]">
             <span className="font-display text-lg font-bold text-[#1E5BFF] block leading-none">
               17
             </span>
@@ -215,7 +208,7 @@ export function HeroProfileMockup() {
       {/* Floating Lifecycle Badges with Magnetic Hover */}
       {/* Learn */}
       <div
-        className="floating-badge-container absolute left-[10px] top-[20px] z-20"
+        className="floating-badge-container absolute left-0 sm:left-[10px] top-[10px] sm:top-[20px] z-20"
         style={{ opacity: 0 }}
       >
         <div
@@ -229,7 +222,7 @@ export function HeroProfileMockup() {
 
       {/* Practice */}
       <div
-        className="floating-badge-container absolute left-[390px] top-[20px] z-20"
+        className="floating-badge-container absolute right-0 sm:right-auto sm:left-[390px] top-[10px] sm:top-[20px] z-20"
         style={{ opacity: 0 }}
       >
         <div
@@ -243,7 +236,7 @@ export function HeroProfileMockup() {
 
       {/* Prove */}
       <div
-        className="floating-badge-container absolute left-[430px] top-[300px] z-20"
+        className="floating-badge-container absolute right-0 sm:right-auto sm:left-[430px] top-[250px] sm:top-[300px] z-20"
         style={{ opacity: 0 }}
       >
         <div
@@ -257,7 +250,7 @@ export function HeroProfileMockup() {
 
       {/* Get Hired */}
       <div
-        className="floating-badge-container absolute left-[5px] top-[440px] z-20"
+        className="floating-badge-container absolute left-0 sm:left-[5px] top-[460px] sm:top-[440px] z-20"
         style={{ opacity: 0 }}
       >
         <div
@@ -269,19 +262,6 @@ export function HeroProfileMockup() {
         </div>
       </div>
 
-      {/* Connecting Decorative Lines (Subtle SVG in Background) */}
-      <svg
-        className="absolute inset-0 w-full h-full pointer-events-none -z-10"
-        fill="none"
-      >
-        <path
-          className="connector-path"
-          d="M 50 40 Q 150 50 250 80 M 430 40 Q 350 150 250 250 M 450 320 Q 300 450 100 460"
-          stroke="#D9CEDF"
-          strokeWidth="2"
-          strokeDasharray="6 6"
-        />
-      </svg>
     </div>
   );
 }

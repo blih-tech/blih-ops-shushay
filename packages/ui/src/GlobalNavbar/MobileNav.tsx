@@ -46,16 +46,16 @@ export function MobileNav({
           : "max-h-0 opacity-0 -translate-y-3 scale-98 mt-0 pointer-events-none"
       }`}
     >
-      <div className="bg-white/95 backdrop-blur-xl border border-[#D9CEDF] rounded-2xl sm:rounded-3xl p-4 shadow-[0_20px_50px_rgba(23,19,31,0.1)] space-y-3 font-sans">
+      <div className="bg-white/80 backdrop-blur-3xl border border-white/60 ring-1 ring-[#D9CEDF]/50 rounded-2xl sm:rounded-3xl p-4 shadow-[0_30px_60px_-15px_rgba(30,91,255,0.15)] space-y-3 font-sans">
         <div className="flex flex-col space-y-1">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className={`px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+              className={`px-3.5 py-2.5 rounded-xl text-sm transition-all duration-300 ease-out flex items-center ${
                 link.active
-                  ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold translate-x-1"
-                  : "text-[#17131F] hover:bg-[#EEF3FF] hover:text-[#1E5BFF]"
+                  ? "bg-gradient-to-r from-[#EEF3FF] to-transparent text-[#1E5BFF] font-bold translate-x-1 border-l-2 border-[#1E5BFF]"
+                  : "text-[#6E6678] hover:bg-white/60 hover:text-[#17131F] font-medium"
               }`}
               onClick={() => setMobileMenuOpen(false)}
             >
@@ -67,8 +67,8 @@ export function MobileNav({
         <div className="pt-3 border-t border-[#D9CEDF]/70 flex flex-col gap-2">
           {user ? (
             <div className="space-y-2.5">
-              <div className="p-3 bg-[#EEF3FF]/40 rounded-xl border border-[#D9CEDF]/50 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm shadow-sm">
+              <div className="p-3 bg-gradient-to-b from-[#EEF3FF]/60 to-transparent rounded-xl border border-[#D9CEDF]/30 flex items-center gap-3 shadow-[inset_0_1px_0_white]">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white flex items-center justify-center font-display font-bold text-sm shadow-inner ring-2 ring-white shrink-0">
                   {userInitial}
                 </div>
                 <div className="min-w-0 flex-1">

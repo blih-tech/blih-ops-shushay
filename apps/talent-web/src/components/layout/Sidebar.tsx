@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
@@ -69,19 +69,17 @@ export function Sidebar({ onNavClick }: SidebarProps) {
               onClick={onNavClick}
               className={`
                 flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-colors duration-interactive group
-                ${
-                  active
-                    ? "bg-primary/8 text-primary font-semibold"
-                    : "text-body hover:bg-muted hover:text-foreground"
+                ${active
+                  ? "bg-primary/8 text-primary font-semibold"
+                  : "text-body hover:bg-muted hover:text-foreground"
                 }
               `}
             >
               <Icon
-                className={`h-4 w-4 shrink-0 transition-colors ${
-                  active
-                    ? "text-primary"
-                    : "text-muted-foreground group-hover:text-foreground"
-                }`}
+                className={`h-4 w-4 shrink-0 transition-colors ${active
+                  ? "text-primary"
+                  : "text-muted-foreground group-hover:text-foreground"
+                  }`}
               />
               <span className="flex-1">{item.label}</span>
               {active && (

@@ -40,21 +40,19 @@ export function LearnCurriculumSidebar({
               <button
                 key={lesson.id || idx}
                 onClick={() => onSelectLesson(idx)}
-                className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
-                  isActive
+                className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${isActive
                     ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
                     : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                      isCompleted
+                    className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${isCompleted
                         ? "bg-[#E6F5F0] text-[#2E8F79]"
                         : isActive
                           ? "bg-[#1E5BFF] text-white"
                           : "bg-[#EEF3FF] text-[#6E6678]"
-                    }`}
+                      }`}
                   >
                     {isCompleted ? (
                       <CheckCircle2 className="w-4 h-4" />

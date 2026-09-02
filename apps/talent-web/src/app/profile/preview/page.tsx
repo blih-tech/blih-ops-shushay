@@ -66,9 +66,9 @@ function ProfilePreviewContent() {
 
   const sortedExperience = profile?.experience
     ? [...profile.experience].sort(
-        (a, b) =>
-          new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-      )
+      (a, b) =>
+        new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
+    )
     : [];
 
   const sortedEducation = profile?.education
@@ -157,11 +157,11 @@ function ProfilePreviewContent() {
                   <span className="font-display font-bold text-[34px] text-[#1E5BFF]">
                     {profile?.fullName
                       ? profile.fullName
-                          .split(" ")
-                          .map((w) => w[0])
-                          .join("")
-                          .toUpperCase()
-                          .slice(0, 2)
+                        .split(" ")
+                        .map((w) => w[0])
+                        .join("")
+                        .toUpperCase()
+                        .slice(0, 2)
                       : "ST"}
                   </span>
                 )}
@@ -174,7 +174,7 @@ function ProfilePreviewContent() {
 
               <div className="space-y-2">
                 <h1 className="font-display text-4xl sm:text-5xl font-bold text-[#17131F] leading-tight tracking-tight">
-                  {profile?.fullName || "Sara Tesfaye"}
+                  {profile?.fullName || "Mikeal Tadesse"}
                 </h1>
                 <div className="flex items-center gap-3 flex-wrap">
                   <h3 className="font-sans text-xl font-semibold text-[#1E5BFF]">

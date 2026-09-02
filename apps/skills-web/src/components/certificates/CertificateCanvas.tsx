@@ -10,14 +10,14 @@ export interface CertificateCanvasProps {
 }
 
 export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
-  recipientName = "Sara Tesfaye",
+  recipientName = "Mikeal Tadesse",
   courseName = "React Product Systems & Architecture",
   issueDate = "August 2026",
   credentialId = "BLIH-CR-892401-VERIFIED",
   score = 94,
 }) => {
   return (
-    <div className="w-full bg-gradient-to-br from-white via-[#EEF3FF]/60 to-white border-2 border-[#D9CEDF] rounded-3xl p-5 sm:p-10 md:p-12 shadow-[0_20px_60px_rgba(30,91,255,0.08)] relative overflow-hidden space-y-6 sm:space-y-8">
+    <div className="w-full bg-gradient-to-br from-white via-[#EEF3FF]/60 to-white border-2 border-[#D9CEDF] rounded-md p-5 sm:p-10 md:p-12 shadow-[0_20px_60px_rgba(30,91,255,0.08)] relative overflow-hidden space-y-6 sm:space-y-8">
       {/* Top watermark / branding */}
       <div className="flex items-center justify-between border-b border-[#D9CEDF]/80 pb-6">
         <div className="flex items-baseline gap-2">
@@ -55,7 +55,7 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
       </div>
 
       {/* Competencies Verified */}
-      <div className="bg-white/80 border border-[#D9CEDF] rounded-2xl p-6 max-w-xl mx-auto space-y-3">
+      <div className="bg-white/80 border border-[#D9CEDF] rounded-lg p-6 max-w-xl mx-auto space-y-3">
         <span className="font-mono text-[11px] uppercase tracking-wider text-[#6E6678] block text-center">
           Verified Competency Breakdown
         </span>

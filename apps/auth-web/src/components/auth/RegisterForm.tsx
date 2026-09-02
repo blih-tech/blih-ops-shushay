@@ -61,7 +61,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setFullName(e.target.value)
           }
-          placeholder="Sara Tesfaye"
+          placeholder="Mikeal Tadesse"
           leftIcon={<UserIcon className="h-4 w-4" />}
         />
 
@@ -73,7 +73,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)
           }
-          placeholder="sara@blih.example"
+          placeholder="mikeal@blih.example"
           leftIcon={<Mail className="h-4 w-4" />}
         />
 
@@ -96,22 +96,20 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             <button
               type="button"
               onClick={() => setRole("TALENT")}
-              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
-                role === "TALENT"
-                  ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
-                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
-              }`}
+              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${role === "TALENT"
+                ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
+                : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                }`}
             >
               Learning + work
             </button>
             <button
               type="button"
               onClick={() => setRole("COMPANY")}
-              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
-                role === "COMPANY"
-                  ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
-                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
-              }`}
+              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${role === "COMPANY"
+                ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
+                : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                }`}
             >
               Hiring talent
             </button>

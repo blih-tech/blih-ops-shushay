@@ -15,9 +15,8 @@ import {
 
 const router = Router();
 
-// Public webhook endpoint for Chapa server-to-server notifications
+// Public webhook endpoint for Chapa server-to-server POST notifications only
 router.post("/webhook", chapaWebhook);
-router.get("/webhook", chapaWebhook);
 
 // Protected payment endpoints
 router.post(

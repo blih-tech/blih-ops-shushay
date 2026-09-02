@@ -6,7 +6,7 @@ export type { TalentProfileCard };
 export const mockTalents: TalentProfileCard[] = [
   {
     id: "tal-1",
-    name: "Sara Tesfaye",
+    name: "Mikeal Tadesse",
     title: "Senior Frontend Systems Engineer",
     location: "Addis Ababa, Ethiopia",
     englishLevel: "Fluent",

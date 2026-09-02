@@ -38,7 +38,7 @@ export const env = {
   chapa: {
     secretKey: process.env.CHAPA_SECRET_KEY || "mock-secret-key",
     apiUrl: process.env.CHAPA_API_URL || "https://api.chapa.co/v1",
-    webhookSecret: process.env.CHAPA_WEBHOOK_SECRET,
+    // Note: Chapa uses the same secretKey for HMAC webhook signature verification.
   },
 
   google: {

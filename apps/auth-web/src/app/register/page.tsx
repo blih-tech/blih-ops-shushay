@@ -43,7 +43,7 @@ export default function RegisterPage() {
           href="/login"
           className="font-mono text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-4 py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white"
         >
-          Already have an account? Sign in
+          Already have an account? <span className="text-[#1E5BFF] underline underline-offset-3">Sign in</span>
         </Link>
       </div>
     </header>

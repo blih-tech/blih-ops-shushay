@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Badge } from "@blih/ui";
 import { Play } from "lucide-react";

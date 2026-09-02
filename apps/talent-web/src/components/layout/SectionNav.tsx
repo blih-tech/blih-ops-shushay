@@ -59,17 +59,15 @@ export function SectionNav({ items }: SectionNavProps) {
             onClick={() => handleClick(item.id)}
             className={`
               w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-interactive
-              ${
-                active
-                  ? "bg-primary/8 text-primary"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              ${active
+                ? "bg-primary/8 text-primary"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
               }
             `}
           >
             <span
-              className={`h-1.5 w-1.5 rounded-full shrink-0 transition-colors ${
-                active ? "bg-primary" : "bg-border"
-              }`}
+              className={`h-1.5 w-1.5 rounded-full shrink-0 transition-colors ${active ? "bg-primary" : "bg-border"
+                }`}
             />
             {item.label}
           </button>

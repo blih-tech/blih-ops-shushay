@@ -1,30 +1,30 @@
+import { randomBytes } from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
 import { PaymentStatus, PaymentType } from "@prisma/client";
 import { chapaService } from "./chapa.service";
 import { createNotification, sendPaymentConfirmationEmail } from "../notifications/notification.service";
-import { InitializeSkillsPaymentInput } from "./payment.schemas";
 
 export const SKILLS_ACCESS_PRICE = 1000;
 export const SKILLS_ACCESS_CURRENCY = "ETB";
 
 /**
- * Generate a unique, safe transaction reference for Blih Skills payment.
+ * Generate a cryptographically unique transaction reference for Blih Skills payment.
+ * Uses crypto.randomBytes to prevent collisions even under concurrent load.
  */
 function generateTxRef(): string {
   const timestamp = Date.now();
-  const random = Math.floor(Math.random() * 10000);
+  const random = randomBytes(8).toString("hex");
   return `blih_skills_${timestamp}_${random}`;
 }
 
 /**
  * Initiates a Blih Skills payment checkout session.
+ * returnUrl and callbackUrl are always derived from server env vars —
+ * clients cannot override them to prevent open-redirect attacks.
  */
-export async function initializeSkillsPayment(
-  userId: string,
-  input?: InitializeSkillsPaymentInput,
-) {
+export async function initializeSkillsPayment(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
@@ -65,10 +65,8 @@ export async function initializeSkillsPayment(
   const firstName = nameParts[0] || "Learner";
   const lastName = nameParts.slice(1).join(" ") || "User";
 
-  const returnUrl =
-    input?.returnUrl || `${env.skillsWebUrl}/checkout/return?tx_ref=${txRef}`;
-  const callbackUrl =
-    input?.callbackUrl || `${env.apiUrl}/api/v1/payments/webhook`;
+  const returnUrl = `${env.skillsWebUrl}/checkout/return?tx_ref=${txRef}`;
+  const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
   const chapaRes = await chapaService.initializePayment({
     amount: SKILLS_ACCESS_PRICE,
@@ -101,8 +99,12 @@ export async function initializeSkillsPayment(
 /**
  * Server-side payment verification and entitlement granting.
  * Strictly idempotent: multiple invocations return the same successful entitlement state.
+ *
+ * @param txRef - Transaction reference to verify
+ * @param callerUserId - The authenticated user making the request; when provided, the txRef must
+ *   belong to this user. Pass undefined for server-to-server webhook calls (already HMAC-verified).
  */
-export async function verifyAndCompletePayment(txRef: string) {
+export async function verifyAndCompletePayment(txRef: string, callerUserId?: string) {
   const transaction = await prisma.paymentTransaction.findUnique({
     where: { txRef },
     include: { user: { include: { talentProfile: true } } },
@@ -110,6 +112,12 @@ export async function verifyAndCompletePayment(txRef: string) {
 
   if (!transaction) {
     throw new AppError(404, "Transaction reference not found");
+  }
+
+  // Ownership check: ensure the authenticated caller owns this transaction.
+  // Skipped for webhook path (callerUserId is undefined, already HMAC-verified).
+  if (callerUserId && transaction.userId !== callerUserId) {
+    throw new AppError(403, "You do not have permission to verify this transaction.");
   }
 
   // Idempotency: If payment was already verified as SUCCESSFUL, return existing state cleanly
@@ -138,18 +146,16 @@ export async function verifyAndCompletePayment(txRef: string) {
     verification.status === "successful" ||
     (isTestMode && verification.rawResponse?.status === "success");
 
-  // Validate amount (1000 ETB) and currency (ETB)
-  const verifyAmount =
-    verification.amount > 0
-      ? verification.amount
-      : isTestMode
-        ? SKILLS_ACCESS_PRICE
-        : 0;
+  // Validate amount (1000 ETB) and currency (ETB).
+  // No test-mode amount fallback: if a mock returns amount=0, the mock is wrong.
+  const verifyAmount = verification.amount;
 
   const isAmountValid = verifyAmount >= SKILLS_ACCESS_PRICE;
+  // In test-mode the Chapa sandbox can return an empty currency string; allow it.
+  // In production, an absent currency is always a rejection.
   const isCurrencyValid =
-    !verification.currency ||
-    verification.currency.toUpperCase() === SKILLS_ACCESS_CURRENCY;
+    (isTestMode && !verification.currency) ||
+    verification.currency?.toUpperCase() === SKILLS_ACCESS_CURRENCY;
 
 
   if (verification.status === "pending") {

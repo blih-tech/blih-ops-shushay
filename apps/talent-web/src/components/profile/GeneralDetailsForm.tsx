@@ -74,7 +74,7 @@ export const GeneralDetailsForm: React.FC<GeneralDetailsFormProps> = ({
             >
               <Input
                 type="text"
-                placeholder="e.g. Sara Tesfaye"
+                placeholder="e.g. Mikeal Tadesse"
                 leftIcon={<User className="h-4 w-4 text-[#6E6678]" />}
                 disabled={saving}
                 error={errors.fullName?.message}

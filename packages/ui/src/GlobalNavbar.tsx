@@ -81,32 +81,32 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
   return (
     <header className="sticky top-4 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-      <nav className="bg-white/95 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
+      <nav className="bg-white/70 backdrop-blur-2xl border border-white/50 ring-1 ring-[#D9CEDF]/50 rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_16px_40px_-12px_rgba(30,91,255,0.1)] transition-all duration-300">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
           <a
             href={talentUrl}
             className="flex items-baseline gap-2.5 group cursor-pointer"
           >
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
+            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1E5BFF] to-[#0A3DCC] group-hover:drop-shadow-[0_2px_8px_rgba(30,91,255,0.25)] transition-all duration-300">
               BLIH OPS
             </span>
-            <span className="hidden sm:inline-block font-mono text-[11px] text-[#6E6678] uppercase tracking-wider">
+            <span className="hidden sm:inline-block font-mono text-[11px] text-[#6E6678] uppercase tracking-wider group-hover:text-[#1E5BFF] transition-colors duration-300">
               Skill & Talent
             </span>
           </a>
         </div>
 
         {/* Desktop navigation links */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8">
+        <div className="hidden md:flex items-center gap-1 lg:gap-2">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className={`font-sans text-sm transition-colors py-1 cursor-pointer ${
+              className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${
                 link.active
-                  ? "text-[#1E5BFF] font-bold border-b-2 border-[#1E5BFF]"
-                  : "text-[#17131F] hover:text-[#1E5BFF] font-normal"
+                  ? "text-[#1E5BFF] font-bold bg-white shadow-sm ring-1 ring-[#D9CEDF]/50"
+                  : "text-[#6E6678] hover:text-[#17131F] hover:bg-white/60 font-medium"
               }`}
             >
               {link.label}

@@ -21,7 +21,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
   const { user, logout } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Find the selected talent from mock database, default to Sara Tesfaye (tal-1)
+  // Find the selected talent from mock database, default to Mikeal Tadesse (tal-1)
   const talent = mockTalents.find((t) => t.id === talentId) || mockTalents[0];
 
   useGSAP(

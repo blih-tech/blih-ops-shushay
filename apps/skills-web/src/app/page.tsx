@@ -9,8 +9,8 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-import { LandingProfileMockup } from "@/components/landing/LandingProfileMockup";
-import { GrowthCycleStrip } from "@/components/landing/GrowthCycleStrip";
+import { LandingProfileMockup } from "@/components/explore/LandingProfileMockup";
+import { GrowthCycleStrip } from "@/components/explore/GrowthCycleStrip";
 
 export default function SkillsHomePage() {
   const { user, loading, logout } = useAuth();
