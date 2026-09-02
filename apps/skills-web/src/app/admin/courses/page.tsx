@@ -2,19 +2,9 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import {
-  Plus,
-  BookOpen,
-  Pencil,
-  Eye,
-  EyeOff,
-  GraduationCap,
-  ArrowLeft,
-  Trash2,
-} from "lucide-react";
+import { Plus, GraduationCap, ArrowLeft } from "lucide-react";
 import {
   Button,
-  Badge,
   Alert,
   ConfirmDialog,
   GlobalNavbar,
@@ -28,6 +18,7 @@ import {
   unpublishCourse,
   deleteCourse,
 } from "@/lib/courses";
+import { AdminCourseCard } from "@/components/admin/AdminCourseCard";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
@@ -122,7 +113,6 @@ function CoursesContent() {
           </Button>
         </Link>
 
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
           <div className="space-y-1">
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
@@ -139,7 +129,6 @@ function CoursesContent() {
           </Link>
         </div>
 
-        {/* Errors */}
         {error && (
           <Alert variant="error" onClose={() => setError(null)}>
             {error}
@@ -151,7 +140,6 @@ function CoursesContent() {
           </Alert>
         )}
 
-        {/* Search Bar */}
         <div className="w-full">
           <UniversalSearch
             value={searchQuery}
@@ -160,7 +148,6 @@ function CoursesContent() {
           />
         </div>
 
-        {/* Loading */}
         {loading && (
           <div className="space-y-4">
             {[0, 1, 2].map((i) => (
@@ -172,7 +159,6 @@ function CoursesContent() {
           </div>
         )}
 
-        {/* Empty */}
         {!loading && !error && filteredCourses.length === 0 && (
           <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
             <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
@@ -199,85 +185,20 @@ function CoursesContent() {
           </div>
         )}
 
-        {/* Course list */}
         {!loading && filteredCourses.length > 0 && (
           <div className="space-y-4">
-            {filteredCourses.map((course) => {
-              const isPublished = course.status === "PUBLISHED";
-              const isActing = actionLoading === course.id;
-              const lessonCount = course._count?.lessons ?? 0;
-              return (
-                <div
-                  key={course.id}
-                  className="bg-white border border-[#D9CEDF] rounded-3xl p-6 hover:border-[#1E5BFF]/40 transition-all shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                >
-                  {/* Icon + Info */}
-                  <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF] shrink-0">
-                      <BookOpen className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-display font-bold text-base sm:text-lg text-[#17131F] truncate">
-                        {course.title}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge
-                          variant={isPublished ? "verified" : "secondary"}
-                          size="sm"
-                        >
-                          {isPublished ? "Published" : "Draft"}
-                        </Badge>
-                        <span className="text-xs font-mono text-[#6E6678]">
-                          {lessonCount}{" "}
-                          {lessonCount === 1 ? "lesson" : "lessons"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Button
-                      variant={isPublished ? "outline" : "primary"}
-                      size="sm"
-                      isLoading={isActing}
-                      onClick={() => handlePublishToggle(course)}
-                      leftIcon={
-                        isPublished ? (
-                          <EyeOff className="h-3.5 w-3.5" />
-                        ) : (
-                          <Eye className="h-3.5 w-3.5" />
-                        )
-                      }
-                    >
-                      {isPublished ? "Unpublish" : "Publish"}
-                    </Button>
-                    <Link href={`/admin/courses/${course.id}/edit`}>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        leftIcon={<Pencil className="h-3.5 w-3.5" />}
-                      >
-                        Edit
-                      </Button>
-                    </Link>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828] transition-colors"
-                      leftIcon={<Trash2 className="h-3.5 w-3.5" />}
-                      onClick={() => setDeleteConfirmCourse(course)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
+            {filteredCourses.map((course) => (
+              <AdminCourseCard
+                key={course.id}
+                course={course}
+                isActing={actionLoading === course.id}
+                onPublishToggle={handlePublishToggle}
+                onDeleteClick={setDeleteConfirmCourse}
+              />
+            ))}
           </div>
         )}
 
-        {/* Confirmation Modal */}
         <ConfirmDialog
           isOpen={!!confirmCourse}
           title="Unpublish Course"
@@ -295,7 +216,6 @@ function CoursesContent() {
           onClose={() => setConfirmCourse(null)}
         />
 
-        {/* Delete Confirmation Modal */}
         <ConfirmDialog
           isOpen={!!deleteConfirmCourse}
           title="Delete Course"

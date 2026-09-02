@@ -33,6 +33,13 @@ export const env = {
     apiSecret: required("CLOUDINARY_API_SECRET"),
   },
   authUrl: process.env.AUTH_URL ?? "http://localhost:3003",
+  apiUrl: process.env.API_URL ?? "http://localhost:4000",
+  skillsWebUrl: process.env.SKILLS_WEB_URL ?? "http://localhost:3001",
+  chapa: {
+    secretKey: process.env.CHAPA_SECRET_KEY || "mock-secret-key",
+    apiUrl: process.env.CHAPA_API_URL || "https://api.chapa.co/v1",
+    webhookSecret: process.env.CHAPA_WEBHOOK_SECRET,
+  },
   google: {
 
     clientId: optional("GOOGLE_CLIENT_ID"),
@@ -47,3 +54,4 @@ export const env = {
       "http://localhost:4000/api/v1/auth/google/callback",
   },
 };
+

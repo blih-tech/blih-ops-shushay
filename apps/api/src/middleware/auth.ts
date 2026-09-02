@@ -59,3 +59,34 @@ export function requireRole(allowedRoles: Role[]) {
     next();
   };
 }
+
+export async function requireSkillsAccess(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  if (!req.user) {
+    return next(new AppError(401, "Authentication required"));
+  }
+
+  // Administrators automatically have access
+  if (req.user.role === Role.ADMIN) {
+    return next();
+  }
+
+  const entitlement = await prisma.skillsEntitlement.findUnique({
+    where: { userId: req.user.id },
+  });
+
+  if (!entitlement) {
+    return next(
+      new AppError(
+        403,
+        "Skills payment required. Please purchase permanent access for 1,000 ETB to unlock course content.",
+      ),
+    );
+  }
+
+  next();
+}
+

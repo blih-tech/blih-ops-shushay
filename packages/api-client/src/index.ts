@@ -14,7 +14,13 @@ export async function apiFetch<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+  const baseUrl = API_URL ? API_URL.replace(/\/+$/, "") : "";
+  const normalizedPath = path.startsWith("/api/v1")
+    ? path.replace(/^\/api\/v1/, "")
+    : path;
+  const url = `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+
+  const res = await fetch(url, {
     ...options,
     credentials: "include",
     headers: {
@@ -41,7 +47,13 @@ export async function apiFetchFormData<T>(
   formData: FormData,
   method = "POST",
 ): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
+  const baseUrl = API_URL ? API_URL.replace(/\/+$/, "") : "";
+  const normalizedPath = path.startsWith("/api/v1")
+    ? path.replace(/^\/api\/v1/, "")
+    : path;
+  const url = `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+
+  const res = await fetch(url, {
     method,
     credentials: "include",
     body: formData,
@@ -58,3 +70,35 @@ export async function apiFetchFormData<T>(
 
   return res.json();
 }
+
+// ─── Payment & Entitlement API Client Helpers ────────────────────────────────
+
+export async function initializeSkillsPayment(returnUrl?: string) {
+  return apiFetch<{
+    alreadyHasAccess: boolean;
+    checkoutUrl: string | null;
+    txRef: string | null;
+  }>("/payments/skills/initialize", {
+    method: "POST",
+    body: JSON.stringify({ returnUrl }),
+  });
+}
+
+export async function verifyPayment(txRef: string) {
+  return apiFetch<{
+    verified: boolean;
+    payment: any;
+    entitlement: any;
+    message: string;
+  }>(`/payments/verify/${txRef}`);
+}
+
+export async function getSkillsAccessStatus() {
+  return apiFetch<{
+    hasAccess: boolean;
+    grantedAt?: string | null;
+    payment?: any;
+  }>("/payments/skills/access-status");
+}
+
+

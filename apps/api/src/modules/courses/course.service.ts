@@ -209,6 +209,32 @@ export async function getCoursePublic(id: string) {
   return publicCourse;
 }
 
+export async function getCourseProtected(id: string) {
+  const course = await prisma.course.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+      lessons: {
+        orderBy: { order: "asc" },
+        select: lessonWithContentSelect,
+      },
+    },
+  });
+
+  if (!course || course.status !== "PUBLISHED") {
+    throw new AppError(404, "Course not found");
+  }
+
+  const { status: _status, ...protectedCourse } = course;
+  return protectedCourse;
+}
+
+
 // ─── Lessons ──────────────────────────────────────────────────────────────────
 
 export async function createLesson(courseId: string, data: CreateLessonInput) {

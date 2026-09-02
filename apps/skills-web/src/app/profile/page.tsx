@@ -16,8 +16,9 @@ import {
   GlobalNavbar,
 } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
-import { ArrowLeft, ExternalLink, Sparkles, CheckCircle2 } from "lucide-react";
-import { TalentProfile } from "@/types/talent";
+import { ArrowLeft } from "lucide-react";
+import { ProfileCompletionCard } from "@/components/profile/ProfileCompletionCard";
+import type { TalentProfile } from "@/types/talent";
 
 const ENGLISH_LEVEL_OPTIONS = [
   { value: "BASIC", label: "Basic" },
@@ -35,7 +36,6 @@ function ProfileContent() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Form states
   const [fullName, setFullName] = useState("");
   const [title, setTitle] = useState("");
   const [phone, setPhone] = useState("");
@@ -95,22 +95,6 @@ function ProfileContent() {
     }
   };
 
-  const getFriendlyFieldName = (field: string) => {
-    const names: Record<string, string> = {
-      fullName: "Full Name",
-      title: "Professional Title",
-      phone: "Phone Number",
-      country: "Country",
-      city: "City",
-      englishLevel: "English Level",
-      skills: "Skills List",
-      experience: "Work Experience",
-      education: "Education Details",
-      cvUrl: "CV Document Upload",
-    };
-    return names[field] || field;
-  };
-
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
@@ -133,7 +117,6 @@ function ProfileContent() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column: Form */}
           <div className="lg:col-span-8 space-y-6">
             <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs">
               <CardTitle className="text-2xl font-bold font-display">
@@ -143,12 +126,7 @@ function ProfileContent() {
                 Update your basic details to build your remote credibility.
               </CardDescription>
 
-              {error && (
-                <Alert variant="error" className="mt-4">
-                  {error}
-                </Alert>
-              )}
-
+              {error && <Alert variant="error" className="mt-4">{error}</Alert>}
               {success && (
                 <Alert
                   variant="success"
@@ -162,7 +140,6 @@ function ProfileContent() {
                 <div className="space-y-6 py-6 animate-pulse">
                   <div className="h-10 bg-[#EEF3FF] rounded-lg" />
                   <div className="h-10 bg-[#EEF3FF] rounded-lg w-5/6" />
-                  <div className="h-24 bg-[#EEF3FF] rounded-lg" />
                 </div>
               ) : (
                 <form onSubmit={handleSave} className="space-y-6 mt-6">
@@ -259,92 +236,12 @@ function ProfileContent() {
             </Card>
           </div>
 
-          {/* Right Column: Completion Meter */}
           <div className="lg:col-span-4 space-y-6">
-            <Card className="border border-[#D9CEDF] rounded-3xl p-6 bg-white shadow-xs space-y-6">
-              <div>
-                <CardTitle className="text-xl font-bold font-display flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#1E5BFF]" />
-                  <span>Profile Completion</span>
-                </CardTitle>
-                <CardDescription className="font-sans text-xs text-[#6E6678] mt-1">
-                  Complete your verified profile to apply for opportunities.
-                </CardDescription>
-              </div>
-
-              {!loading && profile && (
-                <div className="space-y-6">
-                  {/* Progress Ring / Bar */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-baseline text-sm">
-                      <span className="font-mono text-xs font-bold text-[#6E6678] uppercase">
-                        Current Level
-                      </span>
-                      <span className="font-display text-2xl font-bold text-[#1E5BFF]">
-                        {profile.profileCompletion.percentage}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-[#EEF3FF] h-3 rounded-full overflow-hidden">
-                      <div
-                        className="bg-[#1E5BFF] h-full rounded-full transition-all duration-500"
-                        style={{
-                          width: `${profile.profileCompletion.percentage}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Missing Fields Checklist */}
-                  {profile.profileCompletion.missingFields.length > 0 ? (
-                    <div className="space-y-3">
-                      <span className="font-mono text-xs font-bold text-[#6E6678] uppercase block">
-                        Remaining Items (
-                        {profile.profileCompletion.missingFields.length})
-                      </span>
-                      <div className="space-y-2">
-                        {profile.profileCompletion.missingFields.map(
-                          (field) => (
-                            <div
-                              key={field}
-                              className="flex items-center gap-2 text-xs text-[#6E6678] font-sans"
-                            >
-                              <div className="w-1.5 h-1.5 rounded-full bg-[#6E6678]" />
-                              <span>{getFriendlyFieldName(field)}</span>
-                            </div>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-xs font-sans text-[#2E8F79] bg-[#E6F5F0] p-3 rounded-xl border border-[#2E8F79]/10">
-                      <CheckCircle2 className="w-4 h-4 shrink-0 text-[#2E8F79]" />
-                      <span>
-                        Your profile is fully complete and ready for
-                        applications!
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Link to Talent Web for CV/Files/Experience */}
-                  <div className="pt-4 border-t border-[#D9CEDF]/50">
-                    <a
-                      href={`${talentUrl}/profile/edit`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        variant="outline"
-                        fullWidth
-                        size="sm"
-                        rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
-                      >
-                        Upload CV & Experience
-                      </Button>
-                    </a>
-                  </div>
-                </div>
-              )}
-            </Card>
+            <ProfileCompletionCard
+              profile={profile}
+              loading={loading}
+              talentUrl={talentUrl}
+            />
           </div>
         </div>
       </main>

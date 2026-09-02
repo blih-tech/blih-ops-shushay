@@ -59,11 +59,13 @@ export interface PublicLesson {
   id: string;
   title: string;
   order: number;
+  content?: string | null;
   videoUrl: string | null;
   documents: Pick<LessonDocument, "id" | "name">[];
   quiz: Pick<Quiz, "id" | "title"> | null;
   assignment: Pick<Assignment, "id" | "title"> | null;
 }
+
 
 export interface PublicCourse {
   id: string;

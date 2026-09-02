@@ -8,7 +8,6 @@ import {
   Badge,
   Alert,
   Card,
-  Modal,
   GlobalNavbar,
   UniversalSearch,
   Skeleton,
@@ -16,6 +15,7 @@ import {
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminTalents } from "@/lib/adminApi";
+import { TalentInspectModal } from "@/components/admin/TalentInspectModal";
 import type { AdminTalentItem } from "@/types/admin";
 
 function AdminTalentsContent() {
@@ -60,11 +60,9 @@ function AdminTalentsContent() {
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col font-sans antialiased relative">
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
-      {/* Global Navbar */}
       <GlobalNavbar currentApp="admin" user={user} onSignOut={logout} />
 
       <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
           <div className="space-y-1.5">
             <Link
@@ -80,15 +78,13 @@ function AdminTalentsContent() {
               <Badge variant="primary">{talents.length} REGISTERED</Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Inspect registered talent profiles, verify competencies, CV
-              attachments, and career history.
+              Inspect registered talent profiles, verify competencies, CV attachments, and career history.
             </p>
           </div>
         </div>
 
         {error && <Alert variant="error">{error}</Alert>}
 
-        {/* Search Bar */}
         <div className="w-full">
           <UniversalSearch
             value={searchQuery}
@@ -104,25 +100,9 @@ function AdminTalentsContent() {
                 <div className="flex items-center gap-4">
                   <Skeleton variant="circular" className="h-12 w-12" />
                   <div className="space-y-2 flex-1">
-                    <Skeleton
-                      variant="rectangular"
-                      className="h-6 w-3/4 rounded-lg"
-                    />
-                    <Skeleton
-                      variant="rectangular"
-                      className="h-4 w-1/2 rounded-lg"
-                    />
+                    <Skeleton variant="rectangular" className="h-6 w-3/4 rounded-lg" />
+                    <Skeleton variant="rectangular" className="h-4 w-1/2 rounded-lg" />
                   </div>
-                </div>
-                <div className="pt-4 border-t border-[#D9CEDF] space-y-2">
-                  <Skeleton
-                    variant="rectangular"
-                    className="h-4 w-full rounded"
-                  />
-                  <Skeleton
-                    variant="rectangular"
-                    className="h-4 w-5/6 rounded"
-                  />
                 </div>
               </Card>
             ))}
@@ -136,9 +116,7 @@ function AdminTalentsContent() {
               No talent profiles found
             </h3>
             <p className="text-sm text-[#6E6678] max-w-sm mx-auto">
-              {searchQuery
-                ? "No candidates match your search query."
-                : "Registered candidates will appear here."}
+              {searchQuery ? "No candidates match your search query." : "Registered candidates will appear here."}
             </p>
           </div>
         ) : (
@@ -153,17 +131,9 @@ function AdminTalentsContent() {
                     <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg overflow-hidden shrink-0 shadow-xs">
                       {talent.photoUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={talent.photoUrl}
-                          alt="Photo"
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={talent.photoUrl} alt="Photo" className="w-full h-full object-cover" />
                       ) : (
-                        <span>
-                          {(talent.fullName || talent.user.email)
-                            .charAt(0)
-                            .toUpperCase()}
-                        </span>
+                        <span>{(talent.fullName || talent.user.email).charAt(0).toUpperCase()}</span>
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -173,9 +143,7 @@ function AdminTalentsContent() {
                       <p className="text-xs font-mono text-[#1E5BFF] truncate font-medium">
                         {talent.title || "Talent Member"}
                       </p>
-                      <p className="text-xs text-[#6E6678] truncate mt-0.5">
-                        {talent.user.email}
-                      </p>
+                      <p className="text-xs text-[#6E6678] truncate mt-0.5">{talent.user.email}</p>
                     </div>
                   </div>
 
@@ -185,7 +153,6 @@ function AdminTalentsContent() {
                     </p>
                   )}
 
-                  {/* Skills tags */}
                   {talent.skills && talent.skills.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {talent.skills.slice(0, 4).map((skill, si) => (
@@ -203,22 +170,6 @@ function AdminTalentsContent() {
                       )}
                     </div>
                   )}
-
-                  {/* Quick metadata strip */}
-                  <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#D9CEDF]/60 text-xs font-mono text-[#6E6678]">
-                    <div>
-                      <span className="text-[#17131F] font-bold">
-                        {talent.experience.length}
-                      </span>{" "}
-                      Roles
-                    </div>
-                    <div>
-                      <span className="text-[#17131F] font-bold">
-                        {talent.englishLevel || "N/A"}
-                      </span>{" "}
-                      English
-                    </div>
-                  </div>
                 </div>
 
                 <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
@@ -232,9 +183,7 @@ function AdminTalentsContent() {
                       <FileText className="h-3.5 w-3.5" /> View CV
                     </a>
                   ) : (
-                    <span className="text-xs font-mono text-[#6E6678]">
-                      No CV Attached
-                    </span>
+                    <span className="text-xs font-mono text-[#6E6678]">No CV Attached</span>
                   )}
                   <Button
                     size="sm"
@@ -250,131 +199,7 @@ function AdminTalentsContent() {
           </div>
         )}
 
-        {/* Modal Drawer: Inspect Talent Details */}
-        <Modal
-          isOpen={!!selectedTalent}
-          onClose={() => setSelectedTalent(null)}
-          size="lg"
-        >
-          {selectedTalent && (
-            <div className="space-y-6">
-              <div className="flex items-start justify-between pb-4 border-b border-[#D9CEDF]">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-14 h-14 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-xl overflow-hidden shrink-0 shadow-sm">
-                    {selectedTalent.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={selectedTalent.photoUrl}
-                        alt="Photo"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span>
-                        {(selectedTalent.fullName || selectedTalent.user.email)
-                          .charAt(0)
-                          .toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                      {selectedTalent.fullName || "Candidate Details"}
-                    </h2>
-                    <p className="text-sm font-mono text-[#1E5BFF] font-medium">
-                      {selectedTalent.title || "Talent Member"}
-                    </p>
-                    <p className="text-xs text-[#6E6678]">
-                      {selectedTalent.user.email}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bio */}
-              {selectedTalent.bio && (
-                <div className="space-y-1">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">
-                    Technical Overview
-                  </p>
-                  <p className="text-sm text-[#17131F] leading-relaxed bg-[#EEF3FF]/40 p-4 rounded-2xl border border-[#D9CEDF]/70">
-                    {selectedTalent.bio}
-                  </p>
-                </div>
-              )}
-
-              {/* Skills */}
-              {selectedTalent.skills && selectedTalent.skills.length > 0 && (
-                <div className="space-y-2">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">
-                    Verified Competencies
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedTalent.skills.map((skill, si) => (
-                      <span
-                        key={si}
-                        className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/20 text-xs font-mono text-[#1E5BFF] font-semibold"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Experience */}
-              {selectedTalent.experience.length > 0 && (
-                <div className="space-y-3">
-                  <p className="text-xs font-mono text-[#6E6678] uppercase">
-                    Work History
-                  </p>
-                  <div className="space-y-2">
-                    {selectedTalent.experience.map((exp) => (
-                      <div
-                        key={exp.id}
-                        className="p-3.5 bg-white border border-[#D9CEDF] rounded-2xl"
-                      >
-                        <div className="flex justify-between">
-                          <p className="text-sm font-bold text-[#17131F]">
-                            {exp.title}
-                          </p>
-                          <span className="text-xs font-mono text-[#6E6678]">
-                            {exp.company}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex justify-end gap-3 pt-4 border-t border-[#D9CEDF]">
-                {selectedTalent.cvUrl && (
-                  <a
-                    href={selectedTalent.cvUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5"
-                  >
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      leftIcon={<FileText className="h-4 w-4" />}
-                    >
-                      Download Attached CV
-                    </Button>
-                  </a>
-                )}
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => setSelectedTalent(null)}
-                >
-                  Close
-                </Button>
-              </div>
-            </div>
-          )}
-        </Modal>
+        <TalentInspectModal talent={selectedTalent} onClose={() => setSelectedTalent(null)} />
       </main>
     </div>
   );

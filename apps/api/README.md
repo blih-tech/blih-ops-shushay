@@ -1,26 +1,41 @@
 # blih-api
 
-The single backend for Skills Web, Talent Web, and Auth Web. Owns the database — the web apps never touch Postgres directly.
+The single backend for Skills Web, Talent Web, and Auth Web. Owns the database — web apps communicate via REST API and never touch Postgres directly.
+
+## Interactive API Documentation (Swagger)
+
+When running locally, interactive OpenAPI / Swagger UI documentation is available at:
+👉 **[http://localhost:4000/api/v1/docs](http://localhost:4000/api/v1/docs)**
 
 ## Setup
 
 ```bash
-npm install
-cp .env.example .env       # then edit DATABASE_URL / JWT_SECRET
+pnpm install
+cp .env.example .env       # edit DATABASE_URL, JWT_SECRET, CHAPA_SECRET_KEY
 docker compose up -d       # starts local Postgres on :5432
-npm run prisma:migrate     # creates the first migration
-npm run dev                # http://localhost:4000/api/v1/health
+npx prisma migrate dev     # applies database migrations
+pnpm dev:api               # http://localhost:4000/api/v1/health
 ```
 
-## Structure
+## Modular Domain Architecture (`src/modules/`)
 
-- `src/modules/*` — one folder per domain module (auth, users, talents, companies, courses, learning, certificates, payments, subscriptions, jobs, applications, notifications). Keep them as internal modules, not separate services.
-- `src/middleware/errorHandler.ts` — consistent `{ error: { message, details } }` response shape.
-- `src/middleware/validate.ts` — Zod-based request validation.
-- `prisma/schema.prisma` — starts with the `User` model (roles: talent, company, admin) from Phase 1.
+- `auth/` — Authentication, sessions, tokens, Google OAuth, email verification, password reset.
+- `users/` — User accounts and global roles (`TALENT`, `COMPANY`, `ADMIN`).
+- `talents/` — Talent profile management, skills, experience, CV uploads, profile completion score engine.
+- `companies/` — Company profile management, hiring credentials, active subscription gating.
+- `courses/` — Course catalog CRUD, lesson sequences, video resources, document attachments (Cloudinary).
+- `payments/` — **Phase 4: Blih Skills Payment & Access Integration** (Chapa payment checkout, server-side verification, idempotent webhook handling, permanent entitlement grants).
+- `subscriptions/` — Company subscription management and plan gating.
+- `notifications/` — In-app notification queue and email confirmation dispatchers.
 
-## Next steps (Phase 1 — Authentication)
+## Key Payment Endpoints (Phase 4)
 
-1. Fill in `src/modules/auth` (register, login, logout, email verification, password reset).
-2. Add auth + role-based authorization middleware.
-3. Wire it into `src/routes/index.ts`.
+- `GET /api/v1/payments/skills/access-status` — Returns current user's entitlement status and payment history.
+- `POST /api/v1/payments/skills/initialize` — Creates a 1,000 ETB hosted payment checkout session with Chapa.
+- `GET /api/v1/payments/verify/:txRef` — Idempotent server-side payment verification and entitlement granting.
+- `POST /api/v1/payments/chapa/webhook` — Asynchronous Chapa webhook event processor.
+
+## Testing Sandbox Credentials (Chapa Test Mode)
+
+- **Test Mobile Money Numbers**: `0900123456`, `0900112233`, `0900881111`
+- **Test Card Number**: `4111 1111 1111 1111` (Expiry: `12/28`, CVV: `123`)

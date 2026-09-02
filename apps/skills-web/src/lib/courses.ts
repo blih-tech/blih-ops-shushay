@@ -22,6 +22,11 @@ export function fetchPublicCourse(id: string): Promise<PublicCourse> {
   return apiFetch<PublicCourse>(`${BASE}/public/${id}`);
 }
 
+export function fetchProtectedCourse(id: string): Promise<Course> {
+  return apiFetch<Course>(`${BASE}/${id}/learn`);
+}
+
+
 // ─── Admin ────────────────────────────────────────────────────────────────────
 
 export function fetchAdminCourses(): Promise<Course[]> {

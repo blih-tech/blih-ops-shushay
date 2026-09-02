@@ -12,6 +12,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     | "dark";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
+  loading?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
@@ -24,6 +25,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = "primary",
       size = "md",
       isLoading = false,
+      loading,
       leftIcon,
       rightIcon,
       fullWidth = false,
@@ -34,6 +36,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
+    const isSpinning = isLoading || !!loading;
+
     const baseStyles =
       "inline-flex items-center justify-center whitespace-nowrap font-sans font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E5BFF]/20 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none rounded-xl cursor-pointer select-none active:scale-[0.98]";
 
@@ -64,20 +68,21 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        disabled={disabled || isLoading}
+        disabled={disabled || isSpinning}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${className}`}
         {...props}
       >
-        {isLoading ? (
+        {isSpinning ? (
           <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4 text-current shrink-0" />
         ) : leftIcon ? (
           <span className="inline-flex shrink-0">{leftIcon}</span>
         ) : null}
-        <span>{children}</span>
-        {!isLoading && rightIcon ? (
+        <span className="inline-flex items-center justify-center gap-2">{children}</span>
+        {!isSpinning && rightIcon ? (
           <span className="inline-flex shrink-0">{rightIcon}</span>
         ) : null}
       </button>
+
     );
   },
 );

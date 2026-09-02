@@ -157,6 +157,19 @@ export async function getCoursePublic(
   }
 }
 
+export async function getCourseProtected(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    res.json(await courseService.getCourseProtected(p(req, "courseId")));
+  } catch (err) {
+    next(err);
+  }
+}
+
+
 // ─── Lesson handlers ─────────────────────────────────────────────────────────
 
 export async function createLesson(

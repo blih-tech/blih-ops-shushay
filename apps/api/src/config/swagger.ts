@@ -50,8 +50,34 @@ const options: swaggerJsdoc.Options = {
             createdAt: { type: "string", format: "date-time" },
           },
         },
+        PaymentTransaction: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            userId: { type: "string" },
+            txRef: { type: "string", example: "blih_skills_1788330635551_4778" },
+            amount: { type: "number", example: 1000 },
+            currency: { type: "string", example: "ETB" },
+            paymentType: { type: "string", example: "SKILLS_ACCESS" },
+            status: { type: "string", enum: ["PENDING", "SUCCESSFUL", "FAILED"] },
+            chapaRef: { type: "string", nullable: true },
+            metadata: { type: "object", nullable: true },
+            createdAt: { type: "string", format: "date-time" },
+            updatedAt: { type: "string", format: "date-time" },
+          },
+        },
+        SkillsEntitlement: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            userId: { type: "string" },
+            paymentId: { type: "string" },
+            grantedAt: { type: "string", format: "date-time" },
+          },
+        },
       },
     },
+
     paths: {
       "/health": {
         get: {
@@ -345,9 +371,104 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/payments/skills/access-status": {
+        get: {
+          summary: "Get current user's Blih Skills access and entitlement status",
+          tags: ["Payments"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          responses: {
+            "200": {
+              description: "Live skills entitlement status and payment details",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      hasAccess: { type: "boolean", example: true },
+                      grantedAt: { type: "string", format: "date-time", nullable: true },
+                      payment: { $ref: "#/components/schemas/PaymentTransaction", nullable: true },
+                    },
+                  },
+                },
+              },
+            },
+            "401": { description: "Unauthorized" },
+          },
+        },
+      },
+      "/payments/skills/initialize": {
+        post: {
+          summary: "Initialize Blih Skills 1,000 ETB hosted payment checkout with Chapa",
+          tags: ["Payments"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          responses: {
+            "200": {
+              description: "Chapa checkout URL or existing access confirmation",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      alreadyHasAccess: { type: "boolean" },
+                      checkoutUrl: { type: "string", example: "https://checkout.chapa.co/checkout/payment/..." },
+                      txRef: { type: "string", example: "blih_skills_1788330635551_4778" },
+                    },
+                  },
+                },
+              },
+            },
+            "401": { description: "Unauthorized" },
+          },
+        },
+      },
+      "/payments/verify/{txRef}": {
+        get: {
+          summary: "Server-side payment verification with Chapa gateway (Idempotent)",
+          tags: ["Payments"],
+          parameters: [
+            {
+              name: "txRef",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": {
+              description: "Payment verified successfully and entitlement granted",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      verified: { type: "boolean", example: true },
+                      payment: { $ref: "#/components/schemas/PaymentTransaction" },
+                      entitlement: { $ref: "#/components/schemas/SkillsEntitlement" },
+                      message: { type: "string" },
+                    },
+                  },
+                },
+              },
+            },
+            "400": { description: "Payment verification failed or invalid amount" },
+            "404": { description: "Transaction reference not found" },
+          },
+        },
+      },
+      "/payments/chapa/webhook": {
+        post: {
+          summary: "Chapa asynchronous webhook notification receiver",
+          tags: ["Payments"],
+          responses: {
+            "200": { description: "Webhook received and processed idempotently" },
+            "400": { description: "Invalid payload or signature" },
+          },
+        },
+      },
     },
   },
   apis: [],
 };
+
 
 export const swaggerSpec = swaggerJsdoc(options);
