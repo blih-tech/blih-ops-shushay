@@ -6,6 +6,7 @@ import courseRoutes from "../modules/courses/course.routes";
 import adminRoutes from "../modules/admin/admin.routes";
 import paymentRoutes from "../modules/payments/payment.routes";
 import notificationRoutes from "../modules/notifications/notification.routes";
+import learningRoutes from "../modules/learning/learning.routes";
 
 const router = Router();
 
@@ -16,6 +17,7 @@ router.use("/courses", courseRoutes);
 router.use("/admin", adminRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/notifications", notificationRoutes);
+router.use("/learning", learningRoutes);
 
 export default router;
 

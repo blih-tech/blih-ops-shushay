@@ -1,12 +1,18 @@
 "use client";
 
-import React, { use, useState, useEffect } from "react";
+import React, { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronRight, Sparkles, Loader2 } from "lucide-react";
+import { ChevronRight, Sparkles, Loader2, Trophy } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { Button, Alert } from "@blih/ui";
 import { fetchProtectedCourse } from "@/lib/courses";
-import { initializeSkillsPayment } from "@blih/api-client";
+import {
+  initializeSkillsPayment,
+  getCourseProgress,
+  markLessonComplete,
+  submitQuiz,
+  submitAssignment,
+} from "@blih/api-client";
 import { LearnHeader } from "@/components/learn/LearnHeader";
 import { LearnCurriculumSidebar } from "@/components/learn/LearnCurriculumSidebar";
 import { LearnPlayerSurface } from "@/components/learn/LearnPlayerSurface";
@@ -26,25 +32,62 @@ function LearnContent({ courseId }: { courseId: string }) {
   const [activeTab, setActiveTab] = useState<
     "video" | "reading" | "quiz" | "exercise"
   >("video");
-  const [selectedQuizOption, setSelectedQuizOption] = useState<number | null>(
-    null,
-  );
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
-  const [completedLessons, setCompletedLessons] = useState<number[]>([0]);
+  const [quizPassed, setQuizPassed] = useState<boolean | null>(null);
+  const [quizScore, setQuizScore] = useState<number | null>(null);
+  const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+  const [isMarkingComplete, setIsMarkingComplete] = useState(false);
+  const [completionError, setCompletionError] = useState<string | null>(null);
+  const [assignmentContent, setAssignmentContent] = useState("");
+  const [assignmentFile, setAssignmentFile] = useState<File | null>(null);
+  const [isSubmittingAssignment, setIsSubmittingAssignment] = useState(false);
+  const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
+  const [assignmentError, setAssignmentError] = useState<string | null>(null);
+
+  const refreshProgress = useCallback(
+    (lessons: PublicLesson[]) => {
+      getCourseProgress(courseId)
+        .then((progressData) => {
+          if (progressData?.completedLessonIds) {
+            const indices = progressData.completedLessonIds
+              .map((id: string) => lessons.findIndex((l) => l.id === id))
+              .filter((i: number) => i !== -1);
+            setCompletedLessons(indices);
+          }
+        })
+        .catch(console.error);
+    },
+    [courseId],
+  );
 
   useEffect(() => {
     fetchProtectedCourse(courseId)
       .then((data) => {
-        setCourse(data as unknown as PublicCourse);
+        const publicCourse = data as unknown as PublicCourse;
+        setCourse(publicCourse);
+        refreshProgress(publicCourse.lessons);
       })
-
       .catch((err) => {
         if (err.status === 403 || err.message?.includes("payment")) {
           setAccessDenied(true);
         }
       })
       .finally(() => setLoading(false));
-  }, [courseId]);
+  }, [courseId, refreshProgress]);
+
+  // Reset quiz/assignment state when lesson changes
+  useEffect(() => {
+    setQuizAnswers({});
+    setQuizSubmitted(false);
+    setQuizPassed(null);
+    setQuizScore(null);
+    setAssignmentContent("");
+    setAssignmentFile(null);
+    setAssignmentSubmitted(false);
+    setAssignmentError(null);
+    setCompletionError(null);
+  }, [activeLessonIndex]);
 
   const handleUnlockClick = async () => {
     try {
@@ -82,7 +125,8 @@ function LearnContent({ courseId }: { courseId: string }) {
                 Skills Access Required
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
-                Full lesson content, video streams, downloadable resources, and quizzes are protected. Make a one-time <strong className="text-[#17131F]">1,000 ETB</strong> payment via Chapa to permanently unlock all current and future Blih Skills courses.
+                Full lesson content, video streams, downloadable resources, and quizzes are protected. Make a one-time{" "}
+                <strong className="text-[#17131F]">1,000 ETB</strong> payment via Chapa to permanently unlock all current and future Blih Skills courses.
               </p>
             </div>
 
@@ -119,18 +163,69 @@ function LearnContent({ courseId }: { courseId: string }) {
   const lessonsList: PublicLesson[] = course?.lessons || [];
   const activeLesson = lessonsList[activeLessonIndex];
   const totalLessons = lessonsList.length || 1;
-  const progressPercent = Math.round(
-    (completedLessons.length / totalLessons) * 100,
-  );
+  const progressPercent = Math.round((completedLessons.length / totalLessons) * 100);
+  const isCourseComplete = totalLessons > 0 && completedLessons.length === totalLessons;
 
-  const handleCompleteCurrent = () => {
-    if (!completedLessons.includes(activeLessonIndex)) {
-      setCompletedLessons([...completedLessons, activeLessonIndex]);
+  const handleCompleteCurrent = async () => {
+    if (!activeLesson) return;
+    setIsMarkingComplete(true);
+    setCompletionError(null);
+    try {
+      await markLessonComplete(activeLesson.id);
+      if (!completedLessons.includes(activeLessonIndex)) {
+        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      }
+      if (activeLessonIndex + 1 < totalLessons) {
+        setActiveLessonIndex(activeLessonIndex + 1);
+      }
+    } catch (e: any) {
+      // If lesson requires quiz/assignment, show the appropriate error
+      setCompletionError(e.message || "Could not mark lesson complete");
+    } finally {
+      setIsMarkingComplete(false);
     }
-    if (activeLessonIndex + 1 < totalLessons) {
-      setActiveLessonIndex(activeLessonIndex + 1);
-      setSelectedQuizOption(null);
-      setQuizSubmitted(false);
+  };
+
+  const handleQuizSubmit = async () => {
+    if (!activeLesson?.quiz) return;
+    const questions = (activeLesson.quiz as any).questions as any[] ?? [];
+    if (Object.keys(quizAnswers).length !== questions.length) return;
+    const answers = questions.map((_: any, i: number) => quizAnswers[i] ?? 0);
+    try {
+      const result = await submitQuiz(activeLesson.quiz.id, answers);
+      setQuizSubmitted(true);
+      setQuizPassed(result.passed);
+      setQuizScore(result.score);
+      if (result.passed && !completedLessons.includes(activeLessonIndex)) {
+        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      }
+    } catch (e: any) {
+      setCompletionError(e.message || "Failed to submit quiz");
+    }
+  };
+
+  const handleAssignmentSubmit = async () => {
+    if (!activeLesson?.assignment) return;
+    if (!assignmentContent && !assignmentFile) {
+      setAssignmentError("Please provide a text response or upload a file.");
+      return;
+    }
+    setIsSubmittingAssignment(true);
+    setAssignmentError(null);
+    try {
+      await submitAssignment(
+        activeLesson.assignment.id,
+        assignmentContent || undefined,
+        assignmentFile || undefined,
+      );
+      setAssignmentSubmitted(true);
+      if (!completedLessons.includes(activeLessonIndex)) {
+        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      }
+    } catch (e: any) {
+      setAssignmentError(e.message || "Failed to submit assignment");
+    } finally {
+      setIsSubmittingAssignment(false);
     }
   };
 
@@ -145,17 +240,53 @@ function LearnContent({ courseId }: { courseId: string }) {
         progressPercent={progressPercent}
       />
 
+      {/* Course Completion Banner */}
+      {isCourseComplete && (
+        <div className="bg-gradient-to-r from-[#00A859] to-[#2E8F79] text-white px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
+            <Trophy className="w-6 h-6 flex-shrink-0" />
+            <div>
+              <p className="font-display font-bold text-base">
+                🎉 Course Complete!
+              </p>
+              <p className="text-sm text-white/80">
+                You&apos;ve completed all {totalLessons} lessons in{" "}
+                {course?.title}.
+              </p>
+            </div>
+          </div>
+          <Link href="/certificates">
+            <Button variant="secondary" size="sm">
+              View Certificate
+            </Button>
+          </Link>
+        </div>
+      )}
+
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 max-w-[1600px] w-full mx-auto">
         <LearnPlayerSurface
           courseTitle={course?.title}
           activeLesson={activeLesson}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          selectedQuizOption={selectedQuizOption}
-          setSelectedQuizOption={setSelectedQuizOption}
+          selectedQuizOption={quizAnswers}
+          setSelectedQuizOption={(qIdx: number, optIdx: number) => setQuizAnswers(prev => ({ ...prev, [qIdx]: optIdx }))}
           quizSubmitted={quizSubmitted}
-          setQuizSubmitted={setQuizSubmitted}
+          quizPassed={quizPassed}
+          quizScore={quizScore}
+          onSubmitQuiz={handleQuizSubmit}
+          assignmentContent={assignmentContent}
+          setAssignmentContent={setAssignmentContent}
+          assignmentFile={assignmentFile}
+          setAssignmentFile={setAssignmentFile}
+          assignmentSubmitted={assignmentSubmitted}
+          assignmentError={assignmentError}
+          onSubmitAssignment={handleAssignmentSubmit}
+          isSubmittingAssignment={isSubmittingAssignment}
           onCompleteLesson={handleCompleteCurrent}
+          isMarkingComplete={isMarkingComplete}
+          completionError={completionError}
+          isCurrentLessonComplete={completedLessons.includes(activeLessonIndex)}
         />
 
         <LearnCurriculumSidebar
@@ -164,8 +295,6 @@ function LearnContent({ courseId }: { courseId: string }) {
           completedLessons={completedLessons}
           onSelectLesson={(idx) => {
             setActiveLessonIndex(idx);
-            setSelectedQuizOption(null);
-            setQuizSubmitted(false);
           }}
         />
       </div>

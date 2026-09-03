@@ -2,12 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Play, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Play, CheckCircle2, RotateCcw } from "lucide-react";
 import { Button, Badge, Alert } from "@blih/ui";
 
 interface CourseDetailSidebarProps {
   courseId: string;
   hasAccess: boolean;
+  isCompleted?: boolean;
+  progressPercentage?: number;
   initiatingPayment: boolean;
   paymentError: string | null;
   onUnlockClick: () => void;
@@ -16,10 +18,14 @@ interface CourseDetailSidebarProps {
 export function CourseDetailSidebar({
   courseId,
   hasAccess,
+  isCompleted = false,
+  progressPercentage = 0,
   initiatingPayment,
   paymentError,
   onUnlockClick,
 }: CourseDetailSidebarProps) {
+  const isInProgress = progressPercentage > 0 && !isCompleted;
+
   return (
     <div className="lg:col-span-4 space-y-6 sticky top-24">
       <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-[0_12px_40px_rgba(30,91,255,0.06)] space-y-6">
@@ -29,8 +35,16 @@ export function CourseDetailSidebar({
               Your Access Status
             </span>
             <div className="flex items-center gap-2 pt-1">
-              <Badge variant="verified" size="md" className="text-sm font-semibold">
-                Full Access Granted
+              <Badge
+                variant={isCompleted ? "verified" : isInProgress ? "primary" : "secondary"}
+                size="md"
+                className="text-sm font-semibold"
+              >
+                {isCompleted
+                  ? "Track Completed (100%)"
+                  : isInProgress
+                  ? `In Progress (${progressPercentage}%)`
+                  : "Full Access Granted"}
               </Badge>
             </div>
           </div>
@@ -65,9 +79,20 @@ export function CourseDetailSidebar({
               <Button
                 size="lg"
                 fullWidth
-                leftIcon={<Play className="w-4 h-4 fill-current" />}
+                variant={isCompleted ? "secondary" : "primary"}
+                leftIcon={
+                  isCompleted ? (
+                    <RotateCcw className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4 fill-current" />
+                  )
+                }
               >
-                Start Learning Now
+                {isCompleted
+                  ? "Review Course"
+                  : isInProgress
+                  ? `Continue Learning (${progressPercentage}%)`
+                  : "Start Learning Now"}
               </Button>
             </Link>
           ) : (
@@ -98,9 +123,9 @@ export function CourseDetailSidebar({
               "Interactive quizzes and test suites",
               "Digital verified credential on completion",
               "Self-paced with progress tracking",
-            ].map((item, i) => (
-              <li key={i} className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#00A859] shrink-0 mt-0.5" />
+            ].map((item, idx) => (
+              <li key={idx} className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#00A859] shrink-0" />
                 <span>{item}</span>
               </li>
             ))}

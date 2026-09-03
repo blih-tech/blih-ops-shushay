@@ -20,6 +20,8 @@ export function LearnHeader({
   totalLessons,
   progressPercent,
 }: LearnHeaderProps) {
+  const isComplete = progressPercent === 100;
+
   return (
     <header className="bg-white border-b border-[#D9CEDF] sticky top-0 z-40 px-4 sm:px-6 py-3 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-4">
@@ -49,24 +51,32 @@ export function LearnHeader({
           <span className="font-mono text-xs text-[#6E6678]">Progress:</span>
           <div className="w-32 bg-[#EEF3FF] h-2 rounded-full overflow-hidden">
             <div
-              className="bg-[#1E5BFF] h-full rounded-full transition-all duration-500"
+              className={`h-full rounded-full transition-all duration-500 ${
+                isComplete ? "bg-[#00A859]" : "bg-[#1E5BFF]"
+              }`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          <span className="font-mono text-xs font-bold text-[#1E5BFF]">
+          <span
+            className={`font-mono text-xs font-bold ${
+              isComplete ? "text-[#00A859]" : "text-[#1E5BFF]"
+            }`}
+          >
             {progressPercent}%
           </span>
         </div>
 
-        <Link href="/certificates">
-          <Button
-            variant="outline"
-            size="sm"
-            leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}
-          >
-            Credential Status
-          </Button>
-        </Link>
+        {isComplete && (
+          <Link href="/certificates">
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<Award className="w-4 h-4 text-[#00A859]" />}
+            >
+              View Verified Certificate
+            </Button>
+          </Link>
+        )}
       </div>
     </header>
   );

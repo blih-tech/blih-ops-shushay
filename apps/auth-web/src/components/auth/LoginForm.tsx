@@ -60,14 +60,14 @@ export function LoginForm() {
             const isCompanyOnly =
               path === "/company" || path.startsWith("/company/");
             if (isCompanyOnly) {
-              finalUrl = `${TALENT_URL}/profile`;
+              finalUrl = `${TALENT_URL}/`;
             }
           }
         } catch {
           finalUrl =
             role === "COMPANY"
               ? `${TALENT_URL}/company`
-              : `${TALENT_URL}/profile`;
+              : `${TALENT_URL}/`;
         }
         window.location.href = finalUrl;
       } else {
@@ -77,7 +77,7 @@ export function LoginForm() {
         } else if (role === "COMPANY") {
           window.location.href = `${TALENT_URL}/company`;
         } else {
-          window.location.href = `${TALENT_URL}/profile`;
+          window.location.href = `${TALENT_URL}/`;
         }
       }
     } catch (err: any) {

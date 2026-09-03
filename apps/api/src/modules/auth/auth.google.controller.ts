@@ -231,14 +231,14 @@ export async function handleGoogleCallback(
           const isCompanyOnly =
             path === "/company" || path.startsWith("/company/");
           if (isCompanyOnly) {
-            destination = `${TALENT_URL}/profile`;
+            destination = `${TALENT_URL}/`;
           }
         }
       } catch {
         destination =
           user.role === "COMPANY"
             ? `${TALENT_URL}/company`
-            : `${TALENT_URL}/profile`;
+            : `${TALENT_URL}/`;
       }
     }
 
@@ -250,7 +250,7 @@ export async function handleGoogleCallback(
       } else if (user.role === "COMPANY") {
         destination = `${TALENT_URL}/company`;
       } else {
-        destination = `${TALENT_URL}/profile`;
+        destination = `${TALENT_URL}/`;
       }
     }
 
@@ -269,7 +269,7 @@ export async function handleGoogleCallback(
         destination =
           user.role === "COMPANY"
             ? `${TALENT_URL}/company`
-            : `${TALENT_URL}/profile`;
+            : `${TALENT_URL}/`;
       } else {
         destination = destUrl.toString();
       }
@@ -277,7 +277,7 @@ export async function handleGoogleCallback(
       destination =
         user.role === "COMPANY"
           ? `${TALENT_URL}/company`
-          : `${TALENT_URL}/profile`;
+          : `${TALENT_URL}/`;
     }
 
     res.redirect(destination);

@@ -30,6 +30,9 @@ model User {
   paymentTransactions PaymentTransaction[]
   skillsEntitlement   SkillsEntitlement?
   notifications        Notification[]
+  lessonProgress       LessonProgress[]
+  quizAttempts         QuizAttempt[]
+  assignmentSubmissions AssignmentSubmission[]
 
   @@map("users")
 }
@@ -148,6 +151,7 @@ model Lesson {
   documents  LessonDocument[]
   quiz       Quiz?
   assignment Assignment?
+  progress   LessonProgress[]
 
   @@index([courseId, order])
   @@map("lessons")
@@ -174,6 +178,7 @@ model Quiz {
   questions Json     // Array of { text: string, options: string[], correctOptionIndex: number }
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  attempts  QuizAttempt[]
 
   @@map("quizzes")
 }
@@ -186,6 +191,7 @@ model Assignment {
   instructions String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  submissions  AssignmentSubmission[]
 
   @@map("assignments")
 }
@@ -250,5 +256,50 @@ model Notification {
 
   @@index([userId])
   @@map("notifications")
+}
+
+// ─── Learning Progress Domain ────────────────────────────────────────────────
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completedAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score     Int
+  passed    Boolean
+  answers   Json
+  createdAt DateTime @default(now())
+
+  @@index([userId, quizId])
+  @@map("quiz_attempts")
+}
+
+model AssignmentSubmission {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  content      String?
+  fileUrl      String?
+  filePublicId String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([userId, assignmentId])
+  @@map("assignment_submissions")
 }
 

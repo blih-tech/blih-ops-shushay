@@ -7,7 +7,11 @@ import { ArrowLeft } from "lucide-react";
 import { GlobalNavbar, Button, Skeleton, Alert } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
-import { getSkillsAccessStatus, initializeSkillsPayment } from "@blih/api-client";
+import {
+  getSkillsAccessStatus,
+  initializeSkillsPayment,
+  getCourseProgress,
+} from "@blih/api-client";
 import { CourseDetailHero } from "@/components/courses/CourseDetailHero";
 import { CourseDetailSidebar } from "@/components/courses/CourseDetailSidebar";
 import type { PublicCourse } from "@/types/course";
@@ -20,20 +24,50 @@ export default function PublicCourseDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasAccess, setHasAccess] = useState<boolean>(false);
+  const [isCompleted, setIsCompleted] = useState<boolean>(false);
+  const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const [initiatingPayment, setInitiatingPayment] = useState<boolean>(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPublicCourse(courseId)
-      .then(setCourse)
-      .catch((err) => setError(err.message ?? "Course not found"))
-      .finally(() => setLoading(false));
+    let isMounted = true;
 
-    if (user) {
-      getSkillsAccessStatus()
-        .then((res) => setHasAccess(res.hasAccess))
-        .catch(() => setHasAccess(false));
-    }
+    const loadData = async () => {
+      try {
+        const courseData = await fetchPublicCourse(courseId);
+        if (isMounted) setCourse(courseData);
+
+        if (user) {
+          try {
+            const accessRes = await getSkillsAccessStatus();
+            if (isMounted) setHasAccess(accessRes.hasAccess);
+            if (accessRes.hasAccess) {
+              try {
+                const prog = await getCourseProgress(courseId);
+                if (isMounted && prog) {
+                  setProgressPercentage(prog.progressPercentage ?? 0);
+                  setIsCompleted(prog.isCompleted ?? false);
+                }
+              } catch {
+                // Ignore progress fetch error on detail page
+              }
+            }
+          } catch {
+            if (isMounted) setHasAccess(false);
+          }
+        }
+      } catch (err: any) {
+        if (isMounted) setError(err.message ?? "Course not found");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [courseId, user]);
 
   const handleUnlockClick = async () => {
@@ -122,6 +156,8 @@ export default function PublicCourseDetailPage() {
           <CourseDetailSidebar
             courseId={courseId}
             hasAccess={hasAccess}
+            isCompleted={isCompleted}
+            progressPercentage={progressPercentage}
             initiatingPayment={initiatingPayment}
             paymentError={paymentError}
             onUnlockClick={handleUnlockClick}

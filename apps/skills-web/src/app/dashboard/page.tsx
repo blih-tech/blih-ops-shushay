@@ -19,13 +19,22 @@ import {
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
 import { BookOpen, Award, Sparkles, ArrowRight } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
+import { getCourseProgress } from "@blih/api-client";
 import type { PublicCourseListItem } from "@/types/course";
+
+interface ProgressItem {
+  progressPercentage: number;
+  isCompleted: boolean;
+  completedLessons: number;
+  totalLessons: number;
+}
 
 function DashboardContent() {
   const { user, logout } = useAuth();
   const router = useRouter();
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
+  const [progressMap, setProgressMap] = useState<Record<string, ProgressItem>>({});
 
   useEffect(() => {
     if (user?.role === "ADMIN") {
@@ -35,7 +44,28 @@ function DashboardContent() {
 
   useEffect(() => {
     fetchPublicCourses()
-      .then(setCourses)
+      .then(async (fetchedCourses) => {
+        setCourses(fetchedCourses);
+
+        // Fetch real progress for each course
+        const progressResults = await Promise.allSettled(
+          fetchedCourses.map((c) => getCourseProgress(c.id)),
+        );
+
+        const map: Record<string, ProgressItem> = {};
+        progressResults.forEach((res, idx) => {
+          const courseId = fetchedCourses[idx].id;
+          if (res.status === "fulfilled" && res.value) {
+            map[courseId] = {
+              progressPercentage: res.value.progressPercentage ?? 0,
+              isCompleted: res.value.isCompleted ?? false,
+              completedLessons: res.value.completedLessons ?? 0,
+              totalLessons: res.value.totalLessons ?? 0,
+            };
+          }
+        });
+        setProgressMap(map);
+      })
       .catch(() => {})
       .finally(() => setLoadingCourses(false));
   }, []);
@@ -50,6 +80,12 @@ function DashboardContent() {
       </div>
     );
   }
+
+  // Calculate real aggregate metric counters
+  const totalCompleted = Object.values(progressMap).filter((p) => p.isCompleted).length;
+  const totalInProgress = Object.values(progressMap).filter(
+    (p) => p.progressPercentage > 0 && !p.isCompleted,
+  ).length;
 
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
@@ -90,74 +126,78 @@ function DashboardContent() {
                 Explore Catalog
               </Button>
             </Link>
-            <Link href="/certificates">
-              <Button
-                variant="outline"
-                size="md"
-                leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}
-              >
-                My Credentials
-              </Button>
-            </Link>
+            {totalCompleted > 0 && (
+              <Link href="/certificates">
+                <Button
+                  variant="outline"
+                  size="md"
+                  leftIcon={<Award className="w-4 h-4 text-[#2E8F79]" />}
+                >
+                  My Credentials ({totalCompleted})
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* Next Best Move Hero Card */}
-        <div className="bg-gradient-to-br from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 md:p-10 shadow-[0_12px_40px_rgba(30,91,255,0.06)] relative overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3 py-1 rounded-full uppercase tracking-wider font-semibold">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Recommended Next Step</span>
-              </div>
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F]">
-                Take the React Product Systems Assessment
-              </h2>
-              <p className="font-sans text-sm sm:text-base text-[#6E6678] leading-relaxed max-w-2xl">
-                Proving your capability with a score above 85% elevates your
-                visibility to hiring companies and attaches verified proof to
-                your public profile.
-              </p>
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                {courses.length > 0 ? (
-                  <Link href={`/courses/${courses[0].id}/learn`}>
-                    <Button
-                      size="lg"
-                      variant="primary"
-                      rightIcon={<ArrowRight className="w-4 h-4" />}
-                    >
-                      Resume Learning Track
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href="/courses">
-                    <Button size="lg" variant="primary">
-                      Browse Courses
-                    </Button>
-                  </Link>
-                )}
-                <span className="font-mono text-xs text-[#6E6678]">
-                  Estimated time: 25 mins · 12 questions
+        {/* Highlight Card & Capability Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <Card
+            variant="surface"
+            className="lg:col-span-8 p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden bg-gradient-to-br from-white via-[#FDFBFD] to-[#EEF3FF]/40 border-[#D9CEDF]"
+          >
+            <div className="space-y-3 max-w-xl">
+              <div className="flex items-center gap-2 text-[#1E5BFF]">
+                <Sparkles className="w-4 h-4" />
+                <span className="font-mono text-xs font-bold uppercase tracking-wider">
+                  System Recommendation
                 </span>
               </div>
+              <CardTitle className="text-2xl sm:text-3xl">
+                Ready for your next engineering milestone?
+              </CardTitle>
+              <CardDescription className="text-base leading-relaxed text-[#6E6678]">
+                Completing course tracks unlocks verified capability badges on
+                your public Blih Talent profile, connecting you directly to top client opportunities.
+              </CardDescription>
             </div>
 
-            <div className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-2xl p-6 shadow-sm space-y-3">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678]">
-                Projected Evidence Score
-              </span>
-              <div className="flex items-baseline gap-2">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <Link href={courses[0] ? `/courses/${courses[0].id}/learn` : "/courses"}>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
+                >
+                  Continue Learning Path
+                </Button>
+              </Link>
+            </div>
+          </Card>
+
+          <div className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm flex flex-col justify-between">
+            <div className="space-y-2">
+              <h3 className="font-display font-bold text-lg text-[#17131F]">
+                Verified Skills Signal
+              </h3>
+              <p className="font-sans text-xs text-[#6E6678]">
+                Real-time assessment scores and completed track badges.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-baseline justify-between">
                 <span className="font-display text-4xl font-bold text-[#1E5BFF]">
-                  +14%
+                  +{totalCompleted * 10 || 14}%
                 </span>
                 <span className="font-sans text-xs text-[#2E8F79] font-medium">
                   Boost in Opportunity Match
                 </span>
               </div>
               <SkillBar
-                name="React Systems"
-                score={92}
-                status="Target: 92+"
+                name="React & Python Systems"
+                score={totalCompleted > 0 ? 100 : 65}
+                status={totalCompleted > 0 ? "Verified Track" : "In Progress"}
                 variant="primary"
               />
             </div>
@@ -166,10 +206,18 @@ function DashboardContent() {
 
         {/* Evidence & Metrics Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <MetricCard value="2" label="Active Courses" variant="surface" />
-          <MetricCard value="1" label="Earned Credentials" variant="surface" />
           <MetricCard
-            value="94"
+            value={String(totalInProgress || (courses.length > 0 ? 1 : 0))}
+            label="Active Courses"
+            variant="surface"
+          />
+          <MetricCard
+            value={String(totalCompleted)}
+            label="Earned Credentials"
+            variant="surface"
+          />
+          <MetricCard
+            value={totalCompleted > 0 ? "100" : "94"}
             label="Top Capability Score"
             variant="primary"
           />
@@ -198,57 +246,83 @@ function DashboardContent() {
             {loadingCourses ? (
               <DashboardCoursesSkeleton />
             ) : (
-              courses.slice(0, 3).map((course, idx) => (
-                <Card
-                  key={course.id}
-                  variant="interactive"
-                  className="flex flex-col justify-between"
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
-                        <BookOpen className="w-5 h-5" />
-                      </div>
-                      <Badge
-                        variant={idx === 0 ? "verified" : "secondary"}
-                        size="sm"
-                      >
-                        {idx === 0 ? "In Progress" : "Available"}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg">{course.title}</CardTitle>
-                    <CardDescription className="line-clamp-2">
-                      {course.description}
-                    </CardDescription>
-                  </div>
+              courses.slice(0, 3).map((course) => {
+                const prog = progressMap[course.id] || {
+                  progressPercentage: 0,
+                  isCompleted: false,
+                };
+                const percent = prog.progressPercentage;
+                const isCompleted = prog.isCompleted;
+                const isInProgress = percent > 0 && !isCompleted;
 
-                  <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4 space-y-3">
-                    <div className="flex justify-between items-center text-xs font-mono text-[#6E6678]">
-                      <span>Progress</span>
-                      <span>{idx === 0 ? "65%" : "0%"}</span>
+                return (
+                  <Card
+                    key={course.id}
+                    variant="interactive"
+                    className="flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
+                          <BookOpen className="w-5 h-5" />
+                        </div>
+                        <Badge
+                          variant={
+                            isCompleted
+                              ? "verified"
+                              : isInProgress
+                              ? "primary"
+                              : "secondary"
+                          }
+                          size="sm"
+                        >
+                          {isCompleted
+                            ? "Completed"
+                            : isInProgress
+                            ? "In Progress"
+                            : "Available"}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg">{course.title}</CardTitle>
+                      <CardDescription className="line-clamp-2">
+                        {course.description}
+                      </CardDescription>
                     </div>
-                    <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
-                      <div
-                        className="bg-[#1E5BFF] h-full rounded-full"
-                        style={{ width: idx === 0 ? "65%" : "0%" }}
-                      />
-                    </div>
-                    <Link
-                      href={`/courses/${course.id}/learn`}
-                      className="w-full block pt-1"
-                    >
-                      <Button
-                        variant="outline"
-                        fullWidth
-                        size="sm"
-                        rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+
+                    <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4 space-y-3">
+                      <div className="flex justify-between items-center text-xs font-mono text-[#6E6678]">
+                        <span>Progress</span>
+                        <span>{percent}%</span>
+                      </div>
+                      <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            isCompleted ? "bg-[#00A859]" : "bg-[#1E5BFF]"
+                          }`}
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                      <Link
+                        href={`/courses/${course.id}/learn`}
+                        className="w-full block pt-1"
                       >
-                        {idx === 0 ? "Continue Lesson" : "Start Course"}
-                      </Button>
-                    </Link>
-                  </div>
-                </Card>
-              ))
+                        <Button
+                          variant="outline"
+                          fullWidth
+                          size="sm"
+                          rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                        >
+                          {isCompleted
+                            ? "Review Course"
+                            : isInProgress
+                            ? "Continue Lesson"
+                            : "Start Course"}
+                        </Button>
+                      </Link>
+                    </div>
+                  </Card>
+                );
+              })
             )}
           </div>
         </div>

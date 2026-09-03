@@ -98,7 +98,41 @@ export async function getSkillsAccessStatus() {
     hasAccess: boolean;
     grantedAt?: string | null;
     payment?: any;
-  }>("/payments/skills/access-status");
+  }>(`/payments/skills/access-status`);
 }
 
+// ─── Learning API Client Helpers ─────────────────────────────────────────────
 
+export async function getCourseProgress(courseId: string) {
+  return apiFetch<any>(`/learning/progress/${courseId}`);
+}
+
+export async function markLessonComplete(lessonId: string) {
+  return apiFetch<any>("/learning/lesson/complete", {
+    method: "POST",
+    body: JSON.stringify({ lessonId }),
+  });
+}
+
+export async function submitQuiz(quizId: string, answers: number[]) {
+  return apiFetch<any>("/learning/quiz/submit", {
+    method: "POST",
+    body: JSON.stringify({ quizId, answers }),
+  });
+}
+
+export async function submitAssignment(
+  assignmentId: string,
+  content?: string,
+  file?: File
+) {
+  const formData = new FormData();
+  formData.append("assignmentId", assignmentId);
+  if (content) {
+    formData.append("content", content);
+  }
+  if (file) {
+    formData.append("document", file);
+  }
+  return apiFetchFormData<any>("/learning/assignment/submit", formData);
+}
