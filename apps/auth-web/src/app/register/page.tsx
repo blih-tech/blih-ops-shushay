@@ -33,15 +33,15 @@ export default function RegisterPage() {
 
   const navHeader = (
     <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-      <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
-        <Link href={TALENT_URL} className="flex items-baseline gap-2 group">
-          <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
+      <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex justify-between items-center gap-3 sm:gap-4 shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
+        <Link href={TALENT_URL} className="flex items-baseline gap-2 group shrink-0">
+          <span className="font-display text-xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity whitespace-nowrap">
             BLIH OPS
           </span>
         </Link>
         <Link
           href="/login"
-          className="font-mono text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-4 py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white"
+          className="font-mono text-[10px] sm:text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-2.5 sm:px-4 py-1.5 sm:py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white whitespace-nowrap shrink-0"
         >
           Already have an account? <span className="text-[#1E5BFF] underline underline-offset-3">Sign in</span>
         </Link>
@@ -102,9 +102,9 @@ export default function RegisterPage() {
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex items-center justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start w-full">
           {/* Left Column: Intro & Benefits */}
-          <div className="lg:col-span-6 space-y-8">
+          <div className="lg:col-span-6 space-y-8 order-2 lg:order-1">
             <div className="space-y-4">
-              <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F] leading-tight">
+              <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F] leading-tight">
                 Build proof of skill. <br />
                 Compete for better work.
               </h1>
@@ -161,7 +161,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Right Column: Form Panel */}
-          <div className="lg:col-span-6 flex justify-center">
+          <div className="lg:col-span-6 flex justify-center order-1 lg:order-2">
             <RegisterForm
               onSubmit={handleSubmit}
               loading={loading}

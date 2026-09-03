@@ -12,15 +12,15 @@ export default function LoginPage() {
 
       {/* Top Header */}
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
-        <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-6 py-3.5 flex justify-between items-center shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
-          <Link href={TALENT_URL} className="flex items-baseline gap-2 group">
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity">
+        <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex justify-between items-center gap-3 sm:gap-4 shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
+          <Link href={TALENT_URL} className="flex items-baseline gap-2 group shrink-0">
+            <span className="font-display text-xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity whitespace-nowrap">
               BLIH OPS
             </span>
           </Link>
           <Link
             href="/register"
-            className="font-mono text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-4 py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white"
+            className="font-mono text-[10px] sm:text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-2.5 sm:px-4 py-1.5 sm:py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white whitespace-nowrap shrink-0"
           >
             New to BLIH OPS? <span className="text-[#1E5BFF] underline underline-offset-3"> Create account</span>
           </Link>
@@ -30,11 +30,12 @@ export default function LoginPage() {
       {/* Main Two-Column Layout */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex items-center justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
-          {/* Left Column: Value Panel */}
-          <div className="lg:col-span-6 space-y-8">
+          {/* Left Column: Value Panel (below form on mobile) */}
+          <div className="lg:col-span-6 space-y-8 order-2 lg:order-1">
             <div className="space-y-4">
-              <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F] leading-tight">
-                Pick up where your skills and opportunities meet.
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-[#17131F] leading-[1.2]">
+                Pick up where your skills <br className="hidden sm:inline" />
+                and opportunities meet.
               </h1>
               <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
                 Sign in to continue learning, update your evidence, apply to
@@ -56,8 +57,8 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Right Column: Form Panel */}
-          <div className="lg:col-span-6 flex justify-center">
+          {/* Right Column: Form Panel (first on mobile) */}
+          <div className="lg:col-span-6 flex justify-center order-1 lg:order-2">
             <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
               <div className="space-y-1">
                 <h2 className="font-display text-3xl font-bold text-[#17131F]">

@@ -136,3 +136,14 @@ export async function submitAssignment(
   }
   return apiFetchFormData<any>("/learning/assignment/submit", formData);
 }
+
+// ─── Certificate API Client Helpers ──────────────────────────────────────────
+
+export async function getUserCertificates() {
+  return apiFetch<{ certificates: any[] }>("/certificates");
+}
+
+export function getCertificateDownloadUrl(certificateId: string): string {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+  return `${API_URL}/certificates/${certificateId}/download`;
+}

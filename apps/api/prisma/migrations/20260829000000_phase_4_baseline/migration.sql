@@ -40,7 +40,7 @@ CREATE INDEX IF NOT EXISTS "payment_transactions_userId_idx" ON "public"."paymen
 CREATE INDEX IF NOT EXISTS "payment_transactions_txRef_idx" ON "public"."payment_transactions"("txRef" ASC);
 CREATE INDEX IF NOT EXISTS "payment_transactions_status_idx" ON "public"."payment_transactions"("status" ASC);
 
-ALTER TABLE "public"."payment_transactions" ADD CONSTRAINT IF NOT EXISTS "payment_transactions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."payment_transactions" ADD CONSTRAINT "payment_transactions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- CreateTable: skills_entitlements
 CREATE TABLE IF NOT EXISTS "public"."skills_entitlements" (
@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS "public"."skills_entitlements" (
 CREATE UNIQUE INDEX IF NOT EXISTS "skills_entitlements_userId_key" ON "public"."skills_entitlements"("userId" ASC);
 CREATE UNIQUE INDEX IF NOT EXISTS "skills_entitlements_paymentId_key" ON "public"."skills_entitlements"("paymentId" ASC);
 
-ALTER TABLE "public"."skills_entitlements" ADD CONSTRAINT IF NOT EXISTS "skills_entitlements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "public"."skills_entitlements" ADD CONSTRAINT IF NOT EXISTS "skills_entitlements_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "public"."payment_transactions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."skills_entitlements" ADD CONSTRAINT "skills_entitlements_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."skills_entitlements" ADD CONSTRAINT "skills_entitlements_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "public"."payment_transactions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- CreateTable: notifications
 CREATE TABLE IF NOT EXISTS "public"."notifications" (
@@ -72,4 +72,4 @@ CREATE TABLE IF NOT EXISTS "public"."notifications" (
 
 CREATE INDEX IF NOT EXISTS "notifications_userId_idx" ON "public"."notifications"("userId" ASC);
 
-ALTER TABLE "public"."notifications" ADD CONSTRAINT IF NOT EXISTS "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."notifications" ADD CONSTRAINT "notifications_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

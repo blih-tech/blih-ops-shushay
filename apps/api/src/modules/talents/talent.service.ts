@@ -98,10 +98,36 @@ export async function getOrCreateProfile(userId: string) {
 
   const completion = getDetailedProfileCompletion(profile);
 
+  // Fetch certificates & completed courses for profile display
+  const certificates = await prisma.certificate.findMany({
+    where: { userId },
+    include: {
+      course: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const completedCourses = certificates.map((c: any) => ({
+    id: c.course.id,
+    title: c.course.title,
+    description: c.course.description,
+    completedAt: c.issueDate,
+    certificateId: c.id,
+    certificateNumber: c.certificateNumber,
+  }));
+
   return {
     ...profile,
     isComplete: completion.isComplete,
     profileCompletion: completion,
+    certificates,
+    completedCourses,
   };
 }
 
@@ -386,11 +412,36 @@ export async function getTalentProfileById(
 
   const completion = getDetailedProfileCompletion(talent);
 
+  const certificates = await prisma.certificate.findMany({
+    where: { userId: talent.userId },
+    include: {
+      course: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+        },
+      },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  const completedCourses = certificates.map((c: any) => ({
+    id: c.course.id,
+    title: c.course.title,
+    description: c.course.description,
+    completedAt: c.issueDate,
+    certificateId: c.id,
+    certificateNumber: c.certificateNumber,
+  }));
+
   // Attach email from user table to the profile for easy consumption
   return {
     ...talent,
     email: talent.user.email,
     isComplete: completion.isComplete,
     profileCompletion: completion,
+    certificates,
+    completedCourses,
   };
 }

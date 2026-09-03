@@ -7,6 +7,7 @@ import adminRoutes from "../modules/admin/admin.routes";
 import paymentRoutes from "../modules/payments/payment.routes";
 import notificationRoutes from "../modules/notifications/notification.routes";
 import learningRoutes from "../modules/learning/learning.routes";
+import certificateRoutes from "../modules/certificates/certificate.routes";
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use("/admin", adminRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/notifications", notificationRoutes);
 router.use("/learning", learningRoutes);
+router.use("/certificates", certificateRoutes);
 
 export default router;
 

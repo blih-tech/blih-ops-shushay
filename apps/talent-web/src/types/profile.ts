@@ -42,6 +42,8 @@ export interface TalentProfile {
   isComplete: boolean;
   experience?: Experience[];
   education?: Education[];
+  certificates?: any[];
+  completedCourses?: any[];
 }
 
 export interface CompanyProfile {

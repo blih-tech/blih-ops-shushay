@@ -4,6 +4,8 @@
   "private": true,
   "description": "Blih product monorepo — API, Auth, Skills, and Talent applications",
   "scripts": {
+    "dev": "nx run-many -t dev --parallel=4",
+    "start": "nx run-many -t start --parallel=4",
     "dev:api": "pnpm --filter @blih/api dev",
     "dev:auth": "pnpm --filter @blih/auth-web dev",
     "dev:skills": "pnpm --filter @blih/skills-web dev",

@@ -15,6 +15,8 @@ import {
 } from "@blih/ui";
 import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
+import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
+import { ExperienceEducationCard } from "@/components/profile/ExperienceEducationCard";
 import {
   Edit3,
   Eye,
@@ -22,41 +24,12 @@ import {
   MapPin,
   Phone,
   FileText,
-  Briefcase,
-  GraduationCap,
-  ExternalLink,
   Download,
 } from "lucide-react";
 
 function ProfileContent() {
   const { user, logout } = useAuth();
   const { profile, loading, error } = useTalentProfile();
-
-  const formatExperienceDate = (
-    startDate?: string | null,
-    endDate?: string | null,
-    current?: boolean,
-  ) => {
-    if (!startDate) return "Recent";
-    const parse = (d: string) => {
-      try {
-        const date = new Date(d);
-        if (isNaN(date.getTime())) return d;
-        return date.toLocaleDateString("en-US", {
-          month: "short",
-          year: "numeric",
-          timeZone: "UTC",
-        });
-      } catch {
-        return d;
-      }
-    };
-    const startStr = parse(startDate);
-    if (current) return `${startStr} – Present`;
-    if (!endDate) return `${startStr} – Present`;
-    const endStr = parse(endDate);
-    return `${startStr} – ${endStr}`;
-  };
 
   if (loading) {
     return <ProfileSkeleton user={user} logout={logout} />;
@@ -79,9 +52,7 @@ function ProfileContent() {
     );
   }
 
-  const expCount = profile?.experience?.length ?? 0;
-  const eduCount = profile?.education?.length ?? 0;
-  const skillCount = profile?.skills?.length ?? 0;
+  const certCount = profile?.certificates?.length ?? profile?.completedCourses?.length ?? 0;
 
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
@@ -99,7 +70,7 @@ function ProfileContent() {
         {/* Completion banner if applicable */}
         <ProfileCompletionBanner isComplete={!!profile?.isComplete} />
 
-        {/* Profile Decision Hero Header */}
+        {/* Profile Hero Header */}
         <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 md:p-12 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/70">
             <div className="flex flex-col sm:flex-row sm:items-center gap-5">
@@ -114,7 +85,7 @@ function ProfileContent() {
                 ) : profile?.fullName ? (
                   profile.fullName
                     .split(" ")
-                    .map((n) => n[0])
+                    .map((n: string) => n[0])
                     .join("")
                     .slice(0, 2)
                     .toUpperCase()
@@ -197,18 +168,42 @@ function ProfileContent() {
             </div>
           )}
 
-          {/* Evidence Metrics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+          {/* Calibrated Operational Skills */}
+          {profile?.skills && profile.skills.length > 0 && (
+            <div className="space-y-4 pt-2">
+              <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
+                Verified Skill Competencies
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {profile.skills.map((skill: string) => (
+                  <SkillBar
+                    key={skill}
+                    name={skill}
+                    score={92}
+                    status="Verified"
+                    variant="primary"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Key Metrics */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-[#D9CEDF]/70">
             <MetricCard
-              value={expCount}
-              label="Work History"
-              variant="surface"
-            />
-            <MetricCard value={eduCount} label="Education" variant="surface" />
-            <MetricCard
-              value={skillCount || 4}
+              value={`${profile?.skills?.length || 0}`}
               label="Verified Skills"
               variant="primary"
+            />
+            <MetricCard
+              value={profile?.englishLevel || "Native / Fluent"}
+              label="English Proficiency"
+              variant="surface"
+            />
+            <MetricCard
+              value={`${certCount}`}
+              label="Certificates Earned"
+              variant="surface"
             />
             <MetricCard
               value="100%"
@@ -218,161 +213,17 @@ function ProfileContent() {
           </div>
         </div>
 
-        {/* Evidence-Backed Capabilities */}
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
-            <div className="space-y-1">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
-                Demonstrated Proof
-              </span>
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Evidence-Backed Capabilities
-              </h2>
-            </div>
-            <Link
-              href="/profile/edit"
-              className="font-mono text-xs text-[#1E5BFF] hover:underline flex items-center gap-1"
-            >
-              Add Skills <ExternalLink className="h-3.5 w-3.5" />
-            </Link>
-          </div>
+        {/* Verified Blih Skills Courses & Credentials */}
+        <VerifiedCredentialsCard
+          certificates={profile?.certificates}
+          completedCourses={profile?.completedCourses}
+        />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <SkillBar
-                name="Frontend & React Systems"
-                score={94}
-                status="Verified"
-                variant="primary"
-              />
-              <SkillBar
-                name="TypeScript & Architecture"
-                score={89}
-                status="Verified"
-                variant="primary"
-              />
-            </div>
-            <div className="space-y-3">
-              <SkillBar
-                name="API Integration & State"
-                score={88}
-                status="Verified"
-                variant="primary"
-              />
-              <SkillBar
-                name="UI Systems & Accessibility"
-                score={82}
-                status="Developing"
-                variant="coral"
-              />
-            </div>
-          </div>
-
-          {/* Listed skill chips */}
-          {profile?.skills && profile.skills.length > 0 && (
-            <div className="pt-4 border-t border-[#D9CEDF]/60 flex flex-wrap gap-2">
-              {profile.skills.map((skill, i) => (
-                <span
-                  key={i}
-                  className="font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] border border-[#1E5BFF]/20 px-3 py-1 rounded-xl font-medium"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Work History & Experience */}
-        {profile?.experience && profile.experience.length > 0 && (
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
-            <div className="space-y-1 pb-4 border-b border-[#D9CEDF]/70">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
-                Career Timeline
-              </span>
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Work Experience
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              {profile.experience.map((exp: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
-                >
-                  <div className="w-10 h-10 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0 border border-[#1E5BFF]/15">
-                    <Briefcase className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1 flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <h4 className="font-display text-lg font-bold text-[#17131F]">
-                        {exp.title || "Role Title"}
-                      </h4>
-                      <span className="font-mono text-xs text-[#1E5BFF] bg-[#EEF3FF] px-3 py-1 rounded-full border border-[#1E5BFF]/20 self-start sm:self-auto font-medium">
-                        {formatExperienceDate(
-                          exp.startDate,
-                          exp.endDate,
-                          exp.current,
-                        )}
-                      </span>
-                    </div>
-                    <p className="font-sans text-sm text-[#6E6678] font-semibold">
-                      {exp.company}
-                    </p>
-                    {exp.description && (
-                      <p className="font-sans text-sm text-[#6E6678] leading-relaxed pt-1">
-                        {exp.description}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Education & Credentials */}
-        {profile?.education && profile.education.length > 0 && (
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
-            <div className="space-y-1 pb-4 border-b border-[#D9CEDF]/70">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
-                Academic & Accreditations
-              </span>
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Education & Credentials
-              </h2>
-            </div>
-
-            <div className="space-y-6">
-              {profile.education.map((edu: any, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
-                >
-                  <div className="w-10 h-10 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0 border border-[#2E8F79]/20">
-                    <GraduationCap className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1 flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <h4 className="font-display text-lg font-bold text-[#17131F]">
-                        {edu.degree} {edu.field ? `in ${edu.field}` : ""}
-                      </h4>
-                      <span className="font-mono text-xs text-[#2E8F79] bg-[#E6F5F0] px-3 py-1 rounded-full border border-[#2E8F79]/20 self-start sm:self-auto font-medium">
-                        {edu.startYear
-                          ? `${edu.startYear} – ${edu.endYear || "Present"}`
-                          : edu.year || "Completed"}
-                      </span>
-                    </div>
-                    <p className="font-sans text-sm text-[#6E6678]">
-                      {edu.institution}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Work Experience & Education */}
+        <ExperienceEducationCard
+          experience={profile?.experience}
+          education={profile?.education}
+        />
 
         {/* Attached CV Section */}
         {profile?.cvUrl && (

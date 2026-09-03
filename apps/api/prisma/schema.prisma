@@ -33,6 +33,7 @@ model User {
   lessonProgress       LessonProgress[]
   quizAttempts         QuizAttempt[]
   assignmentSubmissions AssignmentSubmission[]
+  certificates          Certificate[]
 
   @@map("users")
 }
@@ -132,7 +133,8 @@ model Course {
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  lessons     Lesson[]
+  lessons      Lesson[]
+  certificates Certificate[]
 
   @@map("courses")
 }
@@ -302,4 +304,26 @@ model AssignmentSubmission {
   @@unique([userId, assignmentId])
   @@map("assignment_submissions")
 }
+
+// ─── Certificate Domain ───────────────────────────────────────────────────────
+
+model Certificate {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId          String
+  course            Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  certificateNumber String   @unique
+  issueDate         DateTime @default(now())
+  pdfUrl            String?
+  pdfPublicId       String?
+  createdAt         DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@index([certificateNumber])
+  @@map("certificates")
+}
+
 

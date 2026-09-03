@@ -14,6 +14,8 @@ import {
   Briefcase,
   GraduationCap,
   Globe,
+  ShieldCheck,
+  Award,
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { gsap } from "gsap";
@@ -261,6 +263,47 @@ function ProfilePreviewContent() {
             )}
           </div>
         </section>
+
+        {/* Verified Blih Credentials Section */}
+        {((profile?.certificates && profile.certificates.length > 0) ||
+          (profile?.completedCourses && profile.completedCourses.length > 0)) && (
+          <section className="reveal-profile-block space-y-6">
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-6 w-6 text-[#2E8F79]" />
+              <h2 className="font-display text-2xl font-bold text-[#17131F]">
+                Verified Blih Skills Credentials
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {(profile?.certificates || profile?.completedCourses || []).map((cert: any, idx: number) => {
+                const certId = cert.id || cert.certificateId;
+                const title = cert.course?.title || cert.title || "Blih Skills Track";
+                const certNumber = cert.certificateNumber || "BLIH-CERT-VERIFIED";
+
+                return (
+                  <div
+                    key={certId || idx}
+                    className="p-5 rounded-2xl border border-[#D9CEDF] bg-[#EEF3FF]/40 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-[10px] text-[#2E8F79] bg-[#E6F5F0] px-2.5 py-0.5 rounded-full font-semibold border border-[#2E8F79]/20 uppercase">
+                        Verified
+                      </span>
+                      <Award className="w-5 h-5 text-[#1E5BFF]" />
+                    </div>
+                    <h4 className="font-display text-base font-bold text-[#17131F]">
+                      {title}
+                    </h4>
+                    <p className="font-mono text-xs text-[#6E6678]">
+                      ID: {certNumber}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Experience Timeline */}
         {sortedExperience.length > 0 && (

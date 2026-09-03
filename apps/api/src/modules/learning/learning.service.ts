@@ -4,6 +4,7 @@ import {
   SubmitQuizInput,
   SubmitAssignmentInput,
 } from "./learning.schemas";
+import { checkAndGenerateCertificate } from "../certificates/certificate.service";
 
 export async function markLessonComplete(userId: string, lessonId: string) {
   // Verify lesson exists
@@ -37,6 +38,11 @@ export async function markLessonComplete(userId: string, lessonId: string) {
     },
   });
 
+  // Automatically check if course is completed and generate certificate
+  try {
+    await checkAndGenerateCertificate(userId, lesson.courseId);
+  } catch {}
+
   return progress;
 }
 
@@ -65,7 +71,7 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
   }
 
   const score = Math.round((correctCount / questions.length) * 100);
-  const passed = score >= 80; // Example passing threshold of 80%
+  const passed = score >= 80;
 
   const attempt = await prisma.quizAttempt.create({
     data: {
@@ -92,6 +98,11 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
         lessonId: quiz.lessonId,
       },
     });
+
+    // Automatically check if course is completed and generate certificate
+    try {
+      await checkAndGenerateCertificate(userId, quiz.lesson.courseId);
+    } catch {}
   }
 
   return attempt;
@@ -104,6 +115,7 @@ export async function submitAssignment(
 ) {
   const assignment = await prisma.assignment.findUnique({
     where: { id: data.assignmentId },
+    include: { lesson: true },
   });
 
   if (!assignment) {
@@ -150,6 +162,11 @@ export async function submitAssignment(
     },
   });
 
+  // Automatically check if course is completed and generate certificate
+  try {
+    await checkAndGenerateCertificate(userId, assignment.lesson.courseId);
+  } catch {}
+
   return submission;
 }
 
@@ -190,12 +207,20 @@ export async function getCourseProgress(userId: string, courseId: string) {
   });
 
   const completedCount = completed.length;
+  const isCompleted = completedCount === totalLessons;
+
+  // If completed, trigger certificate generation automatically
+  if (isCompleted) {
+    try {
+      await checkAndGenerateCertificate(userId, courseId);
+    } catch {}
+  }
 
   return {
     courseId,
     completedLessons: completedCount,
     totalLessons,
-    isCompleted: completedCount === totalLessons,
+    isCompleted,
     progressPercentage: Math.round((completedCount / totalLessons) * 100),
     completedLessonIds: completed.map((c: { lessonId: string }) => c.lessonId),
   };

@@ -88,7 +88,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             href={talentUrl}
             className="flex items-baseline gap-2.5 group cursor-pointer"
           >
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1E5BFF] to-[#0A3DCC] group-hover:drop-shadow-[0_2px_8px_rgba(30,91,255,0.25)] transition-all duration-300">
+            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1E5BFF] to-[#0A3DCC] group-hover:drop-shadow-[0_2px_8px_rgba(30,91,255,0.25)] transition-all duration-300 whitespace-nowrap shrink-0">
               BLIH OPS
             </span>
             <span className="hidden sm:inline-block font-mono text-[11px] text-[#6E6678] uppercase tracking-wider group-hover:text-[#1E5BFF] transition-colors duration-300">
