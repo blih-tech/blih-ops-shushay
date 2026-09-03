@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-
 import { MapPin, Filter, FileText, Eye } from "lucide-react";
 import {
   Button,
@@ -10,86 +9,11 @@ import {
   Modal,
   GlobalNavbar,
   UniversalSearch,
-  Skeleton,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
-
 import { mockTalents, type TalentProfileCard } from "@/data";
-
-function TalentCardSkeleton() {
-  return (
-    <Card className="border border-[#D9CEDF] rounded-3xl bg-white overflow-hidden p-6 flex flex-col justify-between h-[230px]">
-      <div className="space-y-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3.5">
-            <Skeleton
-              variant="rectangular"
-              width={48}
-              height={48}
-              className="rounded-2xl"
-            />
-            <div className="space-y-2">
-              <Skeleton
-                variant="rectangular"
-                width={120}
-                height={18}
-                className="rounded-md"
-              />
-              <Skeleton
-                variant="rectangular"
-                width={80}
-                height={12}
-                className="rounded-md"
-              />
-            </div>
-          </div>
-          <Skeleton
-            variant="rectangular"
-            width={70}
-            height={22}
-            className="rounded-lg"
-          />
-        </div>
-        <Skeleton variant="text" className="w-full" />
-        <div className="flex gap-2">
-          <Skeleton
-            variant="rectangular"
-            width={50}
-            height={16}
-            className="rounded-md"
-          />
-          <Skeleton
-            variant="rectangular"
-            width={60}
-            height={16}
-            className="rounded-md"
-          />
-          <Skeleton
-            variant="rectangular"
-            width={55}
-            height={16}
-            className="rounded-md"
-          />
-        </div>
-      </div>
-      <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-between items-center">
-        <Skeleton
-          variant="rectangular"
-          width={40}
-          height={12}
-          className="rounded-md"
-        />
-        <Skeleton
-          variant="rectangular"
-          width={90}
-          height={28}
-          className="rounded-md"
-        />
-      </div>
-    </Card>
-  );
-}
+import { TalentCardSkeleton } from "@/components/company/CompanyTalentsSkeleton";
 
 function CompanyTalentsSearchContent() {
   const { user, logout } = useAuth();
@@ -203,7 +127,7 @@ function CompanyTalentsSearchContent() {
                 <div className="p-6 space-y-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3.5">
-                      <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs">
+                      <div className="w-12 h-12 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs">
                         {talent.name.charAt(0)}
                       </div>
                       <div>
@@ -279,7 +203,7 @@ function CompanyTalentsSearchContent() {
             <div className="space-y-6">
               <div className="flex items-start justify-between pb-4 border-b border-[#D9CEDF]">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-14 h-14 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-xl shadow-sm">
+                  <div className="w-14 h-14 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-xl shadow-sm">
                     {selectedTalent.name.charAt(0)}
                   </div>
                   <div>

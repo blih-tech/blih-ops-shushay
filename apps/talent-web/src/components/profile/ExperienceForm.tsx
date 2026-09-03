@@ -43,7 +43,6 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Form states
   const [title, setTitle] = useState("");
   const [company, setCompany] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -90,11 +89,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       title,
       company,
       startDate: new Date(startDate).toISOString(),
-      endDate: current
-        ? null
-        : endDate
-          ? new Date(endDate).toISOString()
-          : null,
+      endDate: current ? null : endDate ? new Date(endDate).toISOString() : null,
       current,
       description: description.trim() || null,
     };
@@ -105,262 +100,135 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       } else {
         await addExperience(payload);
       }
-      resetForm();
-      setIsAdding(false);
-      setEditingId(null);
       onRefresh();
+      setEditingId(null);
+      setIsAdding(false);
+      resetForm();
     } catch (err: any) {
-      setError(err?.message || "Failed to save experience entry.");
+      setError(err.message || "Failed to save experience.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this experience?")) return;
+    if (!confirm("Are you sure you want to delete this experience record?")) return;
     setLoading(true);
-    setError(null);
     try {
       await deleteExperience(id);
       onRefresh();
     } catch (err: any) {
-      setError(err?.message || "Failed to delete experience entry.");
+      setError(err.message || "Failed to delete experience.");
     } finally {
       setLoading(false);
     }
   };
 
   const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-      timeZone: "UTC",
-    });
+    try {
+      return new Date(dateStr).toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+    } catch {
+      return dateStr;
+    }
   };
 
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] overflow-hidden font-sans bg-white">
-      <CardHeader className="px-5 py-5 sm:px-8 sm:py-6 border-b border-[#D9CEDF] bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm shrink-0">
-            <Briefcase className="h-5 w-5" />
-          </div>
-          <div>
-            <CardTitle className="text-xl font-bold text-[#17131F] font-display">
-              Work Experience
-            </CardTitle>
-            <CardDescription className="text-sm text-[#6E6678] font-sans">
-              Your professional work history in reverse chronological order.
-            </CardDescription>
-          </div>
+    <Card className="border-[#D9CEDF] shadow-xs">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <div>
+          <CardTitle className="text-xl flex items-center gap-2">
+            <Briefcase className="w-5 h-5 text-[#1E5BFF]" /> Work Experience
+          </CardTitle>
+          <CardDescription>
+            Highlight your career history and key contributions.
+          </CardDescription>
         </div>
         {!isAdding && !editingId && (
           <Button
-            variant="outline"
             size="sm"
-            className="w-full sm:w-auto"
             onClick={() => {
               resetForm();
               setIsAdding(true);
             }}
-            leftIcon={<Plus className="h-4 w-4" />}
+            leftIcon={<Plus className="w-4 h-4" />}
           >
             Add Experience
           </Button>
         )}
       </CardHeader>
+      <CardContent className="space-y-6">
+        {error && <Alert variant="error">{error}</Alert>}
 
-      <CardContent className="p-0 divide-y divide-[#D9CEDF]/70 bg-white">
-        {error && (
-          <div className="p-6 pb-0">
-            <Alert variant="error">{error}</Alert>
-          </div>
-        )}
-
-        {/* Add/Edit Form Box */}
         {(isAdding || editingId) && (
-          <div className="p-6 sm:p-8 bg-[#EEF3FF]/30 border-b border-[#D9CEDF]">
-            <form onSubmit={handleSave} className="space-y-5">
-              <div className="flex items-center justify-between">
-                <h4 className="font-display text-lg font-bold text-[#17131F]">
-                  {editingId ? "Edit Experience Entry" : "New Experience Entry"}
-                </h4>
-                <Badge variant="primary" size="sm">
-                  {editingId ? "Updating record" : "New record"}
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="Job Title" required>
-                  <Input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="e.g. Senior Frontend Developer"
-                    maxLength={100}
-                    disabled={loading}
-                  />
-                </FormField>
-
-                <FormField label="Company Name" required>
-                  <Input
-                    type="text"
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    placeholder="e.g. Google"
-                    maxLength={100}
-                    disabled={loading}
-                  />
-                </FormField>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField label="Start Date" required>
-                  <Input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    disabled={loading}
-                  />
-                </FormField>
-
-                <FormField label="End Date">
-                  <Input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    disabled={loading || current}
-                  />
-                </FormField>
-              </div>
-
-              <div className="flex items-center">
-                <Checkbox
-                  id="current-experience"
-                  checked={current}
-                  onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    setCurrent(isChecked);
-                    if (isChecked) setEndDate("");
-                  }}
-                  disabled={loading}
-                  label={
-                    <span className="text-sm font-medium text-[#17131F] cursor-pointer select-none">
-                      I currently work here
-                    </span>
-                  }
-                />
-              </div>
-
-              <FormField label="Job Description & Key Achievements">
-                <Textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Outline key systems delivered, technical stack used, and direct outcomes..."
-                  rows={3}
-                  maxLength={500}
-                  disabled={loading}
-                />
-              </FormField>
-
-              <div className="flex justify-end gap-3 pt-2">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setIsAdding(false);
-                    setEditingId(null);
-                    resetForm();
-                  }}
-                  disabled={loading}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="sm"
-                  isLoading={loading}
-                  leftIcon={<Check className="h-4 w-4" />}
-                >
-                  Save Entry
-                </Button>
-              </div>
-            </form>
-          </div>
-        )}
-
-        {/* Existing List */}
-        {entries.length === 0 && !isAdding && !editingId ? (
-          <div className="p-8 text-center text-sm text-[#6E6678]">
-            No experience records added yet. Click &quot;Add Experience&quot; to
-            build your profile history.
-          </div>
-        ) : (
-          entries.map((exp) => (
-            <div
-              key={exp.id}
-              className="p-6 sm:p-8 transition-colors hover:bg-[#EEF3FF]/20 flex flex-col sm:flex-row sm:items-start justify-between gap-4"
-            >
-              <div className="space-y-1.5 flex-1 min-w-0">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h4 className="font-display font-bold text-lg text-[#17131F]">
-                    {exp.title}
-                  </h4>
-                  {exp.current && (
-                    <Badge variant="verified" size="sm">
-                      Current Role
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-sm font-semibold text-[#1E5BFF]">
-                  {exp.company}
-                </p>
-                <div className="flex items-center gap-2 text-xs font-mono text-[#6E6678]">
-                  <Calendar className="h-3.5 w-3.5" />
-                  <span>
-                    {formatDate(exp.startDate)} –{" "}
-                    {exp.current
-                      ? "Present"
-                      : exp.endDate
-                        ? formatDate(exp.endDate)
-                        : ""}
-                  </span>
-                </div>
-                {exp.description && (
-                  <p className="text-sm text-[#6E6678] mt-2 leading-relaxed whitespace-pre-line">
-                    {exp.description}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2 self-end sm:self-start shrink-0">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleEditInit(exp)}
-                  disabled={loading || isAdding || editingId !== null}
-                  leftIcon={<Edit2 className="h-3.5 w-3.5" />}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDelete(exp.id)}
-                  disabled={loading}
-                  className="text-[#EF4444] hover:bg-[#EF4444]/10 hover:text-[#EF4444]"
-                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
-                >
-                  Delete
-                </Button>
-              </div>
+          <form onSubmit={handleSave} className="p-4 bg-[#F8F6F9] rounded-xl border border-[#D9CEDF] space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#D9CEDF]">
+              <h4 className="font-semibold text-sm text-[#17131F]">
+                {editingId ? "Edit Experience" : "New Experience Record"}
+              </h4>
+              <Badge variant="outline">{current ? "Current Role" : "Past Role"}</Badge>
             </div>
-          ))
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField label="Job Title" required>
+                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Senior Frontend Engineer" />
+              </FormField>
+              <FormField label="Company" required>
+                <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Gebeya Tech" />
+              </FormField>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField label="Start Date" required>
+                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              </FormField>
+              <FormField label="End Date" helperText={current ? "Currently working here" : ""}>
+                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} disabled={current} />
+              </FormField>
+            </div>
+
+            <Checkbox label="I currently work in this role" checked={current} onChange={(e) => setCurrent(e.target.checked)} />
+
+            <FormField label="Key Contributions / Description">
+              <Textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe impact, tech stack, and achievements..." />
+            </FormField>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button type="button" variant="outline" size="sm" onClick={() => { setIsAdding(false); setEditingId(null); resetForm(); }}>Cancel</Button>
+              <Button type="submit" size="sm" disabled={loading} leftIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}>Save Record</Button>
+            </div>
+          </form>
         )}
+
+        <div className="divide-y divide-[#D9CEDF]">
+          {entries.length === 0 && !isAdding && !editingId ? (
+            <p className="text-sm text-[#6E6678] py-4 text-center">No experience entries added yet.</p>
+          ) : (
+            entries.map((exp) => (
+              <div key={exp.id} className="py-4 flex justify-between items-start group">
+                <div className="space-y-1 max-w-xl">
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-bold text-[#17131F] text-base">{exp.title}</h4>
+                    {exp.current && <Badge variant="primary" size="sm">Current</Badge>}
+                  </div>
+                  <p className="text-sm text-[#1E5BFF] font-medium">{exp.company}</p>
+                  <p className="text-xs font-mono text-[#6E6678] flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5 inline" />
+                    {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+                  </p>
+                  {exp.description && <p className="text-sm text-[#6E6678] pt-1 whitespace-pre-line">{exp.description}</p>}
+                </div>
+                <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
+                  <Button variant="outline" size="sm" onClick={() => handleEditInit(exp)}><Edit2 className="w-3.5 h-3.5" /></Button>
+                  <Button variant="outline" size="sm" onClick={() => handleDelete(exp.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </CardContent>
     </Card>
   );
 };
-export default ExperienceForm;

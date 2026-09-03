@@ -4,128 +4,21 @@ import React, { useState, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { SkillNode } from "@/types/explore";
+import { MOCK_SKILL_NODES } from "@/data/mockExploreData";
 
 gsap.registerPlugin(ScrollTrigger);
-
-interface SkillNode {
-  id: string;
-  label: string;
-  status: "Verified" | "Developing" | "Recommended" | "Unverified";
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  borderColor: string;
-  bgColor: string;
-  textColor: string;
-  detail: string;
-}
-
-const SKILL_NODES: SkillNode[] = [
-  {
-    id: "js",
-    label: "JavaScript",
-    status: "Verified",
-    x: 220,
-    y: 170,
-    width: 128,
-    height: 58,
-    borderColor: "border-[#1E5BFF]",
-    bgColor: "bg-[#DDE7FF]",
-    textColor: "text-[#1E5BFF]",
-    detail: "Assessment 94 · 12 projects · 143 opportunities",
-  },
-  {
-    id: "ts",
-    label: "TypeScript",
-    status: "Developing",
-    x: 370,
-    y: 90,
-    width: 128,
-    height: 58,
-    borderColor: "border-[#D9CEDF]",
-    bgColor: "bg-[#DDE7FF]",
-    textColor: "text-[#6E6678]",
-    detail: "Assessment 89 · 4 projects · 54 opportunities",
-  },
-  {
-    id: "react",
-    label: "React",
-    status: "Verified",
-    x: 390,
-    y: 260,
-    width: 128,
-    height: 58,
-    borderColor: "border-[#1E5BFF]",
-    bgColor: "bg-white",
-    textColor: "text-[#1E5BFF]",
-    detail: "Assessment 91 · 3 projects · 76 opportunities",
-  },
-  {
-    id: "a11y",
-    label: "Accessibility",
-    status: "Recommended",
-    x: 150,
-    y: 300,
-    width: 158,
-    height: 58,
-    borderColor: "border-[#FF8A5B]",
-    bgColor: "bg-white",
-    textColor: "text-[#FF8A5B]",
-    detail: "Curriculum target · 2 assessments recommended",
-  },
-  {
-    id: "testing",
-    label: "Testing",
-    status: "Unverified",
-    x: 460,
-    y: 365,
-    width: 128,
-    height: 58,
-    borderColor: "border-[#D9CEDF]",
-    bgColor: "bg-white",
-    textColor: "text-[#6E6678]",
-    detail: "No active verification · 1 upcoming challenge",
-  },
-  {
-    id: "api",
-    label: "API Integration",
-    status: "Verified",
-    x: 70,
-    y: 130,
-    width: 158,
-    height: 58,
-    borderColor: "border-[#1E5BFF]",
-    bgColor: "bg-[#DDE7FF]",
-    textColor: "text-[#1E5BFF]",
-    detail: "Assessment 88 · 8 projects · 92 opportunities",
-  },
-  {
-    id: "perf",
-    label: "Performance",
-    status: "Developing",
-    x: 230,
-    y: 395,
-    width: 128,
-    height: 58,
-    borderColor: "border-[#D9CEDF]",
-    bgColor: "bg-white",
-    textColor: "text-[#6E6678]",
-    detail: "Assessment 78 · 1 project · 34 opportunities",
-  },
-];
 
 export function SkillGraphPreview() {
   const [activeNodeId, setActiveNodeId] = useState("react");
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
-  const activeNode =
-    SKILL_NODES.find((n) => n.id === activeNodeId) || SKILL_NODES[2];
+  const activeNode: SkillNode =
+    MOCK_SKILL_NODES.find((n) => n.id === activeNodeId) || MOCK_SKILL_NODES[2];
 
   const containerRef = useRef<HTMLDivElement>(null);
   const detailRevealRef = useRef<HTMLDivElement>(null);
 
-  // Transition animation for selected details card at the bottom
   useGSAP(
     () => {
       if (detailRevealRef.current) {
@@ -139,10 +32,8 @@ export function SkillGraphPreview() {
     { dependencies: [activeNodeId] },
   );
 
-  // Entrance and loop animations
   useGSAP(
     () => {
-      // Initial draw-in of connection lines
       gsap.fromTo(
         ".connection-line",
         { opacity: 0, strokeDasharray: "4 4" },
@@ -159,7 +50,6 @@ export function SkillGraphPreview() {
         },
       );
 
-      // Staggered pop-in for the skill cards/nodes
       gsap.fromTo(
         ".skill-node",
         { opacity: 0, scale: 0.3 },
@@ -178,7 +68,6 @@ export function SkillGraphPreview() {
         },
       );
 
-      // Continuous loop: Pulse connection lines after reveal
       gsap.fromTo(
         ".connection-line",
         { opacity: 0.35 },
@@ -196,7 +85,6 @@ export function SkillGraphPreview() {
     { scope: containerRef },
   );
 
-  // Magnetic Pull Hover handlers
   const handleMouseMove = (
     e: React.MouseEvent<HTMLDivElement>,
     nodeId: string,
@@ -238,9 +126,8 @@ export function SkillGraphPreview() {
       ref={containerRef}
       className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center font-sans select-none py-8"
     >
-      {/* Left Column: Heading and Copy */}
       <div className="lg:col-span-5 space-y-6">
-        <h2 className="font-display text-5xl sm:text-6xl lg:text-[82px] font-bold tracking-tight text-[#17131F] leading-tight">
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#17131F] leading-tight">
           Skill Graph
         </h2>
         <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed max-w-md">
@@ -249,15 +136,12 @@ export function SkillGraphPreview() {
         </p>
       </div>
 
-      {/* Right Column: Visual Skill Graph Container */}
       <div className="lg:col-span-7 flex justify-center relative">
         <div className="skill-node-container w-full max-w-[640px] h-[560px] relative border border-[#D9CEDF]/40 rounded-[36px] bg-[#F7F9FF]/30 p-6 overflow-hidden">
-          {/* Network Connection Lines SVG in background */}
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none"
             fill="none"
           >
-            {/* API -> JS */}
             <line
               className="connection-line transition-all duration-300"
               x1="149"
@@ -268,7 +152,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("api", "js") ? "2.5" : "1.5"}
               strokeDasharray={isLineActive("api", "js") ? "0" : "4 4"}
             />
-            {/* JS -> TS */}
             <line
               className="connection-line transition-all duration-300"
               x1="284"
@@ -279,7 +162,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("js", "ts") ? "2.5" : "1.5"}
               strokeDasharray={isLineActive("js", "ts") ? "0" : "4 4"}
             />
-            {/* JS -> React */}
             <line
               className="connection-line transition-all duration-300"
               x1="284"
@@ -290,7 +172,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("js", "react") ? "3" : "2"}
               strokeDasharray={isLineActive("js", "react") ? "0" : "4 4"}
             />
-            {/* React -> TS */}
             <line
               className="connection-line transition-all duration-300"
               x1="454"
@@ -301,7 +182,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("react", "ts") ? "2.5" : "1.5"}
               strokeDasharray={isLineActive("react", "ts") ? "0" : "4 4"}
             />
-            {/* React -> Testing */}
             <line
               className="connection-line transition-all duration-300"
               x1="454"
@@ -312,7 +192,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("react", "testing") ? "2.5" : "1.5"}
               strokeDasharray={isLineActive("react", "testing") ? "0" : "4 4"}
             />
-            {/* React -> A11y */}
             <line
               className="connection-line transition-all duration-300"
               x1="454"
@@ -323,7 +202,6 @@ export function SkillGraphPreview() {
               strokeWidth={isLineActive("react", "a11y") ? "2.5" : "1.5"}
               strokeDasharray={isLineActive("react", "a11y") ? "0" : "4 4"}
             />
-            {/* A11y -> Perf */}
             <line
               className="connection-line transition-all duration-300"
               x1="229"
@@ -336,8 +214,7 @@ export function SkillGraphPreview() {
             />
           </svg>
 
-          {/* Interactive Skill Nodes */}
-          {SKILL_NODES.map((n) => {
+          {MOCK_SKILL_NODES.map((n) => {
             const isActive = n.id === activeNodeId;
             return (
               <div
@@ -355,7 +232,7 @@ export function SkillGraphPreview() {
                   top: `${n.y}px`,
                   width: `${n.width}px`,
                   height: `${n.height}px`,
-                  opacity: 0, // Initial opacity for entrance animation
+                  opacity: 0,
                 }}
               >
                 <span className="font-display text-xs font-bold text-[#17131F] leading-none text-center">
@@ -370,10 +247,9 @@ export function SkillGraphPreview() {
             );
           })}
 
-          {/* Selected skill reveal card at bottom */}
           <div
             ref={detailRevealRef}
-            className="absolute left-[70px] top-[430px] w-[380px] h-[118px] bg-white border border-[#D9CEDF] rounded-[22px] p-6 shadow-md flex items-center justify-between transition-all duration-300"
+            className="absolute left-[70px] top-[430px] w-[380px] h-[118px] bg-[#FFFFFF] border border-[#D9CEDF] rounded-[22px] p-6 shadow-md flex items-center justify-between transition-all duration-300"
           >
             <div className="space-y-1">
               <h4 className="font-display text-xl font-bold text-[#17131F]">

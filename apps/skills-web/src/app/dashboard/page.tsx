@@ -13,10 +13,10 @@ import {
   Badge,
   Spinner,
   GlobalNavbar,
-  SkillBar,
   MetricCard,
 } from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
+import { VerifiedSkillsCard } from "@/components/dashboard/VerifiedSkillsCard";
 import { BookOpen, Award, Sparkles, ArrowRight } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import { getCourseProgress } from "@blih/api-client";
@@ -47,7 +47,6 @@ function DashboardContent() {
       .then(async (fetchedCourses) => {
         setCourses(fetchedCourses);
 
-        // Fetch real progress for each course
         const progressResults = await Promise.allSettled(
           fetchedCourses.map((c) => getCourseProgress(c.id)),
         );
@@ -81,7 +80,6 @@ function DashboardContent() {
     );
   }
 
-  // Calculate real aggregate metric counters
   const totalCompleted = Object.values(progressMap).filter((p) => p.isCompleted).length;
   const totalInProgress = Object.values(progressMap).filter(
     (p) => p.progressPercentage > 0 && !p.isCompleted,
@@ -89,10 +87,8 @@ function DashboardContent() {
 
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      {/* Background ambient lighting */}
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
-      {/* Global Navbar */}
       <GlobalNavbar
         currentApp="dashboard"
         user={user ? { email: user.email, role: user.role } : null}
@@ -100,7 +96,6 @@ function DashboardContent() {
       />
 
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10">
-        {/* Welcome & Momentum Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/80">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
@@ -140,7 +135,6 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Highlight Card & Capability Overview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <Card
             variant="surface"
@@ -175,36 +169,9 @@ function DashboardContent() {
             </div>
           </Card>
 
-          <div className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm flex flex-col justify-between">
-            <div className="space-y-2">
-              <h3 className="font-display font-bold text-lg text-[#17131F]">
-                Verified Skills Signal
-              </h3>
-              <p className="font-sans text-xs text-[#6E6678]">
-                Real-time assessment scores and completed track badges.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-baseline justify-between">
-                <span className="font-display text-4xl font-bold text-[#1E5BFF]">
-                  +{totalCompleted * 10 || 14}%
-                </span>
-                <span className="font-sans text-xs text-[#2E8F79] font-medium">
-                  Boost in Opportunity Match
-                </span>
-              </div>
-              <SkillBar
-                name="React & Python Systems"
-                score={totalCompleted > 0 ? 100 : 65}
-                status={totalCompleted > 0 ? "Verified Track" : "In Progress"}
-                variant="primary"
-              />
-            </div>
-          </div>
+          <VerifiedSkillsCard totalCompleted={totalCompleted} />
         </div>
 
-        {/* Evidence & Metrics Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <MetricCard
             value={String(totalInProgress || (courses.length > 0 ? 1 : 0))}
@@ -228,7 +195,6 @@ function DashboardContent() {
           />
         </div>
 
-        {/* Active Learning & Catalog Rows */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-2xl font-bold text-[#17131F]">
@@ -328,7 +294,6 @@ function DashboardContent() {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
         <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
         <Link

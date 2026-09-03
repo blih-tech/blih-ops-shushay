@@ -7,6 +7,18 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const LEFT_EVIDENCE = [
+  { title: "Course completed", label: "learning evidence", highlight: false },
+  { title: "Assessment passed", label: "learning evidence", highlight: false },
+  { title: "React skill verified", label: "skill proof", highlight: true },
+];
+
+const RIGHT_OUTCOMES = [
+  { title: "Matched 3 jobs", label: "opportunity proof", highlight: false },
+  { title: "Interview requested", label: "reputation proof", highlight: false },
+  { title: "Hired as FE Dev", label: "career proof", highlight: true },
+];
+
 export function EcosystemCanvas() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -98,71 +110,45 @@ export function EcosystemCanvas() {
       {/* Header and intro */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
         <div className="space-y-3 lg:col-span-8">
-          <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold block">
-            ONE PROFILE, CONTINUOUS GROWTH
-          </span>
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#17131F] leading-tight">
-            Evidence becomes
-            <br />
-            professional identity.
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#17131F] leading-tight">
+            Continuous Growth Engine
           </h2>
         </div>
-        <div className="lg:col-span-4 lg:pt-6">
-          <p className="font-sans text-base text-[#6E6678] leading-relaxed">
-            Learning, assessments, real projects and reviews strengthen one
-            Skill Profile instead of living in separate places.
+        <div className="lg:col-span-4 pt-2">
+          <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
+            Every course completed, assessment passed and project delivered builds your verified profile.
           </p>
         </div>
       </div>
 
-      {/* Evolution interactive/visual section */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-4 relative min-h-[500px]">
-        {/* Left Side: Floating evidence objects (First group) */}
+      {/* Interactive Ecosystem Canvas Surface */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+        {/* Left Column: Learning Input floating cards */}
         <div className="lg:col-span-3 flex flex-col gap-4">
-          {/* Course completed */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#EEF3FF] border border-[#D9CEDF] rounded-[22px] px-6 py-4 shadow-sm"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#17131F] mb-1">
-              Course completed
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              learning evidence
-            </span>
-          </div>
-
-          {/* Assessment passed */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#DDE7FF] border border-[#D9CEDF] rounded-[22px] px-6 py-4 shadow-sm"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#17131F] mb-1">
-              Assessment passed
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              learning evidence
-            </span>
-          </div>
-
-          {/* React skill verified */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#DDE7FF] border-2 border-[#1E5BFF] rounded-[22px] px-6 py-4 shadow-md"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#1E5BFF] mb-1">
-              React skill verified
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              skill proof
-            </span>
-          </div>
+          {LEFT_EVIDENCE.map((item, idx) => (
+            <div
+              key={idx}
+              onMouseEnter={onCardEnter}
+              onMouseLeave={onCardLeave}
+              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
+                item.highlight
+                  ? "bg-[#DDE7FF] border-2 border-[#1E5BFF]"
+                  : "bg-white border border-[#D9CEDF]"
+              }`}
+              style={{ opacity: 0 }}
+            >
+              <h4
+                className={`font-display text-base font-bold mb-1 ${
+                  item.highlight ? "text-[#1E5BFF]" : "text-[#17131F]"
+                }`}
+              >
+                {item.title}
+              </h4>
+              <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
+                {item.label}
+              </span>
+            </div>
+          ))}
         </div>
 
         {/* Center: Mikael evolving Skill Profile Card */}
@@ -242,92 +228,40 @@ export function EcosystemCanvas() {
                 </div>
               </div>
             </div>
-
-            {/* Evidence Metrics */}
-            <div className="grid grid-cols-3 gap-2.5 pt-6 border-t border-[#D9CEDF]/60">
-              <div className="bg-[#DDE7FF] rounded-[18px] p-3 text-center flex flex-col justify-center items-center h-[70px]">
-                <span className="font-display text-2xl font-bold text-[#1E5BFF] block leading-none">
-                  4
-                </span>
-                <span className="font-mono text-[9px] text-[#6E6678] mt-1 leading-tight uppercase font-medium">
-                  verified assessments
-                </span>
-              </div>
-              <div className="bg-[#F7F9FF] rounded-[18px] p-3 text-center flex flex-col justify-center items-center h-[70px] border border-[#D9CEDF]/40">
-                <span className="font-display text-2xl font-bold text-[#1E5BFF] block leading-none">
-                  12
-                </span>
-                <span className="font-mono text-[9px] text-[#6E6678] mt-1 leading-tight uppercase font-medium">
-                  completed projects
-                </span>
-              </div>
-              <div className="bg-[#F7F9FF] rounded-[18px] p-3 text-center flex flex-col justify-center items-center h-[70px] border border-[#D9CEDF]/40">
-                <span className="font-display text-2xl font-bold text-[#1E5BFF] block leading-none">
-                  17
-                </span>
-                <span className="font-mono text-[9px] text-[#6E6678] mt-1 leading-tight uppercase font-medium">
-                  client reviews
-                </span>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Right Side: Floating evidence objects (Second group) */}
+        {/* Right Column: Opportunity Output floating cards */}
         <div className="lg:col-span-3 flex flex-col gap-4">
-          {/* Real project completed */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#FFF7EF] border border-[#D9CEDF] rounded-[22px] px-6 py-4 shadow-sm"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#17131F] mb-1">
-              Real project completed
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              skill proof
-            </span>
-          </div>
-
-          {/* Client review received */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#EEF3FF] border border-[#D9CEDF] rounded-[22px] px-6 py-4 shadow-sm"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#17131F] mb-1">
-              Client review received
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              work reputation
-            </span>
-          </div>
-
-          {/* Reputation increased */}
-          <div
-            onMouseEnter={onCardEnter}
-            onMouseLeave={onCardLeave}
-            className="evidence-float bg-[#DDE7FF] border border-[#D9CEDF] rounded-[22px] px-6 py-4 shadow-sm"
-            style={{ opacity: 0 }}
-          >
-            <h4 className="font-display text-base font-bold text-[#17131F] mb-1">
-              Reputation increased
-            </h4>
-            <span className="font-mono text-[9px] text-[#6E6678] uppercase tracking-wider">
-              work reputation
-            </span>
-          </div>
+          {RIGHT_OUTCOMES.map((item, idx) => (
+            <div
+              key={idx}
+              onMouseEnter={onCardEnter}
+              onMouseLeave={onCardLeave}
+              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
+                item.highlight
+                  ? "bg-[#1E5BFF] border-2 border-[#1E5BFF] text-white"
+                  : "bg-white border border-[#D9CEDF]"
+              }`}
+              style={{ opacity: 0 }}
+            >
+              <h4
+                className={`font-display text-base font-bold mb-1 ${
+                  item.highlight ? "text-white" : "text-[#17131F]"
+                }`}
+              >
+                {item.title}
+              </h4>
+              <span
+                className={`font-mono text-[9px] uppercase tracking-wider ${
+                  item.highlight ? "text-white/80" : "text-[#6E6678]"
+                }`}
+              >
+                {item.label}
+              </span>
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* Scroll behavior note */}
-      <div className="text-center pt-6 relative z-10">
-        <span className="font-mono text-[11px] text-[#6E6678] bg-[#EEF3FF] border border-[#D9CEDF]/60 rounded-full px-4 py-1.5 inline-block uppercase tracking-wider">
-          Scroll behavior: evidence objects move into the profile and become
-          skill confidence, verified proof and reputation.
-        </span>
       </div>
     </div>
   );

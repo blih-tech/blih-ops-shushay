@@ -68,6 +68,8 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               onClick={() => {
                 if (user.role === "COMPANY") {
                   window.location.href = "/company";
+                } else if (user.role === "ADMIN") {
+                  window.location.href = `${process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001"}/admin`;
                 } else {
                   window.location.href = "/profile";
                 }

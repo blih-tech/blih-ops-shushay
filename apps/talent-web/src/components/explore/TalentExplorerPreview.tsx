@@ -6,181 +6,20 @@ import { Search, Heart, Mail } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ExploreCandidate } from "@/types/explore";
+import { MOCK_EXPLORE_CANDIDATES } from "@/data/mockExploreData";
 
 gsap.registerPlugin(ScrollTrigger);
 
-interface Candidate {
-  id: string;
-  name: string;
-  role: string;
-  availability: string;
-  avatarInitials: string;
-  skills: {
-    name: string;
-    score: number;
-    status: string;
-    width: string;
-    color: string;
-  }[];
-  evidence: string[];
-}
-
-const CANDIDATES: Candidate[] = [
-  {
-    id: "mikael",
-    name: "Mikael Abebe",
-    role: "Frontend Engineer",
-    availability: "Available in 2 weeks",
-    avatarInitials: "MA",
-    skills: [
-      {
-        name: "React",
-        score: 94,
-        status: "Verified",
-        width: "92%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "TypeScript",
-        score: 89,
-        status: "Verified",
-        width: "87%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Accessibility",
-        score: 82,
-        status: "Developing",
-        width: "78%",
-        color: "bg-[#FF8A5B]",
-      },
-    ],
-    evidence: [
-      "4 verified assessments",
-      "12 completed projects",
-      "17 client reviews",
-      "3 professional certificates",
-    ],
-  },
-  {
-    id: "ruth",
-    name: "Ruth Bekele",
-    role: "Product Engineer",
-    availability: "Available immediately",
-    avatarInitials: "RB",
-    skills: [
-      {
-        name: "React",
-        score: 91,
-        status: "Verified",
-        width: "89%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Node.js",
-        score: 85,
-        status: "Verified",
-        width: "83%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "System Design",
-        score: 76,
-        status: "Developing",
-        width: "72%",
-        color: "bg-[#FF8A5B]",
-      },
-    ],
-    evidence: [
-      "3 verified assessments",
-      "9 completed projects",
-      "11 client reviews",
-      "2 professional certificates",
-    ],
-  },
-  {
-    id: "hana",
-    name: "Hana Yusuf",
-    role: "UI Developer",
-    availability: "Available next month",
-    avatarInitials: "HY",
-    skills: [
-      {
-        name: "Figma",
-        score: 95,
-        status: "Verified",
-        width: "93%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "React",
-        score: 88,
-        status: "Verified",
-        width: "86%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "CSS/Tailwind",
-        score: 92,
-        status: "Verified",
-        width: "90%",
-        color: "bg-[#1E5BFF]",
-      },
-    ],
-    evidence: [
-      "5 verified assessments",
-      "15 completed projects",
-      "22 client reviews",
-      "4 professional certificates",
-    ],
-  },
-  {
-    id: "solomon",
-    name: "Solomon Desta",
-    role: "Backend leaning FE",
-    availability: "Available in 3 weeks",
-    avatarInitials: "SD",
-    skills: [
-      {
-        name: "React",
-        score: 80,
-        status: "Verified",
-        width: "78%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Python/Django",
-        score: 92,
-        status: "Verified",
-        width: "90%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "PostgreSQL",
-        score: 87,
-        status: "Verified",
-        width: "85%",
-        color: "bg-[#1E5BFF]",
-      },
-    ],
-    evidence: [
-      "6 verified assessments",
-      "18 completed projects",
-      "31 client reviews",
-      "5 professional certificates",
-    ],
-  },
-];
-
 export function TalentExplorerPreview() {
   const [selectedId, setSelectedId] = useState("mikael");
-  const selectedCandidate =
-    CANDIDATES.find((c) => c.id === selectedId) || CANDIDATES[0];
+  const selectedCandidate: ExploreCandidate =
+    MOCK_EXPLORE_CANDIDATES.find((c) => c.id === selectedId) ||
+    MOCK_EXPLORE_CANDIDATES[0];
 
   const containerRef = useRef<HTMLDivElement>(null);
   const detailRef = useRef<HTMLDivElement>(null);
 
-  // Transition animation for selected details card when selection changes
   useGSAP(
     () => {
       if (detailRef.current) {
@@ -205,7 +44,6 @@ export function TalentExplorerPreview() {
     { dependencies: [selectedId] },
   );
 
-  // Scroll Trigger staggered entrance for the left panel items
   useGSAP(
     () => {
       gsap.fromTo(
@@ -251,7 +89,7 @@ export function TalentExplorerPreview() {
       {/* Section Header */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-8">
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-[68px] font-bold tracking-tight text-[#17131F] leading-[1.05]">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#17131F] leading-[1.05]">
             Discover people by
             <br />
             what they can prove.
@@ -267,9 +105,7 @@ export function TalentExplorerPreview() {
 
       {/* Explorer UI Shell */}
       <div className="bg-white border border-[#D9CEDF] rounded-[34px] p-6 sm:p-8 shadow-[0_24px_54px_rgba(30,91,255,0.06)] space-y-6">
-        {/* Search & Filters Row */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/60">
-          {/* Search bar mock */}
           <div className="flex-1 max-w-[520px] bg-[#F7F9FF] border border-[#D9CEDF] rounded-2xl px-5 h-14 flex items-center justify-between">
             <span className="text-sm text-[#17131F] font-medium">
               React TypeScript product engineer
@@ -277,7 +113,6 @@ export function TalentExplorerPreview() {
             <Search className="w-4 h-4 text-[#1E5BFF]" />
           </div>
 
-          {/* Filter Chips */}
           <div className="flex flex-wrap gap-2 items-center">
             <span className="bg-[#DDE7FF] border border-[#1E5BFF] text-[#1E5BFF] rounded-full px-3 py-1 text-xs font-mono">
               React
@@ -299,9 +134,8 @@ export function TalentExplorerPreview() {
 
         {/* Workspace content split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left panel: List of candidates */}
           <div className="lg:col-span-4 flex flex-col gap-3">
-            {CANDIDATES.map((c) => {
+            {MOCK_EXPLORE_CANDIDATES.map((c) => {
               const isSelected = c.id === selectedId;
               return (
                 <div
@@ -337,12 +171,10 @@ export function TalentExplorerPreview() {
             })}
           </div>
 
-          {/* Right panel: Candidate Detailed Proof View */}
           <div
             ref={detailRef}
             className="lg:col-span-8 bg-white border border-[#D9CEDF] rounded-[26px] p-6 sm:p-8 flex flex-col justify-between min-h-[350px] shadow-sm"
           >
-            {/* Header info */}
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="space-y-1">
                 <h3 className="font-display text-3xl sm:text-[38px] font-bold text-[#17131F] leading-none">
@@ -354,9 +186,7 @@ export function TalentExplorerPreview() {
               </div>
             </div>
 
-            {/* Content body split */}
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start my-8">
-              {/* Skill bars */}
               <div className="md:col-span-7 space-y-5">
                 {selectedCandidate.skills.map((s) => (
                   <div
@@ -381,7 +211,6 @@ export function TalentExplorerPreview() {
                 ))}
               </div>
 
-              {/* Evidence details list */}
               <div className="md:col-span-5 bg-[#F7F9FF] border border-[#D9CEDF]/60 rounded-2xl p-5 space-y-3">
                 <span className="font-mono text-[10px] uppercase text-[#6E6678] tracking-wider block font-semibold mb-1">
                   Verified Evidence
@@ -397,7 +226,6 @@ export function TalentExplorerPreview() {
               </div>
             </div>
 
-            {/* Action buttons */}
             <div className="flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-[#D9CEDF]/60">
               <Button
                 size="sm"

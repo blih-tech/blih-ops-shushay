@@ -6,16 +6,14 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
 import { Button, Badge, Alert, GlobalNavbar } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
+import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
+import { ExperienceEducationCard } from "@/components/profile/ExperienceEducationCard";
 import {
   Download,
   Edit3,
   Eye,
   CheckCircle2,
-  Briefcase,
-  GraduationCap,
   Globe,
-  ShieldCheck,
-  Award,
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { gsap } from "gsap";
@@ -31,7 +29,6 @@ function ProfilePreviewContent() {
 
   useGSAP(
     () => {
-      // Scroll-triggered slide/scale reveal for profile cards & blocks
       gsap.fromTo(
         ".reveal-profile-block",
         { opacity: 0, y: 40 },
@@ -51,31 +48,6 @@ function ProfilePreviewContent() {
     },
     { scope: containerRef },
   );
-
-  const formatDate = (dateStr: string) => {
-    try {
-      const date = new Date(dateStr);
-      if (isNaN(date.getTime())) return dateStr;
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        year: "numeric",
-        timeZone: "UTC",
-      });
-    } catch {
-      return dateStr;
-    }
-  };
-
-  const sortedExperience = profile?.experience
-    ? [...profile.experience].sort(
-      (a, b) =>
-        new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-    )
-    : [];
-
-  const sortedEducation = profile?.education
-    ? [...profile.education].sort((a, b) => b.startYear - a.startYear)
-    : [];
 
   if (loading) {
     return <ProfilePreviewSkeleton user={user} logout={logout} />;
@@ -116,7 +88,12 @@ function ProfilePreviewContent() {
           </div>
           <div className="flex items-center gap-2">
             {profile?.cvUrl && (
-              <a href={profile.cvUrl} target="_blank" rel="noopener noreferrer">
+              <a
+                href={profile.cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download
+              >
                 <Button
                   size="sm"
                   variant="outline"
@@ -264,117 +241,20 @@ function ProfilePreviewContent() {
           </div>
         </section>
 
-        {/* Verified Blih Credentials Section */}
-        {((profile?.certificates && profile.certificates.length > 0) ||
-          (profile?.completedCourses && profile.completedCourses.length > 0)) && (
-          <section className="reveal-profile-block space-y-6">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="h-6 w-6 text-[#2E8F79]" />
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Verified Blih Skills Credentials
-              </h2>
-            </div>
+        {/* Reusable Verified Blih Credentials Section */}
+        <div className="reveal-profile-block">
+          <VerifiedCredentialsCard
+            certificates={profile?.certificates || profile?.completedCourses || []}
+          />
+        </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(profile?.certificates || profile?.completedCourses || []).map((cert: any, idx: number) => {
-                const certId = cert.id || cert.certificateId;
-                const title = cert.course?.title || cert.title || "Blih Skills Track";
-                const certNumber = cert.certificateNumber || "BLIH-CERT-VERIFIED";
-
-                return (
-                  <div
-                    key={certId || idx}
-                    className="p-5 rounded-2xl border border-[#D9CEDF] bg-[#EEF3FF]/40 space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] text-[#2E8F79] bg-[#E6F5F0] px-2.5 py-0.5 rounded-full font-semibold border border-[#2E8F79]/20 uppercase">
-                        Verified
-                      </span>
-                      <Award className="w-5 h-5 text-[#1E5BFF]" />
-                    </div>
-                    <h4 className="font-display text-base font-bold text-[#17131F]">
-                      {title}
-                    </h4>
-                    <p className="font-mono text-xs text-[#6E6678]">
-                      ID: {certNumber}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
-
-        {/* Experience Timeline */}
-        {sortedExperience.length > 0 && (
-          <section className="reveal-profile-block space-y-6">
-            <div className="flex items-center gap-3">
-              <Briefcase className="h-6 w-6 text-[#1E5BFF]" />
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Work Experience
-              </h2>
-            </div>
-
-            <div className="divide-y divide-[#E6EAF3] border-t border-b border-[#E6EAF3]">
-              {sortedExperience.map((exp, idx) => (
-                <div key={exp.id || idx} className="py-6 space-y-2.5">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                    <h4 className="font-sans text-lg font-bold text-[#17131F]">
-                      {exp.title}
-                    </h4>
-                    <span className="text-xs font-mono text-[#6E6678]">
-                      {formatDate(exp.startDate)} –{" "}
-                      {exp.current
-                        ? "Present"
-                        : exp.endDate
-                          ? formatDate(exp.endDate)
-                          : ""}
-                    </span>
-                  </div>
-                  <p className="text-sm font-semibold text-[#1E5BFF]">
-                    {exp.company}
-                  </p>
-                  {exp.description && (
-                    <p className="text-sm text-[#6E6678] leading-relaxed whitespace-pre-line max-w-3xl pt-1">
-                      {exp.description}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Education Section */}
-        {sortedEducation.length > 0 && (
-          <section className="reveal-profile-block space-y-6">
-            <div className="flex items-center gap-3">
-              <GraduationCap className="h-6 w-6 text-[#1E5BFF]" />
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                Education & Credentials
-              </h2>
-            </div>
-
-            <div className="divide-y divide-[#E6EAF3] border-t border-b border-[#E6EAF3]">
-              {sortedEducation.map((edu, idx) => (
-                <div key={edu.id || idx} className="py-6 space-y-2">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                    <h4 className="font-sans text-lg font-bold text-[#17131F]">
-                      {edu.degree}
-                      {edu.field ? ` in ${edu.field}` : ""}
-                    </h4>
-                    <span className="text-xs font-mono text-[#6E6678]">
-                      {edu.startYear} – {edu.endYear || "Present"}
-                    </span>
-                  </div>
-                  <p className="text-sm font-semibold text-[#1E5BFF]">
-                    {edu.institution}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Reusable Experience & Education Timeline */}
+        <div className="reveal-profile-block">
+          <ExperienceEducationCard
+            experience={profile?.experience || []}
+            education={profile?.education || []}
+          />
+        </div>
       </main>
     </div>
   );

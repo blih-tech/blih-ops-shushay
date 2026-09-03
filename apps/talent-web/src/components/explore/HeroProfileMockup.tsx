@@ -107,13 +107,18 @@ export function HeroProfileMockup() {
       <div className="profile-card absolute left-0 right-0 mx-auto sm:mx-0 sm:right-auto sm:left-[70px] top-[60px] sm:top-[80px] w-[90%] sm:w-[380px] h-[460px] bg-white border border-[#D9CEDF] rounded-[28px] p-6 sm:p-8 shadow-[0_26px_60px_rgba(23,19,31,0.1)] flex flex-col justify-between z-10 transition-shadow hover:shadow-[0_32px_75px_rgba(30,91,255,0.12)]">
         <div>
           {/* Profile Header */}
-          <div className="space-y-1 mb-8">
-            <h3 className="font-display text-[32px] font-bold text-[#17131F] leading-tight">
-              Mikeal Tadesse
-            </h3>
-            <span className="font-mono text-[11px] text-[#1E5BFF] uppercase tracking-wider block font-semibold">
-              Product Designer · verified profile
-            </span>
+          <div className="flex items-center gap-3.5 mb-8">
+            <div className="w-12 h-12 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs shrink-0">
+              MT
+            </div>
+            <div className="space-y-0.5">
+              <h3 className="font-display text-[26px] font-bold text-[#17131F] leading-tight">
+                Mikeal Tadesse
+              </h3>
+              <span className="font-mono text-[10px] text-[#1E5BFF] uppercase tracking-wider block font-semibold">
+                Product Designer · verified profile
+              </span>
+            </div>
           </div>
 
           {/* Skills Breakdown */}

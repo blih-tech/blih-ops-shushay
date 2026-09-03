@@ -7,7 +7,7 @@ import { Button, Input, PasswordInput, Alert } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
 
-import { SKILLS_URL, TALENT_URL, API_URL } from "@/lib/urls";
+import { TALENT_URL, API_URL } from "@/lib/urls";
 import { GoogleIcon } from "@/components/auth/GoogleIcon";
 
 export function LoginForm() {
@@ -45,7 +45,7 @@ export function LoginForm() {
           const parsed = new URL(returnTo, TALENT_URL);
           const path = parsed.pathname;
 
-          if (role === "COMPANY") {
+          if (role === "ADMIN") {
             const isTalentOnly =
               path === "/profile" ||
               path.startsWith("/profile/") ||
@@ -54,7 +54,18 @@ export function LoginForm() {
               path === "/applications" ||
               path.startsWith("/applications/");
             if (isTalentOnly) {
-              finalUrl = `${TALENT_URL}/company`;
+              finalUrl = `${TALENT_URL}/`;
+            }
+          } else if (role === "COMPANY") {
+            const isTalentOnly =
+              path === "/profile" ||
+              path.startsWith("/profile/") ||
+              path === "/jobs" ||
+              path.startsWith("/jobs/") ||
+              path === "/applications" ||
+              path.startsWith("/applications/");
+            if (isTalentOnly) {
+              finalUrl = `${TALENT_URL}/`;
             }
           } else if (role === "TALENT") {
             const isCompanyOnly =
@@ -64,21 +75,12 @@ export function LoginForm() {
             }
           }
         } catch {
-          finalUrl =
-            role === "COMPANY"
-              ? `${TALENT_URL}/company`
-              : `${TALENT_URL}/`;
+          finalUrl = `${TALENT_URL}/`;
         }
         window.location.href = finalUrl;
       } else {
-        const { role } = data.user;
-        if (role === "ADMIN") {
-          window.location.href = `${SKILLS_URL}/admin`;
-        } else if (role === "COMPANY") {
-          window.location.href = `${TALENT_URL}/company`;
-        } else {
-          window.location.href = `${TALENT_URL}/`;
-        }
+        // Redirect all roles (TALENT, ADMIN, COMPANY) to the Explore landing page by default
+        window.location.href = `${TALENT_URL}/`;
       }
     } catch (err: any) {
       setError(err.message || "Invalid email or password");

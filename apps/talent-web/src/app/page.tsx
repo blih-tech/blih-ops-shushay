@@ -4,17 +4,23 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
-import { Button, Badge, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
+import { Button, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 
 import { HeroProfileMockup } from "@/components/explore/HeroProfileMockup";
+import { FeaturedJobsPreview } from "@/components/explore/FeaturedJobsPreview";
 import { EcosystemCanvas } from "@/components/explore/EcosystemCanvas";
 import { TalentExplorerPreview } from "@/components/explore/TalentExplorerPreview";
 import { CareerPathwayPreview } from "@/components/explore/CareerPathwayPreview";
 import { SkillGraphPreview } from "@/components/explore/SkillGraphPreview";
+import {
+  MetricsBar,
+  ActionBanner,
+  ExploreFooter,
+} from "@/components/explore/ExploreSectionBanners";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,6 +42,7 @@ export default function TalentHomePage() {
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power2.out" },
       );
+
       // Smooth side reveal for the live card preview
       gsap.fromTo(
         ".preview-card-anim",
@@ -101,7 +108,7 @@ export default function TalentHomePage() {
       className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]"
     >
       {/* Background ambient lighting */}
-      <div className="absolute top-0 inset-x-0 h-[640px] bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
+      <div className="absolute top-0 inset-x-0 h-[680px] bg-gradient-to-b from-[#EEF3FF] via-white/60 to-transparent pointer-events-none -z-10" />
 
       {/* Global Navbar */}
       <GlobalNavbar
@@ -110,12 +117,12 @@ export default function TalentHomePage() {
         onSignOut={logout}
       />
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-24 sm:space-y-36">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-24 sm:space-y-32">
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column */}
           <div className="lg:col-span-7 space-y-6 sm:space-y-8">
-            <div className="hero-anim-item inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold">
+            <div className="hero-anim-item inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold shadow-2xs">
               <Sparkles className="w-3.5 h-3.5" />
               <span>
                 {isCompany
@@ -126,7 +133,7 @@ export default function TalentHomePage() {
               </span>
             </div>
 
-            <h1 className="hero-anim-item font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#17131F] leading-[1.05]">
+            <h1 className="hero-anim-item font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#17131F] leading-[1.05]">
               {isCompany ? (
                 <>
                   Hire proven talent <br />
@@ -186,7 +193,7 @@ export default function TalentHomePage() {
             </div>
 
             {/* Call to Actions */}
-            <div className="hero-anim-item flex flex-wrap items-center gap-4 pt-4">
+            <div className="hero-anim-item flex flex-wrap items-center gap-4 pt-2">
               {isCompany ? (
                 <>
                   <Link href="/company/talents">
@@ -261,6 +268,16 @@ export default function TalentHomePage() {
           </div>
         </div>
 
+        {/* Real-Time Ecosystem Metrics Strip */}
+        <div className="scroll-reveal-section">
+          <MetricsBar />
+        </div>
+
+        {/* Featured Live Opportunities Section */}
+        <div className="scroll-reveal-section">
+          <FeaturedJobsPreview />
+        </div>
+
         {/* Continuous Growth Ecosystem Canvas */}
         <div className="scroll-reveal-section">
           <EcosystemCanvas />
@@ -281,166 +298,14 @@ export default function TalentHomePage() {
           <SkillGraphPreview />
         </div>
 
-        {/* Dynamic Role-Aware Action Banner */}
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-[0_12px_40px_rgba(30,91,255,0.05)]">
-          {isCompany ? (
-            <>
-              <div className="space-y-3 max-w-xl">
-                <Badge variant="verified" size="sm">
-                  Talent Pipeline Ready
-                </Badge>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#17131F]">
-                  Find and hire pre-vetted African engineering talent
-                </h2>
-                <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Review evidence-backed scorecards, calibrate technical fit,
-                  and contact qualified candidates directly.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-                <Link href="/company/talents" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    rightIcon={<ArrowRight className="w-4 h-4" />}
-                  >
-                    Search Talent Catalog
-                  </Button>
-                </Link>
-                <Link href="/company/jobs" className="w-full sm:w-auto">
-                  <Button size="lg" variant="outline">
-                    Post an Open Role
-                  </Button>
-                </Link>
-              </div>
-            </>
-          ) : isAdmin ? (
-            <>
-              <div className="space-y-3 max-w-2xl">
-                <Badge variant="primary" size="sm">
-                  Platform Administration
-                </Badge>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#17131F]">
-                  Manage curriculum, talents, and hiring authorizations
-                </h2>
-                <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Oversee track publications, verify evidence profiles, and
-                  maintain platform quality.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-                <a href={`${SKILLS_URL}/admin`} className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    fullWidth
-                    rightIcon={<ArrowRight className="w-4 h-4" />}
-                  >
-                    Go to Admin Portal
-                  </Button>
-                </a>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="space-y-3 max-w-2xl">
-                <Badge variant="coral" size="sm">
-                  Hiring Opportunities Live
-                </Badge>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#17131F]">
-                  Explore verified roles matched to your abilities
-                </h2>
-                <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-                  Browse open positions with upfront salary ranges, remote
-                  arrangements, and required skill benchmarks.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-                <Link href="/jobs" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    fullWidth
-                    rightIcon={<ArrowRight className="w-4 h-4" />}
-                  >
-                    Browse Opportunities
-                  </Button>
-                </Link>
-              </div>
-            </>
-          )}
+        {/* Dynamic Action Banner */}
+        <div className="scroll-reveal-section">
+          <ActionBanner role={user?.role} skillsUrl={SKILLS_URL} />
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-[#D9CEDF]/60 flex flex-col items-start gap-4 mt-24 font-sans">
-        <h2 className="font-display text-[64px] font-bold text-[#1E5BFF] leading-none tracking-tight">
-          BLIH OPS
-        </h2>
-        <p className="font-mono text-xs text-[#6E6678]">
-          Skill evidence connected to real opportunities.
-        </p>
-
-        <div className="w-full flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-6 pt-12 border-t border-[#D9CEDF]/20 mt-10">
-          <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-          <div className="flex gap-4 uppercase tracking-wider">
-            {isCompany ? (
-              <>
-                <Link
-                  href="/company/talents"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Talent Search
-                </Link>
-                <span className="text-[#D9CEDF]">·</span>
-                <Link
-                  href="/company/jobs"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Job Posts
-                </Link>
-                <span className="text-[#D9CEDF]">·</span>
-                <Link
-                  href="/company/subscription"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Subscription
-                </Link>
-                <span className="text-[#D9CEDF]">·</span>
-                <Link
-                  href="/company/profile"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Company Profile
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/profile"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Talent Profile
-                </Link>
-                <span className="text-[#D9CEDF]">·</span>
-                <Link
-                  href="/jobs"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  Opportunities
-                </Link>
-                <span className="text-[#D9CEDF]">·</span>
-                <Link
-                  href="/company"
-                  className="hover:text-[#1E5BFF] transition-colors"
-                >
-                  For Companies
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </footer>
+      {/* Page Footer */}
+      <ExploreFooter role={user?.role} />
     </div>
   );
 }
