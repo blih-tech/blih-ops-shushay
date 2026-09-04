@@ -19,11 +19,11 @@ function makeToken(role: Role, id = "test-user-id") {
 }
 
 function adminCookie() {
-  return ["token=" + makeToken(Role.ADMIN, "admin-user-id")];
+  return ["token=" + makeToken(Role.ADMIN, "course-admin-user-id")];
 }
 
 function talentCookie() {
-  return ["token=" + makeToken(Role.TALENT, "talent-user-id")];
+  return ["token=" + makeToken(Role.TALENT, "course-talent-user-id")];
 }
 
 // ─── Setup & Cleanup ──────────────────────────────────────────────────────────
@@ -31,11 +31,11 @@ function talentCookie() {
 beforeAll(async () => {
   // Create test admin
   await prisma.user.upsert({
-    where: { id: "admin-user-id" },
+    where: { id: "course-admin-user-id" },
     update: {},
     create: {
-      id: "admin-user-id",
-      email: "testadmin@blih.com",
+      id: "course-admin-user-id",
+      email: "coursetestadmin@blih.com",
       passwordHash: "dummy",
       role: Role.ADMIN,
       emailVerified: true,
@@ -44,11 +44,11 @@ beforeAll(async () => {
 
   // Create test talent
   await prisma.user.upsert({
-    where: { id: "talent-user-id" },
+    where: { id: "course-talent-user-id" },
     update: {},
     create: {
-      id: "talent-user-id",
-      email: "testtalent@blih.com",
+      id: "course-talent-user-id",
+      email: "coursetesttalent@blih.com",
       passwordHash: "dummy",
       role: Role.TALENT,
       emailVerified: true,
@@ -61,7 +61,7 @@ afterAll(async () => {
     where: { title: { startsWith: "[TEST]" } },
   });
   await prisma.user.deleteMany({
-    where: { id: { in: ["admin-user-id", "talent-user-id"] } },
+    where: { id: { in: ["course-admin-user-id", "course-talent-user-id"] } },
   });
   await prisma.$disconnect();
 });
@@ -137,33 +137,6 @@ describe("Course CRUD", () => {
     expect(res.body.title).toBe("[TEST] Course 1 Updated");
   });
 
-  it("publishes the course", async () => {
-    const res = await request(app)
-      .post("/api/v1/courses/" + courseId + "/publish")
-      .set("Cookie", adminCookie());
-    expect(res.status).toBe(200);
-    expect(res.body.status).toBe("PUBLISHED");
-  });
-
-  it("shows published course in public list", async () => {
-    const res = await request(app).get("/api/v1/courses");
-    expect(res.status).toBe(200);
-    expect(res.body.some((c: any) => c.id === courseId)).toBe(true);
-  });
-
-  it("unpublishes the course", async () => {
-    const res = await request(app)
-      .post("/api/v1/courses/" + courseId + "/unpublish")
-      .set("Cookie", adminCookie());
-    expect(res.status).toBe(200);
-    expect(res.body.status).toBe("DRAFT");
-  });
-
-  it("returns 404 for unpublished course from public endpoint", async () => {
-    const res = await request(app).get("/api/v1/courses/public/" + courseId);
-    expect(res.status).toBe(404);
-  });
-
   // ── Lessons ──────────────────────────────────────────────────────────
   let lessonId: string;
   let lesson2Id: string;
@@ -198,6 +171,33 @@ describe("Course CRUD", () => {
     expect(res.body.title).toBe("[TEST] Lesson 1 Updated");
   });
 
+  it("publishes the course", async () => {
+    const res = await request(app)
+      .post("/api/v1/courses/" + courseId + "/publish")
+      .set("Cookie", adminCookie());
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe("PUBLISHED");
+  });
+
+  it("shows published course in public list", async () => {
+    const res = await request(app).get("/api/v1/courses");
+    expect(res.status).toBe(200);
+    expect(res.body.some((c: any) => c.id === courseId)).toBe(true);
+  });
+
+  it("unpublishes the course", async () => {
+    const res = await request(app)
+      .post("/api/v1/courses/" + courseId + "/unpublish")
+      .set("Cookie", adminCookie());
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe("DRAFT");
+  });
+
+  it("returns 404 for unpublished course from public endpoint", async () => {
+    const res = await request(app).get("/api/v1/courses/public/" + courseId);
+    expect(res.status).toBe(404);
+  });
+
   it("reorders lessons", async () => {
     const res = await request(app)
       .post("/api/v1/courses/" + courseId + "/lessons/reorder")
@@ -209,7 +209,7 @@ describe("Course CRUD", () => {
         ],
       });
     expect(res.status).toBe(200);
-    expect(res.body[0].id).toBe(lesson2Id);
+    expect(res.body.lessons[0].id).toBe(lesson2Id);
   });
 
   // ── Quiz ─────────────────────────────────────────────────────────────

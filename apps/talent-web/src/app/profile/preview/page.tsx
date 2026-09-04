@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
-import { Button, Badge, Alert, GlobalNavbar } from "@blih/ui";
+import { Button, Badge, Alert } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
 import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
 import { ExperienceEducationCard } from "@/components/profile/ExperienceEducationCard";
@@ -55,13 +55,10 @@ function ProfilePreviewContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white">
-        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-        <div className="max-w-md mx-auto mt-12 px-4">
-          <Alert variant="error" title="Load Error">
-            {error}
-          </Alert>
-        </div>
+      <div className="max-w-md mx-auto py-12 px-4">
+        <Alert variant="error" title="Load Error">
+          {error}
+        </Alert>
       </div>
     );
   }
@@ -69,9 +66,8 @@ function ProfilePreviewContent() {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-white text-[#17131F] font-sans selection:bg-[#DDE7FF]"
+      className="w-full font-sans selection:bg-[#DDE7FF]"
     >
-      <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
 
       {/* Preview mode banner */}
       <div className="bg-[#17131F] text-white px-4 sm:px-6 py-3 relative z-30">

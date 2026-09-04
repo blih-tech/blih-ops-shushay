@@ -19,4 +19,6 @@ export * from "./SkillBar";
 export * from "./MetricCard";
 export * from "./UniversalSearch";
 export * from "./GlobalNavbar";
+export * from "./GlobalFooter";
 export * from "./Chip";
+

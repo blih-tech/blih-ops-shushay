@@ -12,7 +12,6 @@ import {
   CardDescription,
   Badge,
   Spinner,
-  GlobalNavbar,
   MetricCard,
 } from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
@@ -86,16 +85,7 @@ function DashboardContent() {
   ).length;
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      <GlobalNavbar
-        currentApp="dashboard"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/80">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
@@ -293,17 +283,6 @@ function DashboardContent() {
           </div>
         </div>
       </main>
-
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <Link
-          href="/courses"
-          className="hover:text-[#1E5BFF] transition-colors uppercase tracking-wider"
-        >
-          Browse Courses
-        </Link>
-      </footer>
-    </div>
   );
 }
 

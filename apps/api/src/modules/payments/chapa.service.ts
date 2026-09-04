@@ -1,5 +1,6 @@
 import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
+import prisma from "../../config/prisma";
 
 export interface InitializeChapaPayload {
   amount: number;
@@ -108,10 +109,14 @@ export class ChapaService {
   async verifyPayment(txRef: string): Promise<ChapaVerifyResponse> {
     if (!this.secretKey || this.secretKey === "mock-secret-key") {
       // Mock verification mode for test environment
+      const tx = await prisma.paymentTransaction.findUnique({
+        where: { txRef },
+        select: { amount: true, currency: true },
+      });
       return {
         txRef,
-        amount: 1000,
-        currency: "ETB",
+        amount: tx?.amount ?? 1000,
+        currency: tx?.currency ?? "ETB",
         status: "success",
         chapaRef: `CHAPA-${txRef}`,
         rawResponse: { mock: true },

@@ -136,60 +136,12 @@ export function ActionBanner({ role, skillsUrl }: ActionBannerProps) {
   );
 }
 
-interface ExploreFooterProps {
+import { GlobalFooter } from "@blih/ui";
+
+export interface ExploreFooterProps {
   role?: string;
 }
 
 export function ExploreFooter({ role }: ExploreFooterProps) {
-  const isCompany = role === "COMPANY";
-
-  return (
-    <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-[#D9CEDF]/60 flex flex-col items-start gap-4 mt-24 font-sans">
-      <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#1E5BFF] leading-none tracking-tight">
-        BLIH OPS
-      </h2>
-      <p className="font-mono text-xs text-[#6E6678]">
-        Skill evidence connected to real opportunities.
-      </p>
-
-      <div className="w-full flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-6 pt-12 border-t border-[#D9CEDF]/20 mt-10">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <div className="flex flex-wrap gap-3 sm:gap-4 uppercase tracking-wider justify-center">
-          {isCompany ? (
-            <>
-              <Link href="/company/talents" className="hover:text-[#1E5BFF] transition-colors">
-                Talent Search
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/jobs" className="hover:text-[#1E5BFF] transition-colors">
-                Job Posts
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/subscription" className="hover:text-[#1E5BFF] transition-colors">
-                Subscription
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company/profile" className="hover:text-[#1E5BFF] transition-colors">
-                Company Profile
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/profile" className="hover:text-[#1E5BFF] transition-colors">
-                Talent Profile
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/jobs" className="hover:text-[#1E5BFF] transition-colors">
-                Opportunities
-              </Link>
-              <span className="text-[#D9CEDF]">·</span>
-              <Link href="/company" className="hover:text-[#1E5BFF] transition-colors">
-                For Companies
-              </Link>
-            </>
-          )}
-        </div>
-      </div>
-    </footer>
-  );
+  return <GlobalFooter user={role ? { role } : null} />;
 }

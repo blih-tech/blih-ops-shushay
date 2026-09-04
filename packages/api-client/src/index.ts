@@ -88,7 +88,8 @@ export async function verifyPayment(txRef: string) {
   return apiFetch<{
     verified: boolean;
     payment: any;
-    entitlement: any;
+    entitlement?: any;
+    subscription?: any;
     message: string;
   }>(`/payments/verify/${txRef}`);
 }
@@ -100,6 +101,38 @@ export async function getSkillsAccessStatus() {
     payment?: any;
   }>(`/payments/skills/access-status`);
 }
+
+// ─── Company Subscription API Client Helpers ─────────────────────────────────
+
+export async function initializeCompanySubscription(plan: "MONTHLY" | "YEARLY") {
+  return apiFetch<{
+    checkoutUrl: string | null;
+    txRef: string;
+    paymentId: string;
+    alreadyActive?: boolean;
+  }>("/company/subscription/initialize", {
+    method: "POST",
+    body: JSON.stringify({ plan }),
+  });
+}
+
+export async function getCompanySubscriptionStatus() {
+  return apiFetch<{
+    hasActiveSubscription: boolean;
+    subscription: {
+      id: string;
+      plan: "MONTHLY" | "YEARLY";
+      status: "ACTIVE" | "EXPIRED";
+      amount: number;
+      currency: string;
+      startDate: string;
+      expiresAt: string;
+    } | null;
+    expiresAt: string | null;
+    daysRemaining: number;
+  }>("/company/subscription/status");
+}
+
 
 // ─── Learning API Client Helpers ─────────────────────────────────────────────
 

@@ -21,7 +21,6 @@ import {
   Textarea,
   FormField,
   Alert,
-  GlobalNavbar,
   Badge,
 } from "@blih/ui";
 import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
@@ -74,13 +73,10 @@ function CompanyProfileContent() {
 
   if (fetchError) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
-        <GlobalNavbar currentApp="explore" user={user} onSignOut={logout} />
-        <div className="max-w-md mx-auto mt-16 p-4">
-          <Alert variant="error" title="Load Error">
-            {fetchError}
-          </Alert>
-        </div>
+      <div className="max-w-md mx-auto py-16 px-4">
+        <Alert variant="error" title="Load Error">
+          {fetchError}
+        </Alert>
       </div>
     );
   }
@@ -136,12 +132,7 @@ function CompanyProfileContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF]">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      <GlobalNavbar currentApp="explore" user={user} onSignOut={logout} />
-
-      <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
+    <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
@@ -301,7 +292,6 @@ function CompanyProfileContent() {
           </div>
         </form>
       </main>
-    </div>
   );
 }
 

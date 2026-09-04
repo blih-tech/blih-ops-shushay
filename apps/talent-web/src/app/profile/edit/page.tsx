@@ -20,7 +20,6 @@ import {
   CardTitle,
   CardDescription,
   Alert,
-  GlobalNavbar,
   Skeleton,
 } from "@blih/ui";
 import { PhotoUpload } from "@/components/profile/PhotoUpload";
@@ -44,48 +43,42 @@ function ProfileEditContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative">
-        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-        <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-pulse">
-          <div className="flex items-center justify-between">
-            <Skeleton variant="rectangular" className="h-6 w-32 rounded-lg" />
-            <Skeleton variant="rectangular" className="h-10 w-24 rounded-xl" />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8 space-y-8">
-              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
-                <Skeleton
-                  variant="rectangular"
-                  className="h-8 w-48 rounded-xl"
-                />
-                <Skeleton variant="rectangular" className="h-32 rounded-2xl" />
-                <Skeleton variant="rectangular" className="h-12 rounded-xl" />
-              </div>
-            </div>
-            <div className="lg:col-span-4 space-y-8">
-              <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
-                <Skeleton
-                  variant="rectangular"
-                  className="h-8 w-32 rounded-xl"
-                />
-                <Skeleton variant="circular" className="h-24 w-24 mx-auto" />
-              </div>
+      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-pulse">
+        <div className="flex items-center justify-between">
+          <Skeleton variant="rectangular" className="h-6 w-32 rounded-lg" />
+          <Skeleton variant="rectangular" className="h-10 w-24 rounded-xl" />
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-8 space-y-8">
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+              <Skeleton
+                variant="rectangular"
+                className="h-8 w-48 rounded-xl"
+              />
+              <Skeleton variant="rectangular" className="h-32 rounded-2xl" />
+              <Skeleton variant="rectangular" className="h-12 rounded-xl" />
             </div>
           </div>
-        </main>
-      </div>
+          <div className="lg:col-span-4 space-y-8">
+            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+              <Skeleton
+                variant="rectangular"
+                className="h-8 w-32 rounded-xl"
+              />
+              <Skeleton variant="circular" className="h-24 w-24 mx-auto" />
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 
   if (fetchError) {
     return (
-      <div className="min-h-screen bg-white">
-        <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-        <div className="max-w-md mx-auto mt-12 px-4">
-          <Alert variant="error" title="Load Error">
-            {fetchError}
-          </Alert>
-        </div>
+      <div className="max-w-md mx-auto py-12 px-4">
+        <Alert variant="error" title="Load Error">
+          {fetchError}
+        </Alert>
       </div>
     );
   }
@@ -133,10 +126,7 @@ function ProfileEditContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F]">
-      <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans space-y-8">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans space-y-8">
         {/* Page header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D9CEDF] pb-6">
           <div className="space-y-1">
@@ -222,7 +212,6 @@ function ProfileEditContent() {
           </section>
         </div>
       </main>
-    </div>
   );
 }
 

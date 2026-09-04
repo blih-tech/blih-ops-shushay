@@ -90,3 +90,58 @@ export async function requireSkillsAccess(
   next();
 }
 
+export async function requireActiveSubscription(
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) {
+  if (!req.user) {
+    return next(new AppError(401, "Authentication required"));
+  }
+
+  // Administrators automatically have access
+  if (req.user.role === Role.ADMIN) {
+    return next();
+  }
+
+  if (req.user.role !== Role.COMPANY) {
+    return next(new AppError(403, "Access denied. Only company accounts can access this feature."));
+  }
+
+  const companyProfile = await prisma.companyProfile.findUnique({
+    where: { userId: req.user.id },
+    select: {
+      id: true,
+      subscriptionActive: true,
+      subscriptionExpiresAt: true,
+      companySubscription: {
+        select: {
+          status: true,
+          expiresAt: true,
+        },
+      },
+    },
+  });
+
+  if (!companyProfile) {
+    return next(new AppError(403, "Access denied. Company profile not found."));
+  }
+
+  const now = new Date();
+  const sub = companyProfile.companySubscription;
+  const isSubscribed =
+    (sub ? sub.expiresAt > now && sub.status === "ACTIVE" : Boolean(companyProfile.subscriptionActive && companyProfile.subscriptionExpiresAt && companyProfile.subscriptionExpiresAt > now));
+
+  if (!isSubscribed) {
+    return next(
+      new AppError(
+        402,
+        "Payment Required. An active company subscription (2,000 ETB/month or 10,000 ETB/year) is required to perform this action.",
+      ),
+    );
+  }
+
+  next();
+}
+
+

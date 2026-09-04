@@ -116,6 +116,8 @@ model CompanyProfile {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  companySubscription CompanySubscription?
+
   @@map("company_profiles")
 }
 
@@ -226,12 +228,41 @@ model PaymentTransaction {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  skillsEntitlement SkillsEntitlement?
+  skillsEntitlement   SkillsEntitlement?
+  companySubscription CompanySubscription?
 
   @@index([userId])
   @@index([txRef])
   @@index([status])
   @@map("payment_transactions")
+}
+
+enum SubscriptionPlan {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model CompanySubscription {
+  id               String             @id @default(cuid())
+  companyProfileId String             @unique
+  companyProfile   CompanyProfile     @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+  plan             SubscriptionPlan
+  status           SubscriptionStatus @default(ACTIVE)
+  amount           Float
+  currency         String             @default("ETB")
+  startDate        DateTime           @default(now())
+  expiresAt        DateTime
+  paymentId        String?            @unique
+  payment          PaymentTransaction? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@map("company_subscriptions")
 }
 
 model SkillsEntitlement {

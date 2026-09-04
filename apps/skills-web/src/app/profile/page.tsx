@@ -13,7 +13,6 @@ import {
   Textarea,
   Select,
   Alert,
-  GlobalNavbar,
 } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 import { ArrowLeft } from "lucide-react";
@@ -96,16 +95,7 @@ function ProfileContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      <GlobalNavbar
-        currentApp="skills"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <Link href="/dashboard">
           <Button
             variant="ghost"
@@ -245,7 +235,6 @@ function ProfileContent() {
           </div>
         </div>
       </main>
-    </div>
   );
 }
 

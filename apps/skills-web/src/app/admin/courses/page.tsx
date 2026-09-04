@@ -7,11 +7,9 @@ import {
   Button,
   Alert,
   ConfirmDialog,
-  GlobalNavbar,
   UniversalSearch,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { useAuth } from "@/providers/AuthProvider";
 import {
   fetchAdminCourses,
   publishCourse,
@@ -22,7 +20,6 @@ import { AdminCourseCard } from "@/components/admin/AdminCourseCard";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
-  const { user, logout } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -99,141 +96,137 @@ function CoursesContent() {
   });
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-      <GlobalNavbar currentApp="courses" user={user} onSignOut={logout} />
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
+      <Link href="/admin">
+        <Button
+          variant="ghost"
+          leftIcon={<ArrowLeft className="h-4 w-4" />}
+          size="sm"
+        >
+          Back to Admin Portal
+        </Button>
+      </Link>
 
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
-        <Link href="/admin">
-          <Button
-            variant="ghost"
-            leftIcon={<ArrowLeft className="h-4 w-4" />}
-            size="sm"
-          >
-            Back to Admin Portal
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
+        <div className="space-y-1">
+          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+            Manage Courses
+          </h1>
+          <p className="text-sm sm:text-base text-[#6E6678]">
+            Create, edit, and publish courses for Blih Skills.
+          </p>
+        </div>
+        <Link href="/admin/courses/new">
+          <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
+            New Course
           </Button>
         </Link>
+      </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
-          <div className="space-y-1">
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
-              Manage Courses
-            </h1>
-            <p className="text-sm sm:text-base text-[#6E6678]">
-              Create, edit, and publish courses for Blih Skills.
-            </p>
-          </div>
-          <Link href="/admin/courses/new">
-            <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
-              New Course
-            </Button>
-          </Link>
-        </div>
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
 
-        {error && (
-          <Alert variant="error" onClose={() => setError(null)}>
-            {error}
-          </Alert>
-        )}
-        {actionError && (
-          <Alert variant="error" onClose={() => setActionError(null)}>
-            {actionError}
-          </Alert>
-        )}
-
-        <div className="w-full">
-          <UniversalSearch
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search courses by title, topic, or status..."
-          />
-        </div>
-
-        {loading && (
-          <div className="space-y-4">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="h-20 bg-[#EEF3FF]/60 rounded-2xl animate-pulse"
-              />
-            ))}
-          </div>
-        )}
-
-        {!loading && !error && filteredCourses.length === 0 && (
-          <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
-              <GraduationCap className="w-6 h-6" />
-            </div>
-            <h3 className="font-display font-bold text-xl text-[#17131F]">
-              {searchQuery ? "No matching courses found" : "No courses yet"}
-            </h3>
-            <p className="text-sm text-[#6E6678]">
-              {searchQuery
-                ? "Try a different search term."
-                : "Create your first course to get started."}
-            </p>
-            {!searchQuery && (
-              <Link href="/admin/courses/new">
-                <Button
-                  variant="primary"
-                  leftIcon={<Plus className="h-4 w-4" />}
-                >
-                  Create Course
-                </Button>
-              </Link>
-            )}
-          </div>
-        )}
-
-        {!loading && filteredCourses.length > 0 && (
-          <div className="space-y-4">
-            {filteredCourses.map((course) => (
-              <AdminCourseCard
-                key={course.id}
-                course={course}
-                isActing={actionLoading === course.id}
-                onPublishToggle={handlePublishToggle}
-                onDeleteClick={setDeleteConfirmCourse}
-              />
-            ))}
-          </div>
-        )}
-
-        <ConfirmDialog
-          isOpen={!!confirmCourse}
-          title="Unpublish Course"
-          message={`Are you sure you want to unpublish "${confirmCourse?.title}"? It will no longer be visible to students.`}
-          confirmText="Unpublish"
-          cancelText="Cancel"
-          variant="destructive"
-          onConfirm={async () => {
-            if (confirmCourse) {
-              const c = confirmCourse;
-              setConfirmCourse(null);
-              await doPublish(c);
-            }
-          }}
-          onClose={() => setConfirmCourse(null)}
+      <div className="w-full">
+        <UniversalSearch
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search courses by title, topic, or status..."
         />
+      </div>
 
-        <ConfirmDialog
-          isOpen={!!deleteConfirmCourse}
-          title="Delete Course"
-          message={`Are you sure you want to permanently delete "${deleteConfirmCourse?.title}"? This will delete all lessons, quizzes, assignments, and remove all files/videos from Cloudinary. This action cannot be undone.`}
-          confirmText="Delete Permanently"
-          cancelText="Cancel"
-          variant="destructive"
-          onConfirm={async () => {
-            if (deleteConfirmCourse) {
-              const c = deleteConfirmCourse;
-              setDeleteConfirmCourse(null);
-              await doDelete(c);
-            }
-          }}
-          onClose={() => setDeleteConfirmCourse(null)}
-        />
-      </main>
-    </div>
+      {loading && (
+        <div className="space-y-4">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-20 bg-[#EEF3FF]/60 rounded-2xl animate-pulse"
+            />
+          ))}
+        </div>
+      )}
+
+      {!loading && !error && filteredCourses.length === 0 && (
+        <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
+            <GraduationCap className="w-6 h-6" />
+          </div>
+          <h3 className="font-display font-bold text-xl text-[#17131F]">
+            {searchQuery ? "No matching courses found" : "No courses yet"}
+          </h3>
+          <p className="text-sm text-[#6E6678]">
+            {searchQuery
+              ? "Try a different search term."
+              : "Create your first course to get started."}
+          </p>
+          {!searchQuery && (
+            <Link href="/admin/courses/new">
+              <Button
+                variant="primary"
+                leftIcon={<Plus className="h-4 w-4" />}
+              >
+                Create Course
+              </Button>
+            </Link>
+          )}
+        </div>
+      )}
+
+      {!loading && filteredCourses.length > 0 && (
+        <div className="space-y-4">
+          {filteredCourses.map((course) => (
+            <AdminCourseCard
+              key={course.id}
+              course={course}
+              isActing={actionLoading === course.id}
+              onPublishToggle={handlePublishToggle}
+              onDeleteClick={setDeleteConfirmCourse}
+            />
+          ))}
+        </div>
+      )}
+
+      <ConfirmDialog
+        isOpen={!!confirmCourse}
+        title="Unpublish Course"
+        message={`Are you sure you want to unpublish "${confirmCourse?.title}"? It will no longer be visible to students.`}
+        confirmText="Unpublish"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={async () => {
+          if (confirmCourse) {
+            const c = confirmCourse;
+            setConfirmCourse(null);
+            await doPublish(c);
+          }
+        }}
+        onClose={() => setConfirmCourse(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={!!deleteConfirmCourse}
+        title="Delete Course"
+        message={`Are you sure you want to permanently delete "${deleteConfirmCourse?.title}"? This will delete all lessons, quizzes, assignments, and remove all files/videos from Cloudinary. This action cannot be undone.`}
+        confirmText="Delete Permanently"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={async () => {
+          if (deleteConfirmCourse) {
+            const c = deleteConfirmCourse;
+            setDeleteConfirmCourse(null);
+            await doDelete(c);
+          }
+        }}
+        onClose={() => setDeleteConfirmCourse(null)}
+      />
+    </main>
   );
 }
 

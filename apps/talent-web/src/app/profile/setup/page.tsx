@@ -11,7 +11,7 @@ import {
   uploadTalentCv,
   deleteTalentCv,
 } from "@/lib/talentApi";
-import { Alert, Card, CardContent, GlobalNavbar } from "@blih/ui";
+import { Alert, Card, CardContent } from "@blih/ui";
 import { ProfileSetupSkeleton } from "@/components/profile/ProfileSkeleton";
 import { StepPersonalInfo } from "@/components/profile/setup/StepPersonalInfo";
 import { StepExpertise } from "@/components/profile/setup/StepExpertise";
@@ -144,14 +144,7 @@ function ProfileSetupContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col font-sans antialiased relative">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar currentApp="talent" user={user} onSignOut={logout} />
-
-      {/* Main wizard area */}
-      <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
+    <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
         {error && (
           <Alert variant="error" className="mb-6">
             {error}
@@ -280,7 +273,6 @@ function ProfileSetupContent() {
           </div>
         </div>
       </main>
-    </div>
   );
 }
 

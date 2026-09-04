@@ -3,9 +3,8 @@
 import React, { use, useRef } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Badge, GlobalNavbar } from "@blih/ui";
+import { Badge } from "@blih/ui";
 import { ArrowLeft, CheckCircle2, Briefcase, Globe } from "lucide-react";
-import { useAuth } from "@/providers/AuthProvider";
 import { mockTalents } from "@/data";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -18,7 +17,6 @@ interface PageProps {
 }
 
 function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
-  const { user, logout } = useAuth();
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Find the selected talent from mock database, default to Mikeal Tadesse (tal-1)
@@ -50,10 +48,8 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-white text-[#17131F] font-sans selection:bg-[#DDE7FF]"
+      className="w-full font-sans selection:bg-[#DDE7FF]"
     >
-      {/* Global Navbar */}
-      <GlobalNavbar currentApp="talents" user={user} onSignOut={logout} />
 
       {/* Sub-header Breadcrumb line */}
       <div className="border-b border-[#E6EAF3] py-4 bg-white">

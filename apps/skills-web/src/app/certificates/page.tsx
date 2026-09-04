@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ShieldCheck, Download, Share2, ArrowLeft, Award, Lock, Loader2 } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Button, GlobalNavbar, Badge } from "@blih/ui";
+import { Button, Badge } from "@blih/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";
 import { useAuth } from "@/providers/AuthProvider";
 import { getUserCertificates, getCertificateDownloadUrl } from "@blih/api-client";
@@ -61,17 +61,7 @@ export default function CertificatesPage() {
 
   return (
     <AuthGuard allowedRoles={["TALENT", "ADMIN"]}>
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-        {/* Global Navbar */}
-        <GlobalNavbar
-          currentApp="skills"
-          user={user ? { email: user.email, role: user.role } : null}
-          onSignOut={logout}
-        />
-
-        <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <Link href="/dashboard">
               <Button
@@ -194,21 +184,6 @@ export default function CertificatesPage() {
             </div>
           )}
         </main>
-
-        {/* Footer */}
-        <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
-          <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-          <div className="flex gap-4 uppercase tracking-wider">
-            <Link href="/dashboard" className="hover:text-[#1E5BFF]">
-              Dashboard
-            </Link>
-            <span className="text-[#D9CEDF]">·</span>
-            <Link href="/courses" className="hover:text-[#1E5BFF]">
-              Courses
-            </Link>
-          </div>
-        </footer>
-      </div>
     </AuthGuard>
   );
 }

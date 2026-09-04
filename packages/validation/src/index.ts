@@ -130,3 +130,16 @@ export type CreateExperienceInput = z.infer<typeof createExperienceSchema>;
 export type UpdateExperienceInput = z.infer<typeof updateExperienceSchema>;
 export type CreateEducationInput = z.infer<typeof createEducationSchema>;
 export type UpdateEducationInput = z.infer<typeof updateEducationSchema>;
+
+export const SubscriptionPlanEnum = z.enum(["MONTHLY", "YEARLY"] as const, {
+  message: "Invalid subscription plan. Must be MONTHLY or YEARLY",
+});
+
+export const initializeSubscriptionSchema = z.object({
+  plan: SubscriptionPlanEnum,
+});
+
+export type InitializeSubscriptionInput = z.infer<
+  typeof initializeSubscriptionSchema
+>;
+

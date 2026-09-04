@@ -66,17 +66,6 @@ export function LearnHeader({
           </span>
         </div>
 
-        {isComplete && (
-          <Link href="/certificates">
-            <Button
-              variant="secondary"
-              size="sm"
-              leftIcon={<Award className="w-4 h-4 text-[#00A859]" />}
-            >
-              View Verified Certificate
-            </Button>
-          </Link>
-        )}
       </div>
     </header>
   );

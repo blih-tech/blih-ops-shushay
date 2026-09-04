@@ -22,7 +22,6 @@ import {
   EmptyState,
   UniversalSearch,
   Chip,
-  GlobalNavbar,
 } from "@blih/ui";
 import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
@@ -138,18 +137,7 @@ export default function CourseCatalogPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      {/* Background ambient gradient */}
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar
-        currentApp="skills"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* Page Title & Premise */}
         <div className="space-y-4 max-w-3xl">
           <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
@@ -257,26 +245,5 @@ export default function CourseCatalogPage() {
           </Link>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <div className="flex gap-4 uppercase tracking-wider">
-          <Link
-            href="/dashboard"
-            className="hover:text-[#1E5BFF] transition-colors"
-          >
-            Dashboard
-          </Link>
-          <span className="text-[#D9CEDF]">·</span>
-          <a
-            href={`${TALENT_URL}/jobs`}
-            className="hover:text-[#1E5BFF] transition-colors"
-          >
-            Opportunities
-          </a>
-        </div>
-      </footer>
-    </div>
   );
 }

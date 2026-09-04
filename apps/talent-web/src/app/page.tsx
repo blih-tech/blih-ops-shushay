@@ -103,21 +103,8 @@ export default function TalentHomePage() {
   const isTalent = user?.role === "TALENT";
 
   return (
-    <div
-      ref={containerRef}
-      className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]"
-    >
-      {/* Background ambient lighting */}
-      <div className="absolute top-0 inset-x-0 h-[680px] bg-gradient-to-b from-[#EEF3FF] via-white/60 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar
-        currentApp="explore"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-24 sm:space-y-32">
+    <div ref={containerRef} className="w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-24 sm:space-y-32">
         {/* Hero Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column */}
@@ -302,10 +289,7 @@ export default function TalentHomePage() {
         <div className="scroll-reveal-section">
           <ActionBanner role={user?.role} skillsUrl={SKILLS_URL} />
         </div>
-      </main>
-
-      {/* Page Footer */}
-      <ExploreFooter role={user?.role} />
+      </div>
     </div>
   );
 }

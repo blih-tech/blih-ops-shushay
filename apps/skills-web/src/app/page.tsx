@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
-import { Button, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
+import { Button, UniversalSearch, Chip } from "@blih/ui";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -64,13 +64,6 @@ export default function SkillsHomePage() {
     >
       {/* Background ambient lighting */}
       <div className="absolute top-0 inset-x-0 h-[600px] bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar
-        currentApp="skills"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
 
       {/* Hero Section */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 space-y-16 sm:space-y-24">
@@ -158,33 +151,6 @@ export default function SkillsHomePage() {
           <GrowthCycleStrip />
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <div className="flex gap-4 uppercase tracking-wider">
-          <Link
-            href="/courses"
-            className="hover:text-[#1E5BFF] transition-colors"
-          >
-            Courses
-          </Link>
-          <span className="text-[#D9CEDF]">·</span>
-          <a
-            href={`${TALENT_URL}/jobs`}
-            className="hover:text-[#1E5BFF] transition-colors"
-          >
-            Opportunities
-          </a>
-          <span className="text-[#D9CEDF]">·</span>
-          <a
-            href={`${TALENT_URL}/profile`}
-            className="hover:text-[#1E5BFF] transition-colors"
-          >
-            Talent
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

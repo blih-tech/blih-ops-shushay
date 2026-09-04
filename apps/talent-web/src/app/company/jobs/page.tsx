@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Plus, MapPin, DollarSign, Building2 } from "lucide-react";
-import { Button, Badge, Card, GlobalNavbar } from "@blih/ui";
+import { Button, Badge, Card } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 
@@ -13,13 +13,7 @@ function CompanyJobsContent() {
   const [jobs, setJobs] = useState<CompanyJobItem[]>(mockCompanyJobs);
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar currentApp="company" user={user} onSignOut={logout} />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
           <div className="space-y-1">
@@ -117,7 +111,6 @@ function CompanyJobsContent() {
           ))}
         </div>
       </main>
-    </div>
   );
 }
 

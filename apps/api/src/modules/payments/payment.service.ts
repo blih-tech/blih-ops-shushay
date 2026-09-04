@@ -2,7 +2,7 @@ import { randomBytes } from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
-import { PaymentStatus, PaymentType } from "@prisma/client";
+import { PaymentStatus, PaymentType, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import { chapaService } from "./chapa.service";
 import { createNotification, sendPaymentConfirmationEmail } from "../notifications/notification.service";
 
@@ -107,7 +107,14 @@ export async function initializeSkillsPayment(userId: string) {
 export async function verifyAndCompletePayment(txRef: string, callerUserId?: string) {
   const transaction = await prisma.paymentTransaction.findUnique({
     where: { txRef },
-    include: { user: { include: { talentProfile: true } } },
+    include: {
+      user: {
+        include: {
+          talentProfile: true,
+          companyProfile: { include: { companySubscription: true } },
+        },
+      },
+    },
   });
 
   if (!transaction) {
@@ -122,6 +129,18 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
 
   // Idempotency: If payment was already verified as SUCCESSFUL, return existing state cleanly
   if (transaction.status === PaymentStatus.SUCCESSFUL) {
+    if (transaction.paymentType === PaymentType.COMPANY_SUBSCRIPTION) {
+      const existingSub = await prisma.companySubscription.findFirst({
+        where: { companyProfile: { userId: transaction.userId } },
+      });
+      return {
+        verified: true,
+        payment: transaction,
+        subscription: existingSub,
+        message: "Payment already successfully verified",
+      };
+    }
+
     const existingEntitlement = await prisma.skillsEntitlement.findUnique({
       where: { userId: transaction.userId },
     });
@@ -146,17 +165,15 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
     verification.status === "successful" ||
     (isTestMode && verification.rawResponse?.status === "success");
 
-  // Validate amount (1000 ETB) and currency (ETB).
-  // No test-mode amount fallback: if a mock returns amount=0, the mock is wrong.
+  // Validate amount and currency based on payment type
+  const expectedPrice = transaction.amount;
   const verifyAmount = verification.amount;
 
-  const isAmountValid = verifyAmount >= SKILLS_ACCESS_PRICE;
+  const isAmountValid = verifyAmount >= expectedPrice;
   // In test-mode the Chapa sandbox can return an empty currency string; allow it.
-  // In production, an absent currency is always a rejection.
   const isCurrencyValid =
     (isTestMode && !verification.currency) ||
     verification.currency?.toUpperCase() === SKILLS_ACCESS_CURRENCY;
-
 
   if (verification.status === "pending") {
     throw new AppError(400, "Payment is still pending. Please complete the payment steps on Chapa.");
@@ -176,7 +193,7 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
     if (!isSuccessStatus) {
       failureReason = `Payment was not completed (Chapa status: ${verification.status || "failed"}). Please try again.`;
     } else if (!isAmountValid) {
-      failureReason = `Paid amount (${verification.amount} ETB) is less than required (${SKILLS_ACCESS_PRICE} ETB).`;
+      failureReason = `Paid amount (${verification.amount} ETB) is less than required (${expectedPrice} ETB).`;
     } else if (!isCurrencyValid) {
       failureReason = `Invalid currency (${verification.currency}), expected ${SKILLS_ACCESS_CURRENCY}.`;
     }
@@ -184,9 +201,88 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
     throw new AppError(400, failureReason);
   }
 
+  // Handle COMPANY_SUBSCRIPTION payment verification
+  if (transaction.paymentType === PaymentType.COMPANY_SUBSCRIPTION) {
+    const companyProfile = transaction.user.companyProfile;
+    if (!companyProfile) {
+      throw new AppError(404, "Company profile not found for this transaction");
+    }
 
+    const metadataPlan = (transaction.metadata as any)?.plan as string | undefined;
+    const plan: SubscriptionPlan = metadataPlan === "YEARLY" || transaction.amount >= 10000 ? "YEARLY" : "MONTHLY";
+    const durationMonths = plan === "YEARLY" ? 12 : 1;
 
-  // Verification succeeded! Execute atomic DB transaction
+    const now = new Date();
+    const existingSub = companyProfile.companySubscription;
+    let baseDate = now;
+
+    // If currently active and unexpired, extend from existing expiresAt
+    if (existingSub && existingSub.expiresAt > now && existingSub.status === SubscriptionStatus.ACTIVE) {
+      baseDate = existingSub.expiresAt;
+    }
+
+    const calculatedExpiresAt = new Date(baseDate);
+    calculatedExpiresAt.setMonth(calculatedExpiresAt.getMonth() + durationMonths);
+
+    const result = await prisma.$transaction(async (tx) => {
+      const updatedPayment = await tx.paymentTransaction.update({
+        where: { id: transaction.id },
+        data: {
+          status: PaymentStatus.SUCCESSFUL,
+          chapaRef: verification.chapaRef || transaction.chapaRef,
+          metadata: verification.rawResponse ?? undefined,
+        },
+      });
+
+      const subscription = await tx.companySubscription.upsert({
+        where: { companyProfileId: companyProfile.id },
+        create: {
+          companyProfileId: companyProfile.id,
+          plan,
+          status: SubscriptionStatus.ACTIVE,
+          amount: transaction.amount,
+          currency: transaction.currency,
+          startDate: now,
+          expiresAt: calculatedExpiresAt,
+          paymentId: transaction.id,
+        },
+        update: {
+          plan,
+          status: SubscriptionStatus.ACTIVE,
+          amount: transaction.amount,
+          currency: transaction.currency,
+          expiresAt: calculatedExpiresAt,
+          paymentId: transaction.id,
+        },
+      });
+
+      await tx.companyProfile.update({
+        where: { id: companyProfile.id },
+        data: {
+          subscriptionActive: true,
+          subscriptionExpiresAt: calculatedExpiresAt,
+        },
+      });
+
+      return { updatedPayment, subscription };
+    });
+
+    await createNotification({
+      userId: transaction.userId,
+      type: "COMPANY_SUBSCRIPTION_SUCCESS",
+      title: "Company Subscription Activated!",
+      message: `Your ${plan.toLowerCase()} subscription of ${transaction.amount} ETB has been confirmed. Full company access is unlocked until ${calculatedExpiresAt.toLocaleDateString()}.`,
+    });
+
+    return {
+      verified: true,
+      payment: result.updatedPayment,
+      subscription: result.subscription,
+      message: "Payment successfully verified and Company Subscription activated",
+    };
+  }
+
+  // Verification succeeded for SKILLS_ACCESS! Execute atomic DB transaction
   const result = await prisma.$transaction(async (tx) => {
     const updatedPayment = await tx.paymentTransaction.update({
       where: { id: transaction.id },

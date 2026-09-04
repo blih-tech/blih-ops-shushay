@@ -9,7 +9,6 @@ import {
   Button,
   Badge,
   Alert,
-  GlobalNavbar,
   SkillBar,
   MetricCard,
 } from "@blih/ui";
@@ -37,17 +36,10 @@ function ProfileContent() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar
-          currentApp="talent"
-          user={user ? { email: user.email, role: user.role } : null}
-          onSignOut={logout}
-        />
-        <div className="max-w-md mx-auto mt-16 px-4">
-          <Alert variant="error" title="Profile Error">
-            {error}
-          </Alert>
-        </div>
+      <div className="max-w-md mx-auto py-16 px-4">
+        <Alert variant="error" title="Profile Error">
+          {error}
+        </Alert>
       </div>
     );
   }
@@ -55,18 +47,7 @@ function ProfileContent() {
   const certCount = profile?.certificates?.length ?? profile?.completedCourses?.length ?? 0;
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      {/* Ambient background glow */}
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-
-      {/* Global Navbar */}
-      <GlobalNavbar
-        currentApp="talent"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* Completion banner if applicable */}
         <ProfileCompletionBanner isComplete={!!profile?.isComplete} />
 
@@ -259,21 +240,6 @@ function ProfileContent() {
           </div>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-[#D9CEDF]/60 flex flex-col sm:flex-row justify-between items-center text-[#6E6678] text-xs font-mono gap-4 mt-12">
-        <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
-        <div className="flex gap-4 uppercase tracking-wider">
-          <Link href="/jobs" className="hover:text-[#1E5BFF]">
-            Jobs
-          </Link>
-          <span className="text-[#D9CEDF]">·</span>
-          <Link href="/company" className="hover:text-[#1E5BFF]">
-            For Business
-          </Link>
-        </div>
-      </footer>
-    </div>
   );
 }
 

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { GlobalNavbar, Button, Skeleton, Alert } from "@blih/ui";
+import { Button, Skeleton, Alert } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
 import {
@@ -95,75 +95,51 @@ export default function PublicCourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar
-          currentApp="skills"
-          user={user ? { email: user.email, role: user.role } : null}
-          onSignOut={logout}
-        />
-        <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-          <Skeleton variant="rectangular" height={32} className="w-48 rounded-xl" />
-          <Skeleton variant="rectangular" height={260} className="rounded-3xl" />
-          <div className="space-y-3">
-            {[0, 1, 2, 3].map((i) => (
-              <Skeleton key={i} variant="rectangular" height={64} className="rounded-2xl" />
-            ))}
-          </div>
-        </main>
-      </div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <Skeleton variant="rectangular" height={32} className="w-48 rounded-xl" />
+        <Skeleton variant="rectangular" height={260} className="rounded-3xl" />
+        <div className="space-y-3">
+          {[0, 1, 2, 3].map((i) => (
+            <Skeleton key={i} variant="rectangular" height={64} className="rounded-2xl" />
+          ))}
+        </div>
+      </main>
     );
   }
 
   if (error || !course) {
     return (
-      <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
-        <GlobalNavbar
-          currentApp="skills"
-          user={user ? { email: user.email, role: user.role } : null}
-          onSignOut={logout}
-        />
-        <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-6">
-          <Link href="/courses">
-            <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />}>
-              Back to Catalog
-            </Button>
-          </Link>
-          <Alert variant="error">{error ?? "Course not found"}</Alert>
-        </main>
-      </div>
+      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-6">
+        <Link href="/courses">
+          <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />}>
+            Back to Catalog
+          </Button>
+        </Link>
+        <Alert variant="error">{error ?? "Course not found"}</Alert>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
-      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
+      <Link href="/courses" className="inline-block">
+        <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
+          Back to Course Catalog
+        </Button>
+      </Link>
 
-      <GlobalNavbar
-        currentApp="skills"
-        user={user ? { email: user.email, role: user.role } : null}
-        onSignOut={logout}
-      />
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
-        <Link href="/courses" className="inline-block">
-          <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
-            Back to Course Catalog
-          </Button>
-        </Link>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <CourseDetailHero course={course} />
-          <CourseDetailSidebar
-            courseId={courseId}
-            hasAccess={hasAccess}
-            isCompleted={isCompleted}
-            progressPercentage={progressPercentage}
-            initiatingPayment={initiatingPayment}
-            paymentError={paymentError}
-            onUnlockClick={handleUnlockClick}
-          />
-        </div>
-      </main>
-    </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <CourseDetailHero course={course} />
+        <CourseDetailSidebar
+          courseId={courseId}
+          hasAccess={hasAccess}
+          isCompleted={isCompleted}
+          progressPercentage={progressPercentage}
+          initiatingPayment={initiatingPayment}
+          paymentError={paymentError}
+          onUnlockClick={handleUnlockClick}
+        />
+      </div>
+    </main>
   );
 }

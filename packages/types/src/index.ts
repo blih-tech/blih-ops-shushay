@@ -53,3 +53,28 @@ export interface Notification {
   createdAt: string;
 }
 
+export type SubscriptionPlan = "MONTHLY" | "YEARLY";
+export type SubscriptionStatus = "ACTIVE" | "EXPIRED";
+
+export interface CompanySubscription {
+  id: string;
+  companyProfileId: string;
+  plan: SubscriptionPlan;
+  status: SubscriptionStatus;
+  amount: number;
+  currency: string;
+  startDate: string;
+  expiresAt: string;
+  paymentId?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CompanySubscriptionStatusResponse {
+  hasActiveSubscription: boolean;
+  subscription: CompanySubscription | null;
+  expiresAt: string | null;
+  daysRemaining: number;
+}
+
+
