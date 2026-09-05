@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from "react";
 import { HelpCircle, Plus, Pencil, X, Save } from "lucide-react";
 import { Button, Alert, Input } from "@blih/ui";
@@ -151,11 +153,10 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
                       u[qi] = { ...u[qi], correctOptionIndex: oi };
                       setQuestions(u);
                     }}
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
-                      q.correctOptionIndex === oi
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${q.correctOptionIndex === oi
                         ? "border-[#1E5BFF] bg-[#1E5BFF]"
                         : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/50"
-                    }`}
+                      }`}
                     title="Mark as correct answer"
                   >
                     {q.correctOptionIndex === oi && (

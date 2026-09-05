@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button, Alert } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
-
 import { TALENT_URL } from "@/lib/urls";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 

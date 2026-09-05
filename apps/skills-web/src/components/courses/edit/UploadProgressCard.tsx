@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Loader2, UploadCloud, FileText, Video } from "lucide-react";
+import { Loader2, FileText, Video } from "lucide-react";
 
 interface UploadProgressCardProps {
   fileName: string;

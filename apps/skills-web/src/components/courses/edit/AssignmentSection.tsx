@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from "react";
 import { FileCheck, Plus, Pencil, Save } from "lucide-react";
 import { Button, Alert, Input, Textarea } from "@blih/ui";

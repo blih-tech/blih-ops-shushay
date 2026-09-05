@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
-import { Button, UniversalSearch, Chip, GlobalNavbar } from "@blih/ui";
+import { Button, UniversalSearch, Chip } from "@blih/ui";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -19,13 +19,12 @@ import { SkillGraphPreview } from "@/components/explore/SkillGraphPreview";
 import {
   MetricsBar,
   ActionBanner,
-  ExploreFooter,
 } from "@/components/explore/ExploreSectionBanners";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function TalentHomePage() {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
   const SKILLS_URL =
@@ -83,12 +82,12 @@ export default function TalentHomePage() {
     user?.role === "COMPANY"
       ? ["React 19", "Next.js", "Fullstack", "Node.js", "UI/UX Specialist"]
       : [
-          "React Developer",
-          "Product Designer",
-          "Financial Analyst",
-          "Fullstack Engineer",
-          "UI/UX Specialist",
-        ];
+        "React Developer",
+        "Product Designer",
+        "Financial Analyst",
+        "Fullstack Engineer",
+        "UI/UX Specialist",
+      ];
 
   const handleSearch = (query: string) => {
     if (user?.role === "COMPANY") {

@@ -42,7 +42,7 @@ export function UserMenu({
       <button
         type="button"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
-        className="flex items-center gap-2 p-1.5 pl-1.5 pr-2.5 rounded-full bg-white/60 backdrop-blur-md border border-[#D9CEDF]/50 shadow-[inset_0_1px_4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_rgba(30,91,255,0.12)] hover:border-[#1E5BFF]/30 transition-all duration-300 ease-out cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#1E5BFF]/20"
+        className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-full bg-white/60 backdrop-blur-md border border-[#D9CEDF]/50 shadow-[inset_0_1px_4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_rgba(30,91,255,0.12)] hover:border-[#1E5BFF]/30 transition-all duration-300 ease-out cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#1E5BFF]/20"
         aria-expanded={userMenuOpen}
         aria-label="User account menu"
       >

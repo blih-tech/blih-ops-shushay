@@ -6,7 +6,6 @@ import { useSearchParams } from "next/navigation";
 import { Button, Input, PasswordInput, Alert } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
-
 import { TALENT_URL, API_URL } from "@/lib/urls";
 import { GoogleIcon } from "@/components/auth/GoogleIcon";
 

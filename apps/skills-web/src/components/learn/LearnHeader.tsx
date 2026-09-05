@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Award } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@blih/ui";
 
 interface LearnHeaderProps {
@@ -51,16 +51,14 @@ export function LearnHeader({
           <span className="font-mono text-xs text-[#6E6678]">Progress:</span>
           <div className="w-32 bg-[#EEF3FF] h-2 rounded-full overflow-hidden">
             <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                isComplete ? "bg-[#00A859]" : "bg-[#1E5BFF]"
-              }`}
+              className={`h-full rounded-full transition-all duration-500 ${isComplete ? "bg-[#00A859]" : "bg-[#1E5BFF]"
+                }`}
               style={{ width: `${progressPercent}%` }}
             />
           </div>
           <span
-            className={`font-mono text-xs font-bold ${
-              isComplete ? "text-[#00A859]" : "text-[#1E5BFF]"
-            }`}
+            className={`font-mono text-xs font-bold ${isComplete ? "text-[#00A859]" : "text-[#1E5BFF]"
+              }`}
           >
             {progressPercent}%
           </span>

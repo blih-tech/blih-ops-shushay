@@ -6,7 +6,7 @@ import { GlobalNavbar, GlobalFooter } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const pathname = usePathname();
 
   return (
@@ -15,7 +15,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
 
       {/* Global Navbar */}
-      <GlobalNavbar user={user} onSignOut={logout} pathname={pathname} />
+      <GlobalNavbar user={user} loading={loading} onSignOut={logout} pathname={pathname} />
 
       {/* Main Content */}
       <main className="flex-1 w-full">{children}</main>

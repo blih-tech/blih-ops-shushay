@@ -28,12 +28,8 @@ import { LogoUpload } from "@/components/profile/LogoUpload";
 import {
   Save,
   ArrowLeft,
-  Building2,
   Building,
   User,
-  Mail,
-  Phone,
-  Globe,
   Sparkles,
 } from "lucide-react";
 
@@ -133,165 +129,165 @@ function CompanyProfileContent() {
 
   return (
     <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-3">
-              <Link
-                href="/company"
-                className="text-[#6E6678] hover:text-[#1E5BFF] transition-colors"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Link>
-              <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
-                Company Profile
-              </h1>
-              <Badge variant="primary" size="sm">
-                RECRUITER
-              </Badge>
-            </div>
-            <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-              Manage your hiring brand details and primary contact information.
-            </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/company"
+              className="text-[#6E6678] hover:text-[#1E5BFF] transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+              Company Profile
+            </h1>
+            <Badge variant="primary" size="sm">
+              RECRUITER
+            </Badge>
           </div>
-
-          <Link href="/company/subscription">
-            <Button variant="outline" size="sm" leftIcon={<Sparkles className="w-4 h-4 text-[#1E5BFF]" />}>
-              Manage Subscription
-            </Button>
-          </Link>
+          <p className="text-sm sm:text-base text-[#6E6678] font-sans">
+            Manage your hiring brand details and primary contact information.
+          </p>
         </div>
 
-        {error && <Alert variant="error">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+        <Link href="/company/subscription">
+          <Button variant="outline" size="sm" leftIcon={<Sparkles className="w-4 h-4 text-[#1E5BFF]" />}>
+            Manage Subscription
+          </Button>
+        </Link>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
-            <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <Building className="h-5 w-5 text-[#1E5BFF]" /> Organization Brand
-              </CardTitle>
-              <CardDescription>
-                Public details visible to talents browsing company listings.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6 sm:p-8 space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-                <LogoUpload
-                  value={profile?.logoUrl}
-                  onUpload={handleLogoUpload}
-                  onDelete={handleLogoDelete}
-                />
-                <div className="space-y-1 flex-1">
-                  <h3 className="font-bold text-[#17131F] text-base">Company Logo</h3>
-                  <p className="text-xs text-[#6E6678] leading-relaxed">
-                    Upload a high-resolution logo (PNG, JPG, SVG up to 5MB).
-                  </p>
-                </div>
+      {error && <Alert variant="error">{error}</Alert>}
+      {success && <Alert variant="success">{success}</Alert>}
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
+          <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
+            <CardTitle className="text-xl flex items-center gap-2">
+              <Building className="h-5 w-5 text-[#1E5BFF]" /> Organization Brand
+            </CardTitle>
+            <CardDescription>
+              Public details visible to talents browsing company listings.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+              <LogoUpload
+                value={profile?.logoUrl}
+                onUpload={handleLogoUpload}
+                onDelete={handleLogoDelete}
+              />
+              <div className="space-y-1 flex-1">
+                <h3 className="font-bold text-[#17131F] text-base">Company Logo</h3>
+                <p className="text-xs text-[#6E6678] leading-relaxed">
+                  Upload a high-resolution logo (PNG, JPG, SVG up to 5MB).
+                </p>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#D9CEDF]/60">
-                <FormField label="Company Name" required>
-                  <Input
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
-                    placeholder="e.g. Gebeya Technologies"
-                  />
-                </FormField>
-
-                <FormField label="Website URL">
-                  <Input
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                    placeholder="https://gebeya.com"
-                  />
-                </FormField>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField label="Country" required>
-                  <Input
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    placeholder="e.g. Ethiopia"
-                  />
-                </FormField>
-
-                <FormField label="City" required>
-                  <Input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="e.g. Addis Ababa"
-                  />
-                </FormField>
-              </div>
-
-              <FormField label="About the Organization">
-                <Textarea
-                  rows={4}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Share your company mission, hiring goals, and engineering culture..."
-                />
-              </FormField>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
-            <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <User className="h-5 w-5 text-[#1E5BFF]" /> Primary Recruiter Contact
-              </CardTitle>
-              <CardDescription>
-                Direct contact info for candidate inquiries and candidate notifications.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-6 sm:p-8 space-y-6">
-              <FormField label="Contact Full Name" required>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#D9CEDF]/60">
+              <FormField label="Company Name" required>
                 <Input
-                  value={contactName}
-                  onChange={(e) => setContactName(e.target.value)}
-                  placeholder="e.g. Sara Tekle"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  placeholder="e.g. Gebeya Technologies"
                 />
               </FormField>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <FormField label="Contact Email" required>
-                  <Input
-                    type="email"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="recruiter@company.com"
-                  />
-                </FormField>
+              <FormField label="Website URL">
+                <Input
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                  placeholder="https://gebeya.com"
+                />
+              </FormField>
+            </div>
 
-                <FormField label="Contact Phone Number">
-                  <Input
-                    value={contactPhone}
-                    onChange={(e) => setContactPhone(e.target.value)}
-                    placeholder="+251 91 123 4567"
-                  />
-                </FormField>
-              </div>
-            </CardContent>
-          </Card>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField label="Country" required>
+                <Input
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  placeholder="e.g. Ethiopia"
+                />
+              </FormField>
 
-          <div className="flex justify-end gap-3 pt-4">
-            <Link href="/company">
-              <Button type="button" variant="outline" size="lg">
-                Cancel
-              </Button>
-            </Link>
-            <Button
-              type="submit"
-              size="lg"
-              disabled={saving}
-              leftIcon={<Save className="h-4 w-4" />}
-            >
-              {saving ? "Saving Changes..." : "Save Company Profile"}
+              <FormField label="City" required>
+                <Input
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g. Addis Ababa"
+                />
+              </FormField>
+            </div>
+
+            <FormField label="About the Organization">
+              <Textarea
+                rows={4}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Share your company mission, hiring goals, and engineering culture..."
+              />
+            </FormField>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
+          <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
+            <CardTitle className="text-xl flex items-center gap-2">
+              <User className="h-5 w-5 text-[#1E5BFF]" /> Primary Recruiter Contact
+            </CardTitle>
+            <CardDescription>
+              Direct contact info for candidate inquiries and candidate notifications.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6 sm:p-8 space-y-6">
+            <FormField label="Contact Full Name" required>
+              <Input
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="e.g. Sara Tekle"
+              />
+            </FormField>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField label="Contact Email" required>
+                <Input
+                  type="email"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="recruiter@company.com"
+                />
+              </FormField>
+
+              <FormField label="Contact Phone Number">
+                <Input
+                  value={contactPhone}
+                  onChange={(e) => setContactPhone(e.target.value)}
+                  placeholder="+251 91 123 4567"
+                />
+              </FormField>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-end gap-3 pt-4">
+          <Link href="/company">
+            <Button type="button" variant="outline" size="lg">
+              Cancel
             </Button>
-          </div>
-        </form>
-      </main>
+          </Link>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={saving}
+            leftIcon={<Save className="h-4 w-4" />}
+          >
+            {saving ? "Saving Changes..." : "Save Company Profile"}
+          </Button>
+        </div>
+      </form>
+    </main>
   );
 }
 

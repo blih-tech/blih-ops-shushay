@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import {
@@ -106,176 +105,175 @@ function JobsFeedContent() {
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
-        {/* Header */}
-        <div className="space-y-4 max-w-3xl">
-          <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Opportunity Discovery</span>
-          </div>
-          <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F]">
-            Evidence-Matched Roles
-          </h1>
-          <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-            Discover remote opportunities scored directly against your verified
-            capability profile.
-          </p>
+      {/* Header */}
+      <div className="space-y-4 max-w-3xl">
+        <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Opportunity Discovery</span>
         </div>
+        <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F]">
+          Evidence-Matched Roles
+        </h1>
+        <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
+          Discover remote opportunities scored directly against your verified
+          capability profile.
+        </p>
+      </div>
 
-        {/* Universal Search & Filters */}
-        <div className="space-y-4">
-          <UniversalSearch
-            placeholder="Search roles, companies, or required competencies..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            actionText="Filter Roles"
-          />
+      {/* Universal Search & Filters */}
+      <div className="space-y-4">
+        <UniversalSearch
+          placeholder="Search roles, companies, or required competencies..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          actionText="Filter Roles"
+        />
 
-          <div className="flex flex-wrap items-center gap-2 pt-1">
-            {filterChips.map((chip) => (
-              <Chip
-                key={chip}
-                active={activeFilter === chip}
-                onClick={() => setActiveFilter(chip)}
-                size="md"
-              >
-                {chip}
-              </Chip>
-            ))}
-          </div>
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          {filterChips.map((chip) => (
+            <Chip
+              key={chip}
+              active={activeFilter === chip}
+              onClick={() => setActiveFilter(chip)}
+              size="md"
+            >
+              {chip}
+            </Chip>
+          ))}
         </div>
+      </div>
 
-        {/* Two-Column Master / Detail Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: Job Cards List */}
-          <div className="lg:col-span-7 space-y-4">
-            {loading ? (
-              <div className="space-y-4">
-                {[0, 1, 2, 3].map((i) => (
-                  <JobCardSkeleton key={i} />
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
-                {filteredJobs.map((job) => {
-                  const isSelected = selectedJob.id === job.id;
-                  return (
-                    <div
-                      key={job.id}
-                      onClick={() => setSelectedJob(job)}
-                      className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
-                        isSelected
-                          ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
-                          : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
+      {/* Two-Column Master / Detail Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: Job Cards List */}
+        <div className="lg:col-span-7 space-y-4">
+          {loading ? (
+            <div className="space-y-4">
+              {[0, 1, 2, 3].map((i) => (
+                <JobCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
+              {filteredJobs.map((job) => {
+                const isSelected = selectedJob.id === job.id;
+                return (
+                  <div
+                    key={job.id}
+                    onClick={() => setSelectedJob(job)}
+                    className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${isSelected
+                      ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                      : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
                       }`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
-                            {job.company}
-                          </span>
-                          <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
-                            {job.title}
-                          </h3>
-                        </div>
-
-                        <Badge
-                          variant={
-                            job.matchScore >= 90 ? "verified" : "primary"
-                          }
-                          size="md"
-                        >
-                          {job.matchScore}% Match
-                        </Badge>
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
+                          {job.company}
+                        </span>
+                        <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
+                          {job.title}
+                        </h3>
                       </div>
 
-                      <p className="font-sans text-sm text-[#6E6678] line-clamp-2">
-                        {job.description}
-                      </p>
+                      <Badge
+                        variant={
+                          job.matchScore >= 90 ? "verified" : "primary"
+                        }
+                        size="md"
+                      >
+                        {job.matchScore}% Match
+                      </Badge>
+                    </div>
 
-                      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D9CEDF]/50 text-xs font-sans text-[#6E6678]">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <span className="flex items-center gap-1 font-medium text-[#17131F]">
-                            <DollarSign className="w-3.5 h-3.5 text-[#2E8F79]" />
-                            {job.salary}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-[#1E5BFF]" />
-                            {job.location}
-                          </span>
-                        </div>
+                    <p className="font-sans text-sm text-[#6E6678] line-clamp-2">
+                      {job.description}
+                    </p>
 
-                        <span className="font-mono text-[11px] text-[#6E6678]">
-                          {job.postedDate}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D9CEDF]/50 text-xs font-sans text-[#6E6678]">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <span className="flex items-center gap-1 font-medium text-[#17131F]">
+                          <DollarSign className="w-3.5 h-3.5 text-[#2E8F79]" />
+                          {job.salary}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                          {job.location}
                         </span>
                       </div>
+
+                      <span className="font-mono text-[11px] text-[#6E6678]">
+                        {job.postedDate}
+                      </span>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-          {/* Right Column: "Your Match" Decision Panel & Quick Preview */}
-          <div className="lg:col-span-5 sticky top-24 space-y-6">
-            <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
-                <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
-                  Opportunity Decision Panel
-                </span>
-                <Badge variant="verified" size="md">
-                  {selectedJob.matchScore}% Calibrated Fit
-                </Badge>
-              </div>
+        {/* Right Column: "Your Match" Decision Panel & Quick Preview */}
+        <div className="lg:col-span-5 sticky top-24 space-y-6">
+          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
+              <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
+                Opportunity Decision Panel
+              </span>
+              <Badge variant="verified" size="md">
+                {selectedJob.matchScore}% Calibrated Fit
+              </Badge>
+            </div>
 
-              <div className="space-y-2">
-                <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                  {selectedJob.title}
-                </h2>
-                <p className="font-sans text-sm font-semibold text-[#1E5BFF]">
-                  {selectedJob.company} · {selectedJob.location}
-                </p>
-                <p className="font-mono text-xs font-bold text-[#2E8F79]">
-                  {selectedJob.salary}
-                </p>
-              </div>
+            <div className="space-y-2">
+              <h2 className="font-display text-2xl font-bold text-[#17131F]">
+                {selectedJob.title}
+              </h2>
+              <p className="font-sans text-sm font-semibold text-[#1E5BFF]">
+                {selectedJob.company} · {selectedJob.location}
+              </p>
+              <p className="font-mono text-xs font-bold text-[#2E8F79]">
+                {selectedJob.salary}
+              </p>
+            </div>
 
-              <div className="space-y-2 text-sm text-[#6E6678] font-sans leading-relaxed">
-                <p>{selectedJob.description}</p>
-              </div>
+            <div className="space-y-2 text-sm text-[#6E6678] font-sans leading-relaxed">
+              <p>{selectedJob.description}</p>
+            </div>
 
-              {/* Match breakdown */}
-              <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl p-5 space-y-3">
-                <span className="font-mono text-xs uppercase tracking-wider text-[#17131F] font-bold block">
-                  Required Competency Match
-                </span>
-                {selectedJob.requiredSkills.map((req) => (
-                  <SkillBar
-                    key={req.name}
-                    name={req.name}
-                    score={req.score}
-                    status="Verified"
-                    variant="primary"
-                  />
-                ))}
-              </div>
+            {/* Match breakdown */}
+            <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl p-5 space-y-3">
+              <span className="font-mono text-xs uppercase tracking-wider text-[#17131F] font-bold block">
+                Required Competency Match
+              </span>
+              {selectedJob.requiredSkills.map((req) => (
+                <SkillBar
+                  key={req.name}
+                  name={req.name}
+                  score={req.score}
+                  status="Verified"
+                  variant="primary"
+                />
+              ))}
+            </div>
 
-              <div className="pt-2 space-y-3">
-                <Button
-                  size="lg"
-                  fullWidth
-                  rightIcon={<ArrowUpRight className="w-4 h-4" />}
-                >
-                  Apply with Verified Skill Profile
-                </Button>
-                <p className="text-center font-mono text-[11px] text-[#6E6678]">
-                  Your verified assessment proof and portfolio will be submitted
-                  directly.
-                </p>
-              </div>
+            <div className="pt-2 space-y-3">
+              <Button
+                size="lg"
+                fullWidth
+                rightIcon={<ArrowUpRight className="w-4 h-4" />}
+              >
+                Apply with Verified Skill Profile
+              </Button>
+              <p className="text-center font-mono text-[11px] text-[#6E6678]">
+                Your verified assessment proof and portfolio will be submitted
+                directly.
+              </p>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </main>
   );
 }
 

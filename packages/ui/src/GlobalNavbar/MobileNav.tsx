@@ -11,13 +11,15 @@ import {
   Building,
 } from "lucide-react";
 import { Button } from "../Button";
-import type { NavLinkItem } from "../GlobalNavbar.helpers";
+import type { NavLinkItem } from "./GlobalNavbar.helpers";
+import { Skeleton } from "../Skeleton";
 
 interface MobileNavProps {
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (open: boolean) => void;
   navLinks: NavLinkItem[];
   user?: { email?: string; role?: string; photoUrl?: string } | null;
+  loading?: boolean;
   role?: string;
   authUrl: string;
   skillsUrl: string;
@@ -30,6 +32,7 @@ export function MobileNav({
   setMobileMenuOpen,
   navLinks,
   user,
+  loading = false,
   role,
   authUrl,
   skillsUrl,
@@ -48,20 +51,28 @@ export function MobileNav({
     >
       <div className="bg-white/80 backdrop-blur-3xl border border-white/60 ring-1 ring-[#D9CEDF]/50 rounded-2xl sm:rounded-3xl p-4 shadow-[0_30px_60px_-15px_rgba(30,91,255,0.15)] space-y-3 font-sans">
         <div className="flex flex-col space-y-1">
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className={`px-3.5 py-2.5 rounded-xl text-sm transition-all duration-300 ease-out flex items-center ${
-                link.active
-                  ? "bg-gradient-to-r from-[#EEF3FF] to-transparent text-[#1E5BFF] font-bold translate-x-1 border-l-2 border-[#1E5BFF]"
-                  : "text-[#6E6678] hover:bg-white/60 hover:text-[#17131F] font-medium"
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
+          {loading ? (
+            <div className="space-y-2 p-1">
+              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
+              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
+              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
+            </div>
+          ) : (
+            navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className={`px-3.5 py-2.5 rounded-xl text-sm transition-all duration-300 ease-out flex items-center ${
+                  link.active
+                    ? "bg-gradient-to-r from-[#EEF3FF] to-transparent text-[#1E5BFF] font-bold translate-x-1 border-l-2 border-[#1E5BFF]"
+                    : "text-[#6E6678] hover:bg-white/60 hover:text-[#17131F] font-medium"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))
+          )}
         </div>
 
         <div className="pt-3 border-t border-[#D9CEDF]/70 flex flex-col gap-2">

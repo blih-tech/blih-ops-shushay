@@ -70,6 +70,11 @@ The platform provides a modern editorial interface connecting ambitious learners
 - **Chapa Gateway Integration**: Native payment checkout supporting local Ethiopian debit cards and mobile money.
 - **Server-Side Verification**: Idempotent transaction verification, currency validation (`ETB`), and entitlement grants.
 
+### 🏢 6. Company Subscriptions & Candidate Access Gating (Phase 7)
+- **Tiered Company Plans**: Monthly (2,000 ETB) and Yearly (10,000 ETB) subscription options for hiring organizations.
+- **Access Control Guards**: Strict server-side route guards enforcing active subscription requirements before companies can search talent profiles or view candidate contact info.
+- **Dynamic Subscription Status**: Automated status resolution (`ACTIVE`, `INACTIVE`, `EXPIRED`, `CANCELLED`) with instant payment return verification.
+
 ---
 
 ## 🛠 Technology Stack

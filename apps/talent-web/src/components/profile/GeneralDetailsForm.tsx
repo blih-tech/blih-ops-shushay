@@ -1,5 +1,5 @@
 import React from "react";
-import { User, Save, Phone, MapPin, Globe, Sparkles } from "lucide-react";
+import { User, Save, Phone, MapPin, Globe } from "lucide-react";
 import {
   FormField,
   Input,

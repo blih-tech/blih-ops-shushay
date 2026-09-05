@@ -27,14 +27,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const data = await apiFetch<{ user: User }>("/auth/me");
       setUser(data.user);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("blih_user_session", JSON.stringify(data.user));
+      }
     } catch (err) {
       setUser(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("blih_user_session");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const cached = localStorage.getItem("blih_user_session");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.id && parsed.email) {
+            setUser(parsed);
+            setLoading(false);
+          }
+        }
+      } catch (e) {
+        // Ignore parse error
+      }
+    }
     fetchUser();
   }, []);
 
@@ -42,6 +62,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await apiFetch("/auth/logout", { method: "POST" });
       setUser(null);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("blih_user_session");
+      }
       setIsLogoutModalOpen(false);
       const AUTH_URL =
         process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";

@@ -19,10 +19,7 @@ import { LessonPanel } from "./LessonPanel";
 import { CourseOverviewCard } from "./CourseOverviewCard";
 import { CurriculumMetricsCard } from "./CurriculumMetricsCard";
 import { AddLessonForm } from "./AddLessonForm";
-
 import { useEditCourse } from "@/hooks/useEditCourse";
-
-
 import { EditCourseSkeleton } from "./EditCourseSkeleton";
 
 interface EditCourseContentProps {

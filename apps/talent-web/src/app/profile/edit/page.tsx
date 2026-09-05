@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
-import { useAuth } from "@/providers/AuthProvider";
 import {
   updateTalentProfile,
   uploadTalentPhoto,
@@ -31,7 +30,6 @@ import { useProfileFormState } from "@/state/profile/profileForm";
 import { Eye, ArrowLeft } from "lucide-react";
 
 function ProfileEditContent() {
-  const { user, logout } = useAuth();
   const { profile, loading, error: fetchError, refetch } = useTalentProfile();
 
   const [saving, setSaving] = useState(false);
@@ -127,91 +125,91 @@ function ProfileEditContent() {
 
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans space-y-8">
-        {/* Page header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D9CEDF] pb-6">
-          <div className="space-y-1">
-            <Link
-              href="/profile"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-2"
+      {/* Page header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#D9CEDF] pb-6">
+        <div className="space-y-1">
+          <Link
+            href="/profile"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-2"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to Profile Decision
+            Page
+          </Link>
+          <h1 className="font-display font-bold text-3xl text-[#17131F]">
+            Edit Talent Profile
+          </h1>
+          <p className="text-sm text-[#6E6678]">
+            Update your credentials, documents, skills, and verified history.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link href="/profile/preview">
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<Eye className="h-4 w-4" />}
             >
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to Profile Decision
-              Page
-            </Link>
-            <h1 className="font-display font-bold text-3xl text-[#17131F]">
-              Edit Talent Profile
-            </h1>
-            <p className="text-sm text-[#6E6678]">
-              Update your credentials, documents, skills, and verified history.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link href="/profile/preview">
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<Eye className="h-4 w-4" />}
-              >
-                Live Preview
-              </Button>
-            </Link>
-          </div>
+              Live Preview
+            </Button>
+          </Link>
         </div>
+      </div>
 
-        {error && <Alert variant="error">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+      {error && <Alert variant="error">{error}</Alert>}
+      {success && <Alert variant="success">{success}</Alert>}
 
-        {/* Main form sections */}
-        <div className="space-y-8">
-          <section id="section-general">
-            <GeneralDetailsForm
-              form={form}
-              saving={saving}
-              onSubmit={handleSubmit(onSubmit)}
-            />
-          </section>
+      {/* Main form sections */}
+      <div className="space-y-8">
+        <section id="section-general">
+          <GeneralDetailsForm
+            form={form}
+            saving={saving}
+            onSubmit={handleSubmit(onSubmit)}
+          />
+        </section>
 
-          <section id="section-experience">
-            <ExperienceForm
-              entries={profile?.experience || []}
-              onRefresh={refetch}
-            />
-          </section>
+        <section id="section-experience">
+          <ExperienceForm
+            entries={profile?.experience || []}
+            onRefresh={refetch}
+          />
+        </section>
 
-          <section id="section-education">
-            <EducationForm
-              entries={profile?.education || []}
-              onRefresh={refetch}
-            />
-          </section>
+        <section id="section-education">
+          <EducationForm
+            entries={profile?.education || []}
+            onRefresh={refetch}
+          />
+        </section>
 
-          <section id="section-media">
-            <Card className="rounded-3xl border border-[#D9CEDF] shadow-sm">
-              <CardHeader className="px-6 py-5 border-b border-[#D9CEDF] bg-[#EEF3FF]/40 rounded-t-3xl">
-                <CardTitle className="text-lg font-bold font-display text-[#17131F]">
-                  Media & Documents
-                </CardTitle>
-                <CardDescription className="text-sm text-[#6E6678]">
-                  Upload your professional headshot and CV document.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="p-6 sm:p-8">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                  <PhotoUpload
-                    value={profile?.photoUrl}
-                    onUpload={handlePhotoUpload}
-                    onDelete={handlePhotoDelete}
-                  />
-                  <CvUpload
-                    value={profile?.cvUrl}
-                    onUpload={handleCvUpload}
-                    onDelete={handleCvDelete}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </section>
-        </div>
-      </main>
+        <section id="section-media">
+          <Card className="rounded-3xl border border-[#D9CEDF] shadow-sm">
+            <CardHeader className="px-6 py-5 border-b border-[#D9CEDF] bg-[#EEF3FF]/40 rounded-t-3xl">
+              <CardTitle className="text-lg font-bold font-display text-[#17131F]">
+                Media & Documents
+              </CardTitle>
+              <CardDescription className="text-sm text-[#6E6678]">
+                Upload your professional headshot and CV document.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 sm:p-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <PhotoUpload
+                  value={profile?.photoUrl}
+                  onUpload={handlePhotoUpload}
+                  onDelete={handlePhotoDelete}
+                />
+                <CvUpload
+                  value={profile?.cvUrl}
+                  onUpload={handleCvUpload}
+                  onDelete={handleCvDelete}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </div>
+    </main>
   );
 }
 
