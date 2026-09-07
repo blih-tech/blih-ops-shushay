@@ -3,26 +3,28 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Plus, Building2 } from "lucide-react";
-import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
+import { Button, Badge, Card, Skeleton, Alert, EmptyState, ConfirmDialog } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useCompanyJobs } from "@/hooks/useCompanyJobs";
 import { CompanyJobCard } from "@/components/company/CompanyJobCard";
 
 function CompanyJobsContent() {
   const { jobs, loading, error, closeJob } = useCompanyJobs();
-  const [closingId, setClosingId] = useState<string | null>(null);
+  const [jobToClose, setJobToClose] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [isClosing, setIsClosing] = useState(false);
 
-  const handleCloseJob = async (jobId: string) => {
-    if (!confirm("Are you sure you want to close this job post? Closed jobs cannot accept new applications or be edited.")) {
-      return;
-    }
-    setClosingId(jobId);
+  const handleConfirmClose = async () => {
+    if (!jobToClose) return;
+    setIsClosing(true);
+    setActionError(null);
     try {
-      await closeJob(jobId);
+      await closeJob(jobToClose);
+      setJobToClose(null);
     } catch (err: any) {
-      alert(err?.message || "Failed to close job");
+      setActionError(err?.message || "Failed to close job posting.");
     } finally {
-      setClosingId(null);
+      setIsClosing(false);
     }
   };
 
@@ -64,6 +66,12 @@ function CompanyJobsContent() {
         </Alert>
       )}
 
+      {actionError && (
+        <Alert variant="error" title="Could Not Close Role">
+          {actionError}
+        </Alert>
+      )}
+
       {/* Jobs List */}
       {loading ? (
         <div className="space-y-4">
@@ -97,12 +105,33 @@ function CompanyJobsContent() {
             <CompanyJobCard
               key={job.id}
               job={job}
-              closingId={closingId}
-              onCloseJob={handleCloseJob}
+              closingId={isClosing ? jobToClose : null}
+              onCloseJob={(id) => {
+                setActionError(null);
+                setJobToClose(id);
+              }}
             />
           ))}
         </div>
       )}
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmDialog
+        isOpen={Boolean(jobToClose)}
+        onClose={() => {
+          if (!isClosing) {
+            setJobToClose(null);
+            setActionError(null);
+          }
+        }}
+        onConfirm={handleConfirmClose}
+        title="Close Job Post"
+        message="Are you sure you want to close this job post? Once closed, this role will no longer accept new applications or allow edits."
+        confirmText="Yes, Close Role"
+        cancelText="Keep Active"
+        variant="destructive"
+        isLoading={isClosing}
+      />
     </main>
   );
 }

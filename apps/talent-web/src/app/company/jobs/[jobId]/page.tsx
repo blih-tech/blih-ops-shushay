@@ -5,33 +5,20 @@ import Link from "next/link";
 import {
   ArrowLeft,
   Edit,
-  Building2,
-  MapPin,
   DollarSign,
   Clock,
   Globe,
-  AlertCircle,
   Users,
-  Eye,
 } from "lucide-react";
-import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
+import { Button, Badge, Card, Skeleton, Alert, EmptyState, ConfirmDialog } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { getJobById, closeJob, getJobApplications } from "@/lib/jobApi";
+import { formatSalary } from "@/lib/jobOptions";
+import { CandidateApplicationCard } from "@/components/company/CandidateApplicationCard";
 import { Job } from "@/types/job";
 
 interface PageProps {
   params: Promise<{ jobId: string }>;
-}
-
-function formatSalary(job: Job): string {
-  if (job.salaryDisplay) return job.salaryDisplay;
-  if (job.salaryMin && job.salaryMax) {
-    return `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()} ${job.salaryCurrency}`;
-  }
-  if (job.salaryMin) {
-    return `From $${job.salaryMin.toLocaleString()} ${job.salaryCurrency}`;
-  }
-  return "Competitive";
 }
 
 function CompanyJobDetailContent({ jobId }: { jobId: string }) {
@@ -39,7 +26,9 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
   const [applications, setApplications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [closing, setClosing] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -62,16 +51,15 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
     loadData();
   }, [jobId]);
 
-  const handleClose = async () => {
-    if (!confirm("Are you sure you want to close this job post? Closed jobs cannot accept new applications or be edited.")) {
-      return;
-    }
+  const handleConfirmClose = async () => {
     setClosing(true);
+    setActionError(null);
     try {
       const updated = await closeJob(jobId);
       setJob(updated);
+      setConfirmOpen(false);
     } catch (err: any) {
-      alert(err?.message || "Failed to close job");
+      setActionError(err?.message || "Failed to close job posting.");
     } finally {
       setClosing(false);
     }
@@ -115,6 +103,12 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       >
         <ArrowLeft className="h-3.5 w-3.5" /> Back to My Job Postings
       </Link>
+
+      {actionError && (
+        <Alert variant="error" title="Could Not Close Role">
+          {actionError}
+        </Alert>
+      )}
 
       {/* Header Card */}
       <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
@@ -160,7 +154,10 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
                   variant="ghost"
                   size="sm"
                   disabled={closing}
-                  onClick={handleClose}
+                  onClick={() => {
+                    setActionError(null);
+                    setConfirmOpen(true);
+                  }}
                   className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
                 >
                   {closing ? "Closing..." : "Close Role"}
@@ -217,55 +214,30 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
             description="No candidates have submitted applications for this role yet."
           />
         ) : (
-          <div className="space-y-3">
-            {applications.map((app) => {
-              const talent = app.talentProfile;
-              const name = talent?.fullName || "Candidate";
-
-              return (
-                <Card
-                  key={app.id}
-                  className="border border-[#D9CEDF] rounded-2xl p-5 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-sm">
-                        {name.charAt(0)}
-                      </div>
-                      <div>
-                        <h4 className="font-display text-base font-bold text-[#17131F]">{name}</h4>
-                        <p className="text-xs font-mono text-[#6E6678]">{talent?.title || talent?.user?.email}</p>
-                      </div>
-                      <Badge variant="verified" size="sm">
-                        {app.status}
-                      </Badge>
-                    </div>
-
-                    {app.coverLetter && (
-                      <p className="text-xs text-[#6E6678] pt-1 italic line-clamp-2">
-                        "{app.coverLetter}"
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-[#6E6678]">
-                      Applied {new Date(app.createdAt).toLocaleDateString()}
-                    </span>
-                    {app.talentProfileId && (
-                      <Link href={`/company/talents/${app.talentProfileId}`}>
-                        <Button variant="outline" size="sm" leftIcon={<Eye className="w-3.5 h-3.5" />}>
-                          Profile
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </Card>
-              );
-            })}
+          <div className="space-y-4">
+            {applications.map((app) => (
+              <CandidateApplicationCard key={app.id} application={app} />
+            ))}
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmOpen}
+        onClose={() => {
+          if (!closing) {
+            setConfirmOpen(false);
+            setActionError(null);
+          }
+        }}
+        onConfirm={handleConfirmClose}
+        title="Close Job Post"
+        message="Are you sure you want to close this job post? Once closed, this role will no longer accept new applications or allow edits."
+        confirmText="Yes, Close Role"
+        cancelText="Keep Active"
+        variant="destructive"
+        isLoading={closing}
+      />
     </main>
   );
 }

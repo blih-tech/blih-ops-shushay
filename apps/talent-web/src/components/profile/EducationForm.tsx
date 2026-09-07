@@ -12,6 +12,7 @@ import {
   Input,
   FormField,
   Alert,
+  ConfirmDialog,
 } from "@blih/ui";
 
 interface EducationFormProps {
@@ -88,11 +89,14 @@ export const EducationForm: React.FC<EducationFormProps> = ({
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this education record?")) return;
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleConfirmDelete = async () => {
+    if (!deletingId) return;
     setLoading(true);
     try {
-      await deleteEducation(id);
+      await deleteEducation(deletingId);
+      setDeletingId(null);
       onRefresh();
     } catch (err: any) {
       setError(err.message || "Failed to delete education record.");
@@ -176,13 +180,25 @@ export const EducationForm: React.FC<EducationFormProps> = ({
                 </div>
                 <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
                   <Button variant="outline" size="sm" onClick={() => handleEditInit(edu)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                  <Button variant="outline" size="sm" onClick={() => handleDelete(edu.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
+                  <Button variant="outline" size="sm" onClick={() => setDeletingId(edu.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
                 </div>
               </div>
             ))
           )}
         </div>
       </CardContent>
+
+      <ConfirmDialog
+        isOpen={Boolean(deletingId)}
+        onClose={() => setDeletingId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Education Record"
+        message="Are you sure you want to delete this education record? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        isLoading={loading}
+      />
     </Card>
   );
 };

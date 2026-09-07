@@ -27,6 +27,7 @@ import {
   FormField,
   Alert,
   Badge,
+  ConfirmDialog,
 } from "@blih/ui";
 
 interface ExperienceFormProps {
@@ -111,11 +112,14 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this experience record?")) return;
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleConfirmDelete = async () => {
+    if (!deletingId) return;
     setLoading(true);
     try {
-      await deleteExperience(id);
+      await deleteExperience(deletingId);
+      setDeletingId(null);
       onRefresh();
     } catch (err: any) {
       setError(err.message || "Failed to delete experience.");
@@ -229,13 +233,25 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                 </div>
                 <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
                   <Button variant="outline" size="sm" onClick={() => handleEditInit(exp)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                  <Button variant="outline" size="sm" onClick={() => handleDelete(exp.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
+                  <Button variant="outline" size="sm" onClick={() => setDeletingId(exp.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
                 </div>
               </div>
             ))
           )}
         </div>
       </CardContent>
+
+      <ConfirmDialog
+        isOpen={Boolean(deletingId)}
+        onClose={() => setDeletingId(null)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Experience"
+        message="Are you sure you want to delete this experience record? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="destructive"
+        isLoading={loading}
+      />
     </Card>
   );
 };

@@ -13,22 +13,12 @@ import {
 } from "lucide-react";
 import { Button } from "@blih/ui";
 import { Job } from "@/types/job";
+import { formatSalary } from "@/lib/jobOptions";
 
 interface CompanyJobCardProps {
   job: Job;
   closingId: string | null;
   onCloseJob: (jobId: string) => void;
-}
-
-function formatSalary(job: Job): string {
-  if (job.salaryDisplay) return job.salaryDisplay;
-  if (job.salaryMin && job.salaryMax) {
-    return `$${job.salaryMin.toLocaleString()} – $${job.salaryMax.toLocaleString()} ${job.salaryCurrency}`;
-  }
-  if (job.salaryMin) {
-    return `From $${job.salaryMin.toLocaleString()} ${job.salaryCurrency}`;
-  }
-  return "Competitive";
 }
 
 function formatEmploymentType(type: string): string {

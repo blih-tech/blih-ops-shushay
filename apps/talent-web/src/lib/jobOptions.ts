@@ -24,3 +24,19 @@ export const englishLevelOptions: SelectOption[] = [
   { value: "FLUENT", label: "Fluent" },
   { value: "NATIVE", label: "Native" },
 ];
+
+export function formatSalary(job: {
+  salaryDisplay?: string | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryCurrency?: string | null;
+}): string {
+  if (job.salaryDisplay) return job.salaryDisplay;
+  if (job.salaryMin && job.salaryMax) {
+    return `$${job.salaryMin.toLocaleString()} – $${job.salaryMax.toLocaleString()} ${job.salaryCurrency || "USD"}`;
+  }
+  if (job.salaryMin) {
+    return `From $${job.salaryMin.toLocaleString()} ${job.salaryCurrency || "USD"}`;
+  }
+  return "Competitive";
+}
