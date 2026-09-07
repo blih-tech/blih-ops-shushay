@@ -1,259 +1,200 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Filter, FileText, Eye } from "lucide-react";
+import Link from "next/link";
+import { Sparkles, Users } from "lucide-react";
 import {
   Button,
   Badge,
   Card,
-  Modal,
   UniversalSearch,
+  Skeleton,
+  Chip,
+  Alert,
+  EmptyState,
+  Select,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { mockTalents, type TalentProfileCard } from "@/data";
-import { TalentCardSkeleton } from "@/components/company/CompanyTalentsSkeleton";
+import { useTalentSearch } from "@/hooks/useTalentSearch";
+import { TalentSearchResultItem } from "@/lib/talentApi";
+import { TalentCard } from "@/components/company/TalentCard";
+
+function TalentCardSkeleton() {
+  return (
+    <Card className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4">
+      <div className="flex items-center gap-3">
+        <Skeleton variant="rectangular" width={48} height={48} className="rounded-full" />
+        <div className="space-y-2 flex-1">
+          <Skeleton variant="rectangular" width={140} height={18} className="rounded-md" />
+          <Skeleton variant="rectangular" width={100} height={14} className="rounded-md" />
+        </div>
+      </div>
+      <Skeleton variant="text" className="w-full" />
+      <div className="flex gap-2">
+        <Skeleton variant="rectangular" width={60} height={20} className="rounded-md" />
+        <Skeleton variant="rectangular" width={60} height={20} className="rounded-md" />
+      </div>
+    </Card>
+  );
+}
+
+const englishLevelFilterOptions = [
+  { value: "", label: "All English Levels" },
+  { value: "CONVERSATIONAL", label: "Conversational+" },
+  { value: "PROFESSIONAL", label: "Professional+" },
+  { value: "FLUENT", label: "Fluent+" },
+  { value: "NATIVE", label: "Native" },
+];
 
 function CompanyTalentsSearchContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("All");
-  const [selectedTalent, setSelectedTalent] =
-    useState<TalentProfileCard | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
-  }, []);
+  const [englishLevelFilter, setEnglishLevelFilter] = useState("");
+  const {
+    talents,
+    loading,
+    error,
+    subscriptionRequired,
+    setFilters,
+  } = useTalentSearch();
 
   const skillFilters = [
     "All",
-    "React 19",
+    "React",
     "Next.js",
     "TypeScript",
     "Node.js",
+    "Python",
     "PostgreSQL",
   ];
 
-  const filteredTalents = mockTalents.filter((talent) => {
-    if (
-      activeSkillFilter !== "All" &&
-      !talent.skills.includes(activeSkillFilter)
-    )
-      return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      return (
-        talent.name.toLowerCase().includes(q) ||
-        talent.title.toLowerCase().includes(q) ||
-        talent.location.toLowerCase().includes(q) ||
-        talent.skills.some((s) => s.toLowerCase().includes(q))
-      );
+  const handleSkillClick = (skill: string) => {
+    setActiveSkillFilter(skill);
+    if (skill === "All") {
+      setFilters((prev) => ({ ...prev, skills: undefined }));
+    } else {
+      setFilters((prev) => ({ ...prev, skills: skill }));
     }
-    return true;
-  });
+  };
+
+  const handleEnglishFilter = (level: string) => {
+    setEnglishLevelFilter(level);
+    setFilters((prev) => ({ ...prev, englishLevel: (level as any) || undefined }));
+  };
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    setFilters((prev) => ({ ...prev, search: q || undefined }));
+  };
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 font-sans">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
-              Talent Search & Discovery
+              Find people whose abilities are already visible.
             </h1>
             <Badge variant="verified">VERIFIED PROFILES</Badge>
           </div>
           <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-            Discover, filter, and review verified candidates backed by
-            evidence and course completions.
+            Search, filter and compare professionals by verified skills, evidence strength, availability and fit — before opening a full profile.
           </p>
         </div>
       </div>
 
-      {/* Filter & Search Bar */}
-      <div className="space-y-4">
-        <div className="w-full">
-          <UniversalSearch
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by candidate name, skill, or role..."
-          />
-        </div>
-
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <span className="text-xs font-mono text-[#6E6678] uppercase mr-1 flex items-center gap-1">
-            <Filter className="h-3.5 w-3.5" /> Filter:
-          </span>
-          {skillFilters.map((skill) => (
-            <button
-              key={skill}
-              type="button"
-              onClick={() => setActiveSkillFilter(skill)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-medium transition-all cursor-pointer ${activeSkillFilter === skill
-                  ? "bg-[#1E5BFF] text-white shadow-xs"
-                  : "bg-[#EEF3FF] text-[#17131F] hover:bg-[#DDE7FF] border border-[#D9CEDF]/70"
-                }`}
-            >
-              {skill}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Talent Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-          {[0, 1, 2, 3, 4, 5].map((i) => (
-            <TalentCardSkeleton key={i} />
-          ))}
-        </div>
+      {/* Subscription Paywall Prompt */}
+      {subscriptionRequired ? (
+        <Card className="border border-[#1E5BFF]/30 bg-gradient-to-br from-white to-[#EEF3FF] rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-5 shadow-md">
+          <div className="w-14 h-14 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center mx-auto shadow-sm">
+            <Sparkles className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F]">
+              Active Company Subscription Required
+            </h2>
+            <p className="text-sm sm:text-base text-[#6E6678] max-w-xl mx-auto font-sans leading-relaxed">
+              Searching, discovering, and evaluating verified talent profiles requires an active company membership (2,000 ETB/mo or 10,000 ETB/yr).
+            </p>
+          </div>
+          <div className="pt-2">
+            <Link href="/company/subscription">
+              <Button variant="primary" size="lg">
+                View Subscription Plans & Activate
+              </Button>
+            </Link>
+          </div>
+        </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
-          {filteredTalents.map((talent) => (
-            <Card
-              key={talent.id}
-              className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 hover:shadow-md transition-all duration-300"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs">
-                      {talent.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h3 className="font-display text-lg font-bold text-[#17131F]">
-                        {talent.name}
-                      </h3>
-                      <p className="text-xs font-mono text-[#1E5BFF] font-semibold">
-                        {talent.title}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="inline-block px-2.5 py-1 rounded-lg bg-[#E6F5F0] text-[#2E8F79] font-mono text-xs font-bold border border-[#2E8F79]/20">
-                      {talent.verifiedScore}% MATCH
-                    </span>
-                  </div>
-                </div>
-
-                <p className="text-xs text-[#6E6678] font-sans line-clamp-2 leading-relaxed">
-                  {talent.bio}
-                </p>
-
-                <div className="flex flex-wrap gap-1.5 pt-1">
-                  {talent.skills.map((skill, si) => (
-                    <span
-                      key={si}
-                      className="px-2.5 py-0.5 rounded-lg bg-[#EEF3FF] border border-[#1E5BFF]/15 text-[11px] font-mono text-[#1E5BFF] font-medium"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[#D9CEDF]/60 text-xs font-mono text-[#6E6678]">
-                  <div className="flex items-center gap-1.5 truncate">
-                    <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                    <span className="truncate">{talent.location}</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-[#17131F] font-bold">
-                      {talent.englishLevel}
-                    </span>{" "}
-                    English
-                  </div>
-                </div>
+        <>
+          {/* Filter & Search Bar */}
+          <div className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch">
+              <div className="flex-1">
+                <UniversalSearch
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onSearch={(q) => handleSearch(q)}
+                  placeholder="Search by candidate name, skill, or role..."
+                  actionText="Search"
+                />
               </div>
+              <div className="w-full sm:w-56 shrink-0">
+                <Select
+                  options={englishLevelFilterOptions}
+                  value={englishLevelFilter}
+                  onChange={(e) => handleEnglishFilter(e.target.value)}
+                  placeholder="Filter English Level"
+                />
+              </div>
+            </div>
 
-              <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
-                <span className="text-xs font-mono text-[#6E6678]">
-                  {talent.experienceYears} exp
-                </span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  leftIcon={<Eye className="h-3.5 w-3.5" />}
-                  onClick={() => setSelectedTalent(talent)}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-xs font-mono text-[#6E6678] uppercase mr-1">
+                Filter Skill:
+              </span>
+              {skillFilters.map((skill) => (
+                <Chip
+                  key={skill}
+                  active={activeSkillFilter === skill}
+                  onClick={() => handleSkillClick(skill)}
+                  size="md"
                 >
-                  View Profile
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {/* Modal: View Full Talent Profile */}
-      <Modal
-        isOpen={!!selectedTalent}
-        onClose={() => setSelectedTalent(null)}
-        size="lg"
-      >
-        {selectedTalent && (
-          <div className="space-y-6">
-            <div className="flex items-start justify-between pb-4 border-b border-[#D9CEDF]">
-              <div className="flex items-center gap-3.5">
-                <div className="w-14 h-14 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-xl shadow-sm">
-                  {selectedTalent.name.charAt(0)}
-                </div>
-                <div>
-                  <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                    {selectedTalent.name}
-                  </h2>
-                  <p className="text-sm font-mono text-[#1E5BFF] font-medium">
-                    {selectedTalent.title}
-                  </p>
-                  <p className="text-xs text-[#6E6678]">
-                    {selectedTalent.location}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-xs font-mono text-[#6E6678] uppercase">
-                Candidate Biography
-              </p>
-              <p className="text-sm text-[#17131F] leading-relaxed bg-[#EEF3FF]/40 p-4 rounded-2xl border border-[#D9CEDF]/70">
-                {selectedTalent.bio}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs font-mono text-[#6E6678] uppercase">
-                Verified Competencies
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {selectedTalent.skills.map((skill, si) => (
-                  <span
-                    key={si}
-                    className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/20 text-xs font-mono text-[#1E5BFF] font-semibold"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-[#D9CEDF]">
-              <Button
-                variant="outline"
-                size="sm"
-                leftIcon={<FileText className="h-4 w-4" />}
-              >
-                Download Resume
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setSelectedTalent(null)}
-              >
-                Close
-              </Button>
+                  {skill}
+                </Chip>
+              ))}
             </div>
           </div>
-        )}
-      </Modal>
+
+          {error && (
+            <Alert variant="error" title="Candidate Search Error">
+              {error}
+            </Alert>
+          )}
+
+          {/* Talent Grid */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+              {[0, 1, 2, 3, 4, 5].map((i) => (
+                <TalentCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : talents.length === 0 ? (
+            <EmptyState
+              icon={<Users className="w-8 h-8 text-[#1E5BFF]" />}
+              title="No Candidates Found"
+              description="Try adjusting your search criteria or clearing active filters."
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
+              {talents.map((talent: TalentSearchResultItem) => (
+                <TalentCard key={talent.id} talent={talent} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </main>
   );
 }

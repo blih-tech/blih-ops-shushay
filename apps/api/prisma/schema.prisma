@@ -66,6 +66,7 @@ model TalentProfile {
   updatedAt    DateTime     @updatedAt
   experience   Experience[]
   education    Education[]
+  jobApplications JobApplication[]
 
   @@map("talent_profiles")
 }
@@ -117,8 +118,88 @@ model CompanyProfile {
   updatedAt         DateTime @updatedAt
 
   companySubscription CompanySubscription?
+  jobs               Job[]
 
   @@map("company_profiles")
+}
+
+// ─── Job Domain ───────────────────────────────────────────────────────────────
+
+enum JobStatus {
+  ACTIVE
+  CLOSED
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  INTERNSHIP
+}
+
+enum ExperienceLevel {
+  ENTRY
+  MID
+  SENIOR
+  LEAD
+  EXECUTIVE
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  IN_REVIEW
+  INTERVIEW_SCHEDULED
+  OFFER_EXTENDED
+  REJECTED
+  WITHDRAWN
+}
+
+model Job {
+  id                   String         @id @default(cuid())
+  companyProfileId     String
+  companyProfile       CompanyProfile @relation(fields: [companyProfileId], references: [id], onDelete: Cascade)
+  title                String
+  description          String
+  requiredSkills       String[]
+  englishLevel         EnglishLevel?
+  salaryMin            Float?
+  salaryMax            Float?
+  salaryCurrency       String         @default("USD")
+  salaryDisplay        String?        // Free-text override e.g. "Competitive"
+  employmentType       EmploymentType
+  workingHours         String?
+  timezone             String?
+  countryRestrictions  String[]
+  experienceLevel      ExperienceLevel
+  applicationDeadline  DateTime?
+  status               JobStatus      @default(ACTIVE)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  applications JobApplication[]
+
+  @@index([companyProfileId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("jobs")
+}
+
+model JobApplication {
+  id               String            @id @default(cuid())
+  jobId            String
+  job              Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  talentProfileId  String
+  talentProfile    TalentProfile     @relation(fields: [talentProfileId], references: [id], onDelete: Cascade)
+  status           ApplicationStatus @default(SUBMITTED)
+  coverLetter      String?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  @@unique([jobId, talentProfileId])
+  @@index([jobId])
+  @@index([talentProfileId])
+  @@map("job_applications")
 }
 
 // ─── Course Domain ──────────────────────────────────────────────────────────

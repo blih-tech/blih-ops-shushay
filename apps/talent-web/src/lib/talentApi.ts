@@ -97,3 +97,52 @@ export async function deleteEducation(
     method: "DELETE",
   });
 }
+
+export interface TalentSearchResultItem {
+  id: string;
+  userId: string;
+  fullName: string;
+  title?: string | null;
+  bio?: string | null;
+  photoUrl?: string | null;
+  country?: string | null;
+  city?: string | null;
+  englishLevel?: string | null;
+  skills: string[];
+  experienceCount: number;
+  educationCount: number;
+  certificatesCount: number;
+  isComplete: boolean;
+}
+
+export interface TalentSearchResponse {
+  talents: TalentSearchResultItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export async function searchTalents(
+  params?: Record<string, any>,
+): Promise<TalentSearchResponse> {
+  const searchParams = new URLSearchParams();
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        searchParams.append(key, String(value));
+      }
+    });
+  }
+  const qs = searchParams.toString();
+  return apiFetch<TalentSearchResponse>(`/talents/search${qs ? `?${qs}` : ""}`);
+}
+
+export async function getTalentProfileById(
+  talentId: string,
+): Promise<TalentProfile & { certificates?: any[]; completedCourses?: any[]; email?: string }> {
+  return apiFetch<TalentProfile & { certificates?: any[]; completedCourses?: any[]; email?: string }>(
+    `/talents/${talentId}`,
+  );
+}
+

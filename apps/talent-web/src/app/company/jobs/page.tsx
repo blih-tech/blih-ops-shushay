@@ -1,13 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, MapPin, DollarSign, Building2 } from "lucide-react";
-import { Button, Badge, Card } from "@blih/ui";
+import Link from "next/link";
+import { Plus, Building2 } from "lucide-react";
+import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { mockCompanyJobs, type CompanyJobItem } from "@/data";
+import { useCompanyJobs } from "@/hooks/useCompanyJobs";
+import { CompanyJobCard } from "@/components/company/CompanyJobCard";
 
 function CompanyJobsContent() {
-  const [jobs, setJobs] = useState<CompanyJobItem[]>(mockCompanyJobs);
+  const { jobs, loading, error, closeJob } = useCompanyJobs();
+  const [closingId, setClosingId] = useState<string | null>(null);
+
+  const handleCloseJob = async (jobId: string) => {
+    if (!confirm("Are you sure you want to close this job post? Closed jobs cannot accept new applications or be edited.")) {
+      return;
+    }
+    setClosingId(jobId);
+    try {
+      await closeJob(jobId);
+    } catch (err: any) {
+      alert(err?.message || "Failed to close job");
+    } finally {
+      setClosingId(null);
+    }
+  };
+
+  const activeJobsCount = jobs.filter((j) => j.status === "ACTIVE").length;
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
@@ -18,95 +37,72 @@ function CompanyJobsContent() {
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
               Job Postings & Roles
             </h1>
-            <Badge variant="primary">{jobs.length} ACTIVE</Badge>
+            <Badge variant="primary">{activeJobsCount} ACTIVE</Badge>
           </div>
           <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-            Publish positions, specify verified skill criteria, and track
-            candidate applications.
+            Publish positions, specify verified skill criteria, and review candidate applications.
           </p>
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <Button
-            variant="primary"
-            size="sm"
-            className="w-full sm:w-auto"
-            leftIcon={<Plus className="h-4 w-4" />}
-          >
-            Create New Job Post
-          </Button>
+          <Link href="/company/jobs/new" className="w-full sm:w-auto">
+            <Button
+              variant="primary"
+              size="sm"
+              className="w-full sm:w-auto"
+              leftIcon={<Plus className="h-4 w-4" />}
+            >
+              Create New Job Post
+            </Button>
+          </Link>
         </div>
       </div>
 
+      {error && (
+        <Alert variant="error" title="Error Loading Jobs">
+          {error}
+        </Alert>
+      )}
+
       {/* Jobs List */}
-      <div className="space-y-4">
-        {jobs.map((job) => (
-          <Card
-            key={job.id}
-            className="border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 bg-white hover:border-[#1E5BFF]/50 transition-all shadow-xs space-y-4"
-          >
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-              <div className="space-y-1.5 flex-1 min-w-0">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F]">
-                    {job.title}
-                  </h3>
-                  <Badge variant="verified" size="sm">
-                    {job.status}
-                  </Badge>
-                  <span className="text-xs font-mono text-[#6E6678]">
-                    {job.type}
-                  </span>
-                </div>
-                <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap pt-0.5">
-                  <span className="flex items-center gap-1">
-                    <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />{" "}
-                    {job.department}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />{" "}
-                    {job.location}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <DollarSign className="h-3.5 w-3.5 text-[#2E8F79]" />{" "}
-                    {job.salary}
-                  </span>
-                </div>
+      {loading ? (
+        <div className="space-y-4">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4">
+              <Skeleton variant="rectangular" width={220} height={24} className="rounded-md" />
+              <Skeleton variant="text" className="w-3/4" />
+              <div className="flex gap-4">
+                <Skeleton variant="rectangular" width={100} height={16} className="rounded-md" />
+                <Skeleton variant="rectangular" width={80} height={16} className="rounded-md" />
               </div>
-
-              <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start pt-2 sm:pt-0 border-t sm:border-t-0 border-[#D9CEDF]/50">
-                <div className="p-2.5 sm:p-3 bg-[#EEF3FF] border border-[#1E5BFF]/15 rounded-2xl text-center">
-                  <p className="font-display text-lg sm:text-xl font-bold text-[#1E5BFF]">
-                    {job.applicantsCount}
-                  </p>
-                  <p className="text-[10px] font-mono text-[#6E6678] uppercase">
-                    Applicants
-                  </p>
-                </div>
-                <Button variant="outline" size="sm">
-                  Manage Role
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#D9CEDF]/60">
-              <div className="flex flex-wrap gap-1.5">
-                {job.requiredSkills.map((skill, si) => (
-                  <span
-                    key={si}
-                    className="px-2.5 py-0.5 rounded-lg bg-[#EEF3FF] border border-[#1E5BFF]/15 text-[11px] font-mono text-[#1E5BFF] font-medium"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-              <span className="text-xs font-mono text-[#6E6678]">
-                Posted {job.postedDate}
-              </span>
-            </div>
-          </Card>
-        ))}
-      </div>
+            </Card>
+          ))}
+        </div>
+      ) : jobs.length === 0 ? (
+        <EmptyState
+          icon={<Building2 className="w-8 h-8 text-[#1E5BFF]" />}
+          title="No Job Listings Yet"
+          description="Create your first job listing to start receiving applications from verified candidates."
+          action={
+            <Link href="/company/jobs/new">
+              <Button variant="primary" size="sm" leftIcon={<Plus className="h-4 w-4" />}>
+                Create First Job
+              </Button>
+            </Link>
+          }
+        />
+      ) : (
+        <div className="space-y-4">
+          {jobs.map((job) => (
+            <CompanyJobCard
+              key={job.id}
+              job={job}
+              closingId={closingId}
+              onCloseJob={handleCloseJob}
+            />
+          ))}
+        </div>
+      )}
     </main>
   );
 }

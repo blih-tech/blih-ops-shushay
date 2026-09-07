@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { requireAuth, requireRole } from "../../middleware/auth";
+import { requireAuth, requireRole, requireActiveSubscription } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import { Role } from "@prisma/client";
 import {
@@ -12,6 +12,7 @@ import {
 import {
   getProfile,
   getTalentProfileById,
+  searchTalents,
   updateProfile,
   uploadPhoto,
   deletePhoto,
@@ -39,6 +40,14 @@ router.patch(
   talentOnly,
   validate(updateTalentProfileSchema),
   updateProfile,
+);
+
+// Talent search (Company & Admin with active subscription)
+router.get(
+  "/search",
+  requireRole([Role.COMPANY, Role.ADMIN]),
+  requireActiveSubscription,
+  searchTalents,
 );
 
 // Company & Admin accessible endpoints (wildcard matches last)

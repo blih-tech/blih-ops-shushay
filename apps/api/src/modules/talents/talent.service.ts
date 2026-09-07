@@ -15,6 +15,7 @@ export {
   updateEducation,
   deleteEducation,
 } from "./talentExperienceEducation.service";
+export { searchTalents } from "./talentSearch.service";
 
 export async function getOrCreateProfile(userId: string) {
   let profile = await prisma.talentProfile.findUnique({
@@ -156,7 +157,13 @@ export async function getTalentProfileById(
   if (requestUser.role === "COMPANY") {
     const company = await prisma.companyProfile.findUnique({
       where: { userId: requestUser.id },
-      select: { subscriptionActive: true, subscriptionExpiresAt: true },
+      select: {
+        subscriptionActive: true,
+        subscriptionExpiresAt: true,
+        companySubscription: {
+          select: { status: true, expiresAt: true },
+        },
+      },
     });
 
     if (!company) {
@@ -164,10 +171,9 @@ export async function getTalentProfileById(
     }
 
     const now = new Date();
+    const sub = company.companySubscription;
     const isSubscribed =
-      company.subscriptionActive &&
-      company.subscriptionExpiresAt &&
-      company.subscriptionExpiresAt > now;
+      (sub ? sub.expiresAt > now && sub.status === "ACTIVE" : Boolean(company.subscriptionActive && company.subscriptionExpiresAt && company.subscriptionExpiresAt > now));
 
     if (!isSubscribed) {
       throw new AppError(
@@ -226,3 +232,4 @@ export async function getTalentProfileById(
     completedCourses,
   };
 }
+

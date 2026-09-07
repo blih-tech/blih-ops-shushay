@@ -180,3 +180,73 @@ export function getCertificateDownloadUrl(certificateId: string): string {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
   return `${API_URL}/certificates/${certificateId}/download`;
 }
+
+// ─── Jobs API Client Helpers ──────────────────────────────────────────────────
+
+function buildQueryString(params?: Record<string, any>): string {
+  if (!params) return "";
+  const searchParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      searchParams.append(key, String(value));
+    }
+  });
+  const qs = searchParams.toString();
+  return qs ? `?${qs}` : "";
+}
+
+export async function listActiveJobs(params?: Record<string, any>) {
+  return apiFetch<any>(`/jobs${buildQueryString(params)}`);
+}
+
+export async function getJobById(jobId: string) {
+  return apiFetch<any>(`/jobs/${jobId}`);
+}
+
+export async function createJob(data: any) {
+  return apiFetch<any>("/jobs", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function updateJob(jobId: string, data: any) {
+  return apiFetch<any>(`/jobs/${jobId}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function closeJob(jobId: string) {
+  return apiFetch<any>(`/jobs/${jobId}/close`, {
+    method: "POST",
+  });
+}
+
+export async function listCompanyJobs(params?: Record<string, any>) {
+  return apiFetch<any>(`/jobs/company/mine${buildQueryString(params)}`);
+}
+
+// ─── Job Applications API Client Helpers ─────────────────────────────────────
+
+export async function applyToJob(jobId: string, coverLetter?: string) {
+  return apiFetch<any>("/applications", {
+    method: "POST",
+    body: JSON.stringify({ jobId, coverLetter }),
+  });
+}
+
+export async function getTalentApplications() {
+  return apiFetch<any[]>("/applications/mine");
+}
+
+export async function getJobApplications(jobId: string) {
+  return apiFetch<any[]>(`/applications/job/${jobId}`);
+}
+
+// ─── Talent Search API Client Helpers ────────────────────────────────────────
+
+export async function searchTalents(params?: Record<string, any>) {
+  return apiFetch<any>(`/talents/search${buildQueryString(params)}`);
+}
+

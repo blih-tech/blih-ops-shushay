@@ -25,11 +25,11 @@ import {
 } from "@blih/ui";
 import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
 import { LogoUpload } from "@/components/profile/LogoUpload";
+import { CompanyContactFields } from "@/components/company/CompanyContactFields";
 import {
   Save,
   ArrowLeft,
   Building,
-  User,
   Sparkles,
 } from "lucide-react";
 
@@ -227,49 +227,21 @@ function CompanyProfileContent() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Share your company mission, hiring goals, and engineering culture..."
+                maxLength={2000}
+                showCharCount
               />
             </FormField>
           </CardContent>
         </Card>
 
-        <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
-          <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
-            <CardTitle className="text-xl flex items-center gap-2">
-              <User className="h-5 w-5 text-[#1E5BFF]" /> Primary Recruiter Contact
-            </CardTitle>
-            <CardDescription>
-              Direct contact info for candidate inquiries and candidate notifications.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-6 sm:p-8 space-y-6">
-            <FormField label="Contact Full Name" required>
-              <Input
-                value={contactName}
-                onChange={(e) => setContactName(e.target.value)}
-                placeholder="e.g. Sara Tekle"
-              />
-            </FormField>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField label="Contact Email" required>
-                <Input
-                  type="email"
-                  value={contactEmail}
-                  onChange={(e) => setContactEmail(e.target.value)}
-                  placeholder="recruiter@company.com"
-                />
-              </FormField>
-
-              <FormField label="Contact Phone Number">
-                <Input
-                  value={contactPhone}
-                  onChange={(e) => setContactPhone(e.target.value)}
-                  placeholder="+251 91 123 4567"
-                />
-              </FormField>
-            </div>
-          </CardContent>
-        </Card>
+        <CompanyContactFields
+          contactName={contactName}
+          setContactName={setContactName}
+          contactEmail={contactEmail}
+          setContactEmail={setContactEmail}
+          contactPhone={contactPhone}
+          setContactPhone={setContactPhone}
+        />
 
         <div className="flex justify-end gap-3 pt-4">
           <Link href="/company">

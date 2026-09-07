@@ -131,4 +131,16 @@ export type UpdateExperienceInput = z.infer<typeof updateExperienceSchema>;
 export type CreateEducationInput = z.infer<typeof createEducationSchema>;
 export type UpdateEducationInput = z.infer<typeof updateEducationSchema>;
 
+export const talentSearchQuerySchema = z.object({
+  search: z.string().trim().optional(),
+  skills: z.string().trim().optional(),
+  englishLevel: EnglishLevelEnum.optional(),
+  country: z.string().trim().optional(),
+  city: z.string().trim().optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().max(100).default(20),
+});
+
+export type TalentSearchQueryInput = z.infer<typeof talentSearchQuerySchema>;
+
 

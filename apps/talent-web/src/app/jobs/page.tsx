@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { useAuth } from "@/providers/AuthProvider";
 import {
-  Button,
   Badge,
   UniversalSearch,
   Chip,
-  SkillBar,
   Skeleton,
   Card,
+  Alert,
+  EmptyState,
 } from "@blih/ui";
-import { MapPin, DollarSign, Sparkles, ArrowUpRight } from "lucide-react";
-
-import { mockJobs, type JobPosting } from "@/data";
+import { MapPin, DollarSign, Sparkles, Building2 } from "lucide-react";
+import { useJobs } from "@/hooks/useJobs";
+import { Job } from "@/types/job";
+import { JobPreviewDetail } from "@/components/jobs/JobPreviewDetail";
 
 function JobCardSkeleton() {
   return (
@@ -22,89 +22,91 @@ function JobCardSkeleton() {
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2 flex-1">
-            <Skeleton
-              variant="rectangular"
-              width={60}
-              height={12}
-              className="rounded-md"
-            />
-            <Skeleton
-              variant="rectangular"
-              width={180}
-              height={20}
-              className="rounded-md"
-            />
+            <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
+            <Skeleton variant="rectangular" width={200} height={20} className="rounded-md" />
           </div>
-          <Skeleton
-            variant="rectangular"
-            width={75}
-            height={22}
-            className="rounded-lg"
-          />
+          <Skeleton variant="rectangular" width={75} height={22} className="rounded-lg" />
         </div>
         <Skeleton variant="text" className="w-full" />
       </div>
       <div className="pt-3 border-t border-[#D9CEDF]/50 flex justify-between items-center">
         <div className="flex gap-4">
-          <Skeleton
-            variant="rectangular"
-            width={80}
-            height={12}
-            className="rounded-md"
-          />
-          <Skeleton
-            variant="rectangular"
-            width={60}
-            height={12}
-            className="rounded-md"
-          />
+          <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
+          <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
         </div>
-        <Skeleton
-          variant="rectangular"
-          width={50}
-          height={10}
-          className="rounded-md"
-        />
+        <Skeleton variant="rectangular" width={50} height={10} className="rounded-md" />
       </div>
     </Card>
   );
 }
 
-function JobsFeedContent() {
-  const { user, logout } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedJob, setSelectedJob] = useState<JobPosting>(mockJobs[0]);
-  const [activeFilter, setActiveFilter] = useState("All Opportunities");
-  const [loading, setLoading] = useState(true);
+function formatSalary(job: Job): string {
+  if (job.salaryDisplay) return job.salaryDisplay;
+  if (job.salaryMin && job.salaryMax) {
+    return `$${job.salaryMin.toLocaleString()} - $${job.salaryMax.toLocaleString()} ${job.salaryCurrency}`;
+  }
+  if (job.salaryMin) {
+    return `From $${job.salaryMin.toLocaleString()} ${job.salaryCurrency}`;
+  }
+  return "Competitive";
+}
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
-  }, []);
+function formatLocation(job: Job): string {
+  const parts: string[] = [];
+  if (job.companyProfile?.city) parts.push(job.companyProfile.city);
+  if (job.companyProfile?.country) parts.push(job.companyProfile.country);
+  if (parts.length > 0) return parts.join(", ");
+  if (job.timezone) return job.timezone;
+  return "Remote";
+}
+
+function JobsFeedContent() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All Opportunities");
+  const { jobs, loading, error, setFilters } = useJobs();
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
 
   const filterChips = [
     "All Opportunities",
-    "Frontend",
-    "Fullstack",
-    "Design Systems",
-    "90%+ Match",
+    "Full Time",
+    "Part Time",
+    "Contract",
+    "Senior",
+    "Mid Level",
   ];
 
-  const filteredJobs = mockJobs.filter((job) => {
-    if (activeFilter === "90%+ Match" && job.matchScore < 90) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      return (
-        job.title.toLowerCase().includes(q) ||
-        job.company.toLowerCase().includes(q) ||
-        job.tags.some((t) => t.toLowerCase().includes(q))
-      );
+  const handleFilterClick = (chip: string) => {
+    setActiveFilter(chip);
+    if (chip === "All Opportunities") {
+      setFilters((prev) => ({ ...prev, employmentType: undefined, experienceLevel: undefined }));
+    } else if (chip === "Full Time") {
+      setFilters((prev) => ({ ...prev, employmentType: "FULL_TIME", experienceLevel: undefined }));
+    } else if (chip === "Part Time") {
+      setFilters((prev) => ({ ...prev, employmentType: "PART_TIME", experienceLevel: undefined }));
+    } else if (chip === "Contract") {
+      setFilters((prev) => ({ ...prev, employmentType: "CONTRACT", experienceLevel: undefined }));
+    } else if (chip === "Senior") {
+      setFilters((prev) => ({ ...prev, experienceLevel: "SENIOR", employmentType: undefined }));
+    } else if (chip === "Mid Level") {
+      setFilters((prev) => ({ ...prev, experienceLevel: "MID", employmentType: undefined }));
     }
-    return true;
-  });
+  };
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    setFilters((prev) => ({ ...prev, search: q || undefined }));
+  };
+
+  const selectedJob = useMemo(() => {
+    if (!jobs || jobs.length === 0) return null;
+    if (selectedJobId) {
+      return jobs.find((j) => j.id === selectedJobId) || jobs[0];
+    }
+    return jobs[0];
+  }, [jobs, selectedJobId]);
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 font-sans">
       {/* Header */}
       <div className="space-y-4 max-w-3xl">
         <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold">
@@ -112,11 +114,10 @@ function JobsFeedContent() {
           <span>Opportunity Discovery</span>
         </div>
         <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F]">
-          Evidence-Matched Roles
+          Opportunities that know your skills.
         </h1>
         <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-          Discover remote opportunities scored directly against your verified
-          capability profile.
+          Find freelance projects, jobs, contracts, internships and challenges matched against evidence already in your BLIH OPS profile.
         </p>
       </div>
 
@@ -125,8 +126,9 @@ function JobsFeedContent() {
         <UniversalSearch
           placeholder="Search roles, companies, or required competencies..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          actionText="Filter Roles"
+          onChange={(e) => handleSearch(e.target.value)}
+          onSearch={(q) => handleSearch(q)}
+          actionText="Search Roles"
         />
 
         <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -134,7 +136,7 @@ function JobsFeedContent() {
             <Chip
               key={chip}
               active={activeFilter === chip}
-              onClick={() => setActiveFilter(chip)}
+              onClick={() => handleFilterClick(chip)}
               size="md"
             >
               {chip}
@@ -142,6 +144,12 @@ function JobsFeedContent() {
           ))}
         </div>
       </div>
+
+      {error && (
+        <Alert variant="error" title="Error Loading Jobs">
+          {error}
+        </Alert>
+      )}
 
       {/* Two-Column Master / Detail Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -153,37 +161,50 @@ function JobsFeedContent() {
                 <JobCardSkeleton key={i} />
               ))}
             </div>
+          ) : jobs.length === 0 ? (
+            <EmptyState
+              icon={<Building2 className="w-8 h-8 text-[#1E5BFF]" />}
+              title="No Opportunities Found"
+              description="There are no open positions matching your search criteria right now. Check back soon or try clearing your filters!"
+            />
           ) : (
             <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
-              {filteredJobs.map((job) => {
-                const isSelected = selectedJob.id === job.id;
+              {jobs.map((job) => {
+                const isSelected = selectedJob?.id === job.id;
+                const companyName = job.companyProfile?.companyName || "Verified Company";
+                const location = formatLocation(job);
+                const salary = formatSalary(job);
+
                 return (
                   <div
                     key={job.id}
-                    onClick={() => setSelectedJob(job)}
-                    className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${isSelected
-                      ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
-                      : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
-                      }`}
+                    onClick={() => setSelectedJobId(job.id)}
+                    className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
+                      isSelected
+                        ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                        : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
+                    }`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <span className="font-mono text-xs text-[#1E5BFF] font-semibold">
-                          {job.company}
+                          {companyName}
                         </span>
                         <h3 className="font-display text-lg sm:text-xl font-bold text-[#17131F] mt-0.5">
                           {job.title}
                         </h3>
                       </div>
 
-                      <Badge
-                        variant={
-                          job.matchScore >= 90 ? "verified" : "primary"
-                        }
-                        size="md"
-                      >
-                        {job.matchScore}% Match
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        {job.hasApplied && (
+                          <Badge variant="verified" size="sm">
+                            Applied
+                          </Badge>
+                        )}
+                        <Badge variant="primary" size="md">
+                          {job.employmentType.replace("_", " ")}
+                        </Badge>
+                      </div>
                     </div>
 
                     <p className="font-sans text-sm text-[#6E6678] line-clamp-2">
@@ -194,16 +215,16 @@ function JobsFeedContent() {
                       <div className="flex flex-wrap items-center gap-3">
                         <span className="flex items-center gap-1 font-medium text-[#17131F]">
                           <DollarSign className="w-3.5 h-3.5 text-[#2E8F79]" />
-                          {job.salary}
+                          {salary}
                         </span>
                         <span className="flex items-center gap-1">
                           <MapPin className="w-3.5 h-3.5 text-[#1E5BFF]" />
-                          {job.location}
+                          {location}
                         </span>
                       </div>
 
                       <span className="font-mono text-[11px] text-[#6E6678]">
-                        {job.postedDate}
+                        {new Date(job.createdAt).toLocaleDateString()}
                       </span>
                     </div>
                   </div>
@@ -213,64 +234,13 @@ function JobsFeedContent() {
           )}
         </div>
 
-        {/* Right Column: "Your Match" Decision Panel & Quick Preview */}
+        {/* Right Column: Detail Panel */}
         <div className="lg:col-span-5 sticky top-24 space-y-6">
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
-                Opportunity Decision Panel
-              </span>
-              <Badge variant="verified" size="md">
-                {selectedJob.matchScore}% Calibrated Fit
-              </Badge>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="font-display text-2xl font-bold text-[#17131F]">
-                {selectedJob.title}
-              </h2>
-              <p className="font-sans text-sm font-semibold text-[#1E5BFF]">
-                {selectedJob.company} · {selectedJob.location}
-              </p>
-              <p className="font-mono text-xs font-bold text-[#2E8F79]">
-                {selectedJob.salary}
-              </p>
-            </div>
-
-            <div className="space-y-2 text-sm text-[#6E6678] font-sans leading-relaxed">
-              <p>{selectedJob.description}</p>
-            </div>
-
-            {/* Match breakdown */}
-            <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl p-5 space-y-3">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#17131F] font-bold block">
-                Required Competency Match
-              </span>
-              {selectedJob.requiredSkills.map((req) => (
-                <SkillBar
-                  key={req.name}
-                  name={req.name}
-                  score={req.score}
-                  status="Verified"
-                  variant="primary"
-                />
-              ))}
-            </div>
-
-            <div className="pt-2 space-y-3">
-              <Button
-                size="lg"
-                fullWidth
-                rightIcon={<ArrowUpRight className="w-4 h-4" />}
-              >
-                Apply with Verified Skill Profile
-              </Button>
-              <p className="text-center font-mono text-[11px] text-[#6E6678]">
-                Your verified assessment proof and portfolio will be submitted
-                directly.
-              </p>
-            </div>
-          </div>
+          <JobPreviewDetail
+            job={selectedJob}
+            formatSalary={formatSalary}
+            formatLocation={formatLocation}
+          />
         </div>
       </div>
     </main>

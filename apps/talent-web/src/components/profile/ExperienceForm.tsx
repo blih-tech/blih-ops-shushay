@@ -192,7 +192,14 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
             <Checkbox label="I currently work in this role" checked={current} onChange={(e) => setCurrent(e.target.checked)} />
 
             <FormField label="Key Contributions / Description">
-              <Textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe impact, tech stack, and achievements..." />
+              <Textarea
+                rows={3}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe impact, tech stack, and achievements..."
+                maxLength={1000}
+                showCharCount
+              />
             </FormField>
 
             <div className="flex justify-end gap-2 pt-2">

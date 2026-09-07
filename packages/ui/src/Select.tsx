@@ -91,7 +91,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div
         ref={containerRef}
-        className={`group relative font-sans space-y-1.5 ${fullWidth ? "w-full" : "inline-block"}`}
+        className={`group font-sans space-y-1.5 ${isOpen ? "relative z-50" : "relative z-10"} ${fullWidth ? "w-full" : "inline-block"}`}
       >
         {label && (
           <label
@@ -140,7 +140,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
         {/* Floating Custom Dropdown Options Menu */}
         {isOpen && (
-          <div className="absolute left-0 mt-2 w-full rounded-xl border border-[#D9CEDF] bg-white shadow-[0_16px_48px_rgba(23,19,31,0.12)] z-50 overflow-hidden p-1.5 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute left-0 mt-2 w-full rounded-xl border border-[#D9CEDF] bg-white shadow-[0_20px_50px_rgba(23,19,31,0.22)] z-[999] overflow-hidden p-1.5 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
             {placeholder && (
               <button
                 type="button"

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../../middleware/errorHandler";
 import * as talentService from "./talent.service";
+import { talentSearchQuerySchema } from "./talent.schemas";
 
 export {
   uploadPhoto,
@@ -8,6 +9,20 @@ export {
   uploadCv,
   deleteCv,
 } from "./talentMedia.controller";
+
+export async function searchTalents(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const query = talentSearchQuerySchema.parse(req.query);
+    const result = await talentService.searchTalents(query);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function getProfile(
   req: Request,
