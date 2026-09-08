@@ -123,10 +123,20 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
             </div>
 
             <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap pt-1">
-              <span className="flex items-center gap-1">
-                <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                {companyName}
-              </span>
+              {job.companyProfileId ? (
+                <Link
+                  href={`/companies/${job.companyProfileId}`}
+                  className="flex items-center gap-1 text-[#1E5BFF] hover:underline font-semibold"
+                >
+                  <Building2 className="h-3.5 w-3.5" />
+                  {companyName}
+                </Link>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />
+                  {companyName}
+                </span>
+              )}
               <span className="flex items-center gap-1">
                 <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
                 {location}
@@ -138,29 +148,40 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
             </div>
           </div>
 
-          {isTalent && (
-            job.hasApplied ? (
-              <Button
-                size="lg"
-                variant="outline"
-                disabled
-                className="bg-[#E6F5F0] text-[#2E8F79] border-[#2E8F79]/30 font-semibold cursor-default"
-                leftIcon={<CheckCircle2 className="w-5 h-5 text-[#2E8F79]" />}
-              >
-                Applied
-              </Button>
-            ) : (
-              <Button
-                size="lg"
-                variant="primary"
-                disabled={isClosed}
-                onClick={() => setIsApplyModalOpen(true)}
-              >
-                {isClosed ? "Job Closed" : "Apply with Evidence Profile"}
-              </Button>
-            )
-          )}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            {job.companyProfileId && (
+              <Link href={`/companies/${job.companyProfileId}`}>
+                <Button size="md" variant="outline">
+                  View Hiring Organization
+                </Button>
+              </Link>
+            )}
+
+            {isTalent && (
+              job.hasApplied ? (
+                <Button
+                  size="lg"
+                  variant="outline"
+                  disabled
+                  className="bg-[#E6F5F0] text-[#2E8F79] border-[#2E8F79]/30 font-semibold cursor-default"
+                  leftIcon={<CheckCircle2 className="w-5 h-5 text-[#2E8F79]" />}
+                >
+                  Applied
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  variant="primary"
+                  disabled={isClosed}
+                  onClick={() => setIsApplyModalOpen(true)}
+                >
+                  {isClosed ? "Job Closed" : "Apply with Evidence Profile"}
+                </Button>
+              )
+            )}
+          </div>
         </div>
+
 
         <div className="flex flex-wrap gap-2 pt-2 border-t border-[#D9CEDF]/60">
           <span className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium">

@@ -1,4 +1,2 @@
-export { Sidebar } from "./Sidebar";
-export { Topbar } from "./Topbar";
-export { MobileSidebar } from "./MobileSidebar";
-export { SectionNav } from "./SectionNav";
+export { AppShell } from "./AppShell";
+export { NotificationMenu } from "./NotificationMenu";

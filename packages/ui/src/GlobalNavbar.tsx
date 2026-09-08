@@ -197,6 +197,11 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-2">
+          {extraActions && (
+            <div className="flex items-center">
+              {extraActions}
+            </div>
+          )}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

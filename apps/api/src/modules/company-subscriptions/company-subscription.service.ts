@@ -54,8 +54,7 @@ export async function initializeCompanySubscription(
   const firstName = nameParts[0] || "Company";
   const lastName = nameParts.slice(1).join(" ") || "Admin";
 
-  const defaultReturnUrl = "http://localhost:3002/company/subscription/return";
-  const returnUrl = `${defaultReturnUrl}?tx_ref=${txRef}`;
+  const returnUrl = `${env.talentWebUrl}/company/subscription/return?tx_ref=${txRef}`;
   const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
   const chapaRes = await chapaService.initializePayment({

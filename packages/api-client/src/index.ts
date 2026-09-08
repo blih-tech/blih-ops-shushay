@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 export class ApiError extends Error {
   constructor(
@@ -268,5 +268,12 @@ export async function markNotificationAsRead(id: string) {
 export async function searchTalents(params?: Record<string, any>) {
   return apiFetch<any>(`/talents/search${buildQueryString(params)}`);
 }
+
+// ─── Company API Client Helpers ─────────────────────────────────────────────
+
+export async function getCompanyById(companyId: string) {
+  return apiFetch<any>(`/companies/${companyId}`);
+}
+
 
 

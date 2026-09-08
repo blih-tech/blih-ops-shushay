@@ -74,3 +74,46 @@ export async function updateFile(
     },
   });
 }
+
+export async function getCompanyById(companyId: string) {
+  const company = await prisma.companyProfile.findUnique({
+    where: { id: companyId },
+    select: {
+      id: true,
+      companyName: true,
+      description: true,
+      website: true,
+      country: true,
+      city: true,
+      contactName: true,
+      contactEmail: true,
+      contactPhone: true,
+      logoUrl: true,
+      createdAt: true,
+      jobs: {
+        where: { status: "ACTIVE" },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          employmentType: true,
+          experienceLevel: true,
+          salaryMin: true,
+          salaryMax: true,
+          salaryCurrency: true,
+          salaryDisplay: true,
+          countryRestrictions: true,
+          createdAt: true,
+        },
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
+
+  if (!company) {
+    throw new AppError(404, "Company profile not found");
+  }
+
+  return company;
+}
+

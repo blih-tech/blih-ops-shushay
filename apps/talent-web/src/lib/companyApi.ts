@@ -1,4 +1,4 @@
-import { apiFetch } from "./api";
+import { apiFetch, apiFetchFormData } from "./api";
 import { CompanyProfile } from "@/types/profile";
 
 export async function getCompanyProfile(): Promise<CompanyProfile> {
@@ -17,11 +17,9 @@ export async function updateCompanyProfile(
 export async function uploadCompanyLogo(file: File): Promise<CompanyProfile> {
   const formData = new FormData();
   formData.append("logo", file);
-  return apiFetch<CompanyProfile>("/companies/profile/logo", {
-    method: "POST",
-    body: formData,
-  });
+  return apiFetchFormData<CompanyProfile>("/companies/profile/logo", formData);
 }
+
 
 export async function deleteCompanyLogo(): Promise<CompanyProfile> {
   return apiFetch<CompanyProfile>("/companies/profile/logo", {

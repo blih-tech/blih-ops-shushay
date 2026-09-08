@@ -133,6 +133,14 @@ export function UserMenu({
             ) : (
               <>
                 <a
+                  href={`${talentUrl}/applications`}
+                  onClick={() => setUserMenuOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                >
+                  <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
+                  <span>My Applications</span>
+                </a>
+                <a
                   href={`${talentUrl}/profile`}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"

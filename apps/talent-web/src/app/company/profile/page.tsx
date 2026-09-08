@@ -171,19 +171,12 @@ function CompanyProfileContent() {
             </CardDescription>
           </CardHeader>
           <CardContent className="p-6 sm:p-8 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-6">
-              <LogoUpload
-                value={profile?.logoUrl}
-                onUpload={handleLogoUpload}
-                onDelete={handleLogoDelete}
-              />
-              <div className="space-y-1 flex-1">
-                <h3 className="font-bold text-[#17131F] text-base">Company Logo</h3>
-                <p className="text-xs text-[#6E6678] leading-relaxed">
-                  Upload a high-resolution logo (PNG, JPG, SVG up to 5MB).
-                </p>
-              </div>
-            </div>
+            <LogoUpload
+              value={profile?.logoUrl}
+              onUpload={handleLogoUpload}
+              onDelete={handleLogoDelete}
+            />
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#D9CEDF]/60">
               <FormField label="Company Name" required>

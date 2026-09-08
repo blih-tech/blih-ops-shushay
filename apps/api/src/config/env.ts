@@ -34,6 +34,7 @@ export const env = {
   },
   authUrl: process.env.AUTH_URL ?? "http://localhost:3003",
   apiUrl: process.env.API_URL ?? "http://localhost:4000",
+  talentWebUrl: process.env.TALENT_WEB_URL ?? "http://localhost:3002",
   skillsWebUrl: process.env.SKILLS_WEB_URL ?? "http://localhost:3001",
   chapa: {
     secretKey: process.env.CHAPA_SECRET_KEY || "mock-secret-key",
@@ -53,6 +54,10 @@ export const env = {
     callbackUrl:
       process.env.GOOGLE_CALLBACK_URL ??
       "http://localhost:4000/api/v1/auth/google/callback",
+  },
+  resend: {
+    apiKey: optional("RESEND_API_KEY"),
+    emailFrom: process.env.EMAIL_FROM ?? "Blih <onboarding@resend.dev>",
   },
 };
 

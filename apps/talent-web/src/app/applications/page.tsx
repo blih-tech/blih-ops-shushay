@@ -137,6 +137,7 @@ function ApplicationsContent() {
           {applications.map((app) => {
             const job = app.job || {};
             const company = job.companyProfile || {};
+            const companyId = company.id || job.companyProfileId;
             const companyName = company.companyName || "Verified Partner";
             const location = [company.city, company.country].filter(Boolean).join(", ") || "Remote";
             const appliedDate = new Date(app.createdAt).toLocaleDateString("en-US", {
@@ -162,10 +163,20 @@ function ApplicationsContent() {
                       {getStatusBadge(app.status)}
                     </div>
                     <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap">
-                      <span className="flex items-center gap-1">
-                        <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                        {companyName}
-                      </span>
+                      {companyId ? (
+                        <Link
+                          href={`/companies/${companyId}`}
+                          className="flex items-center gap-1 text-[#1E5BFF] hover:underline font-semibold"
+                        >
+                          <Building2 className="h-3.5 w-3.5" />
+                          {companyName}
+                        </Link>
+                      ) : (
+                        <span className="flex items-center gap-1">
+                          <Building2 className="h-3.5 w-3.5 text-[#1E5BFF]" />
+                          {companyName}
+                        </span>
+                      )}
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
                         {location}
@@ -176,6 +187,13 @@ function ApplicationsContent() {
                       </span>
                     </div>
                   </div>
+                  {companyId && (
+                    <Link href={`/companies/${companyId}`}>
+                      <Button size="sm" variant="outline">
+                        View Hiring Organization
+                      </Button>
+                    </Link>
+                  )}
                 </div>
 
                 {app.coverLetter && (

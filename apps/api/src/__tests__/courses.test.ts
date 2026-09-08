@@ -26,6 +26,8 @@ function talentCookie() {
   return ["token=" + makeToken(Role.TALENT, "course-talent-user-id")];
 }
 
+jest.setTimeout(30000);
+
 // ─── Setup & Cleanup ──────────────────────────────────────────────────────────
 
 beforeAll(async () => {

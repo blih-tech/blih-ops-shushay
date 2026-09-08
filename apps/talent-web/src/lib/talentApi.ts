@@ -1,4 +1,4 @@
-import { apiFetch } from "./api";
+import { apiFetch, apiFetchFormData } from "./api";
 import { TalentProfile, Experience, Education } from "@/types/profile";
 
 export async function getTalentProfile(): Promise<TalentProfile> {
@@ -17,10 +17,7 @@ export async function updateTalentProfile(
 export async function uploadTalentPhoto(file: File): Promise<TalentProfile> {
   const formData = new FormData();
   formData.append("photo", file);
-  return apiFetch<TalentProfile>("/talents/profile/photo", {
-    method: "POST",
-    body: formData,
-  });
+  return apiFetchFormData<TalentProfile>("/talents/profile/photo", formData);
 }
 
 export async function deleteTalentPhoto(): Promise<TalentProfile> {
@@ -32,11 +29,9 @@ export async function deleteTalentPhoto(): Promise<TalentProfile> {
 export async function uploadTalentCv(file: File): Promise<TalentProfile> {
   const formData = new FormData();
   formData.append("cv", file);
-  return apiFetch<TalentProfile>("/talents/profile/cv", {
-    method: "POST",
-    body: formData,
-  });
+  return apiFetchFormData<TalentProfile>("/talents/profile/cv", formData);
 }
+
 
 export async function deleteTalentCv(): Promise<TalentProfile> {
   return apiFetch<TalentProfile>("/talents/profile/cv", {

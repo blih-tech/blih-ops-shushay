@@ -140,3 +140,19 @@ export async function deleteLogo(
     next(err);
   }
 }
+
+export async function getCompanyById(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const company = await companyService.getCompanyById(
+      req.params.companyId as string,
+    );
+    res.json(company);
+  } catch (err) {
+    next(err);
+  }
+}
+

@@ -42,16 +42,21 @@ export function getNavLinks({
         active: currentPath ? isMatch("/", true) : currentApp === "explore",
       },
       {
+        label: "Opportunities",
+        href: `${talentUrl}/jobs`,
+        active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
+      },
+      {
+        label: "My Applications",
+        href: `${talentUrl}/applications`,
+        active: currentPath ? isMatch("/applications") : currentApp === "applications",
+      },
+      {
         label: "Courses",
         href: `${skillsUrl}/courses`,
         active: currentPath
           ? isMatch("/courses") && !isMatch("/admin")
           : currentApp === "courses",
-      },
-      {
-        label: "Opportunities",
-        href: `${talentUrl}/jobs`,
-        active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
       },
       {
         label: "Dashboard",

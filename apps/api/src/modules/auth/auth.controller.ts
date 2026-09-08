@@ -12,6 +12,7 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
 } from "./auth.schemas";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../../services/email.service";
 
 
 export async function register(
@@ -44,13 +45,9 @@ export async function register(
       },
     });
 
-    // Mock verification email by printing it to console
+    // Send verification email (real in production, console in dev without key)
     const verificationLink = `${env.authUrl}/verify-email?token=${verificationToken}`;
-    console.log("\n==================================================");
-    console.log("[EMAIL MOCK] Verification Email Sent");
-    console.log(`To: ${normalizedEmail}`);
-    console.log(`Link: ${verificationLink}`);
-    console.log("==================================================\n");
+    await sendVerificationEmail(normalizedEmail, verificationLink);
 
     res.status(201).json({
       message:
@@ -197,13 +194,9 @@ export async function forgotPassword(
         },
       });
 
-      // Mock reset email by printing it to console
+      // Send password reset email (real in production, console in dev without key)
       const resetLink = `${env.authUrl}/reset-password?token=${resetToken}`;
-      console.log("\n==================================================");
-      console.log("[EMAIL MOCK] Password Reset Email Sent");
-      console.log(`To: ${email}`);
-      console.log(`Link: ${resetLink}`);
-      console.log("==================================================\n");
+      await sendPasswordResetEmail(email, resetLink);
     }
 
     // Always return success to prevent user enumeration

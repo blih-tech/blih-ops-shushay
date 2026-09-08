@@ -318,6 +318,25 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/companies/{companyId}": {
+        get: {
+          summary: "Get public company profile and active job postings by ID",
+          tags: ["Companies"],
+          security: [{ cookieAuth: [] }, { bearerAuth: [] }],
+          parameters: [
+            {
+              name: "companyId",
+              in: "path",
+              required: true,
+              schema: { type: "string" },
+            },
+          ],
+          responses: {
+            "200": { description: "Public company profile detail record with active job listings" },
+            "404": { description: "Company profile not found" },
+          },
+        },
+      },
       "/courses/{courseId}": {
         delete: {
           summary:

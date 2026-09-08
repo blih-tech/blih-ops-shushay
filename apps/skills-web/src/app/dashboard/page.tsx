@@ -16,7 +16,7 @@ import {
 } from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
 import { VerifiedSkillsCard } from "@/components/dashboard/VerifiedSkillsCard";
-import { BookOpen, Award, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Award, Sparkles, ArrowRight, Briefcase } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import { getCourseProgress } from "@blih/api-client";
 import type { PublicCourseListItem } from "@/types/course";
@@ -34,6 +34,7 @@ function DashboardContent() {
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [progressMap, setProgressMap] = useState<Record<string, ProgressItem>>({});
+  const talentUrl = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
 
   useEffect(() => {
     if (user?.role === "ADMIN") {
@@ -111,6 +112,15 @@ function DashboardContent() {
                 Explore Catalog
               </Button>
             </Link>
+            <a href={`${talentUrl}/jobs`}>
+              <Button
+                variant="outline"
+                size="md"
+                leftIcon={<Briefcase className="w-4 h-4 text-[#1E5BFF]" />}
+              >
+                View Job Openings
+              </Button>
+            </a>
             {totalCompleted > 0 && (
               <Link href="/certificates">
                 <Button
@@ -156,6 +166,15 @@ function DashboardContent() {
                   Continue Learning Path
                 </Button>
               </Link>
+              <a href={`${talentUrl}/jobs`}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  leftIcon={<Briefcase className="w-4 h-4 text-[#1E5BFF]" />}
+                >
+                  Browse Opportunity Feed
+                </Button>
+              </a>
             </div>
           </Card>
 

@@ -77,16 +77,18 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
   });
 
   // Trigger internal and email notifications for company
-  const companyUserId = job.companyProfile.userId;
+  const companyUserId = job.companyProfile?.userId;
   const applicantName = talentProfile.fullName || "A candidate";
-  await createNotification({
-    userId: companyUserId,
-    type: "NEW_JOB_APPLICATION",
-    title: "New Job Application",
-    message: `${applicantName} has applied for your job posting '${job.title}'.`,
-  });
+  if (companyUserId) {
+    await createNotification({
+      userId: companyUserId,
+      type: "NEW_JOB_APPLICATION",
+      title: "New Job Application",
+      message: `${applicantName} has applied for your job posting '${job.title}'.`,
+    });
+  }
 
-  const companyEmail = job.companyProfile.contactEmail || job.companyProfile.user.email;
+  const companyEmail = job.companyProfile?.contactEmail || job.companyProfile?.user?.email;
   if (companyEmail) {
     sendJobApplicationEmail(companyEmail, job.title, applicantName);
   }
