@@ -63,3 +63,36 @@ export async function sendPaymentConfirmationEmail(
     return { success: false, error: err.message };
   }
 }
+
+export async function sendSubscriptionConfirmationEmail(
+  email: string,
+  companyName: string,
+  amount: number,
+  plan: string,
+) {
+  try {
+    console.log(
+      `[EMAIL SERVICE] Sending subscription confirmation email to ${email} for ${companyName}: ${plan} plan, amount: ${amount} ETB.`,
+    );
+    return { success: true };
+  } catch (err: any) {
+    console.error(`[EMAIL SERVICE FAILED] Failed to send subscription email to ${email}: ${err.message}`);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function sendJobApplicationEmail(
+  companyEmail: string,
+  jobTitle: string,
+  applicantName: string,
+) {
+  try {
+    console.log(
+      `[EMAIL SERVICE] Sending job application email notification to ${companyEmail} for position '${jobTitle}' applied by '${applicantName}'.`,
+    );
+    return { success: true };
+  } catch (err: any) {
+    console.error(`[EMAIL SERVICE FAILED] Failed to send job application email to ${companyEmail}: ${err.message}`);
+    return { success: false, error: err.message };
+  }
+}

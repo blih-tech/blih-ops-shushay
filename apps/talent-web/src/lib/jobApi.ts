@@ -75,3 +75,14 @@ export async function getTalentApplications(): Promise<any[]> {
 export async function getJobApplications(jobId: string): Promise<any[]> {
   return apiFetch<any[]>(`/applications/job/${jobId}`);
 }
+
+export async function updateApplicationStatus(
+  applicationId: string,
+  status: "IN_REVIEW",
+): Promise<any> {
+  return apiFetch<any>(`/applications/${applicationId}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}
+

@@ -77,4 +77,25 @@ export interface CompanySubscriptionStatusResponse {
   daysRemaining: number;
 }
 
+export type ApplicationStatus =
+  | "SUBMITTED"
+  | "IN_REVIEW"
+  | "INTERVIEW_SCHEDULED"
+  | "OFFER_EXTENDED"
+  | "REJECTED"
+  | "WITHDRAWN";
+
+export interface JobApplication {
+  id: string;
+  jobId: string;
+  talentProfileId: string;
+  status: ApplicationStatus;
+  coverLetter?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  job?: any;
+  talentProfile?: any;
+}
+
+
 

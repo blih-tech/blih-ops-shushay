@@ -244,9 +244,29 @@ export async function getJobApplications(jobId: string) {
   return apiFetch<any[]>(`/applications/job/${jobId}`);
 }
 
+export async function updateApplicationStatus(applicationId: string, status: "IN_REVIEW") {
+  return apiFetch<any>(`/applications/${applicationId}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}
+
+// ─── Notifications API Client Helpers ────────────────────────────────────────
+
+export async function getUserNotifications() {
+  return apiFetch<any[]>("/notifications");
+}
+
+export async function markNotificationAsRead(id: string) {
+  return apiFetch<any>(`/notifications/${id}/read`, {
+    method: "PATCH",
+  });
+}
+
 // ─── Talent Search API Client Helpers ────────────────────────────────────────
 
 export async function searchTalents(params?: Record<string, any>) {
   return apiFetch<any>(`/talents/search${buildQueryString(params)}`);
 }
+
 

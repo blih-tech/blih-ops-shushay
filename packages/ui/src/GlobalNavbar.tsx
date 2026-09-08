@@ -34,6 +34,7 @@ export interface GlobalNavbarProps {
   authUrl?: string;
   skillsUrl?: string;
   talentUrl?: string;
+  extraActions?: React.ReactNode;
 }
 
 export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
@@ -45,6 +46,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   authUrl = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003",
   skillsUrl = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001",
   talentUrl = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002",
+  extraActions,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -164,16 +166,19 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               />
             </div>
           ) : user ? (
-            <UserMenu
-              user={user}
-              role={role}
-              userMenuOpen={userMenuOpen}
-              setUserMenuOpen={setUserMenuOpen}
-              userMenuRef={userMenuRef}
-              skillsUrl={skillsUrl}
-              talentUrl={talentUrl}
-              onSignOut={onSignOut}
-            />
+            <div className="flex items-center gap-2">
+              {extraActions}
+              <UserMenu
+                user={user}
+                role={role}
+                userMenuOpen={userMenuOpen}
+                setUserMenuOpen={setUserMenuOpen}
+                userMenuRef={userMenuRef}
+                skillsUrl={skillsUrl}
+                talentUrl={talentUrl}
+                onSignOut={onSignOut}
+              />
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <a href={`${authUrl}/login`}>

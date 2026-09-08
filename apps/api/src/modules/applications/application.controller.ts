@@ -44,3 +44,24 @@ export async function getJobApplications(
     next(err);
   }
 }
+
+export async function updateApplicationStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    if (!req.user) return next(new AppError(401, "Not authenticated"));
+    const applicationId = req.params.id as string;
+    const { status } = req.body;
+    const updated = await applicationService.updateApplicationStatus(
+      applicationId,
+      req.user.id,
+      status,
+    );
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+}
+

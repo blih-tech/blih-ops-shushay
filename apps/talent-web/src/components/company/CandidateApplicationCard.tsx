@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -9,8 +9,12 @@ import {
   MapPin,
   Clock,
   Globe,
+  Mail,
+  Phone,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@blih/ui";
+import { updateApplicationStatus } from "@/lib/jobApi";
 
 interface CandidateApplicationCardProps {
   application: {
@@ -25,39 +29,36 @@ interface CandidateApplicationCardProps {
       fullName?: string | null;
       title?: string | null;
       avatarUrl?: string | null;
+      photoUrl?: string | null;
       experienceYears?: number | null;
       skills?: string[];
       englishLevel?: string | null;
       city?: string | null;
       country?: string | null;
+      phone?: string | null;
+      cvUrl?: string | null;
       user?: {
         email?: string;
       };
     } | null;
   };
+  onStatusUpdated?: (updatedApp: any) => void;
 }
 
 function renderStatusBadge(status: string) {
   switch (status) {
-    case "SHORTLISTED":
-      return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#E6F5F0] text-[#2E8F79] border border-[#2E8F79]/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2E8F79]" />
-          Shortlisted
-        </span>
-      );
-    case "REVIEWED":
+    case "IN_REVIEW":
       return (
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#FFF4EE] text-[#FF8A5B] border border-[#FF8A5B]/30">
           <span className="w-1.5 h-1.5 rounded-full bg-[#FF8A5B]" />
-          In Review
+          Reviewing
         </span>
       );
-    case "HIRED":
+    case "INTERVIEW_SCHEDULED":
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1E5BFF]" />
-          Hired
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#E6F5F0] text-[#2E8F79] border border-[#2E8F79]/30">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2E8F79]" />
+          Interview Scheduled
         </span>
       );
     case "REJECTED":
@@ -72,17 +73,42 @@ function renderStatusBadge(status: string) {
       return (
         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/20">
           <span className="w-1.5 h-1.5 rounded-full bg-[#1E5BFF]" />
-          Application Received
+          Applied
         </span>
       );
   }
 }
 
-export function CandidateApplicationCard({ application: app }: CandidateApplicationCardProps) {
-  const talent = app.talentProfile;
+export function CandidateApplicationCard({
+  application: initialApp,
+  onStatusUpdated,
+}: CandidateApplicationCardProps) {
+  const [appStatus, setAppStatus] = useState(initialApp.status);
+  const [updating, setUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+
+  const talent = initialApp.talentProfile;
   const name = talent?.fullName || "Candidate";
   const initial = name.charAt(0).toUpperCase() || "C";
   const location = [talent?.city, talent?.country].filter(Boolean).join(", ");
+  const email = talent?.user?.email;
+  const phone = talent?.phone;
+  const photo = talent?.photoUrl || talent?.avatarUrl;
+
+  const handleMoveToReviewing = async () => {
+    setUpdating(true);
+    setUpdateError(null);
+    try {
+      const updated = await updateApplicationStatus(initialApp.id, "IN_REVIEW");
+      setAppStatus("IN_REVIEW");
+      onStatusUpdated?.(updated);
+    } catch (err: any) {
+      console.error("Error updating status:", err);
+      setUpdateError(err?.message || "Failed to update status.");
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   return (
     <div className="rounded-2xl border border-[#D9CEDF] bg-white p-6 space-y-4 hover:border-[#1E5BFF]/40 transition-colors shadow-xs">
@@ -90,9 +116,9 @@ export function CandidateApplicationCard({ application: app }: CandidateApplicat
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex items-start gap-3.5 flex-1 min-w-0">
           {/* Circular Avatar */}
-          {talent?.avatarUrl ? (
+          {photo ? (
             <img
-              src={talent.avatarUrl}
+              src={photo}
               alt={name}
               className="w-12 h-12 rounded-full object-cover ring-2 ring-[#EEF3FF] shrink-0"
             />
@@ -105,24 +131,31 @@ export function CandidateApplicationCard({ application: app }: CandidateApplicat
           <div className="space-y-1 flex-1 min-w-0">
             <div className="flex items-center gap-2.5 flex-wrap">
               <Link
-                href={`/company/talents/${app.talentProfileId}`}
+                href={`/company/talents/${initialApp.talentProfileId}`}
                 className="font-display text-lg font-bold text-[#17131F] hover:text-[#1E5BFF] transition-colors leading-tight line-clamp-1"
               >
                 {name}
               </Link>
-              {renderStatusBadge(app.status)}
+              {renderStatusBadge(appStatus)}
             </div>
 
             <p className="text-sm font-medium text-[#4A4154]">
-              {talent?.title || "Professional"}
+              {talent?.title || "Technical Specialist"}
             </p>
 
-            {/* Quick Metadata Row */}
-            <div className="flex items-center gap-3 text-xs font-mono text-[#6E6678] flex-wrap pt-0.5">
-              {talent?.experienceYears !== undefined && talent?.experienceYears !== null && (
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#6E6678]/70" />
-                  {talent.experienceYears}y experience
+            {/* Quick Metadata & Contact Row */}
+            <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap pt-0.5">
+              {email && (
+                <span className="flex items-center gap-1 text-[#17131F]">
+                  <Mail className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                  {email}
+                </span>
+              )}
+
+              {phone && (
+                <span className="flex items-center gap-1 text-[#17131F]">
+                  <Phone className="w-3.5 h-3.5 text-[#2E8F79]" />
+                  {phone}
                 </span>
               )}
 
@@ -143,10 +176,41 @@ export function CandidateApplicationCard({ application: app }: CandidateApplicat
           </div>
         </div>
 
-        {/* View Profile Action */}
-        <div className="shrink-0 self-start sm:self-center">
-          {app.talentProfileId && (
-            <Link href={`/company/talents/${app.talentProfileId}`}>
+        {/* Action Buttons: Status Change & View Profile */}
+        <div className="flex items-center gap-2 shrink-0 self-start sm:self-center">
+          {appStatus === "SUBMITTED" && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleMoveToReviewing}
+              disabled={updating}
+              className="h-9 px-3 text-xs font-semibold border-[#FF8A5B]/40 text-[#FF8A5B] hover:bg-[#FFF4EE]"
+              leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
+            >
+              {updating ? "Updating..." : "Mark as Reviewing"}
+            </Button>
+          )}
+
+          {talent?.cvUrl && (
+            <a
+              href={talent.cvUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="shrink-0"
+            >
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 px-3 text-xs font-semibold"
+                leftIcon={<FileText className="w-3.5 h-3.5" />}
+              >
+                CV
+              </Button>
+            </a>
+          )}
+
+          {initialApp.talentProfileId && (
+            <Link href={`/company/talents/${initialApp.talentProfileId}`}>
               <Button
                 variant="primary"
                 size="sm"
@@ -160,15 +224,21 @@ export function CandidateApplicationCard({ application: app }: CandidateApplicat
         </div>
       </div>
 
+      {updateError && (
+        <p className="text-xs font-mono text-red-600 bg-red-50 p-2 rounded-lg border border-red-200">
+          {updateError}
+        </p>
+      )}
+
       {/* Candidate Cover Statement */}
-      {app.coverLetter && (
+      {initialApp.coverLetter && (
         <div className="rounded-xl bg-[#F8FAFD] border border-[#E6EAF3] p-4 space-y-1.5">
           <div className="flex items-center gap-1.5 text-[11px] font-mono font-semibold text-[#6E6678] uppercase tracking-wider">
             <FileText className="w-3.5 h-3.5 text-[#1E5BFF]" />
             <span>Candidate Statement</span>
           </div>
           <p className="text-sm text-[#352D3D] leading-relaxed font-sans whitespace-pre-line">
-            "{app.coverLetter}"
+            "{initialApp.coverLetter}"
           </p>
         </div>
       )}
@@ -206,7 +276,7 @@ export function CandidateApplicationCard({ application: app }: CandidateApplicat
           <Calendar className="w-3.5 h-3.5 text-[#6E6678]/70" />
           <span>
             Applied{" "}
-            {new Date(app.createdAt).toLocaleDateString("en-US", {
+            {new Date(initialApp.createdAt).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
               year: "numeric",

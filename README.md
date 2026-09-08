@@ -75,6 +75,22 @@ The platform provides a modern editorial interface connecting ambitious learners
 - **Access Control Guards**: Strict server-side route guards enforcing active subscription requirements before companies can search talent profiles or view candidate contact info.
 - **Dynamic Subscription Status**: Automated status resolution (`ACTIVE`, `INACTIVE`, `EXPIRED`, `CANCELLED`) with instant payment return verification.
 
+### 🎯 7. Jobs & Opportunity Search (Phase 8)
+- **Job Posting Lifecycle**: Full job creation, editing, and closing pipeline for active company subscribers.
+- **Active Jobs Directory**: Searchable opportunities feed with salary ranges, skills tags, employment types, experience levels, and deadline indicators.
+- **Talent Search Directory**: Gated recruiter directory allowing subscribed companies to filter candidates by skills, country, and experience.
+
+### 📩 8. Applications & Notifications (Phase 9)
+- **Application Submission**: One-click application flow with cover statement and auto-attached evidence profile & CV.
+- **Duplicate & Closed Job Controls**: Database and API enforcement preventing duplicate applications and blocking applications to closed positions.
+- **Application Management**: Candidate pipeline view allowing companies to view applicant profiles/CVs and transition status (`Applied` → `Reviewing`).
+- **In-App & Email Notifications**: Real-time notification menu for payment unlocks and application alerts, coupled with resilient email dispatch services.
+
+### 🛡️ 9. System Testing & Hardening (Phase 10)
+- **Health Check Monitoring**: Live database health check endpoint (`/api/v1/health`).
+- **Authorization Matrix Hardening**: Automated test suites verifying `TALENT`, `COMPANY`, and `ADMIN` role boundaries and cross-tenant data isolation.
+- **Payment & System Resilience**: Idempotent webhook handling, gateway verification failure protection, and zero-error workspace TypeScript build (`tsc --noEmit`).
+
 ---
 
 ## 🛠 Technology Stack

@@ -2,6 +2,7 @@ import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { CreateApplicationInput } from "./application.schemas";
 import { JobStatus, ApplicationStatus } from "@prisma/client";
+import { createNotification, sendJobApplicationEmail } from "../notifications/notification.service";
 
 export async function applyToJob(userId: string, data: CreateApplicationInput) {
   const talentProfile = await prisma.talentProfile.findUnique({
@@ -14,6 +15,17 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
 
   const job = await prisma.job.findUnique({
     where: { id: data.jobId },
+    include: {
+      companyProfile: {
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!job) {
@@ -41,7 +53,7 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
     throw new AppError(409, "You have already submitted an application for this job.");
   }
 
-  return prisma.jobApplication.create({
+  const application = await prisma.jobApplication.create({
     data: {
       jobId: data.jobId,
       talentProfileId: talentProfile.id,
@@ -63,6 +75,23 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
       },
     },
   });
+
+  // Trigger internal and email notifications for company
+  const companyUserId = job.companyProfile.userId;
+  const applicantName = talentProfile.fullName || "A candidate";
+  await createNotification({
+    userId: companyUserId,
+    type: "NEW_JOB_APPLICATION",
+    title: "New Job Application",
+    message: `${applicantName} has applied for your job posting '${job.title}'.`,
+  });
+
+  const companyEmail = job.companyProfile.contactEmail || job.companyProfile.user.email;
+  if (companyEmail) {
+    sendJobApplicationEmail(companyEmail, job.title, applicantName);
+  }
+
+  return application;
 }
 
 export async function getTalentApplications(userId: string) {
@@ -126,8 +155,65 @@ export async function getJobApplicationsForCompany(jobId: string, companyUserId:
               email: true,
             },
           },
+          experience: true,
+          education: true,
         },
       },
     },
   });
 }
+
+export async function updateApplicationStatus(
+  applicationId: string,
+  companyUserId: string,
+  targetStatus: ApplicationStatus,
+) {
+  const companyProfile = await prisma.companyProfile.findUnique({
+    where: { userId: companyUserId },
+  });
+
+  if (!companyProfile) {
+    throw new AppError(404, "Company profile not found.");
+  }
+
+  const application = await prisma.jobApplication.findUnique({
+    where: { id: applicationId },
+    include: {
+      job: {
+        select: {
+          companyProfileId: true,
+        },
+      },
+    },
+  });
+
+  if (!application) {
+    throw new AppError(404, "Application not found.");
+  }
+
+  if (application.job.companyProfileId !== companyProfile.id) {
+    throw new AppError(403, "You do not have access to update applications for this job.");
+  }
+
+  // Enforcement: Allow only Applied (SUBMITTED) -> Reviewing (IN_REVIEW)
+  if (application.status !== ApplicationStatus.SUBMITTED || targetStatus !== ApplicationStatus.IN_REVIEW) {
+    throw new AppError(400, "Only status change from Applied (SUBMITTED) to Reviewing (IN_REVIEW) is allowed.");
+  }
+
+  return prisma.jobApplication.update({
+    where: { id: applicationId },
+    data: { status: ApplicationStatus.IN_REVIEW },
+    include: {
+      talentProfile: {
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+

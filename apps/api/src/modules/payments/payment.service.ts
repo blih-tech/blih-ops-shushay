@@ -4,7 +4,11 @@ import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
 import { PaymentStatus, PaymentType, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
 import { chapaService } from "./chapa.service";
-import { createNotification, sendPaymentConfirmationEmail } from "../notifications/notification.service";
+import {
+  createNotification,
+  sendPaymentConfirmationEmail,
+  sendSubscriptionConfirmationEmail,
+} from "../notifications/notification.service";
 
 export const SKILLS_ACCESS_PRICE = 1000;
 export const SKILLS_ACCESS_CURRENCY = "ETB";
@@ -273,6 +277,15 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
       title: "Company Subscription Activated!",
       message: `Your ${plan.toLowerCase()} subscription of ${transaction.amount} ETB has been confirmed. Full company access is unlocked until ${calculatedExpiresAt.toLocaleDateString()}.`,
     });
+
+    const companyName = companyProfile.companyName || transaction.user.email;
+    const companyEmail = companyProfile.contactEmail || transaction.user.email;
+    sendSubscriptionConfirmationEmail(
+      companyEmail,
+      companyName,
+      transaction.amount,
+      plan,
+    );
 
     return {
       verified: true,
