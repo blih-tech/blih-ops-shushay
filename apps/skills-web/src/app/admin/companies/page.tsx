@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { formatPhone } from "@/lib/formatPhone";
 import Link from "next/link";
 import { ArrowLeft, Building2, MapPin, Phone, Globe } from "lucide-react";
 import {
@@ -200,7 +201,7 @@ function AdminCompaniesContent() {
                   {comp.contactPhone && (
                     <p className="flex items-center gap-2">
                       <Phone className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                      <span>{comp.contactPhone}</span>
+                      <span>{formatPhone(comp.contactPhone)}</span>
                     </p>
                   )}
                 </div>

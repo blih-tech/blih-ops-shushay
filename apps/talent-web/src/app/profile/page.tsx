@@ -5,6 +5,7 @@ import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
+import { formatPhone } from "@/lib/formatPhone";
 import {
   Button,
   Badge,
@@ -107,7 +108,7 @@ function ProfileContent() {
                 {profile?.phone && (
                   <span className="flex items-center gap-1.5">
                     <Phone className="h-3.5 w-3.5 text-[#6E6678]" />
-                    {profile.phone}
+                    {formatPhone(profile.phone)}
                   </span>
                 )}
               </div>

@@ -3,6 +3,7 @@
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Building2, MapPin, Globe, Mail, Phone, Briefcase, ExternalLink, Loader2 } from "lucide-react";
+import { formatPhone } from "@/lib/formatPhone";
 import { Button, Badge, Alert, Card } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { getCompanyById } from "@blih/api-client";
@@ -184,7 +185,7 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
               {company.contactPhone && (
                 <div className="flex items-center gap-1.5">
                   <Phone className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                  <span>{company.contactPhone}</span>
+                  <span>{formatPhone(company.contactPhone)}</span>
                 </div>
               )}
             </div>

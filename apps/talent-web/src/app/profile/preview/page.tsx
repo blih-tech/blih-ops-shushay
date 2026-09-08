@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
+import { formatPhone } from "@/lib/formatPhone";
 import { Button, Badge, Alert } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
 import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
@@ -184,7 +185,7 @@ function ProfilePreviewContent() {
                         Phone:
                       </span>
                       <span className="text-[#17131F] font-semibold">
-                        {profile.phone}
+                        {formatPhone(profile.phone)}
                       </span>
                     </div>
                   )}

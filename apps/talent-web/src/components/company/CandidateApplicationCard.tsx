@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { formatPhone } from "@/lib/formatPhone";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -155,7 +156,7 @@ export function CandidateApplicationCard({
               {phone && (
                 <span className="flex items-center gap-1 text-[#17131F]">
                   <Phone className="w-3.5 h-3.5 text-[#2E8F79]" />
-                  {phone}
+                  {formatPhone(phone)}
                 </span>
               )}
 
