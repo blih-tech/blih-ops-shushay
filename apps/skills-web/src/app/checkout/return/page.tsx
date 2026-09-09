@@ -4,7 +4,14 @@ import React, { useEffect, useState, Suspense } from "react";
 
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, XCircle, Loader2, ArrowRight, BookOpen, ShieldCheck } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  ArrowRight,
+  BookOpen,
+  ShieldCheck,
+} from "lucide-react";
 import { Button, Card, Alert } from "@blih/ui";
 import { verifyPayment } from "@blih/api-client";
 
@@ -19,7 +26,9 @@ function ReturnContent() {
   useEffect(() => {
     if (!txRef) {
       setLoading(false);
-      setErrorMessage("No transaction reference provided in payment return URL.");
+      setErrorMessage(
+        "No transaction reference provided in payment return URL.",
+      );
       return;
     }
 
@@ -62,7 +71,6 @@ function ReturnContent() {
   };
 
   return (
-
     <div className="min-h-screen bg-[#FDFBFD] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">
       {/* Dynamic Background Mesh Gradients */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-[#1E5BFF]/10 via-[#FF8A5B]/10 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
@@ -77,7 +85,8 @@ function ReturnContent() {
               Verifying Your Payment
             </h2>
             <p className="text-[#6E6678] text-sm leading-relaxed max-w-sm mx-auto">
-              Establishing secure server-side verification with Chapa payment gateway...
+              Establishing secure server-side verification with Chapa payment
+              gateway...
             </p>
           </Card>
         ) : success ? (
@@ -100,7 +109,8 @@ function ReturnContent() {
                 Payment Successful!
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed max-w-md mx-auto">
-                Your payment has been verified. You now have permanent access to all current and future Blih Skills courses.
+                Your payment has been verified. You now have permanent access to
+                all current and future Blih Skills courses.
               </p>
             </div>
 
@@ -112,7 +122,9 @@ function ReturnContent() {
               </div>
               <div className="flex justify-between items-center text-xs text-[#6E6678]">
                 <span>Payment Gateway</span>
-                <span className="font-mono text-[#1E5BFF] font-semibold">Chapa Gateway</span>
+                <span className="font-mono text-[#1E5BFF] font-semibold">
+                  Chapa Gateway
+                </span>
               </div>
               {txRef && (
                 <div className="flex justify-between items-center text-xs text-[#6E6678] pt-2 border-t border-[#E8E1EE]">
@@ -174,11 +186,16 @@ function ReturnContent() {
                 Payment Processing in Progress
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
-                Your payment is currently being confirmed by Chapa or your mobile bank operator. Please complete any pending steps on your device.
+                Your payment is currently being confirmed by Chapa or your
+                mobile bank operator. Please complete any pending steps on your
+                device.
               </p>
             </div>
 
-            <Alert variant="info" className="text-left text-xs bg-[#FFFBEB] border-[#FCD34D] text-[#B45309]">
+            <Alert
+              variant="info"
+              className="text-left text-xs bg-[#FFFBEB] border-[#FCD34D] text-[#B45309]"
+            >
               {errorMessage}
             </Alert>
 
@@ -202,7 +219,9 @@ function ReturnContent() {
 
             <div className="space-y-2">
               <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
-                {isCanceled ? "Payment Canceled" : "Payment Could Not Be Completed"}
+                {isCanceled
+                  ? "Payment Canceled"
+                  : "Payment Could Not Be Completed"}
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
                 {isCanceled
@@ -231,8 +250,6 @@ function ReturnContent() {
             </div>
           </Card>
         )}
-
-
       </div>
     </div>
   );

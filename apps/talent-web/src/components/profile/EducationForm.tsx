@@ -1,7 +1,18 @@
 import React, { useState } from "react";
-import { Plus, Trash2, Edit2, GraduationCap, Loader2, Check } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  GraduationCap,
+  Loader2,
+  Check,
+} from "lucide-react";
 import { Education } from "@/types/profile";
-import { addEducation, updateEducation, deleteEducation } from "@/lib/talentApi";
+import {
+  addEducation,
+  updateEducation,
+  deleteEducation,
+} from "@/lib/talentApi";
 import {
   Button,
   Card,
@@ -110,7 +121,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div>
           <CardTitle className="text-xl flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-[#1E5BFF]" /> Education & Qualifications
+            <GraduationCap className="w-5 h-5 text-[#1E5BFF]" /> Education &
+            Qualifications
           </CardTitle>
           <CardDescription>
             Degrees, certifications, and academic background.
@@ -133,54 +145,135 @@ export const EducationForm: React.FC<EducationFormProps> = ({
         {error && <Alert variant="error">{error}</Alert>}
 
         {(isAdding || editingId) && (
-          <form onSubmit={handleSave} className="p-4 bg-[#F8F6F9] rounded-xl border border-[#D9CEDF] space-y-4">
+          <form
+            onSubmit={handleSave}
+            className="p-4 bg-[#F8F6F9] rounded-xl border border-[#D9CEDF] space-y-4"
+          >
             <h4 className="font-semibold text-sm text-[#17131F] pb-2 border-b border-[#D9CEDF]">
               {editingId ? "Edit Education Record" : "New Academic Record"}
             </h4>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField label="Institution / University" required>
-                <Input value={institution} onChange={(e) => setInstitution(e.target.value)} placeholder="e.g. Addis Ababa University" />
+                <Input
+                  value={institution}
+                  onChange={(e) => setInstitution(e.target.value)}
+                  placeholder="e.g. Addis Ababa University"
+                />
               </FormField>
               <FormField label="Degree / Qualification" required>
-                <Input value={degree} onChange={(e) => setDegree(e.target.value)} placeholder="e.g. Bachelor of Science" />
+                <Input
+                  value={degree}
+                  onChange={(e) => setDegree(e.target.value)}
+                  placeholder="e.g. Bachelor of Science"
+                />
               </FormField>
             </div>
 
             <FormField label="Field of Study">
-              <Input value={field} onChange={(e) => setField(e.target.value)} placeholder="e.g. Computer Science" />
+              <Input
+                value={field}
+                onChange={(e) => setField(e.target.value)}
+                placeholder="e.g. Computer Science"
+              />
             </FormField>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField label="Start Year" required>
-                <Input type="number" min={1960} max={2100} value={startYear} onChange={(e) => setStartYear(e.target.value ? Number(e.target.value) : "")} placeholder="YYYY" />
+                <Input
+                  type="number"
+                  min={1960}
+                  max={2100}
+                  value={startYear}
+                  onChange={(e) =>
+                    setStartYear(e.target.value ? Number(e.target.value) : "")
+                  }
+                  placeholder="YYYY"
+                />
               </FormField>
               <FormField label="End Year (or Expected)">
-                <Input type="number" min={1960} max={2100} value={endYear} onChange={(e) => setEndYear(e.target.value ? Number(e.target.value) : "")} placeholder="YYYY" />
+                <Input
+                  type="number"
+                  min={1960}
+                  max={2100}
+                  value={endYear}
+                  onChange={(e) =>
+                    setEndYear(e.target.value ? Number(e.target.value) : "")
+                  }
+                  placeholder="YYYY"
+                />
               </FormField>
             </div>
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => { setIsAdding(false); setEditingId(null); resetForm(); }}>Cancel</Button>
-              <Button type="submit" size="sm" disabled={loading} leftIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}>Save Record</Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setIsAdding(false);
+                  setEditingId(null);
+                  resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={loading}
+                leftIcon={
+                  loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Check className="w-4 h-4" />
+                  )
+                }
+              >
+                Save Record
+              </Button>
             </div>
           </form>
         )}
 
         <div className="divide-y divide-[#D9CEDF]">
           {entries.length === 0 && !isAdding && !editingId ? (
-            <p className="text-sm text-[#6E6678] py-4 text-center">No education records added yet.</p>
+            <p className="text-sm text-[#6E6678] py-4 text-center">
+              No education records added yet.
+            </p>
           ) : (
             entries.map((edu) => (
-              <div key={edu.id} className="py-4 flex justify-between items-start group">
+              <div
+                key={edu.id}
+                className="py-4 flex justify-between items-start group"
+              >
                 <div className="space-y-1">
-                  <h4 className="font-bold text-[#17131F] text-base">{edu.degree} {edu.field ? `in ${edu.field}` : ""}</h4>
-                  <p className="text-sm text-[#1E5BFF] font-medium">{edu.institution}</p>
-                  <p className="text-xs font-mono text-[#6E6678]">{edu.startYear} – {edu.endYear || "Present"}</p>
+                  <h4 className="font-bold text-[#17131F] text-base">
+                    {edu.degree} {edu.field ? `in ${edu.field}` : ""}
+                  </h4>
+                  <p className="text-sm text-[#1E5BFF] font-medium">
+                    {edu.institution}
+                  </p>
+                  <p className="text-xs font-mono text-[#6E6678]">
+                    {edu.startYear} – {edu.endYear || "Present"}
+                  </p>
                 </div>
                 <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                  <Button variant="outline" size="sm" onClick={() => handleEditInit(edu)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                  <Button variant="outline" size="sm" onClick={() => setDeletingId(edu.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEditInit(edu)}
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setDeletingId(edu.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
               </div>
             ))

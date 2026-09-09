@@ -9,7 +9,6 @@ import {
   DollarSign,
   Clock,
   Globe,
-  AlertCircle,
   CheckCircle2,
 } from "lucide-react";
 import { Button, Badge, Card, Skeleton, Alert } from "@blih/ui";
@@ -61,13 +60,33 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
   if (loading) {
     return (
       <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-6">
-        <Skeleton variant="rectangular" width={180} height={20} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={180}
+          height={20}
+          className="rounded-md"
+        />
         <Card className="p-8 space-y-4">
-          <Skeleton variant="rectangular" width={300} height={32} className="rounded-md" />
+          <Skeleton
+            variant="rectangular"
+            width={300}
+            height={32}
+            className="rounded-md"
+          />
           <Skeleton variant="text" className="w-3/4" />
           <div className="flex gap-4 pt-4">
-            <Skeleton variant="rectangular" width={120} height={20} className="rounded-md" />
-            <Skeleton variant="rectangular" width={120} height={20} className="rounded-md" />
+            <Skeleton
+              variant="rectangular"
+              width={120}
+              height={20}
+              className="rounded-md"
+            />
+            <Skeleton
+              variant="rectangular"
+              width={120}
+              height={20}
+              className="rounded-md"
+            />
           </div>
         </Card>
       </main>
@@ -84,7 +103,8 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to Opportunities Feed
         </Link>
         <Alert variant="error" title={error || "Position Not Found"}>
-          This job listing may have been closed or removed by the hiring company.
+          This job listing may have been closed or removed by the hiring
+          company.
         </Alert>
       </main>
     );
@@ -157,8 +177,8 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
               </Link>
             )}
 
-            {isTalent && (
-              job.hasApplied ? (
+            {isTalent &&
+              (job.hasApplied ? (
                 <Button
                   size="lg"
                   variant="outline"
@@ -177,11 +197,9 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
                 >
                   {isClosed ? "Job Closed" : "Apply with Evidence Profile"}
                 </Button>
-              )
-            )}
+              ))}
           </div>
         </div>
-
 
         <div className="flex flex-wrap gap-2 pt-2 border-t border-[#D9CEDF]/60">
           <span className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium">

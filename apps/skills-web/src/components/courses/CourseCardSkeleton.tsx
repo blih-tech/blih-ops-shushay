@@ -39,7 +39,11 @@ export function CourseVisualCover({ themeIndex = 0 }: { themeIndex?: number }) {
   );
 }
 
-export function CourseCardSkeleton({ themeIndex = 0 }: { themeIndex?: number }) {
+export function CourseCardSkeleton({
+  themeIndex = 0,
+}: {
+  themeIndex?: number;
+}) {
   return (
     <Card className="flex flex-col bg-white border border-[#D9CEDF] rounded-3xl p-5 space-y-4 shadow-xs">
       <CourseVisualCover themeIndex={themeIndex} />

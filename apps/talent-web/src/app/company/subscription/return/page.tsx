@@ -3,10 +3,16 @@
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, XCircle, Loader2, ArrowRight, ShieldCheck, Briefcase } from "lucide-react";
+import {
+  CheckCircle2,
+  XCircle,
+  Loader2,
+  ArrowRight,
+  ShieldCheck,
+  Briefcase,
+} from "lucide-react";
 import { Button, Card, Alert } from "@blih/ui";
 import { verifyPayment } from "@blih/api-client";
-
 
 function ReturnContent() {
   const searchParams = useSearchParams();
@@ -20,7 +26,9 @@ function ReturnContent() {
   useEffect(() => {
     if (!txRef) {
       setLoading(false);
-      setErrorMessage("No transaction reference provided in payment return URL.");
+      setErrorMessage(
+        "No transaction reference provided in payment return URL.",
+      );
       return;
     }
 
@@ -79,7 +87,8 @@ function ReturnContent() {
               Verifying Company Subscription
             </h2>
             <p className="text-[#6E6678] text-sm leading-relaxed max-w-sm mx-auto">
-              Establishing secure server-side payment verification with Chapa payment gateway...
+              Establishing secure server-side payment verification with Chapa
+              payment gateway...
             </p>
           </Card>
         ) : success ? (
@@ -101,7 +110,8 @@ function ReturnContent() {
                 Subscription Activated!
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed max-w-md mx-auto">
-                Your payment has been confirmed. Full access to talent profiles, candidate contacts, and job postings is unlocked.
+                Your payment has been confirmed. Full access to talent profiles,
+                candidate contacts, and job postings is unlocked.
               </p>
             </div>
 
@@ -114,7 +124,9 @@ function ReturnContent() {
               </div>
               <div className="flex justify-between items-center text-xs text-[#6E6678]">
                 <span>Payment Gateway</span>
-                <span className="font-mono text-[#1E5BFF] font-semibold">Chapa Gateway</span>
+                <span className="font-mono text-[#1E5BFF] font-semibold">
+                  Chapa Gateway
+                </span>
               </div>
               {subscriptionData?.expiresAt && (
                 <div className="flex justify-between items-center text-xs text-[#6E6678]">
@@ -183,11 +195,15 @@ function ReturnContent() {
                 Payment Processing in Progress
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
-                Your subscription payment is currently being confirmed by Chapa or your payment operator.
+                Your subscription payment is currently being confirmed by Chapa
+                or your payment operator.
               </p>
             </div>
 
-            <Alert variant="info" className="text-left text-xs bg-[#FFFBEB] border-[#FCD34D] text-[#B45309]">
+            <Alert
+              variant="info"
+              className="text-left text-xs bg-[#FFFBEB] border-[#FCD34D] text-[#B45309]"
+            >
               {errorMessage}
             </Alert>
 
@@ -211,7 +227,9 @@ function ReturnContent() {
 
             <div className="space-y-2">
               <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
-                {isCanceled ? "Payment Canceled" : "Payment Could Not Be Completed"}
+                {isCanceled
+                  ? "Payment Canceled"
+                  : "Payment Could Not Be Completed"}
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
                 {isCanceled

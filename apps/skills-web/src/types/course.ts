@@ -66,7 +66,6 @@ export interface PublicLesson {
   assignment: Pick<Assignment, "id" | "title"> | null;
 }
 
-
 export interface PublicCourse {
   id: string;
   title: string;

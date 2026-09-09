@@ -172,8 +172,13 @@ export async function getTalentProfileById(
 
     const now = new Date();
     const sub = company.companySubscription;
-    const isSubscribed =
-      (sub ? sub.expiresAt > now && sub.status === "ACTIVE" : Boolean(company.subscriptionActive && company.subscriptionExpiresAt && company.subscriptionExpiresAt > now));
+    const isSubscribed = sub
+      ? sub.expiresAt > now && sub.status === "ACTIVE"
+      : Boolean(
+          company.subscriptionActive &&
+          company.subscriptionExpiresAt &&
+          company.subscriptionExpiresAt > now,
+        );
 
     if (!isSubscribed) {
       throw new AppError(
@@ -232,4 +237,3 @@ export async function getTalentProfileById(
     completedCourses,
   };
 }
-

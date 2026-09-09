@@ -40,13 +40,21 @@ describe("Phase 7 Company Subscriptions System", () => {
       },
     });
     await prisma.paymentTransaction.deleteMany({
-      where: { userId: { in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId] } },
+      where: {
+        userId: {
+          in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId],
+        },
+      },
     });
     await prisma.companyProfile.deleteMany({
       where: { userId: { in: [companyUserId, secondCompanyUserId] } },
     });
     await prisma.user.deleteMany({
-      where: { id: { in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId] } },
+      where: {
+        id: {
+          in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId],
+        },
+      },
     });
 
     // Create Company User 1
@@ -121,13 +129,21 @@ describe("Phase 7 Company Subscriptions System", () => {
       },
     });
     await prisma.paymentTransaction.deleteMany({
-      where: { userId: { in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId] } },
+      where: {
+        userId: {
+          in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId],
+        },
+      },
     });
     await prisma.companyProfile.deleteMany({
       where: { userId: { in: [companyUserId, secondCompanyUserId] } },
     });
     await prisma.user.deleteMany({
-      where: { id: { in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId] } },
+      where: {
+        id: {
+          in: [companyUserId, secondCompanyUserId, talentUserId, adminUserId],
+        },
+      },
     });
     await prisma.$disconnect();
   });
@@ -202,31 +218,37 @@ describe("Phase 7 Company Subscriptions System", () => {
     });
 
     it("should reject verification if payment amount is insufficient", async () => {
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: monthlyTxRef,
-        amount: 500, // Expected 2000
-        currency: "ETB",
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: monthlyTxRef,
+          amount: 500, // Expected 2000
+          currency: "ETB",
+          status: "success",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${monthlyTxRef}`)
         .set("Cookie", authCookie(companyUserId, Role.COMPANY));
 
       expect(res.status).toBe(400);
-      expect(res.body.error.message).toMatch(/Paid amount \(500 ETB\) is less than required \(2000 ETB\)/i);
+      expect(res.body.error.message).toMatch(
+        /Paid amount \(500 ETB\) is less than required \(2000 ETB\)/i,
+      );
 
       spy.mockRestore();
     });
 
     it("should verify payment successfully, create CompanySubscription, and sync CompanyProfile cache", async () => {
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: monthlyTxRef,
-        amount: 2000,
-        currency: "ETB",
-        status: "success",
-        chapaRef: "CHAPA-SUB-REF-100",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: monthlyTxRef,
+          amount: 2000,
+          currency: "ETB",
+          status: "success",
+          chapaRef: "CHAPA-SUB-REF-100",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${monthlyTxRef}`)
@@ -250,12 +272,14 @@ describe("Phase 7 Company Subscriptions System", () => {
 
     it("should process duplicate verification requests idempotently", async () => {
       // First verification call
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: monthlyTxRef,
-        amount: 2000,
-        currency: "ETB",
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: monthlyTxRef,
+          amount: 2000,
+          currency: "ETB",
+          status: "success",
+        });
 
       await request(app)
         .get(`/api/v1/payments/verify/${monthlyTxRef}`)
@@ -270,7 +294,9 @@ describe("Phase 7 Company Subscriptions System", () => {
 
       expect(duplicateRes.status).toBe(200);
       expect(duplicateRes.body.verified).toBe(true);
-      expect(duplicateRes.body.message).toMatch(/already successfully verified/i);
+      expect(duplicateRes.body.message).toMatch(
+        /already successfully verified/i,
+      );
 
       // Verify only 1 CompanySubscription record exists
       const subsCount = await prisma.companySubscription.count({
@@ -338,12 +364,14 @@ describe("Phase 7 Company Subscriptions System", () => {
       const txRef = initRes.body.txRef;
 
       // Verify renewal payment
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef,
-        amount: 2000,
-        currency: "ETB",
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef,
+          amount: 2000,
+          currency: "ETB",
+          status: "success",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${txRef}`)
@@ -357,7 +385,9 @@ describe("Phase 7 Company Subscriptions System", () => {
       });
 
       // Expiry should be ~30 days into the future from now
-      expect(new Date(updatedSub!.expiresAt).getTime()).toBeGreaterThan(Date.now());
+      expect(new Date(updatedSub!.expiresAt).getTime()).toBeGreaterThan(
+        Date.now(),
+      );
       expect(updatedSub?.status).toBe("ACTIVE");
 
       spy.mockRestore();
@@ -379,12 +409,14 @@ describe("Phase 7 Company Subscriptions System", () => {
 
       const txRef = initRes.body.txRef;
 
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef,
-        amount: 2000,
-        currency: "ETB",
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef,
+          amount: 2000,
+          currency: "ETB",
+          status: "success",
+        });
 
       await request(app)
         .get(`/api/v1/payments/verify/${txRef}`)
@@ -398,7 +430,9 @@ describe("Phase 7 Company Subscriptions System", () => {
       const expectedTarget = new Date(futureBase);
       expectedTarget.setMonth(expectedTarget.getMonth() + 1);
 
-      expect(new Date(updatedSub!.expiresAt).toDateString()).toBe(expectedTarget.toDateString());
+      expect(new Date(updatedSub!.expiresAt).toDateString()).toBe(
+        expectedTarget.toDateString(),
+      );
 
       spy.mockRestore();
     });

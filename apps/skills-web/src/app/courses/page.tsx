@@ -3,13 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { GraduationCap, Layers, ArrowRight } from "lucide-react";
-import {
-  Button,
-  Alert,
-  EmptyState,
-  UniversalSearch,
-  Chip,
-} from "@blih/ui";
+import { Button, Alert, EmptyState, UniversalSearch, Chip } from "@blih/ui";
 import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
 import { CourseCard } from "@/components/courses/CourseCard";
@@ -44,7 +38,9 @@ export default function CourseCatalogPage() {
     // Deduplicate by course ID or title
     const isFirstOccurrence =
       self.findIndex(
-        (c) => c.id === course.id || c.title.toLowerCase() === course.title.toLowerCase()
+        (c) =>
+          c.id === course.id ||
+          c.title.toLowerCase() === course.title.toLowerCase(),
       ) === index;
 
     if (!isFirstOccurrence) return false;
@@ -52,7 +48,7 @@ export default function CourseCatalogPage() {
     const matchesSearch =
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesCategory =
       activeCategory === "All" ||
       course.title.toLowerCase().includes(activeCategory.toLowerCase()) ||

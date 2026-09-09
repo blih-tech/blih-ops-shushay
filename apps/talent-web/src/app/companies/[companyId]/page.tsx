@@ -2,7 +2,17 @@
 
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Building2, MapPin, Globe, Mail, Phone, Briefcase, ExternalLink, Loader2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  MapPin,
+  Globe,
+  Mail,
+  Phone,
+  Briefcase,
+  ExternalLink,
+  Loader2,
+} from "lucide-react";
 import { formatPhone } from "@/lib/formatPhone";
 import { Button, Badge, Alert, Card } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
@@ -144,7 +154,11 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
 
             {company.website && (
               <a
-                href={company.website.startsWith("http") ? company.website : `https://${company.website}`}
+                href={
+                  company.website.startsWith("http")
+                    ? company.website
+                    : `https://${company.website}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 border border-[#D9CEDF] rounded-xl text-xs font-mono text-[#1E5BFF] hover:bg-[#EEF3FF] transition-colors shrink-0 self-start sm:self-auto"
@@ -167,17 +181,25 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
           </div>
 
           {/* Contact Info Footer */}
-          {(company.contactName || company.contactEmail || company.contactPhone) && (
+          {(company.contactName ||
+            company.contactEmail ||
+            company.contactPhone) && (
             <div className="pt-4 border-t border-[#D9CEDF]/60 flex flex-wrap gap-6 text-xs text-[#6E6678]">
               {company.contactName && (
                 <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-[#17131F]">Contact Person:</span> {company.contactName}
+                  <span className="font-semibold text-[#17131F]">
+                    Contact Person:
+                  </span>{" "}
+                  {company.contactName}
                 </div>
               )}
               {company.contactEmail && (
                 <div className="flex items-center gap-1.5">
                   <Mail className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                  <a href={`mailto:${company.contactEmail}`} className="text-[#1E5BFF] hover:underline">
+                  <a
+                    href={`mailto:${company.contactEmail}`}
+                    className="text-[#1E5BFF] hover:underline"
+                  >
                     {company.contactEmail}
                   </a>
                 </div>
@@ -204,7 +226,8 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
 
         {company.jobs.length === 0 ? (
           <Card className="p-8 text-center text-sm text-[#6E6678] border-[#D9CEDF]">
-            This organization does not have any open positions listed at the moment.
+            This organization does not have any open positions listed at the
+            moment.
           </Card>
         ) : (
           <div className="grid grid-cols-1 gap-4">
@@ -222,8 +245,12 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
                       {job.title}
                     </Link>
                     <div className="flex items-center gap-2 flex-wrap text-xs text-[#6E6678] mt-1">
-                      <Badge variant="default">{job.employmentType.replace(/_/g, " ")}</Badge>
-                      <Badge variant="primary">{job.experienceLevel} LEVEL</Badge>
+                      <Badge variant="default">
+                        {job.employmentType.replace(/_/g, " ")}
+                      </Badge>
+                      <Badge variant="primary">
+                        {job.experienceLevel} LEVEL
+                      </Badge>
                       {job.salaryDisplay && (
                         <span className="font-mono text-[#2E8F79] font-semibold">
                           {job.salaryDisplay}
@@ -258,4 +285,3 @@ export default function CompanyProfilePage({ params }: PageProps) {
     </AuthGuard>
   );
 }
-

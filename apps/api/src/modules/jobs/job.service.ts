@@ -33,13 +33,24 @@ export async function createJob(userId: string, data: CreateJobInput) {
       experienceLevel: data.experienceLevel,
       applicationDeadline: data.applicationDeadline ?? null,
     },
-    include: { companyProfile: { select: { companyName: true, logoUrl: true } } },
+    include: {
+      companyProfile: { select: { companyName: true, logoUrl: true } },
+    },
   });
 }
 
 export async function getCompanyJobs(userId: string, query: JobQueryInput) {
   const companyProfile = await getCompanyProfileByUserId(userId);
-  const { page, limit, search, skills, englishLevel, employmentType, experienceLevel, status } = query;
+  const {
+    page,
+    limit,
+    search,
+    skills,
+    englishLevel,
+    employmentType,
+    experienceLevel,
+    status,
+  } = query;
   const skip = (page - 1) * limit;
 
   const where: any = { companyProfileId: companyProfile.id };
@@ -48,7 +59,10 @@ export async function getCompanyJobs(userId: string, query: JobQueryInput) {
   if (experienceLevel) where.experienceLevel = experienceLevel;
   if (englishLevel) where.englishLevel = englishLevel;
   if (skills) {
-    const skillList = skills.split(",").map((s) => s.trim()).filter(Boolean);
+    const skillList = skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     if (skillList.length) where.requiredSkills = { hasSome: skillList };
   }
   if (search) {
@@ -115,7 +129,11 @@ export async function getJobById(jobId: string, userId?: string) {
   return { ...job, hasApplied };
 }
 
-export async function updateJob(jobId: string, userId: string, data: UpdateJobInput) {
+export async function updateJob(
+  jobId: string,
+  userId: string,
+  data: UpdateJobInput,
+) {
   const companyProfile = await getCompanyProfileByUserId(userId);
   const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) throw new AppError(404, "Job not found.");
@@ -144,7 +162,9 @@ export async function updateJob(jobId: string, userId: string, data: UpdateJobIn
       experienceLevel: data.experienceLevel,
       applicationDeadline: data.applicationDeadline ?? undefined,
     },
-    include: { companyProfile: { select: { companyName: true, logoUrl: true } } },
+    include: {
+      companyProfile: { select: { companyName: true, logoUrl: true } },
+    },
   });
 }
 
@@ -167,7 +187,15 @@ export async function closeJob(jobId: string, userId: string) {
 // ─── Public job listing ───────────────────────────────────────────────────────
 
 export async function listActiveJobs(query: JobQueryInput, userId?: string) {
-  const { page, limit, search, skills, englishLevel, employmentType, experienceLevel } = query;
+  const {
+    page,
+    limit,
+    search,
+    skills,
+    englishLevel,
+    employmentType,
+    experienceLevel,
+  } = query;
   const skip = (page - 1) * limit;
 
   const where: any = { status: JobStatus.ACTIVE };
@@ -182,7 +210,10 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
   if (experienceLevel) where.experienceLevel = experienceLevel;
   if (englishLevel) where.englishLevel = englishLevel;
   if (skills) {
-    const skillList = skills.split(",").map((s) => s.trim()).filter(Boolean);
+    const skillList = skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     if (skillList.length) where.requiredSkills = { hasSome: skillList };
   }
   if (search) {
@@ -205,7 +236,12 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
       orderBy: { createdAt: "desc" },
       include: {
         companyProfile: {
-          select: { companyName: true, logoUrl: true, country: true, city: true },
+          select: {
+            companyName: true,
+            logoUrl: true,
+            country: true,
+            city: true,
+          },
         },
         _count: { select: { applications: true } },
       },
@@ -236,5 +272,11 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
     hasApplied: appliedJobIds.has(job.id),
   }));
 
-  return { jobs: enrichedJobs, total, page, limit, totalPages: Math.ceil(total / limit) };
+  return {
+    jobs: enrichedJobs,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+  };
 }

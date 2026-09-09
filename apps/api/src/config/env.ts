@@ -43,7 +43,6 @@ export const env = {
   },
 
   google: {
-
     clientId: optional("GOOGLE_CLIENT_ID"),
     clientSecret: optional("GOOGLE_CLIENT_SECRET"),
     /**
@@ -60,4 +59,3 @@ export const env = {
     emailFrom: process.env.EMAIL_FROM ?? "Blih <onboarding@resend.dev>",
   },
 };
-

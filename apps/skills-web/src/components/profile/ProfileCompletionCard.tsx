@@ -66,7 +66,8 @@ export function ProfileCompletionCard({
           {profile.profileCompletion.missingFields.length > 0 ? (
             <div className="space-y-3">
               <span className="font-mono text-xs font-bold text-[#6E6678] uppercase block">
-                Remaining Items ({profile.profileCompletion.missingFields.length})
+                Remaining Items (
+                {profile.profileCompletion.missingFields.length})
               </span>
               <div className="space-y-2">
                 {profile.profileCompletion.missingFields.map((field) => (

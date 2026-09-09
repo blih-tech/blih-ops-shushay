@@ -6,13 +6,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
 import { formatPhone } from "@/lib/formatPhone";
-import {
-  Button,
-  Badge,
-  Alert,
-  SkillBar,
-  MetricCard,
-} from "@blih/ui";
+import { Button, Badge, Alert, SkillBar, MetricCard } from "@blih/ui";
 import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
 import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
@@ -45,7 +39,8 @@ function ProfileContent() {
     );
   }
 
-  const certCount = profile?.certificates?.length ?? profile?.completedCourses?.length ?? 0;
+  const certCount =
+    profile?.certificates?.length ?? profile?.completedCourses?.length ?? 0;
 
   return (
     <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">

@@ -17,7 +17,10 @@ export async function searchTalents(query: TalentSearchQueryInput) {
     where.city = { contains: city, mode: "insensitive" };
   }
   if (skills) {
-    const skillList = skills.split(",").map((s) => s.trim()).filter(Boolean);
+    const skillList = skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     if (skillList.length > 0) {
       where.skills = { hasSome: skillList };
     }

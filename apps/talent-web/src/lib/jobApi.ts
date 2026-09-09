@@ -85,4 +85,3 @@ export async function updateApplicationStatus(
     body: JSON.stringify({ status }),
   });
 }
-

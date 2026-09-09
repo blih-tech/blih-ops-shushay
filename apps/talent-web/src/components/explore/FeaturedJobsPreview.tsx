@@ -1,14 +1,64 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { Badge, Button } from "@blih/ui";
 import { ArrowRight, MapPin, DollarSign, ShieldCheck } from "lucide-react";
 import { MOCK_FEATURED_JOBS } from "@/data/mockExploreData";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function FeaturedJobsPreview() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        ".featured-job-card",
+        { opacity: 0, y: 30, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: "back.out(1.2)",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        },
+      );
+    },
+    { scope: containerRef },
+  );
+
+  const onCardEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, {
+      y: -6,
+      borderColor: "#1E5BFF",
+      boxShadow: "0 16px 40px rgba(30,91,255,0.08)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
+  const onCardLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, {
+      y: 0,
+      borderColor: "#D9CEDF",
+      boxShadow: "0 4px 20px rgba(23,19,31,0.04)",
+      duration: 0.3,
+      ease: "power2.out",
+    });
+  };
+
   return (
-    <div className="space-y-8">
+    <div ref={containerRef} className="space-y-8 font-sans">
       {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
@@ -19,11 +69,16 @@ export function FeaturedJobsPreview() {
             Matched Opportunities Ready For Proof
           </h2>
           <p className="font-sans text-base text-[#6E6678] max-w-xl">
-            Positions with upfront compensation, verified technical requirements, and direct application via profile evidence.
+            Positions with upfront compensation, verified technical
+            requirements, and direct application via profile evidence.
           </p>
         </div>
         <Link href="/jobs" className="shrink-0">
-          <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+          <Button
+            variant="outline"
+            size="sm"
+            rightIcon={<ArrowRight className="w-4 h-4" />}
+          >
             View All Openings
           </Button>
         </Link>
@@ -34,7 +89,10 @@ export function FeaturedJobsPreview() {
         {MOCK_FEATURED_JOBS.map((job) => (
           <div
             key={job.id}
-            className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-[0_4px_20px_rgba(23,19,31,0.04)] hover:shadow-[0_16px_40px_rgba(30,91,255,0.08)] hover:border-[#1E5BFF]/40 transition-all duration-300 flex flex-col justify-between group"
+            onMouseEnter={onCardEnter}
+            onMouseLeave={onCardLeave}
+            className="featured-job-card bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-[0_4px_20px_rgba(23,19,31,0.04)] flex flex-col justify-between group cursor-default"
+            style={{ opacity: 0 }}
           >
             <div className="space-y-4">
               <div className="flex justify-between items-center">
@@ -63,7 +121,9 @@ export function FeaturedJobsPreview() {
                 </div>
                 <div className="flex items-center gap-2">
                   <DollarSign className="w-3.5 h-3.5 text-[#FF8A5B]" />
-                  <span className="font-semibold text-[#17131F]">{job.salary}</span>
+                  <span className="font-semibold text-[#17131F]">
+                    {job.salary}
+                  </span>
                 </div>
               </div>
 
@@ -81,7 +141,12 @@ export function FeaturedJobsPreview() {
 
             <div className="pt-6 mt-6 border-t border-[#D9CEDF]/50">
               <Link href={`/jobs/${job.id}`}>
-                <Button size="sm" fullWidth variant="secondary" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                <Button
+                  size="sm"
+                  fullWidth
+                  variant="secondary"
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                >
                   Apply with Profile Evidence
                 </Button>
               </Link>

@@ -47,4 +47,3 @@ pnpm dev:api               # http://localhost:4000/api/v1/health
 
 - **Test Mobile Money Numbers**: `0900123456`, `0900112233`, `0900881111`
 - **Test Card Number**: `4111 1111 1111 1111` (Expiry: `12/28`, CVV: `123`)
-

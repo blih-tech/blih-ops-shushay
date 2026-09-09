@@ -72,7 +72,8 @@ export default function PublicCourseDetailPage() {
 
   const handleUnlockClick = async () => {
     if (!user) {
-      const authUrl = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
+      const authUrl =
+        process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
       window.location.href = `${authUrl}/login?redirect=${encodeURIComponent(window.location.href)}`;
       return;
     }
@@ -96,11 +97,20 @@ export default function PublicCourseDetailPage() {
   if (loading) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <Skeleton variant="rectangular" height={32} className="w-48 rounded-xl" />
+        <Skeleton
+          variant="rectangular"
+          height={32}
+          className="w-48 rounded-xl"
+        />
         <Skeleton variant="rectangular" height={260} className="rounded-3xl" />
         <div className="space-y-3">
           {[0, 1, 2, 3].map((i) => (
-            <Skeleton key={i} variant="rectangular" height={64} className="rounded-2xl" />
+            <Skeleton
+              key={i}
+              variant="rectangular"
+              height={64}
+              className="rounded-2xl"
+            />
           ))}
         </div>
       </main>
@@ -123,7 +133,11 @@ export default function PublicCourseDetailPage() {
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
       <Link href="/courses" className="inline-block">
-        <Button variant="ghost" leftIcon={<ArrowLeft className="h-4 w-4" />} size="sm">
+        <Button
+          variant="ghost"
+          leftIcon={<ArrowLeft className="h-4 w-4" />}
+          size="sm"
+        >
           Back to Course Catalog
         </Button>
       </Link>

@@ -28,7 +28,9 @@ export function formatPhone(phone: string | null | undefined): string {
     for (let i = 0; i < sizes.length; i++) {
       if (offset >= rest.length) break;
       const isLast = i === sizes.length - 1;
-      const chunk = isLast ? rest.slice(offset) : rest.slice(offset, offset + sizes[i]);
+      const chunk = isLast
+        ? rest.slice(offset)
+        : rest.slice(offset, offset + sizes[i]);
       groups.push(chunk);
       offset += sizes[i];
     }
@@ -42,7 +44,9 @@ export function formatPhone(phone: string | null | undefined): string {
   for (let i = 0; i < sizes.length; i++) {
     if (offset >= digits.length) break;
     const isLast = i === sizes.length - 1;
-    const chunk = isLast ? digits.slice(offset) : digits.slice(offset, offset + sizes[i]);
+    const chunk = isLast
+      ? digits.slice(offset)
+      : digits.slice(offset, offset + sizes[i]);
     groups.push(chunk);
     offset += sizes[i];
   }

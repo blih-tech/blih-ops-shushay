@@ -2,15 +2,16 @@
 
 import React, { use, useState, useEffect } from "react";
 import Link from "next/link";
+import { ArrowLeft, Edit, DollarSign, Clock, Globe, Users } from "lucide-react";
 import {
-  ArrowLeft,
-  Edit,
-  DollarSign,
-  Clock,
-  Globe,
-  Users,
-} from "lucide-react";
-import { Button, Badge, Card, Skeleton, Alert, EmptyState, ConfirmDialog } from "@blih/ui";
+  Button,
+  Badge,
+  Card,
+  Skeleton,
+  Alert,
+  EmptyState,
+  ConfirmDialog,
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { getJobById, closeJob, getJobApplications } from "@/lib/jobApi";
 import { formatSalary } from "@/lib/jobOptions";
@@ -68,9 +69,19 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
   if (loading) {
     return (
       <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-6">
-        <Skeleton variant="rectangular" width={200} height={20} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={200}
+          height={20}
+          className="rounded-md"
+        />
         <Card className="p-8 space-y-4">
-          <Skeleton variant="rectangular" width={300} height={32} className="rounded-md" />
+          <Skeleton
+            variant="rectangular"
+            width={300}
+            height={32}
+            className="rounded-md"
+          />
           <Skeleton variant="text" className="w-full" />
         </Card>
       </main>
@@ -87,7 +98,8 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to My Job Postings
         </Link>
         <Alert variant="error" title={error || "Job Not Found"}>
-          Unable to display position details. The job may not exist or network connection failed.
+          Unable to display position details. The job may not exist or network
+          connection failed.
         </Alert>
       </main>
     );
@@ -118,8 +130,12 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
               <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F]">
                 {job.title}
               </h1>
-              <Badge variant={isClosed ? "outline" : "verified"}>{job.status}</Badge>
-              <Badge variant="primary">{job.employmentType.replace("_", " ")}</Badge>
+              <Badge variant={isClosed ? "outline" : "verified"}>
+                {job.status}
+              </Badge>
+              <Badge variant="primary">
+                {job.employmentType.replace("_", " ")}
+              </Badge>
             </div>
 
             <div className="flex items-center gap-4 text-xs font-mono text-[#6E6678] flex-wrap pt-1">
@@ -146,7 +162,11 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
             {!isClosed && (
               <>
                 <Link href={`/company/jobs/${job.id}/edit`}>
-                  <Button variant="outline" size="sm" leftIcon={<Edit className="h-4 w-4" />}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    leftIcon={<Edit className="h-4 w-4" />}
+                  >
                     Edit Role
                   </Button>
                 </Link>
@@ -190,7 +210,9 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
 
       {/* Overview & Description */}
       <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white space-y-4">
-        <h2 className="font-display text-xl font-bold text-[#17131F]">Job Description</h2>
+        <h2 className="font-display text-xl font-bold text-[#17131F]">
+          Job Description
+        </h2>
         <div className="text-sm text-[#6E6678] leading-relaxed font-sans whitespace-pre-line">
           {job.description}
         </div>

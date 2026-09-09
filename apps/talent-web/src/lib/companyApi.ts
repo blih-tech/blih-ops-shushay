@@ -20,7 +20,6 @@ export async function uploadCompanyLogo(file: File): Promise<CompanyProfile> {
   return apiFetchFormData<CompanyProfile>("/companies/profile/logo", formData);
 }
 
-
 export async function deleteCompanyLogo(): Promise<CompanyProfile> {
   return apiFetch<CompanyProfile>("/companies/profile/logo", {
     method: "DELETE",

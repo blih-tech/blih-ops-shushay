@@ -2,7 +2,6 @@ import type { CompanyJobItem } from "@/types/job";
 
 export type { CompanyJobItem };
 
-
 export const mockCompanyJobs: CompanyJobItem[] = [
   {
     id: "job-1",

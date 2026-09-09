@@ -47,7 +47,10 @@ export async function assertCourseExists(id: string) {
   return course;
 }
 
-export async function assertLessonBelongsToCourse(courseId: string, lessonId: string) {
+export async function assertLessonBelongsToCourse(
+  courseId: string,
+  lessonId: string,
+) {
   const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } });
   if (!lesson) throw new AppError(404, "Lesson not found");
   if (lesson.courseId !== courseId)

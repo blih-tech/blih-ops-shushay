@@ -26,12 +26,7 @@ import {
 import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkeleton";
 import { LogoUpload } from "@/components/profile/LogoUpload";
 import { CompanyContactFields } from "@/components/company/CompanyContactFields";
-import {
-  Save,
-  ArrowLeft,
-  Building,
-  Sparkles,
-} from "lucide-react";
+import { Save, ArrowLeft, Building, Sparkles } from "lucide-react";
 
 function CompanyProfileContent() {
   const { user, logout } = useAuth();
@@ -151,7 +146,11 @@ function CompanyProfileContent() {
         </div>
 
         <Link href="/company/subscription">
-          <Button variant="outline" size="sm" leftIcon={<Sparkles className="w-4 h-4 text-[#1E5BFF]" />}>
+          <Button
+            variant="outline"
+            size="sm"
+            leftIcon={<Sparkles className="w-4 h-4 text-[#1E5BFF]" />}
+          >
             Manage Subscription
           </Button>
         </Link>
@@ -176,7 +175,6 @@ function CompanyProfileContent() {
               onUpload={handleLogoUpload}
               onDelete={handleLogoDelete}
             />
-
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#D9CEDF]/60">
               <FormField label="Company Name" required>

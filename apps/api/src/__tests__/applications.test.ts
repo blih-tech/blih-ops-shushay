@@ -95,7 +95,9 @@ describe("Application Service & Authorization", () => {
 
       await expect(
         applyToJob("user-talent-1", { jobId: "job-closed" }),
-      ).rejects.toThrow("This job is closed and no longer accepting applications.");
+      ).rejects.toThrow(
+        "This job is closed and no longer accepting applications.",
+      );
     });
 
     it("rejects duplicate application for the same job and talent", async () => {
@@ -118,7 +120,9 @@ describe("Application Service & Authorization", () => {
 
       await expect(
         applyToJob("user-talent-1", { jobId: "job-202" }),
-      ).rejects.toThrow("You have already submitted an application for this job.");
+      ).rejects.toThrow(
+        "You have already submitted an application for this job.",
+      );
     });
   });
 

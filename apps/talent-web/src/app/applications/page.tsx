@@ -2,7 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Building2, MapPin, DollarSign, ArrowRight, Briefcase } from "lucide-react";
+import {
+  Building2,
+  MapPin,
+  DollarSign,
+  ArrowRight,
+  Briefcase,
+} from "lucide-react";
 import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { getTalentApplications } from "@/lib/jobApi";
@@ -60,14 +66,29 @@ function ApplicationsContent() {
   if (loading) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <Skeleton variant="rectangular" width={220} height={32} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={220}
+          height={32}
+          className="rounded-md"
+        />
         <div className="space-y-4 pt-4">
           <Card className="p-6 space-y-3">
-            <Skeleton variant="rectangular" width={280} height={24} className="rounded-md" />
+            <Skeleton
+              variant="rectangular"
+              width={280}
+              height={24}
+              className="rounded-md"
+            />
             <Skeleton variant="text" className="w-1/2" />
           </Card>
           <Card className="p-6 space-y-3">
-            <Skeleton variant="rectangular" width={280} height={24} className="rounded-md" />
+            <Skeleton
+              variant="rectangular"
+              width={280}
+              height={24}
+              className="rounded-md"
+            />
             <Skeleton variant="text" className="w-1/2" />
           </Card>
         </div>
@@ -129,12 +150,17 @@ function ApplicationsContent() {
             const company = job.companyProfile || {};
             const companyId = company.id || job.companyProfileId;
             const companyName = company.companyName || "Verified Partner";
-            const location = [company.city, company.country].filter(Boolean).join(", ") || "Remote";
-            const appliedDate = new Date(app.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            });
+            const location =
+              [company.city, company.country].filter(Boolean).join(", ") ||
+              "Remote";
+            const appliedDate = new Date(app.createdAt).toLocaleDateString(
+              "en-US",
+              {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              },
+            );
 
             return (
               <Card
@@ -194,7 +220,9 @@ function ApplicationsContent() {
                         <Button
                           size="sm"
                           variant="outline"
-                          leftIcon={<Building2 className="w-3.5 h-3.5 text-[#1E5BFF]" />}
+                          leftIcon={
+                            <Building2 className="w-3.5 h-3.5 text-[#1E5BFF]" />
+                          }
                         >
                           View Hiring Org
                         </Button>

@@ -105,7 +105,12 @@ export async function requireActiveSubscription(
   }
 
   if (req.user.role !== Role.COMPANY) {
-    return next(new AppError(403, "Access denied. Only company accounts can access this feature."));
+    return next(
+      new AppError(
+        403,
+        "Access denied. Only company accounts can access this feature.",
+      ),
+    );
   }
 
   const companyProfile = await prisma.companyProfile.findUnique({
@@ -129,8 +134,13 @@ export async function requireActiveSubscription(
 
   const now = new Date();
   const sub = companyProfile.companySubscription;
-  const isSubscribed =
-    (sub ? sub.expiresAt > now && sub.status === "ACTIVE" : Boolean(companyProfile.subscriptionActive && companyProfile.subscriptionExpiresAt && companyProfile.subscriptionExpiresAt > now));
+  const isSubscribed = sub
+    ? sub.expiresAt > now && sub.status === "ACTIVE"
+    : Boolean(
+        companyProfile.subscriptionActive &&
+        companyProfile.subscriptionExpiresAt &&
+        companyProfile.subscriptionExpiresAt > now,
+      );
 
   if (!isSubscribed) {
     return next(
@@ -143,5 +153,3 @@ export async function requireActiveSubscription(
 
   next();
 }
-
-

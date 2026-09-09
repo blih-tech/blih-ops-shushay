@@ -10,9 +10,13 @@ import { Role } from "@prisma/client";
 import { chapaService } from "../modules/payments/chapa.service";
 
 function makeToken(role: Role, id = "test-payment-user-id") {
-  return jwt.sign({ userId: id, email: "payuser@blih.com", role }, env.jwtSecret, {
-    expiresIn: "1h",
-  });
+  return jwt.sign(
+    { userId: id, email: "payuser@blih.com", role },
+    env.jwtSecret,
+    {
+      expiresIn: "1h",
+    },
+  );
 }
 
 function userCookie(id = "test-payment-user-id", role = Role.TALENT) {
@@ -96,10 +100,11 @@ describe("Phase 4 Payments & Access System", () => {
     await prisma.$disconnect();
   });
 
-
   describe("1. Course Content Protection (Pre-Payment)", () => {
     it("should allow public catalog preview for unauthenticated users", async () => {
-      const res = await request(app).get(`/api/v1/courses/public/${createdCourseId}`);
+      const res = await request(app).get(
+        `/api/v1/courses/public/${createdCourseId}`,
+      );
       expect(res.status).toBe(200);
       expect(res.body.title).toBe("Test Payment Course");
       expect(res.body.lessons[0].content).toBeUndefined(); // Sensitive content hidden
@@ -150,12 +155,14 @@ describe("Phase 4 Payments & Access System", () => {
 
     it("should reject payment verification if currency is wrong (not ETB)", async () => {
       // Mock Chapa verification returning wrong currency
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: activeTxRef,
-        amount: 1000,
-        currency: "USD", // Wrong currency
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: activeTxRef,
+          amount: 1000,
+          currency: "USD", // Wrong currency
+          status: "success",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${activeTxRef}`)
@@ -168,31 +175,36 @@ describe("Phase 4 Payments & Access System", () => {
     });
 
     it("should reject payment verification if amount is less than 1,000 ETB", async () => {
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: activeTxRef,
-        amount: 500, // Insufficient amount
-        currency: "ETB",
-        status: "success",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: activeTxRef,
+          amount: 500, // Insufficient amount
+          currency: "ETB",
+          status: "success",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${activeTxRef}`)
         .set("Cookie", userCookie(testUserId));
 
       expect(res.status).toBe(400);
-      expect(res.body.error.message).toMatch(/Paid amount \(500 ETB\) is less than required \(1000 ETB\)/i);
+      expect(res.body.error.message).toMatch(
+        /Paid amount \(500 ETB\) is less than required \(1000 ETB\)/i,
+      );
 
       spy.mockRestore();
     });
 
-
     it("should handle failed gateway response cleanly and support retry", async () => {
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: activeTxRef,
-        amount: 1000,
-        currency: "ETB",
-        status: "failed",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: activeTxRef,
+          amount: 1000,
+          currency: "ETB",
+          status: "failed",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${activeTxRef}`)
@@ -223,13 +235,15 @@ describe("Phase 4 Payments & Access System", () => {
     });
 
     it("should verify payment successfully, grant entitlement, and create notification", async () => {
-      const spy = jest.spyOn(chapaService, "verifyPayment").mockResolvedValueOnce({
-        txRef: activeTxRef,
-        amount: 1000,
-        currency: "ETB",
-        status: "success",
-        chapaRef: "CHAPA-TEST-REF-999",
-      });
+      const spy = jest
+        .spyOn(chapaService, "verifyPayment")
+        .mockResolvedValueOnce({
+          txRef: activeTxRef,
+          amount: 1000,
+          currency: "ETB",
+          status: "success",
+          chapaRef: "CHAPA-TEST-REF-999",
+        });
 
       const res = await request(app)
         .get(`/api/v1/payments/verify/${activeTxRef}`)
@@ -287,7 +301,9 @@ describe("Phase 4 Payments & Access System", () => {
 
       expect(res.status).toBe(200);
       expect(res.body.title).toBe("Test Payment Course");
-      expect(res.body.lessons[0].content).toBe("Secret protected lesson material");
+      expect(res.body.lessons[0].content).toBe(
+        "Secret protected lesson material",
+      );
     });
 
     it("should return alreadyHasAccess = true if an entitled user tries to initiate payment again", async () => {

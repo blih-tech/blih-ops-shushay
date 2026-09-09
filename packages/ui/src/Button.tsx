@@ -48,7 +48,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-[#EEF3FF] text-[#1E5BFF] hover:bg-[#DDE7FF] hover:-translate-y-0.5 active:translate-y-0 border border-[#1E5BFF]/20 shadow-xs hover:shadow-sm",
       outline:
         "border border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF]/40 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-sm",
-      ghost: "text-[#17131F] hover:bg-[#EEF3FF] hover:text-[#1E5BFF] border border-transparent",
+      ghost:
+        "text-[#17131F] hover:bg-[#EEF3FF] hover:text-[#1E5BFF] border border-transparent",
       coral:
         "bg-[#FF8A5B] text-white hover:bg-[#E57648] hover:-translate-y-0.5 active:translate-y-0 active:bg-[#CC6338] border border-transparent shadow-[0_4px_14px_rgba(255,138,91,0.25)] hover:shadow-[0_8px_24px_rgba(255,138,91,0.38)]",
       destructive:
@@ -77,12 +78,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ) : leftIcon ? (
           <span className="inline-flex shrink-0">{leftIcon}</span>
         ) : null}
-        <span className="inline-flex items-center justify-center gap-2">{children}</span>
+        <span className="inline-flex items-center justify-center gap-2">
+          {children}
+        </span>
         {!isSpinning && rightIcon ? (
           <span className="inline-flex shrink-0">{rightIcon}</span>
         ) : null}
       </button>
-
     );
   },
 );

@@ -8,7 +8,8 @@ export async function getUserNotifications(
 ) {
   try {
     const userId = req.user!.id;
-    const notifications = await notificationService.getUserNotifications(userId);
+    const notifications =
+      await notificationService.getUserNotifications(userId);
     res.json(notifications);
   } catch (err) {
     next(err);
@@ -23,7 +24,10 @@ export async function markAsRead(
   try {
     const userId = req.user!.id;
     const notificationId = req.params.id as string;
-    const updated = await notificationService.markNotificationAsRead(userId, notificationId);
+    const updated = await notificationService.markNotificationAsRead(
+      userId,
+      notificationId,
+    );
     res.json(updated);
   } catch (err) {
     next(err);

@@ -44,21 +44,43 @@ jest.mock("../config/prisma", () => ({
 describe("Phase 10 System Hardening & Security Matrix", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (prisma.user.findUnique as jest.Mock).mockImplementation(async ({ where }) => {
-      if (where.id === "user-tal-1") {
-        return { id: "user-tal-1", email: "talent@blih.com", role: Role.TALENT, emailVerified: true };
-      }
-      if (where.id === "user-comp-1") {
-        return { id: "user-comp-1", email: "company@blih.com", role: Role.COMPANY, emailVerified: true };
-      }
-      if (where.id === "user-comp-unsub") {
-        return { id: "user-comp-unsub", email: "unsub@company.com", role: Role.COMPANY, emailVerified: true };
-      }
-      if (where.id === "user-comp-A") {
-        return { id: "user-comp-A", email: "compA@company.com", role: Role.COMPANY, emailVerified: true };
-      }
-      return null;
-    });
+    (prisma.user.findUnique as jest.Mock).mockImplementation(
+      async ({ where }) => {
+        if (where.id === "user-tal-1") {
+          return {
+            id: "user-tal-1",
+            email: "talent@blih.com",
+            role: Role.TALENT,
+            emailVerified: true,
+          };
+        }
+        if (where.id === "user-comp-1") {
+          return {
+            id: "user-comp-1",
+            email: "company@blih.com",
+            role: Role.COMPANY,
+            emailVerified: true,
+          };
+        }
+        if (where.id === "user-comp-unsub") {
+          return {
+            id: "user-comp-unsub",
+            email: "unsub@company.com",
+            role: Role.COMPANY,
+            emailVerified: true,
+          };
+        }
+        if (where.id === "user-comp-A") {
+          return {
+            id: "user-comp-A",
+            email: "compA@company.com",
+            role: Role.COMPANY,
+            emailVerified: true,
+          };
+        }
+        return null;
+      },
+    );
   });
 
   describe("1. Health Check Endpoint", () => {
@@ -90,7 +112,10 @@ describe("Phase 10 System Hardening & Security Matrix", () => {
     it("returns 403 Forbidden when COMPANY role accesses TALENT-only endpoints", async () => {
       const res = await request(app)
         .post("/api/v1/applications")
-        .set("Cookie", userCookie(Role.COMPANY, "user-comp-1", "company@blih.com"))
+        .set(
+          "Cookie",
+          userCookie(Role.COMPANY, "user-comp-1", "company@blih.com"),
+        )
         .send({ jobId: "job-1" });
 
       expect(res.status).toBe(403);
@@ -118,7 +143,10 @@ describe("Phase 10 System Hardening & Security Matrix", () => {
 
       const res = await request(app)
         .get("/api/v1/talents/tal-target-id")
-        .set("Cookie", userCookie(Role.COMPANY, "user-comp-unsub", "unsub@company.com"));
+        .set(
+          "Cookie",
+          userCookie(Role.COMPANY, "user-comp-unsub", "unsub@company.com"),
+        );
 
       expect(res.status).toBe(402);
       expect(res.body.error.message).toMatch(/subscription/i);
@@ -137,7 +165,10 @@ describe("Phase 10 System Hardening & Security Matrix", () => {
 
       const res = await request(app)
         .get("/api/v1/applications/job/job-B")
-        .set("Cookie", userCookie(Role.COMPANY, "user-comp-A", "compA@company.com"));
+        .set(
+          "Cookie",
+          userCookie(Role.COMPANY, "user-comp-A", "compA@company.com"),
+        );
 
       expect(res.status).toBe(403);
       expect(res.body.error.message).toMatch(/do not have access/i);
@@ -159,11 +190,16 @@ describe("Phase 10 System Hardening & Security Matrix", () => {
 
       const res = await request(app)
         .patch("/api/v1/applications/app-1/status")
-        .set("Cookie", userCookie(Role.COMPANY, "user-comp-1", "company@blih.com"))
+        .set(
+          "Cookie",
+          userCookie(Role.COMPANY, "user-comp-1", "company@blih.com"),
+        )
         .send({ status: "SUBMITTED" });
 
       expect(res.status).toBe(400);
-      expect(res.body.error.message).toMatch(/Only status change from Applied/i);
+      expect(res.body.error.message).toMatch(
+        /Only status change from Applied/i,
+      );
     });
   });
 });

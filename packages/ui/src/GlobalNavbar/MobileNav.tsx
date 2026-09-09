@@ -53,9 +53,21 @@ export function MobileNav({
         <div className="flex flex-col space-y-1">
           {loading ? (
             <div className="space-y-2 p-1">
-              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
-              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
-              <Skeleton variant="rectangular" height={32} className="w-full rounded-xl bg-[#EEF3FF]" />
+              <Skeleton
+                variant="rectangular"
+                height={32}
+                className="w-full rounded-xl bg-[#EEF3FF]"
+              />
+              <Skeleton
+                variant="rectangular"
+                height={32}
+                className="w-full rounded-xl bg-[#EEF3FF]"
+              />
+              <Skeleton
+                variant="rectangular"
+                height={32}
+                className="w-full rounded-xl bg-[#EEF3FF]"
+              />
             </div>
           ) : (
             navLinks.map((link) => (

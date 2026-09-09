@@ -36,15 +36,21 @@ export function CourseDetailSidebar({
             </span>
             <div className="flex items-center gap-2 pt-1">
               <Badge
-                variant={isCompleted ? "verified" : isInProgress ? "primary" : "secondary"}
+                variant={
+                  isCompleted
+                    ? "verified"
+                    : isInProgress
+                      ? "primary"
+                      : "secondary"
+                }
                 size="md"
                 className="text-sm font-semibold"
               >
                 {isCompleted
                   ? "Track Completed (100%)"
                   : isInProgress
-                  ? `In Progress (${progressPercentage}%)`
-                  : "Full Access Granted"}
+                    ? `In Progress (${progressPercentage}%)`
+                    : "Full Access Granted"}
               </Badge>
             </div>
           </div>
@@ -62,7 +68,8 @@ export function CourseDetailSidebar({
               </span>
             </div>
             <p className="text-xs text-[#6E6678] pt-1">
-              Unlocks permanent access to all current and future Blih Skills courses.
+              Unlocks permanent access to all current and future Blih Skills
+              courses.
             </p>
           </div>
         )}
@@ -91,8 +98,8 @@ export function CourseDetailSidebar({
                 {isCompleted
                   ? "Review Course"
                   : isInProgress
-                  ? `Continue Learning (${progressPercentage}%)`
-                  : "Start Learning Now"}
+                    ? `Continue Learning (${progressPercentage}%)`
+                    : "Start Learning Now"}
               </Button>
             </Link>
           ) : (

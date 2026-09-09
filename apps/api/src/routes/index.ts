@@ -29,5 +29,3 @@ router.use("/learning", learningRoutes);
 router.use("/certificates", certificateRoutes);
 
 export default router;
-
-

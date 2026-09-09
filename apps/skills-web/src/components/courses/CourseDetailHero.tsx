@@ -61,8 +61,13 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
                       {lesson.title}
                     </h3>
                     <p className="font-mono text-xs text-[#6E6678] mt-0.5">
-                      {lesson.quiz ? "Assessment Quiz Included" : "Video Content"} ·{" "}
-                      {lesson.assignment ? "Practical Task Included" : "Self-Paced"}
+                      {lesson.quiz
+                        ? "Assessment Quiz Included"
+                        : "Video Content"}{" "}
+                      ·{" "}
+                      {lesson.assignment
+                        ? "Practical Task Included"
+                        : "Self-Paced"}
                     </p>
                   </div>
                 </div>

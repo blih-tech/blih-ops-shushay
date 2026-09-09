@@ -6,10 +6,7 @@ import {
   requireActiveSubscription,
 } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
-import {
-  createJobSchema,
-  updateJobSchema,
-} from "./job.schemas";
+import { createJobSchema, updateJobSchema } from "./job.schemas";
 import {
   createJob,
   getCompanyJobs,
@@ -66,7 +63,12 @@ router.get("/", requireAuth, listActiveJobs);
  *     responses:
  *       200: { description: Array of jobs belonging to company }
  */
-router.get("/company/mine", requireAuth, requireRole([Role.COMPANY]), getCompanyJobs);
+router.get(
+  "/company/mine",
+  requireAuth,
+  requireRole([Role.COMPANY]),
+  getCompanyJobs,
+);
 
 router.post(
   "/",
@@ -142,4 +144,3 @@ router.post(
 );
 
 export default router;
-

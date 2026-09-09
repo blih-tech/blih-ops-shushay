@@ -2,7 +2,10 @@ import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { CreateApplicationInput } from "./application.schemas";
 import { JobStatus, ApplicationStatus } from "@prisma/client";
-import { createNotification, sendJobApplicationEmail } from "../notifications/notification.service";
+import {
+  createNotification,
+  sendJobApplicationEmail,
+} from "../notifications/notification.service";
 
 export async function applyToJob(userId: string, data: CreateApplicationInput) {
   const talentProfile = await prisma.talentProfile.findUnique({
@@ -10,7 +13,10 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
   });
 
   if (!talentProfile) {
-    throw new AppError(404, "Talent profile not found. Please complete your profile first.");
+    throw new AppError(
+      404,
+      "Talent profile not found. Please complete your profile first.",
+    );
   }
 
   const job = await prisma.job.findUnique({
@@ -33,11 +39,17 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
   }
 
   if (job.status !== JobStatus.ACTIVE) {
-    throw new AppError(400, "This job is closed and no longer accepting applications.");
+    throw new AppError(
+      400,
+      "This job is closed and no longer accepting applications.",
+    );
   }
 
   if (job.applicationDeadline && job.applicationDeadline < new Date()) {
-    throw new AppError(400, "The application deadline for this job has passed.");
+    throw new AppError(
+      400,
+      "The application deadline for this job has passed.",
+    );
   }
 
   const existingApplication = await prisma.jobApplication.findUnique({
@@ -50,7 +62,10 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
   });
 
   if (existingApplication) {
-    throw new AppError(409, "You have already submitted an application for this job.");
+    throw new AppError(
+      409,
+      "You have already submitted an application for this job.",
+    );
   }
 
   const application = await prisma.jobApplication.create({
@@ -88,7 +103,8 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
     });
   }
 
-  const companyEmail = job.companyProfile?.contactEmail || job.companyProfile?.user?.email;
+  const companyEmail =
+    job.companyProfile?.contactEmail || job.companyProfile?.user?.email;
   if (companyEmail) {
     sendJobApplicationEmail(companyEmail, job.title, applicantName);
   }
@@ -125,7 +141,10 @@ export async function getTalentApplications(userId: string) {
   });
 }
 
-export async function getJobApplicationsForCompany(jobId: string, companyUserId: string) {
+export async function getJobApplicationsForCompany(
+  jobId: string,
+  companyUserId: string,
+) {
   const companyProfile = await prisma.companyProfile.findUnique({
     where: { userId: companyUserId },
   });
@@ -143,7 +162,10 @@ export async function getJobApplicationsForCompany(jobId: string, companyUserId:
   }
 
   if (job.companyProfileId !== companyProfile.id) {
-    throw new AppError(403, "You do not have access to applications for this job.");
+    throw new AppError(
+      403,
+      "You do not have access to applications for this job.",
+    );
   }
 
   return prisma.jobApplication.findMany({
@@ -194,12 +216,21 @@ export async function updateApplicationStatus(
   }
 
   if (application.job.companyProfileId !== companyProfile.id) {
-    throw new AppError(403, "You do not have access to update applications for this job.");
+    throw new AppError(
+      403,
+      "You do not have access to update applications for this job.",
+    );
   }
 
   // Enforcement: Allow only Applied (SUBMITTED) -> Reviewing (IN_REVIEW)
-  if (application.status !== ApplicationStatus.SUBMITTED || targetStatus !== ApplicationStatus.IN_REVIEW) {
-    throw new AppError(400, "Only status change from Applied (SUBMITTED) to Reviewing (IN_REVIEW) is allowed.");
+  if (
+    application.status !== ApplicationStatus.SUBMITTED ||
+    targetStatus !== ApplicationStatus.IN_REVIEW
+  ) {
+    throw new AppError(
+      400,
+      "Only status change from Applied (SUBMITTED) to Reviewing (IN_REVIEW) is allowed.",
+    );
   }
 
   return prisma.jobApplication.update({
@@ -218,4 +249,3 @@ export async function updateApplicationStatus(
     },
   });
 }
-

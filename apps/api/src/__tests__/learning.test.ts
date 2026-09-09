@@ -58,10 +58,15 @@ describe("Learning Service", () => {
       expect(result.lessonId).toBe("lesson-1");
       expect(prisma.lessonProgress.upsert).toHaveBeenCalledWith(
         expect.objectContaining({
-          where: { userId_lessonId: { userId: "user-1", lessonId: "lesson-1" } },
+          where: {
+            userId_lessonId: { userId: "user-1", lessonId: "lesson-1" },
+          },
         }),
       );
-      expect(checkAndGenerateCertificate).toHaveBeenCalledWith("user-1", "course-1");
+      expect(checkAndGenerateCertificate).toHaveBeenCalledWith(
+        "user-1",
+        "course-1",
+      );
     });
 
     it("throws 404 when lesson does not exist", async () => {
@@ -130,7 +135,10 @@ describe("Learning Service", () => {
       expect(attempt.score).toBe(100);
       expect(attempt.passed).toBe(true);
       expect(prisma.lessonProgress.upsert).toHaveBeenCalled();
-      expect(checkAndGenerateCertificate).toHaveBeenCalledWith("user-1", "course-1");
+      expect(checkAndGenerateCertificate).toHaveBeenCalledWith(
+        "user-1",
+        "course-1",
+      );
     });
 
     it("calculates 0% score and does NOT mark lesson complete on zero-correct answers", async () => {
@@ -163,7 +171,10 @@ describe("Learning Service", () => {
         ],
       };
       (prisma.quiz.findUnique as jest.Mock).mockResolvedValue(twoOfThreeQuiz);
-      (prisma.quizAttempt.create as jest.Mock).mockResolvedValue({ score: 80, passed: true });
+      (prisma.quizAttempt.create as jest.Mock).mockResolvedValue({
+        score: 80,
+        passed: true,
+      });
       (prisma.lessonProgress.upsert as jest.Mock).mockResolvedValue({});
 
       const attempt = await submitQuiz("user-1", {
@@ -201,7 +212,9 @@ describe("Learning Service", () => {
     };
 
     it("saves submission with text content and marks lesson complete", async () => {
-      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(mockAssignment);
+      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(
+        mockAssignment,
+      );
       (prisma.assignmentSubmission.upsert as jest.Mock).mockResolvedValue({
         id: "sub-1",
         content: "My answer",
@@ -215,11 +228,16 @@ describe("Learning Service", () => {
 
       expect(submission.id).toBe("sub-1");
       expect(prisma.lessonProgress.upsert).toHaveBeenCalled();
-      expect(checkAndGenerateCertificate).toHaveBeenCalledWith("user-1", "course-1");
+      expect(checkAndGenerateCertificate).toHaveBeenCalledWith(
+        "user-1",
+        "course-1",
+      );
     });
 
     it("saves submission with file info", async () => {
-      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(mockAssignment);
+      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(
+        mockAssignment,
+      );
       (prisma.assignmentSubmission.upsert as jest.Mock).mockResolvedValue({
         id: "sub-2",
         fileUrl: "https://cdn.example.com/file.pdf",
@@ -229,14 +247,19 @@ describe("Learning Service", () => {
       const submission = await submitAssignment(
         "user-1",
         { assignmentId: "assign-1" },
-        { fileUrl: "https://cdn.example.com/file.pdf", filePublicId: "public-id-1" },
+        {
+          fileUrl: "https://cdn.example.com/file.pdf",
+          filePublicId: "public-id-1",
+        },
       );
 
       expect(submission.fileUrl).toBeDefined();
     });
 
     it("throws 400 when neither content nor file is provided", async () => {
-      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(mockAssignment);
+      (prisma.assignment.findUnique as jest.Mock).mockResolvedValue(
+        mockAssignment,
+      );
 
       await expect(
         submitAssignment("user-1", { assignmentId: "assign-1" }),
@@ -304,7 +327,10 @@ describe("Learning Service", () => {
       expect(progress.totalLessons).toBe(2);
       expect(progress.progressPercentage).toBe(100);
       expect(progress.isCompleted).toBe(true);
-      expect(checkAndGenerateCertificate).toHaveBeenCalledWith("user-1", "course-1");
+      expect(checkAndGenerateCertificate).toHaveBeenCalledWith(
+        "user-1",
+        "course-1",
+      );
     });
 
     it("returns zero state when course has no lessons", async () => {

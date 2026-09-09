@@ -13,5 +13,6 @@ export const updateApplicationStatusSchema = z.object({
   }),
 });
 
-export type UpdateApplicationStatusInput = z.infer<typeof updateApplicationStatusSchema>;
-
+export type UpdateApplicationStatusInput = z.infer<
+  typeof updateApplicationStatusSchema
+>;

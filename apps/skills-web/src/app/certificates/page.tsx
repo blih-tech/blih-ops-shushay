@@ -3,12 +3,23 @@
 import React, { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ShieldCheck, Download, Share2, ArrowLeft, Award, Lock, Loader2 } from "lucide-react";
+import {
+  ShieldCheck,
+  Download,
+  Share2,
+  ArrowLeft,
+  Award,
+  Lock,
+  Loader2,
+} from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { Button, Badge } from "@blih/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";
 import { useAuth } from "@/providers/AuthProvider";
-import { getUserCertificates, getCertificateDownloadUrl } from "@blih/api-client";
+import {
+  getUserCertificates,
+  getCertificateDownloadUrl,
+} from "@blih/api-client";
 
 interface CertificateItem {
   id: string;
@@ -30,7 +41,9 @@ function CertificatesContent() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
   const [certificates, setCertificates] = useState<CertificateItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<string | null>(courseIdParam);
+  const [activeFilter, setActiveFilter] = useState<string | null>(
+    courseIdParam,
+  );
 
   useEffect(() => {
     if (courseIdParam) {
@@ -48,7 +61,9 @@ function CertificatesContent() {
           const uniqueCerts = res.certificates.reduce(
             (acc: CertificateItem[], cert: CertificateItem) => {
               const titleKey = cert.course?.title?.trim() || cert.id;
-              if (!acc.some((c) => (c.course?.title?.trim() || c.id) === titleKey)) {
+              if (
+                !acc.some((c) => (c.course?.title?.trim() || c.id) === titleKey)
+              ) {
                 acc.push(cert);
               }
               return acc;
@@ -155,7 +170,9 @@ function CertificatesContent() {
               Complete a Track to Earn Your Certificate
             </h2>
             <p className="font-sans text-sm text-[#6E6678] leading-relaxed">
-              Digital credentials are automatically issued and cryptographically verified once you finish 100% of all lessons, quizzes, and practical exercises in a course track.
+              Digital credentials are automatically issued and cryptographically
+              verified once you finish 100% of all lessons, quizzes, and
+              practical exercises in a course track.
             </p>
           </div>
           <div className="pt-2">
@@ -176,7 +193,11 @@ function CertificatesContent() {
           <p className="text-sm font-mono text-[#6E6678]">
             No certificate record found matching this filter.
           </p>
-          <Button variant="outline" size="sm" onClick={() => setActiveFilter(null)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setActiveFilter(null)}
+          >
             Show All ({certificates.length}) Certificates
           </Button>
         </div>
@@ -192,7 +213,8 @@ function CertificatesContent() {
               Verified Digital Credentials ({displayedCertificates.length})
             </h1>
             <p className="font-sans text-sm sm:text-base text-[#6E6678]">
-              All certificates issued through Blih Skills are cryptographically verifiable and indexed on your talent profile.
+              All certificates issued through Blih Skills are cryptographically
+              verifiable and indexed on your talent profile.
             </p>
           </div>
 
@@ -216,11 +238,14 @@ function CertificatesContent() {
                 recipientName={recipientName}
                 courseName={cert.course.title}
                 credentialId={cert.certificateNumber}
-                issueDate={new Date(cert.issueDate).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                issueDate={new Date(cert.issueDate).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  },
+                )}
                 score={100}
               />
             </div>

@@ -4,13 +4,7 @@ import React, { useEffect, useState } from "react";
 import { formatPhone } from "@/lib/formatPhone";
 import Link from "next/link";
 import { ArrowLeft, Building2, MapPin, Phone, Globe } from "lucide-react";
-import {
-  Badge,
-  Alert,
-  Card,
-  UniversalSearch,
-  Skeleton,
-} from "@blih/ui";
+import { Badge, Alert, Card, UniversalSearch } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { AdminCompanySkeletonGrid } from "@/components/admin/AdminSkeletonList";
 import { useAuth } from "@/providers/AuthProvider";

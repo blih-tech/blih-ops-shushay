@@ -32,61 +32,70 @@ The platform provides a modern editorial interface connecting ambitious learners
                                └─────────────────┘
 ```
 
-| Application | URL / Port | Role & Key Functionality |
-| :--- | :--- | :--- |
-| **Auth Web** | `http://localhost:3003` | Centralized identity provider, Google OAuth 2.0, login/registration, password reset, and session management. |
-| **Skills Web** | `http://localhost:3001` | Course catalog, interactive learning workspace (video, reading, quizzes, assignment uploads), payment checkout, and digital certificates. |
-| **Talent Web** | `http://localhost:3002` | Verified talent directory, candidate profile management, verified credentials display, CV attachments, and recruiter search. |
-| **Core API** | `http://localhost:4000` | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming. |
-| **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing. |
+| Application    | URL / Port                          | Role & Key Functionality                                                                                                                  |
+| :------------- | :---------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Auth Web**   | `http://localhost:3003`             | Centralized identity provider, Google OAuth 2.0, login/registration, password reset, and session management.                              |
+| **Skills Web** | `http://localhost:3001`             | Course catalog, interactive learning workspace (video, reading, quizzes, assignment uploads), payment checkout, and digital certificates. |
+| **Talent Web** | `http://localhost:3002`             | Verified talent directory, candidate profile management, verified credentials display, CV attachments, and recruiter search.              |
+| **Core API**   | `http://localhost:4000`             | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming.                                    |
+| **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing.                                                                      |
 
 ---
 
 ## ✨ Core Ecosystem Features
 
 ### 🔐 1. Centralized Identity & Security (Phases 0–1)
+
 - **Unified Auth**: Shared authentication flow across all ecosystem frontends using HTTP-only JWT cookies.
 - **Google OAuth 2.0 & Email Auth**: Social sign-in combined with email verification and password recovery.
 - **Global Role-Based Access**: Granular permissions for `TALENT`, `COMPANY`, and `ADMIN` roles.
 
 ### 📚 2. Blih Skills & Interactive Learning Engine (Phases 2 & 5)
+
 - **Comprehensive Course Catalog**: Public exploration of curriculum modules, learning outcomes, and course structure.
 - **Interactive Player**: Multi-tab course workspace featuring video streams, reading material, automated quizzes, and file/link assignment submissions.
 - **Permanent Skills Entitlement**: One-time payment granting lifetime access to all Blih Skills tracks.
 - **Real-Time Progress Tracking**: Granular lesson completion tracking with automatic course completion calculation.
 
 ### 📜 3. Certificates & Product Integration (Phase 6)
+
 - **Automated Certificate Generation**: Unique certificate numbers (`BLIH-CERT-...`) auto-issued upon 100% course completion.
 - **Vector PDF Generator & Downloads**: Direct A4 vector PDF certificate stream downloads powered by `pdfkit`.
 - **Verified Talent Profile Display**: Talent Web profiles showcase earned Blih credentials, verified badges, and direct PDF download links for employers.
 - **Responsive Certificate Canvas**: Fluid React certificate renderer with Blih logo vectors and verification pills.
 
 ### 💼 4. Blih Talent Network & Directory (Phase 3)
+
 - **Verified Candidate Profiles**: Rich talent profiles displaying verified competencies, work history, education, and CV documents.
 - **Profile Completion Engine**: Dynamic completion score meter with an actionable missing fields checklist.
 - **Company Recruitment Access**: Company subscription plan gating for talent search and candidate profile inspection.
 
 ### 💳 5. Ethiopian Payment Infrastructure (Phase 4)
+
 - **Chapa Gateway Integration**: Native payment checkout supporting local Ethiopian debit cards and mobile money.
 - **Server-Side Verification**: Idempotent transaction verification, currency validation (`ETB`), and entitlement grants.
 
 ### 🏢 6. Company Subscriptions & Candidate Access Gating (Phase 7)
+
 - **Tiered Company Plans**: Monthly (2,000 ETB) and Yearly (10,000 ETB) subscription options for hiring organizations.
 - **Access Control Guards**: Strict server-side route guards enforcing active subscription requirements before companies can search talent profiles or view candidate contact info.
 - **Dynamic Subscription Status**: Automated status resolution (`ACTIVE`, `INACTIVE`, `EXPIRED`, `CANCELLED`) with instant payment return verification.
 
 ### 🎯 7. Jobs & Opportunity Search (Phase 8)
+
 - **Job Posting Lifecycle**: Full job creation, editing, and closing pipeline for active company subscribers.
 - **Active Jobs Directory**: Searchable opportunities feed with salary ranges, skills tags, employment types, experience levels, and deadline indicators.
 - **Talent Search Directory**: Gated recruiter directory allowing subscribed companies to filter candidates by skills, country, and experience.
 
 ### 📩 8. Applications & Notifications (Phase 9)
+
 - **Application Submission**: One-click application flow with cover statement and auto-attached evidence profile & CV.
 - **Duplicate & Closed Job Controls**: Database and API enforcement preventing duplicate applications and blocking applications to closed positions.
 - **Application Management**: Candidate pipeline view allowing companies to view applicant profiles/CVs and transition status (`Applied` → `Reviewing`).
 - **In-App & Email Notifications**: Real-time notification menu for payment unlocks and application alerts, coupled with resilient email dispatch services.
 
 ### 🛡️ 9. System Testing & Hardening (Phase 10)
+
 - **Health Check Monitoring**: Live database health check endpoint (`/api/v1/health`).
 - **Authorization Matrix Hardening**: Automated test suites verifying `TALENT`, `COMPANY`, and `ADMIN` role boundaries and cross-tenant data isolation.
 - **Payment & System Resilience**: Idempotent webhook handling, gateway verification failure protection, and zero-error workspace TypeScript build (`tsc --noEmit`).

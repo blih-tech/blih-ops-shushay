@@ -96,145 +96,149 @@ function ProfileContent() {
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <Link href="/dashboard">
-          <Button
-            variant="ghost"
-            size="sm"
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-          >
-            Back to Dashboard
-          </Button>
-        </Link>
+      <Link href="/dashboard">
+        <Button
+          variant="ghost"
+          size="sm"
+          leftIcon={<ArrowLeft className="w-4 h-4" />}
+        >
+          Back to Dashboard
+        </Button>
+      </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          <div className="lg:col-span-8 space-y-6">
-            <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs">
-              <CardTitle className="text-2xl font-bold font-display">
-                Talent Profile Settings
-              </CardTitle>
-              <CardDescription className="font-sans text-sm text-[#6E6678] mt-1">
-                Update your basic details to build your remote credibility.
-              </CardDescription>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 space-y-6">
+          <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs">
+            <CardTitle className="text-2xl font-bold font-display">
+              Talent Profile Settings
+            </CardTitle>
+            <CardDescription className="font-sans text-sm text-[#6E6678] mt-1">
+              Update your basic details to build your remote credibility.
+            </CardDescription>
 
-              {error && <Alert variant="error" className="mt-4">{error}</Alert>}
-              {success && (
-                <Alert
-                  variant="success"
-                  className="mt-4 bg-[#E6F5F0] border-[#2E8F79] text-[#2E8F79]"
-                >
-                  {success}
-                </Alert>
-              )}
+            {error && (
+              <Alert variant="error" className="mt-4">
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert
+                variant="success"
+                className="mt-4 bg-[#E6F5F0] border-[#2E8F79] text-[#2E8F79]"
+              >
+                {success}
+              </Alert>
+            )}
 
-              {loading ? (
-                <div className="space-y-6 py-6 animate-pulse">
-                  <div className="h-10 bg-[#EEF3FF] rounded-lg" />
-                  <div className="h-10 bg-[#EEF3FF] rounded-lg w-5/6" />
-                </div>
-              ) : (
-                <form onSubmit={handleSave} className="space-y-6 mt-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        Full Name
-                      </label>
-                      <Input
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        placeholder="John Doe"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        Professional Title
-                      </label>
-                      <Input
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Full Stack Engineer"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        Phone Number
-                      </label>
-                      <Input
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+251 911 ..."
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        English Proficiency
-                      </label>
-                      <Select
-                        value={englishLevel}
-                        onChange={(e) => setEnglishLevel(e.target.value)}
-                        options={ENGLISH_LEVEL_OPTIONS}
-                        placeholder="Select Proficiency"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        Country
-                      </label>
-                      <Input
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        placeholder="Ethiopia"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                        City
-                      </label>
-                      <Input
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        placeholder="Addis Ababa"
-                      />
-                    </div>
-                  </div>
-
+            {loading ? (
+              <div className="space-y-6 py-6 animate-pulse">
+                <div className="h-10 bg-[#EEF3FF] rounded-lg" />
+                <div className="h-10 bg-[#EEF3FF] rounded-lg w-5/6" />
+              </div>
+            ) : (
+              <form onSubmit={handleSave} className="space-y-6 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
-                      Biography / Summary
+                      Full Name
                     </label>
-                    <Textarea
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      placeholder="Write a brief professional summary..."
-                      rows={4}
+                    <Input
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="John Doe"
+                      required
                     />
                   </div>
-
-                  <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-end">
-                    <Button type="submit" variant="primary" isLoading={saving}>
-                      Save Changes
-                    </Button>
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                      Professional Title
+                    </label>
+                    <Input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Full Stack Engineer"
+                    />
                   </div>
-                </form>
-              )}
-            </Card>
-          </div>
+                </div>
 
-          <div className="lg:col-span-4 space-y-6">
-            <ProfileCompletionCard
-              profile={profile}
-              loading={loading}
-              talentUrl={talentUrl}
-            />
-          </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                      Phone Number
+                    </label>
+                    <Input
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+251 911 ..."
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                      English Proficiency
+                    </label>
+                    <Select
+                      value={englishLevel}
+                      onChange={(e) => setEnglishLevel(e.target.value)}
+                      options={ENGLISH_LEVEL_OPTIONS}
+                      placeholder="Select Proficiency"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                      Country
+                    </label>
+                    <Input
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      placeholder="Ethiopia"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                      City
+                    </label>
+                    <Input
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      placeholder="Addis Ababa"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
+                    Biography / Summary
+                  </label>
+                  <Textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    placeholder="Write a brief professional summary..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-end">
+                  <Button type="submit" variant="primary" isLoading={saving}>
+                    Save Changes
+                  </Button>
+                </div>
+              </form>
+            )}
+          </Card>
         </div>
-      </main>
+
+        <div className="lg:col-span-4 space-y-6">
+          <ProfileCompletionCard
+            profile={profile}
+            loading={loading}
+            talentUrl={talentUrl}
+          />
+        </div>
+      </div>
+    </main>
   );
 }
 

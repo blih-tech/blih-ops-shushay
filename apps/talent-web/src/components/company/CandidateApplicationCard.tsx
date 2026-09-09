@@ -8,7 +8,6 @@ import {
   Calendar,
   FileText,
   MapPin,
-  Clock,
   Globe,
   Mail,
   Phone,
@@ -250,7 +249,9 @@ export function CandidateApplicationCard({
         <div className="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
           {talent?.skills && talent.skills.length > 0 ? (
             <>
-              <span className="text-xs font-mono text-[#6E6678] mr-1">Skills:</span>
+              <span className="text-xs font-mono text-[#6E6678] mr-1">
+                Skills:
+              </span>
               {talent.skills.slice(0, 6).map((skill, idx) => (
                 <span
                   key={idx}

@@ -2,15 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import {
-  Badge,
-  UniversalSearch,
-  Chip,
-  Skeleton,
-  Card,
-  Alert,
-  EmptyState,
-} from "@blih/ui";
+import { Badge, UniversalSearch, Chip, Alert, EmptyState } from "@blih/ui";
 import { MapPin, DollarSign, Sparkles, Building2 } from "lucide-react";
 import { useJobs } from "@/hooks/useJobs";
 import { Job } from "@/types/job";
@@ -55,17 +47,41 @@ function JobsFeedContent() {
   const handleFilterClick = (chip: string) => {
     setActiveFilter(chip);
     if (chip === "All Opportunities") {
-      setFilters((prev) => ({ ...prev, employmentType: undefined, experienceLevel: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        employmentType: undefined,
+        experienceLevel: undefined,
+      }));
     } else if (chip === "Full Time") {
-      setFilters((prev) => ({ ...prev, employmentType: "FULL_TIME", experienceLevel: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        employmentType: "FULL_TIME",
+        experienceLevel: undefined,
+      }));
     } else if (chip === "Part Time") {
-      setFilters((prev) => ({ ...prev, employmentType: "PART_TIME", experienceLevel: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        employmentType: "PART_TIME",
+        experienceLevel: undefined,
+      }));
     } else if (chip === "Contract") {
-      setFilters((prev) => ({ ...prev, employmentType: "CONTRACT", experienceLevel: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        employmentType: "CONTRACT",
+        experienceLevel: undefined,
+      }));
     } else if (chip === "Senior") {
-      setFilters((prev) => ({ ...prev, experienceLevel: "SENIOR", employmentType: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        experienceLevel: "SENIOR",
+        employmentType: undefined,
+      }));
     } else if (chip === "Mid Level") {
-      setFilters((prev) => ({ ...prev, experienceLevel: "MID", employmentType: undefined }));
+      setFilters((prev) => ({
+        ...prev,
+        experienceLevel: "MID",
+        employmentType: undefined,
+      }));
     }
   };
 
@@ -94,7 +110,8 @@ function JobsFeedContent() {
           Opportunities that know your skills.
         </h1>
         <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-          Find freelance projects, jobs, contracts, internships and challenges matched against evidence already in your BLIH OPS profile.
+          Find freelance projects, jobs, contracts, internships and challenges
+          matched against evidence already in your BLIH OPS profile.
         </p>
       </div>
 
@@ -148,7 +165,8 @@ function JobsFeedContent() {
             <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
               {jobs.map((job) => {
                 const isSelected = selectedJob?.id === job.id;
-                const companyName = job.companyProfile?.companyName || "Verified Company";
+                const companyName =
+                  job.companyProfile?.companyName || "Verified Company";
                 const location = formatLocation(job);
                 const salary = formatSalary(job);
 
@@ -160,7 +178,9 @@ function JobsFeedContent() {
                       setSelectedJobId(job.id);
                       // Scroll to detail on mobile viewports
                       if (window.innerWidth < 1024) {
-                        document.getElementById("job-detail-panel")?.scrollIntoView({ behavior: "smooth" });
+                        document
+                          .getElementById("job-detail-panel")
+                          ?.scrollIntoView({ behavior: "smooth" });
                       }
                     }}
                     className={`w-full text-left bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
@@ -219,7 +239,10 @@ function JobsFeedContent() {
         </div>
 
         {/* Right Column: Detail Panel */}
-        <div id="job-detail-panel" className="lg:col-span-5 sticky top-24 space-y-6">
+        <div
+          id="job-detail-panel"
+          className="lg:col-span-5 sticky top-24 space-y-6"
+        >
           <JobPreviewDetail
             job={selectedJob}
             formatSalary={formatSalary}

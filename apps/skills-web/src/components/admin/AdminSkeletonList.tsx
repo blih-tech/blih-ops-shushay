@@ -22,10 +22,23 @@ export function AdminTalentSkeletonGrid({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <Card key={i} className="p-6 space-y-4 shadow-xs">
           <div className="flex items-center gap-4">
-            <Skeleton variant="circular" width={48} height={48} themeIndex={i} />
+            <Skeleton
+              variant="circular"
+              width={48}
+              height={48}
+              themeIndex={i}
+            />
             <div className="space-y-2 flex-1">
-              <Skeleton variant="rectangular" themeIndex={i} className="h-6 w-3/4 rounded-lg" />
-              <Skeleton variant="rectangular" themeIndex={i} className="h-4 w-1/2 rounded-lg" />
+              <Skeleton
+                variant="rectangular"
+                themeIndex={i}
+                className="h-6 w-3/4 rounded-lg"
+              />
+              <Skeleton
+                variant="rectangular"
+                themeIndex={i}
+                className="h-4 w-1/2 rounded-lg"
+              />
             </div>
           </div>
         </Card>
@@ -40,7 +53,12 @@ export function AdminCompanySkeletonGrid({ count = 6 }: { count?: number }) {
       {Array.from({ length: count }).map((_, i) => (
         <Card key={i} className="p-6 space-y-4 shadow-xs">
           <div className="flex items-center gap-4">
-            <Skeleton variant="circular" width={48} height={48} themeIndex={i} />
+            <Skeleton
+              variant="circular"
+              width={48}
+              height={48}
+              themeIndex={i}
+            />
             <div className="space-y-2 flex-1">
               <Skeleton
                 variant="rectangular"

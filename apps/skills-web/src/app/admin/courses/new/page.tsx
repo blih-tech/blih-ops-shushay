@@ -99,8 +99,8 @@ function NewCourseContent() {
                 Course Details
               </CardTitle>
               <CardDescription className="text-sm text-[#6E6678]">
-                Basic metadata and syllabus overview presented to candidates
-                in the catalog.
+                Basic metadata and syllabus overview presented to candidates in
+                the catalog.
               </CardDescription>
             </div>
           </div>

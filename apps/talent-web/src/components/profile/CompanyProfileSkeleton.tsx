@@ -6,8 +6,7 @@ interface CompanyProfileSkeletonProps {
   logout?: () => void;
 }
 
-export function CompanyProfileSkeleton({
-}: CompanyProfileSkeletonProps) {
+export function CompanyProfileSkeleton({}: CompanyProfileSkeletonProps) {
   return (
     <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 animate-pulse">
       <div className="flex items-center justify-between">

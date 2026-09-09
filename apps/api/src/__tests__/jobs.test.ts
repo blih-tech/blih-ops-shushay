@@ -79,7 +79,9 @@ describe("Job and Application Services", () => {
 
     it("throws 404 when job does not exist", async () => {
       (prisma.job.findUnique as jest.Mock).mockResolvedValue(null);
-      await expect(getJobById("non-existent")).rejects.toThrow("Job not found.");
+      await expect(getJobById("non-existent")).rejects.toThrow(
+        "Job not found.",
+      );
     });
   });
 
@@ -141,9 +143,9 @@ describe("Job and Application Services", () => {
         status: JobStatus.CLOSED,
       });
 
-      await expect(
-        applyToJob("user-tal", { jobId: "job-1" }),
-      ).rejects.toThrow("This job is closed and no longer accepting applications.");
+      await expect(applyToJob("user-tal", { jobId: "job-1" })).rejects.toThrow(
+        "This job is closed and no longer accepting applications.",
+      );
     });
 
     it("rejects duplicate application for the same job", async () => {
@@ -163,9 +165,9 @@ describe("Job and Application Services", () => {
         talentProfileId: "tal-1",
       });
 
-      await expect(
-        applyToJob("user-tal", { jobId: "job-1" }),
-      ).rejects.toThrow("You have already submitted an application for this job.");
+      await expect(applyToJob("user-tal", { jobId: "job-1" })).rejects.toThrow(
+        "You have already submitted an application for this job.",
+      );
     });
 
     it("successfully creates application when criteria are met", async () => {

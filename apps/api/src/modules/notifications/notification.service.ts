@@ -79,7 +79,10 @@ export async function getUserNotifications(userId: string) {
   });
 }
 
-export async function markNotificationAsRead(userId: string, notificationId: string) {
+export async function markNotificationAsRead(
+  userId: string,
+  notificationId: string,
+) {
   const notification = await prisma.notification.findUnique({
     where: { id: notificationId },
   });
@@ -112,7 +115,9 @@ export async function sendPaymentConfirmationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(`[EMAIL DEV] Skills payment confirmation → ${email} | txRef: ${txRef} | amount: ${amount} ETB`);
+    console.log(
+      `[EMAIL DEV] Skills payment confirmation → ${email} | txRef: ${txRef} | amount: ${amount} ETB`,
+    );
     return { success: true };
   }
 
@@ -142,7 +147,9 @@ export async function sendPaymentConfirmationEmail(
 
     return { success: true };
   } catch (err: any) {
-    console.error(`[EMAIL ERROR] Skills payment email to ${email}: ${err.message}`);
+    console.error(
+      `[EMAIL ERROR] Skills payment email to ${email}: ${err.message}`,
+    );
     return { success: false, error: err.message };
   }
 }
@@ -159,7 +166,9 @@ export async function sendSubscriptionConfirmationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(`[EMAIL DEV] Subscription confirmation → ${email} | company: ${companyName} | plan: ${plan}`);
+    console.log(
+      `[EMAIL DEV] Subscription confirmation → ${email} | company: ${companyName} | plan: ${plan}`,
+    );
     return { success: true };
   }
 
@@ -189,7 +198,9 @@ export async function sendSubscriptionConfirmationEmail(
 
     return { success: true };
   } catch (err: any) {
-    console.error(`[EMAIL ERROR] Subscription email to ${email}: ${err.message}`);
+    console.error(
+      `[EMAIL ERROR] Subscription email to ${email}: ${err.message}`,
+    );
     return { success: false, error: err.message };
   }
 }
@@ -205,7 +216,9 @@ export async function sendJobApplicationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(`[EMAIL DEV] Job application → ${companyEmail} | job: "${jobTitle}" | applicant: ${applicantName}`);
+    console.log(
+      `[EMAIL DEV] Job application → ${companyEmail} | job: "${jobTitle}" | applicant: ${applicantName}`,
+    );
     return { success: true };
   }
 
@@ -234,7 +247,9 @@ export async function sendJobApplicationEmail(
 
     return { success: true };
   } catch (err: any) {
-    console.error(`[EMAIL ERROR] Job application email to ${companyEmail}: ${err.message}`);
+    console.error(
+      `[EMAIL ERROR] Job application email to ${companyEmail}: ${err.message}`,
+    );
     return { success: false, error: err.message };
   }
 }

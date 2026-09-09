@@ -18,7 +18,12 @@ import {
 } from "@blih/ui";
 import { SkillsInput } from "@/components/profile/SkillsInput";
 import { JobCompensationFields } from "@/components/jobs/JobCompensationFields";
-import { EmploymentType, ExperienceLevel, EnglishLevel, Job } from "@/types/job";
+import {
+  EmploymentType,
+  ExperienceLevel,
+  EnglishLevel,
+  Job,
+} from "@/types/job";
 import {
   employmentTypeOptions,
   experienceLevelOptions,
@@ -64,7 +69,9 @@ export function JobForm({
   subscriptionRequired,
 }: JobFormProps) {
   const [title, setTitle] = useState(initialData?.title || "");
-  const [description, setDescription] = useState(initialData?.description || "");
+  const [description, setDescription] = useState(
+    initialData?.description || "",
+  );
   const [employmentType, setEmploymentType] = useState<EmploymentType>(
     initialData?.employmentType || "FULL_TIME",
   );
@@ -74,7 +81,9 @@ export function JobForm({
   const [englishLevel, setEnglishLevel] = useState<EnglishLevel | "">(
     initialData?.englishLevel || "PROFESSIONAL",
   );
-  const [skills, setSkills] = useState<string[]>(initialData?.requiredSkills || []);
+  const [skills, setSkills] = useState<string[]>(
+    initialData?.requiredSkills || [],
+  );
   const [salaryMin, setSalaryMin] = useState<string>(
     initialData?.salaryMin ? String(initialData.salaryMin) : "",
   );
@@ -118,7 +127,10 @@ export function JobForm({
     }
 
     const countries = countryRestrictions
-      ? countryRestrictions.split(",").map((c) => c.trim()).filter(Boolean)
+      ? countryRestrictions
+          .split(",")
+          .map((c) => c.trim())
+          .filter(Boolean)
       : [];
 
     const payload: JobFormData = {
@@ -217,7 +229,9 @@ export function JobForm({
               <Select
                 options={employmentTypeOptions}
                 value={employmentType}
-                onChange={(e) => setEmploymentType(e.target.value as EmploymentType)}
+                onChange={(e) =>
+                  setEmploymentType(e.target.value as EmploymentType)
+                }
                 placeholder="Select type"
                 disabled={isSubmitting}
               />
@@ -227,7 +241,9 @@ export function JobForm({
               <Select
                 options={experienceLevelOptions}
                 value={experienceLevel}
-                onChange={(e) => setExperienceLevel(e.target.value as ExperienceLevel)}
+                onChange={(e) =>
+                  setExperienceLevel(e.target.value as ExperienceLevel)
+                }
                 placeholder="Select level"
                 disabled={isSubmitting}
               />
@@ -237,7 +253,9 @@ export function JobForm({
               <Select
                 options={englishLevelOptions}
                 value={englishLevel}
-                onChange={(e) => setEnglishLevel(e.target.value as EnglishLevel | "")}
+                onChange={(e) =>
+                  setEnglishLevel(e.target.value as EnglishLevel | "")
+                }
                 placeholder="Select proficiency"
                 disabled={isSubmitting}
               />
@@ -271,11 +289,21 @@ export function JobForm({
 
       <div className="flex justify-end gap-3 pt-2">
         <Link href="/company/jobs">
-          <Button variant="outline" size="lg" type="button" disabled={isSubmitting}>
+          <Button
+            variant="outline"
+            size="lg"
+            type="button"
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
         </Link>
-        <Button variant="primary" size="lg" type="submit" disabled={isSubmitting}>
+        <Button
+          variant="primary"
+          size="lg"
+          type="submit"
+          disabled={isSubmitting}
+        >
           {isSubmitting ? loadingLabel : submitLabel}
         </Button>
       </div>

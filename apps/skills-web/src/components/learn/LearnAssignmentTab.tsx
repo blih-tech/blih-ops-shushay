@@ -52,7 +52,8 @@ export function LearnAssignmentTab({
             </span>
           </div>
           <p className="font-sans text-xs text-[#2E8F79]">
-            Your submission has been recorded. This lesson is now marked as complete.
+            Your submission has been recorded. This lesson is now marked as
+            complete.
           </p>
         </div>
       ) : (
@@ -101,8 +102,14 @@ export function LearnAssignmentTab({
             variant="primary"
             size="md"
             onClick={onSubmitAssignment}
-            disabled={isSubmittingAssignment || (!assignmentContent && !assignmentFile)}
-            leftIcon={isSubmittingAssignment ? <Loader2 className="w-4 h-4 animate-spin" /> : undefined}
+            disabled={
+              isSubmittingAssignment || (!assignmentContent && !assignmentFile)
+            }
+            leftIcon={
+              isSubmittingAssignment ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : undefined
+            }
           >
             {isSubmittingAssignment ? "Submitting..." : "Submit Assignment"}
           </Button>

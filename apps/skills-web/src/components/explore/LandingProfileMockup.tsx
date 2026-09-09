@@ -1,82 +1,72 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { Badge, SkillBar } from "@blih/ui";
 import { Award } from "lucide-react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function LandingProfileMockup() {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const card = cardRef.current;
-    const badge = badgeRef.current;
-    if (!card) return;
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none none",
+        },
+      });
 
-    // Start hidden — will animate in on scroll
-    card.style.opacity = "0";
-    card.style.transform = "translateY(40px) scale(0.97)";
+      // 1. Card entry
+      tl.fromTo(
+        containerRef.current,
+        { opacity: 0, y: 40, scale: 0.97 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: "power3.out" },
+      );
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
+      // 2. Skill bar rows stagger in from left
+      tl.fromTo(
+        ".skill-bar-row",
+        { opacity: 0, x: -20 },
+        { opacity: 1, x: 0, duration: 0.5, stagger: 0.12, ease: "power2.out" },
+        "-=0.4",
+      );
 
-        // 1. Card slides up and fades in
-        card.style.transition =
-          "opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)";
-        card.style.opacity = "1";
-        card.style.transform = "translateY(0px) scale(1)";
+      // 3. Stat tiles bounce in
+      tl.fromTo(
+        ".stat-tile",
+        { opacity: 0, scale: 0.75 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.45,
+          stagger: 0.1,
+          ease: "back.out(1.5)",
+        },
+        "-=0.3",
+      );
 
-        // 2. Skill bar rows stagger in from left
-        const bars = card.querySelectorAll<HTMLElement>(".skill-bar-row");
-        bars.forEach((bar, i) => {
-          bar.style.opacity = "0";
-          bar.style.transform = "translateX(-14px)";
-          setTimeout(() => {
-            bar.style.transition =
-              "opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)";
-            bar.style.opacity = "1";
-            bar.style.transform = "translateX(0)";
-          }, 420 + i * 130);
-        });
-
-        // 3. Stat tiles bounce in
-        const stats = card.querySelectorAll<HTMLElement>(".stat-tile");
-        stats.forEach((s, i) => {
-          s.style.opacity = "0";
-          s.style.transform = "scale(0.75)";
-          setTimeout(() => {
-            s.style.transition =
-              "opacity 0.45s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)";
-            s.style.opacity = "1";
-            s.style.transform = "scale(1)";
-          }, 700 + i * 90);
-        });
-
-        // 4. Floating badge springs in last
-        if (badge) {
-          badge.style.opacity = "0";
-          badge.style.transform = "scale(0.55) translateY(10px)";
-          setTimeout(() => {
-            badge.style.transition =
-              "opacity 0.5s ease, transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)";
-            badge.style.opacity = "1";
-            badge.style.transform = "scale(1) translateY(0)";
-          }, 980);
-        }
-      },
-      { threshold: 0.18 },
-    );
-
-    observer.observe(card);
-    return () => observer.disconnect();
-  }, []);
+      // 4. Floating badge springs in last
+      tl.fromTo(
+        ".floating-credential-badge",
+        { opacity: 0, scale: 0.55, y: 15 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.55, ease: "back.out(1.6)" },
+        "-=0.2",
+      );
+    },
+    { scope: containerRef },
+  );
 
   return (
     <div
-      ref={cardRef}
+      ref={containerRef}
       className="bg-white border border-[#D9CEDF] rounded-md p-6 sm:p-8 shadow-[0_20px_60px_rgba(23,19,31,0.08)] relative"
+      style={{ opacity: 0 }}
     >
       {/* Header */}
       <div className="flex items-start justify-between pb-6 border-b border-[#D9CEDF]/60">
@@ -157,10 +147,7 @@ export function LandingProfileMockup() {
       </div>
 
       {/* Floating badge — springs in after the card */}
-      <div
-        ref={badgeRef}
-        className="hidden sm:flex absolute -bottom-6 -left-6 bg-white border border-[#D9CEDF] rounded-lg p-4 shadow-lg items-center gap-3"
-      >
+      <div className="floating-credential-badge hidden sm:flex absolute -bottom-6 -left-6 bg-white border border-[#D9CEDF] rounded-lg p-4 shadow-lg items-center gap-3">
         <div className="w-10 h-10 rounded-md bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center">
           <Award className="w-5 h-5" />
         </div>

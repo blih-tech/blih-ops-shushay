@@ -1,9 +1,22 @@
 import { z } from "zod";
-import { EmploymentType, ExperienceLevel, EnglishLevel, JobStatus } from "@prisma/client";
+import {
+  EmploymentType,
+  ExperienceLevel,
+  EnglishLevel,
+  JobStatus,
+} from "@prisma/client";
 
 export const createJobSchema = z.object({
-  title: z.string().trim().min(3, "Title must be at least 3 characters").max(150),
-  description: z.string().trim().min(20, "Description must be at least 20 characters").max(5000),
+  title: z
+    .string()
+    .trim()
+    .min(3, "Title must be at least 3 characters")
+    .max(150),
+  description: z
+    .string()
+    .trim()
+    .min(20, "Description must be at least 20 characters")
+    .max(5000),
   requiredSkills: z
     .array(z.string().trim().min(1))
     .min(1, "At least one required skill must be specified"),

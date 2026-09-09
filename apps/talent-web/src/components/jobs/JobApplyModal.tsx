@@ -52,7 +52,8 @@ export function JobApplyModal({
             Apply for {jobTitle}
           </h3>
           <p className="text-xs text-[#6E6678] mt-1 font-sans">
-            Your verified skills, completed courses, and portfolio credentials will be attached automatically.
+            Your verified skills, completed courses, and portfolio credentials
+            will be attached automatically.
           </p>
         </div>
 

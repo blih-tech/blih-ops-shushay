@@ -49,20 +49,14 @@ function ProfileEditContent() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-8 space-y-8">
             <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
-              <Skeleton
-                variant="rectangular"
-                className="h-8 w-48 rounded-xl"
-              />
+              <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
               <Skeleton variant="rectangular" className="h-32 rounded-2xl" />
               <Skeleton variant="rectangular" className="h-12 rounded-xl" />
             </div>
           </div>
           <div className="lg:col-span-4 space-y-8">
             <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
-              <Skeleton
-                variant="rectangular"
-                className="h-8 w-32 rounded-xl"
-              />
+              <Skeleton variant="rectangular" className="h-8 w-32 rounded-xl" />
               <Skeleton variant="circular" className="h-24 w-24 mx-auto" />
             </div>
           </div>
@@ -132,8 +126,7 @@ function ProfileEditContent() {
             href="/profile"
             className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-2"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Profile Decision
-            Page
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to Profile Decision Page
           </Link>
           <h1 className="font-display font-bold text-3xl text-[#17131F]">
             Edit Talent Profile

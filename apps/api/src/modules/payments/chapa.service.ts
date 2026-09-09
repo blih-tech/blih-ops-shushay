@@ -40,10 +40,14 @@ export class ChapaService {
   /**
    * Initializes a payment checkout session with Chapa.
    */
-  async initializePayment(payload: InitializeChapaPayload): Promise<ChapaInitResponse> {
+  async initializePayment(
+    payload: InitializeChapaPayload,
+  ): Promise<ChapaInitResponse> {
     if (!this.secretKey || this.secretKey === "mock-secret-key") {
       // Mock mode for local test environment without real key
-      const redirectUrl = payload.returnUrl || `${env.skillsWebUrl}/checkout/return?tx_ref=${payload.txRef}`;
+      const redirectUrl =
+        payload.returnUrl ||
+        `${env.skillsWebUrl}/checkout/return?tx_ref=${payload.txRef}`;
       const finalUrl = redirectUrl.includes("tx_ref=")
         ? redirectUrl
         : `${redirectUrl}${redirectUrl.includes("?") ? "&" : "?"}tx_ref=${payload.txRef}`;
@@ -51,7 +55,6 @@ export class ChapaService {
         checkoutUrl: finalUrl,
       };
     }
-
 
     const isLocalhostCallback =
       payload.callbackUrl?.includes("localhost") ||
@@ -84,10 +87,13 @@ export class ChapaService {
         body: JSON.stringify(bodyData),
       });
 
-
       const data = (await response.json()) as any;
 
-      if (!response.ok || data.status !== "success" || !data.data?.checkout_url) {
+      if (
+        !response.ok ||
+        data.status !== "success" ||
+        !data.data?.checkout_url
+      ) {
         throw new AppError(
           502,
           `Chapa initialization failed: ${data.message || response.statusText}`,
@@ -99,7 +105,10 @@ export class ChapaService {
       };
     } catch (err: any) {
       if (err instanceof AppError) throw err;
-      throw new AppError(502, `Failed to connect to payment gateway: ${err.message}`);
+      throw new AppError(
+        502,
+        `Failed to connect to payment gateway: ${err.message}`,
+      );
     }
   }
 
@@ -124,12 +133,15 @@ export class ChapaService {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/transaction/verify/${txRef}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.secretKey}`,
+      const response = await fetch(
+        `${this.baseUrl}/transaction/verify/${txRef}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.secretKey}`,
+          },
         },
-      });
+      );
 
       const data = (await response.json()) as any;
 
@@ -145,7 +157,8 @@ export class ChapaService {
 
       const verifyData = data.data || {};
       const isTestMode =
-        verifyData.mode === "test" || this.secretKey.startsWith("CHASECK_TEST-");
+        verifyData.mode === "test" ||
+        this.secretKey.startsWith("CHASECK_TEST-");
 
       const finalStatus =
         isTestMode && data.status === "success"
@@ -157,22 +170,29 @@ export class ChapaService {
         amount: parseFloat(verifyData.amount ?? (isTestMode ? 1000 : 0)),
         currency: verifyData.currency || "ETB",
         status: finalStatus,
-        chapaRef: verifyData.reference || verifyData.trans_id || `CHAPA-${txRef}`,
+        chapaRef:
+          verifyData.reference || verifyData.trans_id || `CHAPA-${txRef}`,
         rawResponse: data,
       };
-
     } catch (err: any) {
-      throw new AppError(502, `Failed to verify payment with gateway: ${err.message}`);
+      throw new AppError(
+        502,
+        `Failed to verify payment with gateway: ${err.message}`,
+      );
     }
   }
 
   /**
    * Verifies Chapa HMAC SHA-256 webhook signature header.
    */
-  verifyWebhookSignature(rawBody: string | object, signature: string | undefined): boolean {
+  verifyWebhookSignature(
+    rawBody: string | object,
+    signature: string | undefined,
+  ): boolean {
     if (!signature || !this.secretKey) return false;
     try {
-      const payloadString = typeof rawBody === "string" ? rawBody : JSON.stringify(rawBody);
+      const payloadString =
+        typeof rawBody === "string" ? rawBody : JSON.stringify(rawBody);
       const expectedSignature = require("crypto")
         .createHmac("sha256", this.secretKey)
         .update(payloadString)
@@ -188,4 +208,3 @@ export class ChapaService {
 }
 
 export const chapaService = new ChapaService();
-

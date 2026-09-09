@@ -5,6 +5,7 @@ The central authentication interface for Blih. Handles sign up, login, logout, e
 No course/job/talent/company/payment business logic belongs here.
 
 ## Setup
+
 ```bash
 npm install
 cp .env.local.example .env.local

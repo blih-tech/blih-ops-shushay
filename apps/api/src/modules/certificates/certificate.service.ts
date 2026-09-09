@@ -2,7 +2,10 @@ import PDFDocument from "pdfkit";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 
-export async function checkAndGenerateCertificate(userId: string, courseId: string) {
+export async function checkAndGenerateCertificate(
+  userId: string,
+  courseId: string,
+) {
   const course = await prisma.course.findUnique({
     where: { id: courseId },
     include: {
@@ -30,10 +33,7 @@ export async function checkAndGenerateCertificate(userId: string, courseId: stri
   const existingCert = await prisma.certificate.findFirst({
     where: {
       userId,
-      OR: [
-        { courseId },
-        { course: { title: course.title } },
-      ],
+      OR: [{ courseId }, { course: { title: course.title } }],
     },
     include: {
       course: { select: { id: true, title: true, description: true } },
@@ -143,7 +143,9 @@ export async function generateCertificatePdfStream(cert: any, res: any) {
 
   const recipientName =
     cert.user?.talentProfile?.fullName ||
-    (cert.user?.email ? cert.user.email.split("@")[0].toUpperCase() : "Shushay Kebedew");
+    (cert.user?.email
+      ? cert.user.email.split("@")[0].toUpperCase()
+      : "Shushay Kebedew");
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
@@ -160,11 +162,7 @@ export async function generateCertificatePdfStream(cert: any, res: any) {
     .strokeColor("#1E5BFF")
     .stroke();
 
-  doc
-    .rect(32, 32, 777.89, 531.28)
-    .lineWidth(1)
-    .strokeColor("#D9CEDF")
-    .stroke();
+  doc.rect(32, 32, 777.89, 531.28).lineWidth(1).strokeColor("#D9CEDF").stroke();
 
   // Corner Accents
   doc.rect(20, 20, 15, 15).lineWidth(2).strokeColor("#1E5BFF").stroke();
@@ -246,7 +244,9 @@ export async function generateCertificatePdfStream(cert: any, res: any) {
     .font("Helvetica-Bold")
     .fontSize(12)
     .fillColor("#1E5BFF")
-    .text(`Certificate No: ${cert.certificateNumber}`, 0, 450, { align: "center" });
+    .text(`Certificate No: ${cert.certificateNumber}`, 0, 450, {
+      align: "center",
+    });
 
   // 9. Blih Skills Footer
   doc

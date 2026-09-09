@@ -143,10 +143,11 @@ export function TalentExplorerPreview() {
                   onClick={() => setSelectedId(c.id)}
                   onMouseEnter={onItemEnter}
                   onMouseLeave={onItemLeave}
-                  className={`candidate-card-item cursor-pointer rounded-2xl p-4 border flex items-center gap-4 ${isSelected
+                  className={`candidate-card-item cursor-pointer rounded-2xl p-4 border flex items-center gap-4 ${
+                    isSelected
                       ? "bg-[#DDE7FF] border-[#1E5BFF] shadow-sm scale-[0.98]"
                       : "bg-white border-[#D9CEDF] hover:bg-[#EEF3FF]/40"
-                    }`}
+                  }`}
                   style={{ opacity: 0 }}
                 >
                   <div className="w-[42px] h-[42px] rounded-full bg-[#EEF3FF] border border-[#1E5BFF]/10 flex items-center justify-center font-display font-bold text-xs text-[#1E5BFF] shrink-0">

@@ -12,5 +12,6 @@ export const verifyPaymentSchema = z.object({
 export const initializeSkillsPaymentSchema = z.object({});
 
 export type VerifyPaymentInput = z.infer<typeof verifyPaymentSchema>;
-export type InitializeSkillsPaymentInput = z.infer<typeof initializeSkillsPaymentSchema>;
-
+export type InitializeSkillsPaymentInput = z.infer<
+  typeof initializeSkillsPaymentSchema
+>;

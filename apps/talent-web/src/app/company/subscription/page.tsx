@@ -1,7 +1,15 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { CheckCircle2, Sparkles, ShieldCheck, AlertCircle, Loader2, Calendar, Clock } from "lucide-react";
+import {
+  CheckCircle2,
+  Sparkles,
+  ShieldCheck,
+  AlertCircle,
+  Loader2,
+  Calendar,
+  Clock,
+} from "lucide-react";
 import { Button, Badge, Card, Alert } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import {
@@ -10,7 +18,9 @@ import {
 } from "@blih/api-client";
 
 function CompanySubscriptionContent() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("yearly");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "yearly",
+  );
 
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [statusError, setStatusError] = useState<string | null>(null);
@@ -57,7 +67,9 @@ function CompanySubscriptionContent() {
       if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
       } else {
-        setCheckoutError("Could not retrieve payment checkout URL. Please try again.");
+        setCheckoutError(
+          "Could not retrieve payment checkout URL. Please try again.",
+        );
       }
     } catch (err: any) {
       setCheckoutError(err.message || "Failed to initialize payment checkout.");
@@ -87,7 +99,8 @@ function CompanySubscriptionContent() {
           Hire verified African engineering talent with confidence.
         </h1>
         <p className="text-base sm:text-lg text-[#6E6678] font-sans leading-relaxed">
-          Gain full access to the graduate evidence catalog, direct contact information, and unlimited role postings.
+          Gain full access to the graduate evidence catalog, direct contact
+          information, and unlimited role postings.
         </p>
       </div>
 
@@ -121,25 +134,40 @@ function CompanySubscriptionContent() {
                 <div className="flex items-center gap-3 text-xs text-[#6E6678]">
                   <Calendar className="w-4 h-4 text-[#1E5BFF] shrink-0" />
                   <div>
-                    <span className="block font-semibold text-[#17131F]">Start Date</span>
-                    <span>{new Date(statusData.subscription.startDate).toLocaleDateString()}</span>
+                    <span className="block font-semibold text-[#17131F]">
+                      Start Date
+                    </span>
+                    <span>
+                      {new Date(
+                        statusData.subscription.startDate,
+                      ).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-[#6E6678]">
                   <Calendar className="w-4 h-4 text-[#1E5BFF] shrink-0" />
                   <div>
-                    <span className="block font-semibold text-[#17131F]">Expiration Date</span>
-                    <span>{new Date(statusData.subscription.expiresAt).toLocaleDateString()}</span>
+                    <span className="block font-semibold text-[#17131F]">
+                      Expiration Date
+                    </span>
+                    <span>
+                      {new Date(
+                        statusData.subscription.expiresAt,
+                      ).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs text-[#6E6678]">
                   <Clock className="w-4 h-4 text-[#1E5BFF] shrink-0" />
                   <div>
-                    <span className="block font-semibold text-[#17131F]">Time Remaining</span>
+                    <span className="block font-semibold text-[#17131F]">
+                      Time Remaining
+                    </span>
                     <span className="font-bold text-[#2E8F79]">
-                      {statusData.daysRemaining} {statusData.daysRemaining === 1 ? "day" : "days"}
+                      {statusData.daysRemaining}{" "}
+                      {statusData.daysRemaining === 1 ? "day" : "days"}
                     </span>
                   </div>
                 </div>
@@ -158,7 +186,12 @@ function CompanySubscriptionContent() {
                     Your Company Subscription Has Expired
                   </h2>
                   <p className="text-xs text-[#6E6678]">
-                    Expired on {new Date(statusData.subscription.expiresAt).toLocaleDateString()}. Talent search and job postings are currently blocked. Renew below to restore full access immediately.
+                    Expired on{" "}
+                    {new Date(
+                      statusData.subscription.expiresAt,
+                    ).toLocaleDateString()}
+                    . Talent search and job postings are currently blocked.
+                    Renew below to restore full access immediately.
                   </p>
                 </div>
 
@@ -187,20 +220,22 @@ function CompanySubscriptionContent() {
           <button
             type="button"
             onClick={() => setBillingCycle("monthly")}
-            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${billingCycle === "monthly"
-              ? "bg-[#1E5BFF] text-white shadow-xs"
-              : "text-[#6E6678] hover:text-[#17131F]"
-              }`}
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+              billingCycle === "monthly"
+                ? "bg-[#1E5BFF] text-white shadow-xs"
+                : "text-[#6E6678] hover:text-[#17131F]"
+            }`}
           >
             Monthly Billing
           </button>
           <button
             type="button"
             onClick={() => setBillingCycle("yearly")}
-            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${billingCycle === "yearly"
-              ? "bg-[#1E5BFF] text-white shadow-xs"
-              : "text-[#6E6678] hover:text-[#17131F]"
-              }`}
+            className={`px-4 sm:px-5 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              billingCycle === "yearly"
+                ? "bg-[#1E5BFF] text-white shadow-xs"
+                : "text-[#6E6678] hover:text-[#17131F]"
+            }`}
           >
             <span>Yearly Plan</span>
             <span className="bg-[#2E8F79] text-white text-[10px] px-2 py-0.5 rounded-full font-sans font-bold">
@@ -214,10 +249,11 @@ function CompanySubscriptionContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
         {/* Monthly Plan */}
         <Card
-          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${billingCycle === "monthly"
-            ? "border-2 border-[#1E5BFF] shadow-lg"
-            : "border-[#D9CEDF]"
-            }`}
+          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
+            billingCycle === "monthly"
+              ? "border-2 border-[#1E5BFF] shadow-lg"
+              : "border-[#D9CEDF]"
+          }`}
         >
           <div className="space-y-6">
             <div className="space-y-2">
@@ -276,10 +312,11 @@ function CompanySubscriptionContent() {
 
         {/* Yearly Plan */}
         <Card
-          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${billingCycle === "yearly"
-            ? "border-2 border-[#1E5BFF] shadow-xl relative"
-            : "border-[#D9CEDF]"
-            }`}
+          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
+            billingCycle === "yearly"
+              ? "border-2 border-[#1E5BFF] shadow-xl relative"
+              : "border-[#D9CEDF]"
+          }`}
         >
           {billingCycle === "yearly" && (
             <div className="absolute -top-3.5 right-6 bg-[#1E5BFF] text-white text-[11px] font-mono uppercase px-3 py-1 rounded-full font-bold shadow-sm">

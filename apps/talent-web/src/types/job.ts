@@ -5,12 +5,7 @@ export type EmploymentType =
   | "FREELANCE"
   | "INTERNSHIP";
 
-export type ExperienceLevel =
-  | "ENTRY"
-  | "MID"
-  | "SENIOR"
-  | "LEAD"
-  | "EXECUTIVE";
+export type ExperienceLevel = "ENTRY" | "MID" | "SENIOR" | "LEAD" | "EXECUTIVE";
 
 export type JobStatus = "ACTIVE" | "CLOSED";
 

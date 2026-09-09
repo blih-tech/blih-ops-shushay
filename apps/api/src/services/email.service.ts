@@ -83,7 +83,9 @@ export async function sendVerificationEmail(
 
     return { success: true };
   } catch (err: any) {
-    console.error(`[EMAIL ERROR] Verification email to ${email}: ${err.message}`);
+    console.error(
+      `[EMAIL ERROR] Verification email to ${email}: ${err.message}`,
+    );
     return { success: false, error: err.message };
   }
 }
@@ -127,7 +129,9 @@ export async function sendPasswordResetEmail(
 
     return { success: true };
   } catch (err: any) {
-    console.error(`[EMAIL ERROR] Password reset email to ${email}: ${err.message}`);
+    console.error(
+      `[EMAIL ERROR] Password reset email to ${email}: ${err.message}`,
+    );
     return { success: false, error: err.message };
   }
 }

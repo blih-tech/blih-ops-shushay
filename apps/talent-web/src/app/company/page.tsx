@@ -56,7 +56,11 @@ function CompanyDashboardContent() {
 
       {/* Metrics Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <MetricCard value="Live" label="Active Job Postings" variant="surface" />
+        <MetricCard
+          value="Live"
+          label="Active Job Postings"
+          variant="surface"
+        />
         <MetricCard
           value="Active"
           label="Candidate Review Queue"
@@ -158,8 +162,7 @@ function CompanyDashboardContent() {
             </div>
             <CardTitle className="text-xl mb-1">Billing & Access</CardTitle>
             <CardDescription className="text-sm">
-              Manage hiring seat licenses, payment methods, and receipt
-              history.
+              Manage hiring seat licenses, payment methods, and receipt history.
             </CardDescription>
           </div>
           <div className="pt-4 border-t border-[#D9CEDF]/50 mt-4">

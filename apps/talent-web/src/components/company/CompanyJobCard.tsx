@@ -29,7 +29,11 @@ function formatEmploymentType(type: string): string {
     .join("-");
 }
 
-export function CompanyJobCard({ job, closingId, onCloseJob }: CompanyJobCardProps) {
+export function CompanyJobCard({
+  job,
+  closingId,
+  onCloseJob,
+}: CompanyJobCardProps) {
   const isClosed = job.status === "CLOSED";
   const applicantsCount = job._count?.applications || 0;
   const isClosing = closingId === job.id;
@@ -43,10 +47,11 @@ export function CompanyJobCard({ job, closingId, onCloseJob }: CompanyJobCardPro
           <div className="flex items-start gap-4 flex-1 min-w-0">
             {/* Vibrant Monogram Badge */}
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-bold text-xl shrink-0 shadow-sm ${isClosed
-                ? "bg-[#F4F1F7] text-[#6E6678] border border-[#D9CEDF]"
-                : "bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white shadow-[0_4px_12px_rgba(30,91,255,0.25)] ring-4 ring-[#EEF3FF]"
-                }`}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-bold text-xl shrink-0 shadow-sm ${
+                isClosed
+                  ? "bg-[#F4F1F7] text-[#6E6678] border border-[#D9CEDF]"
+                  : "bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white shadow-[0_4px_12px_rgba(30,91,255,0.25)] ring-4 ring-[#EEF3FF]"
+              }`}
             >
               {initial}
             </div>
@@ -156,7 +161,8 @@ export function CompanyJobCard({ job, closingId, onCloseJob }: CompanyJobCardPro
             <div className="flex items-center gap-1.5 text-sm font-medium text-[#17131F] truncate">
               <MapPin className="w-4 h-4 text-[#1E5BFF] shrink-0" />
               <span className="truncate">
-                {job.timezone || "Remote"} {job.workingHours ? `· ${job.workingHours}` : ""}
+                {job.timezone || "Remote"}{" "}
+                {job.workingHours ? `· ${job.workingHours}` : ""}
               </span>
             </div>
           </div>
@@ -171,7 +177,10 @@ export function CompanyJobCard({ job, closingId, onCloseJob }: CompanyJobCardPro
               className="flex items-center gap-1.5 text-sm font-bold text-[#1E5BFF] hover:underline"
             >
               <Users className="w-4 h-4 text-[#1E5BFF] shrink-0" />
-              <span>{applicantsCount} {applicantsCount === 1 ? "Candidate" : "Candidates"}</span>
+              <span>
+                {applicantsCount}{" "}
+                {applicantsCount === 1 ? "Candidate" : "Candidates"}
+              </span>
             </Link>
           </div>
         </div>
@@ -207,7 +216,8 @@ export function CompanyJobCard({ job, closingId, onCloseJob }: CompanyJobCardPro
           <div className="flex items-center gap-1.5 text-xs font-mono text-[#6E6678] shrink-0">
             <Calendar className="w-3.5 h-3.5 text-[#6E6678]/70" />
             <span>
-              Posted {new Date(job.createdAt).toLocaleDateString("en-US", {
+              Posted{" "}
+              {new Date(job.createdAt).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
                 year: "numeric",

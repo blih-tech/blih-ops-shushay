@@ -125,8 +125,11 @@ function LearnContent({ courseId }: { courseId: string }) {
                 Skills Access Required
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed">
-                Full lesson content, video streams, downloadable resources, and quizzes are protected. Make a one-time{" "}
-                <strong className="text-[#17131F]">1,000 ETB</strong> payment via Chapa to permanently unlock all current and future Blih Skills courses.
+                Full lesson content, video streams, downloadable resources, and
+                quizzes are protected. Make a one-time{" "}
+                <strong className="text-[#17131F]">1,000 ETB</strong> payment
+                via Chapa to permanently unlock all current and future Blih
+                Skills courses.
               </p>
             </div>
 
@@ -163,8 +166,11 @@ function LearnContent({ courseId }: { courseId: string }) {
   const lessonsList: PublicLesson[] = course?.lessons || [];
   const activeLesson = lessonsList[activeLessonIndex];
   const totalLessons = lessonsList.length || 1;
-  const progressPercent = Math.round((completedLessons.length / totalLessons) * 100);
-  const isCourseComplete = totalLessons > 0 && completedLessons.length === totalLessons;
+  const progressPercent = Math.round(
+    (completedLessons.length / totalLessons) * 100,
+  );
+  const isCourseComplete =
+    totalLessons > 0 && completedLessons.length === totalLessons;
 
   const handleCompleteCurrent = async () => {
     if (!activeLesson) return;
@@ -188,7 +194,7 @@ function LearnContent({ courseId }: { courseId: string }) {
 
   const handleQuizSubmit = async () => {
     if (!activeLesson?.quiz) return;
-    const questions = (activeLesson.quiz as any).questions as any[] ?? [];
+    const questions = ((activeLesson.quiz as any).questions as any[]) ?? [];
     if (Object.keys(quizAnswers).length !== questions.length) return;
     const answers = questions.map((_: any, i: number) => quizAnswers[i] ?? 0);
     try {
@@ -276,7 +282,9 @@ function LearnContent({ courseId }: { courseId: string }) {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           selectedQuizOption={quizAnswers}
-          setSelectedQuizOption={(qIdx: number, optIdx: number) => setQuizAnswers(prev => ({ ...prev, [qIdx]: optIdx }))}
+          setSelectedQuizOption={(qIdx: number, optIdx: number) =>
+            setQuizAnswers((prev) => ({ ...prev, [qIdx]: optIdx }))
+          }
           quizSubmitted={quizSubmitted}
           quizPassed={quizPassed}
           quizScore={quizScore}

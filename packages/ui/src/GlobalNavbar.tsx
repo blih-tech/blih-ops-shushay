@@ -14,19 +14,19 @@ export type { NavLinkItem };
 
 export interface GlobalNavbarProps {
   currentApp?:
-  | "auth"
-  | "skills"
-  | "talent"
-  | "talents"
-  | "explore"
-  | "courses"
-  | "opportunities"
-  | "jobs"
-  | "business"
-  | "dashboard"
-  | "subscription"
-  | "admin"
-  | "company";
+    | "auth"
+    | "skills"
+    | "talent"
+    | "talents"
+    | "explore"
+    | "courses"
+    | "opportunities"
+    | "jobs"
+    | "business"
+    | "dashboard"
+    | "subscription"
+    | "admin"
+    | "company";
   pathname?: string;
   user?: { email?: string; role?: string; photoUrl?: string } | null;
   loading?: boolean;
@@ -137,10 +137,11 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               <a
                 key={link.label}
                 href={link.href}
-                className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${link.active
+                className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${
+                  link.active
                     ? "text-[#1E5BFF] font-bold bg-white shadow-sm ring-1 ring-[#D9CEDF]/50"
                     : "text-[#6E6678] hover:text-[#17131F] hover:bg-white/60 font-medium"
-                  }`}
+                }`}
               >
                 {link.label}
               </a>
@@ -198,9 +199,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-2">
           {extraActions && (
-            <div className="flex items-center">
-              {extraActions}
-            </div>
+            <div className="flex items-center">{extraActions}</div>
           )}
           <button
             type="button"
@@ -212,16 +211,18 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <span className="sr-only">Toggle navigation menu</span>
             <div className="relative w-5 h-5 flex items-center justify-center">
               <Menu
-                className={`h-5 w-5 absolute transition-all duration-300 transform ${mobileMenuOpen
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen
                     ? "rotate-90 opacity-0 scale-75"
                     : "rotate-0 opacity-100 scale-100"
-                  }`}
+                }`}
               />
               <X
-                className={`h-5 w-5 absolute transition-all duration-300 transform ${mobileMenuOpen
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen
                     ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]"
                     : "-rotate-90 opacity-0 scale-75"
-                  }`}
+                }`}
               />
             </div>
           </button>

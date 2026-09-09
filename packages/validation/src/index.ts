@@ -142,4 +142,3 @@ export const initializeSubscriptionSchema = z.object({
 export type InitializeSubscriptionInput = z.infer<
   typeof initializeSubscriptionSchema
 >;
-

@@ -21,4 +21,3 @@ export * from "./UniversalSearch";
 export * from "./GlobalNavbar";
 export * from "./GlobalFooter";
 export * from "./Chip";
-

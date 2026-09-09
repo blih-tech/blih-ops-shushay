@@ -6,10 +6,9 @@ export interface ExperienceEducationCardProps {
   education?: any[];
 }
 
-export const ExperienceEducationCard: React.FC<ExperienceEducationCardProps> = ({
-  experience,
-  education,
-}) => {
+export const ExperienceEducationCard: React.FC<
+  ExperienceEducationCardProps
+> = ({ experience, education }) => {
   return (
     <>
       {/* Work Experience */}
@@ -39,7 +38,8 @@ export const ExperienceEducationCard: React.FC<ExperienceEducationCardProps> = (
                       {exp.title}
                     </h4>
                     <span className="font-mono text-xs text-[#6E6678] bg-[#EEF3FF] px-3 py-1 rounded-full border border-[#D9CEDF]/60 self-start sm:self-auto">
-                      {exp.startDate} – {exp.current ? "Present" : exp.endDate || "Ended"}
+                      {exp.startDate} –{" "}
+                      {exp.current ? "Present" : exp.endDate || "Ended"}
                     </span>
                   </div>
                   <p className="font-sans text-sm font-semibold text-[#1E5BFF]">

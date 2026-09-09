@@ -1,5 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Upload, Trash2, Building2, Loader2, ImagePlus, CheckCircle2 } from "lucide-react";
+import {
+  Upload,
+  Trash2,
+  Building2,
+  Loader2,
+  ImagePlus,
+  CheckCircle2,
+} from "lucide-react";
 import { Button, Alert } from "@blih/ui";
 
 interface LogoUploadProps {
@@ -123,7 +130,8 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
               <span>Brand Logo & Identity</span>
             </h3>
             <p className="text-xs text-[#6E6678] leading-relaxed">
-              Upload your official high-resolution logo. Displayed on your public profile, company cards, and job listings.
+              Upload your official high-resolution logo. Displayed on your
+              public profile, company cards, and job listings.
             </p>
           </div>
 
@@ -136,15 +144,18 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => !loading && fileInputRef.current?.click()}
-            className={`p-3.5 rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-3 ${isDragging
+            className={`p-3.5 rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-3 ${
+              isDragging
                 ? "border-[#1E5BFF] bg-[#EEF3FF]"
                 : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/60 hover:bg-[#EEF3FF]/30"
-              }`}
+            }`}
           >
             <div className="flex items-center gap-2.5 text-xs text-[#4E4656] pointer-events-none">
               <Upload className="w-4 h-4 text-[#1E5BFF] shrink-0" />
               <span className="font-medium">
-                {isDragging ? "Drop your file here" : "Click to select or drag logo file here"}
+                {isDragging
+                  ? "Drop your file here"
+                  : "Click to select or drag logo file here"}
               </span>
             </div>
 
@@ -212,4 +223,3 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
 };
 
 export default LogoUpload;
-

@@ -55,10 +55,24 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
   if (initLoading) {
     return (
       <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <Skeleton variant="rectangular" width={180} height={20} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={180}
+          height={20}
+          className="rounded-md"
+        />
         <Card className="p-8 space-y-6">
-          <Skeleton variant="rectangular" width={280} height={28} className="rounded-md" />
-          <Skeleton variant="rectangular" height={140} className="w-full rounded-xl" />
+          <Skeleton
+            variant="rectangular"
+            width={280}
+            height={28}
+            className="rounded-md"
+          />
+          <Skeleton
+            variant="rectangular"
+            height={140}
+            className="w-full rounded-xl"
+          />
         </Card>
       </main>
     );
@@ -90,7 +104,8 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
           <ArrowLeft className="h-3.5 w-3.5" /> Back to My Job Postings
         </Link>
         <Alert variant="warning" title="Closed Job Listing">
-          This job post is closed and cannot be modified. Create a new posting to reopen the role.
+          This job post is closed and cannot be modified. Create a new posting
+          to reopen the role.
         </Alert>
       </main>
     );
@@ -110,7 +125,8 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
           Edit Opportunity Listing
         </h1>
         <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-          Update role details, required competencies, or compensation specifications.
+          Update role details, required competencies, or compensation
+          specifications.
         </p>
       </div>
 

@@ -2,7 +2,6 @@ import type { TalentProfileCard } from "@/types/talent-card";
 
 export type { TalentProfileCard };
 
-
 export const mockTalents: TalentProfileCard[] = [
   {
     id: "tal-1",

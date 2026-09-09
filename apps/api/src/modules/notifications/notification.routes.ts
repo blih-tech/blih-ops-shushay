@@ -38,4 +38,3 @@ router.get("/", requireAuth, getUserNotifications);
 router.patch("/:id/read", requireAuth, markAsRead);
 
 export default router;
-

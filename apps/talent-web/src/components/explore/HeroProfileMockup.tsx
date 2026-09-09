@@ -38,7 +38,6 @@ export function HeroProfileMockup() {
         },
       });
 
-
       // Initial scale/fade reveal of the profile surface
       gsap.fromTo(
         ".profile-card",
@@ -266,7 +265,6 @@ export function HeroProfileMockup() {
           Get Hired
         </div>
       </div>
-
     </div>
   );
 }

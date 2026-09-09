@@ -7,8 +7,7 @@ interface EditCourseSkeletonProps {
   onSignOut?: () => void;
 }
 
-export function EditCourseSkeleton({
-}: EditCourseSkeletonProps) {
+export function EditCourseSkeleton({}: EditCourseSkeletonProps) {
   return (
     <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1 animate-pulse">
       <div className="flex items-center justify-between">

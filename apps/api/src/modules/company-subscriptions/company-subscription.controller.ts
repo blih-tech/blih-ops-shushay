@@ -10,10 +10,11 @@ export async function initializeCompanySubscription(
   try {
     const userId = req.user!.id;
     const validated = initializeSubscriptionSchema.parse(req.body);
-    const result = await companySubscriptionService.initializeCompanySubscription(
-      userId,
-      validated.plan,
-    );
+    const result =
+      await companySubscriptionService.initializeCompanySubscription(
+        userId,
+        validated.plan,
+      );
     res.json(result);
   } catch (err) {
     next(err);
@@ -27,9 +28,8 @@ export async function getCompanySubscriptionStatus(
 ) {
   try {
     const userId = req.user!.id;
-    const result = await companySubscriptionService.getCompanySubscriptionStatus(
-      userId,
-    );
+    const result =
+      await companySubscriptionService.getCompanySubscriptionStatus(userId);
     res.json(result);
   } catch (err) {
     next(err);

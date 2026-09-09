@@ -90,7 +90,11 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       title,
       company,
       startDate: new Date(startDate).toISOString(),
-      endDate: current ? null : endDate ? new Date(endDate).toISOString() : null,
+      endDate: current
+        ? null
+        : endDate
+          ? new Date(endDate).toISOString()
+          : null,
       current,
       description: description.trim() || null,
     };
@@ -167,33 +171,62 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
         {error && <Alert variant="error">{error}</Alert>}
 
         {(isAdding || editingId) && (
-          <form onSubmit={handleSave} className="p-4 bg-[#F8F6F9] rounded-xl border border-[#D9CEDF] space-y-4">
+          <form
+            onSubmit={handleSave}
+            className="p-4 bg-[#F8F6F9] rounded-xl border border-[#D9CEDF] space-y-4"
+          >
             <div className="flex justify-between items-center pb-2 border-b border-[#D9CEDF]">
               <h4 className="font-semibold text-sm text-[#17131F]">
                 {editingId ? "Edit Experience" : "New Experience Record"}
               </h4>
-              <Badge variant="outline">{current ? "Current Role" : "Past Role"}</Badge>
+              <Badge variant="outline">
+                {current ? "Current Role" : "Past Role"}
+              </Badge>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField label="Job Title" required>
-                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Senior Frontend Engineer" />
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g. Senior Frontend Engineer"
+                />
               </FormField>
               <FormField label="Company" required>
-                <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="e.g. Gebeya Tech" />
+                <Input
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  placeholder="e.g. Gebeya Tech"
+                />
               </FormField>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField label="Start Date" required>
-                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                <Input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
               </FormField>
-              <FormField label="End Date" helperText={current ? "Currently working here" : ""}>
-                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} disabled={current} />
+              <FormField
+                label="End Date"
+                helperText={current ? "Currently working here" : ""}
+              >
+                <Input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  disabled={current}
+                />
               </FormField>
             </div>
 
-            <Checkbox label="I currently work in this role" checked={current} onChange={(e) => setCurrent(e.target.checked)} />
+            <Checkbox
+              label="I currently work in this role"
+              checked={current}
+              onChange={(e) => setCurrent(e.target.checked)}
+            />
 
             <FormField label="Key Contributions / Description">
               <Textarea
@@ -207,33 +240,92 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
             </FormField>
 
             <div className="flex justify-end gap-2 pt-2">
-              <Button type="button" variant="outline" size="sm" onClick={() => { setIsAdding(false); setEditingId(null); resetForm(); }}>Cancel</Button>
-              <Button type="submit" size="sm" disabled={loading} leftIcon={loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}>Save Record</Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setIsAdding(false);
+                  setEditingId(null);
+                  resetForm();
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={loading}
+                leftIcon={
+                  loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Check className="w-4 h-4" />
+                  )
+                }
+              >
+                Save Record
+              </Button>
             </div>
           </form>
         )}
 
         <div className="divide-y divide-[#D9CEDF]">
           {entries.length === 0 && !isAdding && !editingId ? (
-            <p className="text-sm text-[#6E6678] py-4 text-center">No experience entries added yet.</p>
+            <p className="text-sm text-[#6E6678] py-4 text-center">
+              No experience entries added yet.
+            </p>
           ) : (
             entries.map((exp) => (
-              <div key={exp.id} className="py-4 flex justify-between items-start group">
+              <div
+                key={exp.id}
+                className="py-4 flex justify-between items-start group"
+              >
                 <div className="space-y-1 max-w-xl">
                   <div className="flex items-center gap-2">
-                    <h4 className="font-bold text-[#17131F] text-base">{exp.title}</h4>
-                    {exp.current && <Badge variant="primary" size="sm">Current</Badge>}
+                    <h4 className="font-bold text-[#17131F] text-base">
+                      {exp.title}
+                    </h4>
+                    {exp.current && (
+                      <Badge variant="primary" size="sm">
+                        Current
+                      </Badge>
+                    )}
                   </div>
-                  <p className="text-sm text-[#1E5BFF] font-medium">{exp.company}</p>
+                  <p className="text-sm text-[#1E5BFF] font-medium">
+                    {exp.company}
+                  </p>
                   <p className="text-xs font-mono text-[#6E6678] flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 inline" />
-                    {formatDate(exp.startDate)} – {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : ""}
+                    {formatDate(exp.startDate)} –{" "}
+                    {exp.current
+                      ? "Present"
+                      : exp.endDate
+                        ? formatDate(exp.endDate)
+                        : ""}
                   </p>
-                  {exp.description && <p className="text-sm text-[#6E6678] pt-1 whitespace-pre-line">{exp.description}</p>}
+                  {exp.description && (
+                    <p className="text-sm text-[#6E6678] pt-1 whitespace-pre-line">
+                      {exp.description}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center gap-1 opacity-90 group-hover:opacity-100 transition-opacity">
-                  <Button variant="outline" size="sm" onClick={() => handleEditInit(exp)}><Edit2 className="w-3.5 h-3.5" /></Button>
-                  <Button variant="outline" size="sm" onClick={() => setDeletingId(exp.id)} className="text-red-600 hover:text-red-700"><Trash2 className="w-3.5 h-3.5" /></Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEditInit(exp)}
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setDeletingId(exp.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </Button>
                 </div>
               </div>
             ))

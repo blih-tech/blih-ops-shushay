@@ -78,7 +78,9 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
         <div className="inline-flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs sm:text-sm bg-white border border-[#D9CEDF] text-[#17131F] px-4 sm:px-6 py-2.5 rounded-2xl shadow-sm ring-1 ring-[#1E5BFF]/10">
           <ShieldCheck className="w-4 h-4 text-[#00A859] shrink-0" />
           <span className="text-[#6E6678] font-medium">Certificate No:</span>
-          <span className="font-bold text-[#1E5BFF] select-all">{credentialId}</span>
+          <span className="font-bold text-[#1E5BFF] select-all">
+            {credentialId}
+          </span>
         </div>
       </div>
 

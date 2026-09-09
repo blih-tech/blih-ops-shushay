@@ -32,7 +32,6 @@ export async function uploadTalentCv(file: File): Promise<TalentProfile> {
   return apiFetchFormData<TalentProfile>("/talents/profile/cv", formData);
 }
 
-
 export async function deleteTalentCv(): Promise<TalentProfile> {
   return apiFetch<TalentProfile>("/talents/profile/cv", {
     method: "DELETE",
@@ -135,9 +134,18 @@ export async function searchTalents(
 
 export async function getTalentProfileById(
   talentId: string,
-): Promise<TalentProfile & { certificates?: any[]; completedCourses?: any[]; email?: string }> {
-  return apiFetch<TalentProfile & { certificates?: any[]; completedCourses?: any[]; email?: string }>(
-    `/talents/${talentId}`,
-  );
+): Promise<
+  TalentProfile & {
+    certificates?: any[];
+    completedCourses?: any[];
+    email?: string;
+  }
+> {
+  return apiFetch<
+    TalentProfile & {
+      certificates?: any[];
+      completedCourses?: any[];
+      email?: string;
+    }
+  >(`/talents/${talentId}`);
 }
-

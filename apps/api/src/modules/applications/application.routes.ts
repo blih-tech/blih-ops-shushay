@@ -2,7 +2,10 @@ import { Router } from "express";
 import { Role } from "@prisma/client";
 import { requireAuth, requireRole } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
-import { createApplicationSchema, updateApplicationStatusSchema } from "./application.schemas";
+import {
+  createApplicationSchema,
+  updateApplicationStatusSchema,
+} from "./application.schemas";
 import {
   applyToJob,
   getTalentApplications,
@@ -121,5 +124,3 @@ router.patch(
 );
 
 export default router;
-
-

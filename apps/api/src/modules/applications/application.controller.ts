@@ -9,7 +9,10 @@ export async function applyToJob(
 ) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
-    const application = await applicationService.applyToJob(req.user.id, req.body);
+    const application = await applicationService.applyToJob(
+      req.user.id,
+      req.body,
+    );
     res.status(201).json(application);
   } catch (err) {
     next(err);
@@ -23,7 +26,9 @@ export async function getTalentApplications(
 ) {
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
-    const applications = await applicationService.getTalentApplications(req.user.id);
+    const applications = await applicationService.getTalentApplications(
+      req.user.id,
+    );
     res.json(applications);
   } catch (err) {
     next(err);
@@ -38,7 +43,10 @@ export async function getJobApplications(
   try {
     if (!req.user) return next(new AppError(401, "Not authenticated"));
     const jobId = req.params.jobId as string;
-    const applications = await applicationService.getJobApplicationsForCompany(jobId, req.user.id);
+    const applications = await applicationService.getJobApplicationsForCompany(
+      jobId,
+      req.user.id,
+    );
     res.json(applications);
   } catch (err) {
     next(err);
@@ -64,4 +72,3 @@ export async function updateApplicationStatus(
     next(err);
   }
 }
-

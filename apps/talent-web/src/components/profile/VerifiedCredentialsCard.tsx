@@ -8,14 +8,19 @@ export interface VerifiedCredentialsCardProps {
   completedCourses?: any[];
 }
 
-export const VerifiedCredentialsCard: React.FC<VerifiedCredentialsCardProps> = ({
-  certificates,
-  completedCourses,
-}) => {
+export const VerifiedCredentialsCard: React.FC<
+  VerifiedCredentialsCardProps
+> = ({ certificates, completedCourses }) => {
   const rawItems = certificates || completedCourses || [];
   const items = rawItems.reduce((acc: any[], item: any) => {
-    const titleKey = item.course?.title?.trim() || item.title?.trim() || item.id;
-    if (!acc.some((i) => (i.course?.title?.trim() || i.title?.trim() || i.id) === titleKey)) {
+    const titleKey =
+      item.course?.title?.trim() || item.title?.trim() || item.id;
+    if (
+      !acc.some(
+        (i) =>
+          (i.course?.title?.trim() || i.title?.trim() || i.id) === titleKey,
+      )
+    ) {
       acc.push(item);
     }
     return acc;
@@ -42,7 +47,8 @@ export const VerifiedCredentialsCard: React.FC<VerifiedCredentialsCardProps> = (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {items.map((cert: any, idx: number) => {
           const certId = cert.id || cert.certificateId;
-          const title = cert.course?.title || cert.title || "Blih Skills Course";
+          const title =
+            cert.course?.title || cert.title || "Blih Skills Course";
           const certNumber = cert.certificateNumber || "BLIH-CERT-VERIFIED";
           const issueDate = cert.issueDate || cert.completedAt;
 
@@ -66,7 +72,12 @@ export const VerifiedCredentialsCard: React.FC<VerifiedCredentialsCardProps> = (
                 </p>
                 {issueDate && (
                   <p className="font-sans text-xs text-[#6E6678]">
-                    Issued: {new Date(issueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    Issued:{" "}
+                    {new Date(issueDate).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
                   </p>
                 )}
               </div>

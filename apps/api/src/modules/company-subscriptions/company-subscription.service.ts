@@ -2,9 +2,17 @@ import { randomBytes } from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
-import { PaymentStatus, PaymentType, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
+import {
+  PaymentStatus,
+  PaymentType,
+  SubscriptionPlan,
+  SubscriptionStatus,
+} from "@prisma/client";
 import { chapaService } from "../payments/chapa.service";
-import { COMPANY_SUBSCRIPTION_PLANS, SubscriptionPlanKey } from "./company-subscription.constants";
+import {
+  COMPANY_SUBSCRIPTION_PLANS,
+  SubscriptionPlanKey,
+} from "./company-subscription.constants";
 
 function generateTxRef(plan: SubscriptionPlanKey): string {
   const timestamp = Date.now();
@@ -27,11 +35,17 @@ export async function initializeCompanySubscription(
   });
 
   if (!user || user.role !== "COMPANY") {
-    throw new AppError(403, "Only company accounts can initialize a subscription.");
+    throw new AppError(
+      403,
+      "Only company accounts can initialize a subscription.",
+    );
   }
 
   if (!user.companyProfile) {
-    throw new AppError(404, "Company profile not found. Please set up your company profile first.");
+    throw new AppError(
+      404,
+      "Company profile not found. Please set up your company profile first.",
+    );
   }
 
   const txRef = generateTxRef(plan);
@@ -49,7 +63,10 @@ export async function initializeCompanySubscription(
     },
   });
 
-  const contactName = user.companyProfile.contactName || user.companyProfile.companyName || "Company Admin";
+  const contactName =
+    user.companyProfile.contactName ||
+    user.companyProfile.companyName ||
+    "Company Admin";
   const nameParts = contactName.trim().split(" ");
   const firstName = nameParts[0] || "Company";
   const lastName = nameParts.slice(1).join(" ") || "Admin";
@@ -111,7 +128,11 @@ export async function getCompanySubscriptionStatus(userId: string) {
   const isExpired = subscription.expiresAt <= now;
 
   // Dynamic synchronization if record is past expiry date
-  if (isExpired && (subscription.status !== SubscriptionStatus.EXPIRED || companyProfile.subscriptionActive)) {
+  if (
+    isExpired &&
+    (subscription.status !== SubscriptionStatus.EXPIRED ||
+      companyProfile.subscriptionActive)
+  ) {
     await prisma.$transaction([
       prisma.companySubscription.update({
         where: { id: subscription.id },
@@ -124,9 +145,16 @@ export async function getCompanySubscriptionStatus(userId: string) {
     ]);
   }
 
-  const hasActiveSubscription = !isExpired && subscription.status === SubscriptionStatus.ACTIVE;
+  const hasActiveSubscription =
+    !isExpired && subscription.status === SubscriptionStatus.ACTIVE;
   const daysRemaining = hasActiveSubscription
-    ? Math.max(0, Math.ceil((subscription.expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+    ? Math.max(
+        0,
+        Math.ceil(
+          (subscription.expiresAt.getTime() - now.getTime()) /
+            (1000 * 60 * 60 * 24),
+        ),
+      )
     : 0;
 
   return {
@@ -134,7 +162,9 @@ export async function getCompanySubscriptionStatus(userId: string) {
     subscription: {
       id: subscription.id,
       plan: subscription.plan,
-      status: hasActiveSubscription ? SubscriptionStatus.ACTIVE : SubscriptionStatus.EXPIRED,
+      status: hasActiveSubscription
+        ? SubscriptionStatus.ACTIVE
+        : SubscriptionStatus.EXPIRED,
       amount: subscription.amount,
       currency: subscription.currency,
       startDate: subscription.startDate.toISOString(),

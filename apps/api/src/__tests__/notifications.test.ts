@@ -81,9 +81,9 @@ describe("Notification Service", () => {
         userId: "user-other",
       });
 
-      await expect(
-        markNotificationAsRead("user-1", "notif-1"),
-      ).rejects.toThrow("Access denied");
+      await expect(markNotificationAsRead("user-1", "notif-1")).rejects.toThrow(
+        "Access denied",
+      );
     });
 
     it("marks notification read for owner user", async () => {

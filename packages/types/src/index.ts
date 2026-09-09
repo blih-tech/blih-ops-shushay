@@ -96,6 +96,3 @@ export interface JobApplication {
   job?: any;
   talentProfile?: any;
 }
-
-
-

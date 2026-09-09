@@ -82,12 +82,12 @@ export default function TalentHomePage() {
     user?.role === "COMPANY"
       ? ["React 19", "Next.js", "Fullstack", "Node.js", "UI/UX Specialist"]
       : [
-        "React Developer",
-        "Product Designer",
-        "Financial Analyst",
-        "Fullstack Engineer",
-        "UI/UX Specialist",
-      ];
+          "React Developer",
+          "Product Designer",
+          "Financial Analyst",
+          "Fullstack Engineer",
+          "UI/UX Specialist",
+        ];
 
   const handleSearch = (query: string) => {
     if (user?.role === "COMPANY") {

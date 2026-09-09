@@ -119,7 +119,9 @@ describe("Auth — Registration & Login", () => {
       expect(res.body.user.role).toBe(Role.TALENT);
       // Cookie should be set
       const rawCookie = res.headers["set-cookie"];
-      const cookie = Array.isArray(rawCookie) ? rawCookie.join(";") : (rawCookie ?? "");
+      const cookie = Array.isArray(rawCookie)
+        ? rawCookie.join(";")
+        : (rawCookie ?? "");
       expect(cookie).toMatch(/token=/);
     });
 
@@ -168,7 +170,9 @@ describe("Auth — Registration & Login", () => {
       expect(res.status).toBe(200);
       expect(res.body.message).toMatch(/Logged out/i);
       const rawCookie = res.headers["set-cookie"];
-      const cookie = Array.isArray(rawCookie) ? rawCookie.join(";") : (rawCookie ?? "");
+      const cookie = Array.isArray(rawCookie)
+        ? rawCookie.join(";")
+        : (rawCookie ?? "");
       // Cookie should be expired (Max-Age=0 or Expires in the past)
       expect(cookie).toMatch(/token=/);
     });
@@ -181,7 +185,11 @@ describe("Auth — Registration & Login", () => {
       (prisma.user.findUnique as jest.Mock).mockResolvedValue(VERIFIED_USER);
 
       const token = jwt.sign(
-        { userId: VERIFIED_USER.id, email: VERIFIED_USER.email, role: VERIFIED_USER.role },
+        {
+          userId: VERIFIED_USER.id,
+          email: VERIFIED_USER.email,
+          role: VERIFIED_USER.role,
+        },
         env.jwtSecret,
         { expiresIn: "1h" },
       );

@@ -4,7 +4,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getCourseProgress } from "@blih/api-client";
-import { CheckCircle2, Circle, PlayCircle, FileText, HelpCircle, PenTool } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  PlayCircle,
+  FileText,
+  HelpCircle,
+  PenTool,
+} from "lucide-react";
 
 // Mock types. Ensure proper types are available in your project.
 type Lesson = {
@@ -32,7 +39,7 @@ export function LessonSidebar({ courseId }: { courseId: string }) {
       }
     };
     fetchProgress();
-    
+
     // Mocking lesson fetch for structure
     setLessons([
       { id: "1", title: "Introduction", order: 1, type: "VIDEO" },
@@ -44,11 +51,16 @@ export function LessonSidebar({ courseId }: { courseId: string }) {
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "VIDEO": return <PlayCircle className="w-4 h-4" />;
-      case "TEXT": return <FileText className="w-4 h-4" />;
-      case "QUIZ": return <HelpCircle className="w-4 h-4" />;
-      case "ASSIGNMENT": return <PenTool className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
+      case "VIDEO":
+        return <PlayCircle className="w-4 h-4" />;
+      case "TEXT":
+        return <FileText className="w-4 h-4" />;
+      case "QUIZ":
+        return <HelpCircle className="w-4 h-4" />;
+      case "ASSIGNMENT":
+        return <PenTool className="w-4 h-4" />;
+      default:
+        return <FileText className="w-4 h-4" />;
     }
   };
 
@@ -91,7 +103,9 @@ export function LessonSidebar({ courseId }: { courseId: string }) {
                     <Circle className="w-5 h-5 text-gray-300 flex-shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium truncate ${isActive ? "text-primary" : "text-gray-900"}`}>
+                    <p
+                      className={`text-sm font-medium truncate ${isActive ? "text-primary" : "text-gray-900"}`}
+                    >
                       {lesson.order}. {lesson.title}
                     </p>
                     <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">

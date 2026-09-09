@@ -55,7 +55,9 @@ export async function uploadPhoto(
         public_id: `${fileBaseName}-${Date.now()}`,
       });
 
-      const currentProfile = await talentService.getOrCreateProfile(req.user.id);
+      const currentProfile = await talentService.getOrCreateProfile(
+        req.user.id,
+      );
       const updated = await talentService.updateFile(
         req.user.id,
         "photoUrl",
@@ -135,7 +137,9 @@ export async function uploadCv(
         public_id: `${fileBaseName}-${Date.now()}`,
       });
 
-      const currentProfile = await talentService.getOrCreateProfile(req.user.id);
+      const currentProfile = await talentService.getOrCreateProfile(
+        req.user.id,
+      );
       const updated = await talentService.updateFile(
         req.user.id,
         "cvUrl",

@@ -18,7 +18,8 @@ export function useTalentSearch(initialFilters: TalentSearchFilters = {}) {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [subscriptionRequired, setSubscriptionRequired] = useState<boolean>(false);
+  const [subscriptionRequired, setSubscriptionRequired] =
+    useState<boolean>(false);
   const [filters, setFilters] = useState<TalentSearchFilters>(initialFilters);
 
   const fetchTalents = useCallback(async () => {

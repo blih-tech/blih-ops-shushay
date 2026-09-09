@@ -3,14 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, User, FileText, Eye } from "lucide-react";
-import {
-  Button,
-  Badge,
-  Alert,
-  Card,
-  UniversalSearch,
-  Skeleton,
-} from "@blih/ui";
+import { Button, Badge, Alert, Card, UniversalSearch } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { AdminTalentSkeletonGrid } from "@/components/admin/AdminSkeletonList";
 import { useAuth } from "@/providers/AuthProvider";
@@ -73,7 +66,8 @@ function AdminTalentsContent() {
             <Badge variant="primary">{talents.length} REGISTERED</Badge>
           </div>
           <p className="text-sm text-[#6E6678]">
-            Inspect registered talent profiles, verify competencies, CV attachments, and career history.
+            Inspect registered talent profiles, verify competencies, CV
+            attachments, and career history.
           </p>
         </div>
       </div>
@@ -99,7 +93,9 @@ function AdminTalentsContent() {
             No talent profiles found
           </h3>
           <p className="text-sm text-[#6E6678] max-w-sm mx-auto">
-            {searchQuery ? "No candidates match your search query." : "Registered candidates will appear here."}
+            {searchQuery
+              ? "No candidates match your search query."
+              : "Registered candidates will appear here."}
           </p>
         </div>
       ) : (
@@ -114,9 +110,17 @@ function AdminTalentsContent() {
                   <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg overflow-hidden shrink-0 shadow-xs">
                     {talent.photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={talent.photoUrl} alt="Photo" className="w-full h-full object-cover" />
+                      <img
+                        src={talent.photoUrl}
+                        alt="Photo"
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
-                      <span>{(talent.fullName || talent.user.email).charAt(0).toUpperCase()}</span>
+                      <span>
+                        {(talent.fullName || talent.user.email)
+                          .charAt(0)
+                          .toUpperCase()}
+                      </span>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -126,7 +130,9 @@ function AdminTalentsContent() {
                     <p className="text-xs font-mono text-[#1E5BFF] truncate font-medium">
                       {talent.title || "Talent Member"}
                     </p>
-                    <p className="text-xs text-[#6E6678] truncate mt-0.5">{talent.user.email}</p>
+                    <p className="text-xs text-[#6E6678] truncate mt-0.5">
+                      {talent.user.email}
+                    </p>
                   </div>
                 </div>
 
@@ -166,7 +172,9 @@ function AdminTalentsContent() {
                     <FileText className="h-3.5 w-3.5" /> View CV
                   </a>
                 ) : (
-                  <span className="text-xs font-mono text-[#6E6678]">No CV Attached</span>
+                  <span className="text-xs font-mono text-[#6E6678]">
+                    No CV Attached
+                  </span>
                 )}
                 <Button
                   size="sm"
@@ -182,11 +190,13 @@ function AdminTalentsContent() {
         </div>
       )}
 
-      <TalentInspectModal talent={selectedTalent} onClose={() => setSelectedTalent(null)} />
+      <TalentInspectModal
+        talent={selectedTalent}
+        onClose={() => setSelectedTalent(null)}
+      />
     </main>
   );
 }
-
 
 export default function AdminTalentsPage() {
   return (

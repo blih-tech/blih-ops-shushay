@@ -8,7 +8,6 @@ import {
   Badge,
   Card,
   UniversalSearch,
-  Skeleton,
   Chip,
   Alert,
   EmptyState,
@@ -32,13 +31,8 @@ function CompanyTalentsSearchContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSkillFilter, setActiveSkillFilter] = useState("All");
   const [englishLevelFilter, setEnglishLevelFilter] = useState("");
-  const {
-    talents,
-    loading,
-    error,
-    subscriptionRequired,
-    setFilters,
-  } = useTalentSearch();
+  const { talents, loading, error, subscriptionRequired, setFilters } =
+    useTalentSearch();
 
   const skillFilters = [
     "All",
@@ -61,7 +55,10 @@ function CompanyTalentsSearchContent() {
 
   const handleEnglishFilter = (level: string) => {
     setEnglishLevelFilter(level);
-    setFilters((prev) => ({ ...prev, englishLevel: (level as any) || undefined }));
+    setFilters((prev) => ({
+      ...prev,
+      englishLevel: (level as any) || undefined,
+    }));
   };
 
   const handleSearch = (q: string) => {
@@ -81,7 +78,9 @@ function CompanyTalentsSearchContent() {
             <Badge variant="verified">VERIFIED PROFILES</Badge>
           </div>
           <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-            Search, filter and compare professionals by verified skills, evidence strength, availability and fit — before opening a full profile.
+            Search, filter and compare professionals by verified skills,
+            evidence strength, availability and fit — before opening a full
+            profile.
           </p>
         </div>
       </div>
@@ -97,7 +96,9 @@ function CompanyTalentsSearchContent() {
               Active Company Subscription Required
             </h2>
             <p className="text-sm sm:text-base text-[#6E6678] max-w-xl mx-auto font-sans leading-relaxed">
-              Searching, discovering, and evaluating verified talent profiles requires an active company membership (2,000 ETB/mo or 10,000 ETB/yr).
+              Searching, discovering, and evaluating verified talent profiles
+              requires an active company membership (2,000 ETB/mo or 10,000
+              ETB/yr).
             </p>
           </div>
           <div className="pt-2">

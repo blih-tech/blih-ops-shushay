@@ -142,5 +142,3 @@ export const talentSearchQuerySchema = z.object({
 });
 
 export type TalentSearchQueryInput = z.infer<typeof talentSearchQuerySchema>;
-
-

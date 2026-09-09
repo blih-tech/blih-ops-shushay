@@ -82,13 +82,33 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-6">
-        <Skeleton variant="rectangular" width={180} height={20} className="rounded-md" />
+        <Skeleton
+          variant="rectangular"
+          width={180}
+          height={20}
+          className="rounded-md"
+        />
         <Card className="p-8 space-y-4">
           <div className="flex gap-4">
-            <Skeleton variant="rectangular" width={100} height={100} className="rounded-full" />
+            <Skeleton
+              variant="rectangular"
+              width={100}
+              height={100}
+              className="rounded-full"
+            />
             <div className="space-y-2 flex-1">
-              <Skeleton variant="rectangular" width={250} height={28} className="rounded-md" />
-              <Skeleton variant="rectangular" width={180} height={18} className="rounded-md" />
+              <Skeleton
+                variant="rectangular"
+                width={250}
+                height={28}
+                className="rounded-md"
+              />
+              <Skeleton
+                variant="rectangular"
+                width={180}
+                height={18}
+                className="rounded-md"
+              />
             </div>
           </div>
         </Card>
@@ -114,7 +134,9 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
               Subscription Required to View Profile
             </h2>
             <p className="text-sm text-[#6E6678] max-w-md mx-auto font-sans">
-              Viewing complete candidate profiles, contacts, verified certificates, and project evidence requires an active company subscription.
+              Viewing complete candidate profiles, contacts, verified
+              certificates, and project evidence requires an active company
+              subscription.
             </p>
           </div>
           <Link href="/company/subscription" className="inline-block pt-2">
@@ -168,7 +190,15 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
           <div className="flex flex-col sm:flex-row items-start gap-6">
             <div
               className="w-[118px] h-[118px] rounded-full overflow-hidden border border-[#BFD0FF] shadow-xs shrink-0 bg-[#EEF3FF] relative flex items-center justify-center"
-              style={{ width: "118px", height: "118px", minWidth: "118px", minHeight: "118px", maxWidth: "118px", maxHeight: "118px", borderRadius: "50%" }}
+              style={{
+                width: "118px",
+                height: "118px",
+                minWidth: "118px",
+                minHeight: "118px",
+                maxWidth: "118px",
+                maxHeight: "118px",
+                borderRadius: "50%",
+              }}
             >
               {talent.photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -176,11 +206,21 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
                   src={talent.photoUrl}
                   alt={name}
                   className="w-full h-full object-cover rounded-full"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
                 />
               ) : (
                 <div className="w-full h-full bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-[34px] shadow-sm rounded-full">
-                  {name.split(" ").map((w: string) => w[0]).join("").toUpperCase().slice(0, 2) || name.charAt(0)}
+                  {name
+                    .split(" ")
+                    .map((w: string) => w[0])
+                    .join("")
+                    .toUpperCase()
+                    .slice(0, 2) || name.charAt(0)}
                 </div>
               )}
             </div>
@@ -210,7 +250,10 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
                 )}
                 {talent.englishLevel && (
                   <span>
-                    English: <strong className="text-[#17131F]">{talent.englishLevel}</strong>
+                    English:{" "}
+                    <strong className="text-[#17131F]">
+                      {talent.englishLevel}
+                    </strong>
                   </span>
                 )}
               </div>
@@ -223,7 +266,11 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
                 rel="noreferrer"
                 className="shrink-0"
               >
-                <Button variant="outline" size="sm" leftIcon={<FileText className="w-4 h-4" />}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<FileText className="w-4 h-4" />}
+                >
                   Download CV
                 </Button>
               </a>

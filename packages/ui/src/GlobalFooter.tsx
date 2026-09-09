@@ -24,7 +24,10 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
         { label: "Hiring Hub", href: `${talentUrl}/company` },
         { label: "Talent Search", href: `${talentUrl}/company/talents` },
         { label: "Job Posts", href: `${talentUrl}/company/jobs` },
-        { label: "Company Subscription", href: `${talentUrl}/company/subscription` },
+        {
+          label: "Company Subscription",
+          href: `${talentUrl}/company/subscription`,
+        },
         { label: "Company Profile", href: `${talentUrl}/company/profile` },
       ];
     }
@@ -76,7 +79,9 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
             </div>
 
             <p className="text-sm text-[#6E6678] font-sans leading-relaxed max-w-sm">
-              Skill evidence connected to real opportunities. Empowering African engineering graduates and top employers with verified proof of work.
+              Skill evidence connected to real opportunities. Empowering African
+              engineering graduates and top employers with verified proof of
+              work.
             </p>
 
             <div className="pt-1 flex items-center gap-2 text-xs font-mono text-[#2E8F79] bg-[#E6F6ED] border border-[#BDE8D0] px-3.5 py-1.5 rounded-full w-fit">
@@ -116,7 +121,8 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
                 <span>Verified Assessment Certs</span>
               </div>
               <p>
-                Course deliverables and project code evidence verified by automated grading engines.
+                Course deliverables and project code evidence verified by
+                automated grading engines.
               </p>
             </div>
           </div>
@@ -126,15 +132,24 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-[#6E6678]">
           <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
           <div className="flex flex-wrap gap-4 items-center">
-            <a href={`${talentUrl}/company/subscription`} className="hover:text-[#1E5BFF] transition-colors">
+            <a
+              href={`${talentUrl}/company/subscription`}
+              className="hover:text-[#1E5BFF] transition-colors"
+            >
               Subscription
             </a>
             <span className="text-[#D9CEDF]">·</span>
-            <a href={`${skillsUrl}/courses`} className="hover:text-[#1E5BFF] transition-colors">
+            <a
+              href={`${skillsUrl}/courses`}
+              className="hover:text-[#1E5BFF] transition-colors"
+            >
               Courses
             </a>
             <span className="text-[#D9CEDF]">·</span>
-            <a href={`${talentUrl}/jobs`} className="hover:text-[#1E5BFF] transition-colors">
+            <a
+              href={`${talentUrl}/jobs`}
+              className="hover:text-[#1E5BFF] transition-colors"
+            >
               Opportunities
             </a>
             <span className="text-[#D9CEDF]">·</span>

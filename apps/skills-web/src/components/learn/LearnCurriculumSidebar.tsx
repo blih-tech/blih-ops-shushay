@@ -54,8 +54,8 @@ export function LearnCurriculumSidebar({
                       isCompleted
                         ? "bg-[#2E8F79]/10 text-[#2E8F79]"
                         : isActive
-                        ? "bg-[#1E5BFF] text-white shadow-xs"
-                        : "bg-[#EEF3FF] text-[#6E6678]"
+                          ? "bg-[#1E5BFF] text-white shadow-xs"
+                          : "bg-[#EEF3FF] text-[#6E6678]"
                     }`}
                   >
                     {isCompleted ? (
@@ -100,8 +100,8 @@ export function LearnCurriculumSidebar({
           </span>
         </div>
         <p className="font-sans text-xs text-[#6E6678] leading-relaxed">
-          Completing all quizzes and exercises in this track will add a
-          verified capability badge to your public Blih Talent profile.
+          Completing all quizzes and exercises in this track will add a verified
+          capability badge to your public Blih Talent profile.
         </p>
       </div>
     </div>

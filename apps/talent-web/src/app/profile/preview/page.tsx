@@ -9,13 +9,7 @@ import { Button, Badge, Alert } from "@blih/ui";
 import { ProfilePreviewSkeleton } from "@/components/profile/ProfileSkeleton";
 import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
 import { ExperienceEducationCard } from "@/components/profile/ExperienceEducationCard";
-import {
-  Download,
-  Edit3,
-  Eye,
-  CheckCircle2,
-  Globe,
-} from "lucide-react";
+import { Download, Edit3, Eye, CheckCircle2, Globe } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -65,11 +59,7 @@ function ProfilePreviewContent() {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="w-full font-sans selection:bg-[#DDE7FF]"
-    >
-
+    <div ref={containerRef} className="w-full font-sans selection:bg-[#DDE7FF]">
       {/* Preview mode banner */}
       <div className="bg-[#17131F] text-white px-4 sm:px-6 py-3 relative z-30">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -133,11 +123,11 @@ function ProfilePreviewContent() {
                   <span className="font-display font-bold text-[34px] text-[#1E5BFF]">
                     {profile?.fullName
                       ? profile.fullName
-                        .split(" ")
-                        .map((w) => w[0])
-                        .join("")
-                        .toUpperCase()
-                        .slice(0, 2)
+                          .split(" ")
+                          .map((w) => w[0])
+                          .join("")
+                          .toUpperCase()
+                          .slice(0, 2)
                       : "ST"}
                   </span>
                 )}
@@ -241,7 +231,9 @@ function ProfilePreviewContent() {
         {/* Reusable Verified Blih Credentials Section */}
         <div className="reveal-profile-block">
           <VerifiedCredentialsCard
-            certificates={profile?.certificates || profile?.completedCourses || []}
+            certificates={
+              profile?.certificates || profile?.completedCourses || []
+            }
           />
         </div>
 

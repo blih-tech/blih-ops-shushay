@@ -83,9 +83,13 @@ export function NotificationMenu() {
           </div>
 
           {loading ? (
-            <p className="text-center py-6 text-[#6E6678] font-mono">Loading notifications...</p>
+            <p className="text-center py-6 text-[#6E6678] font-mono">
+              Loading notifications...
+            </p>
           ) : notifications.length === 0 ? (
-            <p className="text-center py-6 text-[#6E6678]">No notifications yet.</p>
+            <p className="text-center py-6 text-[#6E6678]">
+              No notifications yet.
+            </p>
           ) : (
             <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
               {notifications.map((n) => (
@@ -107,8 +111,12 @@ export function NotificationMenu() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0 space-y-1">
-                    <p className="font-semibold text-xs leading-tight">{n.title}</p>
-                    <p className="text-[11px] leading-relaxed text-[#4A4154]">{n.message}</p>
+                    <p className="font-semibold text-xs leading-tight">
+                      {n.title}
+                    </p>
+                    <p className="text-[11px] leading-relaxed text-[#4A4154]">
+                      {n.message}
+                    </p>
                     <span className="text-[10px] font-mono text-[#6E6678] block">
                       {new Date(n.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",

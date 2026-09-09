@@ -22,7 +22,9 @@ export function LearnReadingTab({ activeLesson }: LearnReadingTabProps) {
           {activeLesson.content}
         </div>
       ) : (
-        <p className="text-sm text-[#6E6678]">No written content for this lesson.</p>
+        <p className="text-sm text-[#6E6678]">
+          No written content for this lesson.
+        </p>
       )}
 
       {hasDocuments && (

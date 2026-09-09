@@ -12,8 +12,10 @@ import {
   ForgotPasswordInput,
   ResetPasswordInput,
 } from "./auth.schemas";
-import { sendVerificationEmail, sendPasswordResetEmail } from "../../services/email.service";
-
+import {
+  sendVerificationEmail,
+  sendPasswordResetEmail,
+} from "../../services/email.service";
 
 export async function register(
   req: Request<{}, {}, RegisterInput>,
@@ -262,5 +264,3 @@ export {
   initiateGoogleAuth,
   handleGoogleCallback,
 } from "./auth.google.controller";
-
-

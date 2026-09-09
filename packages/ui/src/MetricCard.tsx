@@ -14,8 +14,10 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   className = "",
 }) => {
   const variantStyles = {
-    primary: "bg-gradient-to-br from-[#EEF3FF] to-[#DDE7FF] border border-[#1E5BFF]/30 text-[#1E5BFF] shadow-xs",
-    surface: "bg-gradient-to-br from-white via-[#F8FAFF] to-[#EEF3FF]/70 border border-[#D9CEDF]/80 text-[#17131F] shadow-xs",
+    primary:
+      "bg-gradient-to-br from-[#EEF3FF] to-[#DDE7FF] border border-[#1E5BFF]/30 text-[#1E5BFF] shadow-xs",
+    surface:
+      "bg-gradient-to-br from-white via-[#F8FAFF] to-[#EEF3FF]/70 border border-[#D9CEDF]/80 text-[#17131F] shadow-xs",
     white: "bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs",
   };
 

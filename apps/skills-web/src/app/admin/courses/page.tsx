@@ -91,7 +91,9 @@ function CoursesContent() {
     // Deduplicate duplicate seed/db entries by ID or Title
     const isFirstOccurrence =
       self.findIndex(
-        (item) => item.id === c.id || item.title.toLowerCase() === c.title.toLowerCase()
+        (item) =>
+          item.id === c.id ||
+          item.title.toLowerCase() === c.title.toLowerCase(),
       ) === index;
 
     if (!isFirstOccurrence) return false;
@@ -169,10 +171,7 @@ function CoursesContent() {
           </p>
           {!searchQuery && (
             <Link href="/admin/courses/new">
-              <Button
-                variant="primary"
-                leftIcon={<Plus className="h-4 w-4" />}
-              >
+              <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
                 Create Course
               </Button>
             </Link>

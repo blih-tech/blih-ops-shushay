@@ -26,11 +26,12 @@ export const SKELETON_THEME_ORDER: SkeletonColorTheme[] = [
 
 export function getSkeletonThemeClass(
   colorTheme?: SkeletonColorTheme,
-  themeIndex?: number
+  themeIndex?: number,
 ): string {
   if (colorTheme) return SKELETON_THEME_MAP[colorTheme];
   if (typeof themeIndex === "number") {
-    const themeKey = SKELETON_THEME_ORDER[themeIndex % SKELETON_THEME_ORDER.length];
+    const themeKey =
+      SKELETON_THEME_ORDER[themeIndex % SKELETON_THEME_ORDER.length];
     return SKELETON_THEME_MAP[themeKey];
   }
   return SKELETON_THEME_MAP.surface;

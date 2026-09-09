@@ -14,18 +14,9 @@ export function ProfileSkeleton({ user, logout }: SkeletonProps) {
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
             <Skeleton variant="circular" className="h-20 w-20 shrink-0" />
             <div className="space-y-2">
-              <Skeleton
-                variant="rectangular"
-                className="h-8 w-48 rounded-xl"
-              />
-              <Skeleton
-                variant="rectangular"
-                className="h-4 w-32 rounded-lg"
-              />
-              <Skeleton
-                variant="rectangular"
-                className="h-4 w-64 rounded-lg"
-              />
+              <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
+              <Skeleton variant="rectangular" className="h-4 w-32 rounded-lg" />
+              <Skeleton variant="rectangular" className="h-4 w-64 rounded-lg" />
             </div>
           </div>
           <Skeleton variant="rectangular" className="h-10 w-28 rounded-xl" />
@@ -90,18 +81,9 @@ export function ProfileSetupSkeleton({ user, logout }: SkeletonProps) {
           <Skeleton variant="rectangular" className="h-6 w-24 rounded-lg" />
         </div>
         <div className="space-y-4">
-          <Skeleton
-            variant="rectangular"
-            className="h-12 w-full rounded-xl"
-          />
-          <Skeleton
-            variant="rectangular"
-            className="h-12 w-full rounded-xl"
-          />
-          <Skeleton
-            variant="rectangular"
-            className="h-12 w-full rounded-xl"
-          />
+          <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+          <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
+          <Skeleton variant="rectangular" className="h-12 w-full rounded-xl" />
         </div>
       </div>
     </main>

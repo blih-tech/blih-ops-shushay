@@ -1,4 +1,5 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
 export class ApiError extends Error {
   constructor(
@@ -104,7 +105,9 @@ export async function getSkillsAccessStatus() {
 
 // ─── Company Subscription API Client Helpers ─────────────────────────────────
 
-export async function initializeCompanySubscription(plan: "MONTHLY" | "YEARLY") {
+export async function initializeCompanySubscription(
+  plan: "MONTHLY" | "YEARLY",
+) {
   return apiFetch<{
     checkoutUrl: string | null;
     txRef: string;
@@ -133,7 +136,6 @@ export async function getCompanySubscriptionStatus() {
   }>("/company/subscription/status");
 }
 
-
 // ─── Learning API Client Helpers ─────────────────────────────────────────────
 
 export async function getCourseProgress(courseId: string) {
@@ -157,7 +159,7 @@ export async function submitQuiz(quizId: string, answers: number[]) {
 export async function submitAssignment(
   assignmentId: string,
   content?: string,
-  file?: File
+  file?: File,
 ) {
   const formData = new FormData();
   formData.append("assignmentId", assignmentId);
@@ -177,7 +179,8 @@ export async function getUserCertificates() {
 }
 
 export function getCertificateDownloadUrl(certificateId: string): string {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
   return `${API_URL}/certificates/${certificateId}/download`;
 }
 
@@ -244,7 +247,10 @@ export async function getJobApplications(jobId: string) {
   return apiFetch<any[]>(`/applications/job/${jobId}`);
 }
 
-export async function updateApplicationStatus(applicationId: string, status: "IN_REVIEW") {
+export async function updateApplicationStatus(
+  applicationId: string,
+  status: "IN_REVIEW",
+) {
   return apiFetch<any>(`/applications/${applicationId}/status`, {
     method: "PATCH",
     body: JSON.stringify({ status }),
@@ -274,6 +280,3 @@ export async function searchTalents(params?: Record<string, any>) {
 export async function getCompanyById(companyId: string) {
   return apiFetch<any>(`/companies/${companyId}`);
 }
-
-
-

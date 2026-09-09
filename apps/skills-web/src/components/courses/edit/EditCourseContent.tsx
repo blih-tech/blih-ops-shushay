@@ -1,19 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  Plus,
-  BookOpen,
-  Layers,
-} from "lucide-react";
-import {
-  Button,
-  Badge,
-  Alert,
-  ConfirmDialog,
-} from "@blih/ui";
+import { ArrowLeft, Eye, EyeOff, Plus, BookOpen, Layers } from "lucide-react";
+import { Button, Badge, Alert, ConfirmDialog } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { LessonPanel } from "./LessonPanel";
 import { CourseOverviewCard } from "./CourseOverviewCard";
@@ -106,7 +94,8 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
               </Badge>
             </div>
             <p className="text-sm text-[#6E6678]">
-              Manage curriculum structure, video lectures, assessments, and learning resources.
+              Manage curriculum structure, video lectures, assessments, and
+              learning resources.
             </p>
           </div>
 
@@ -114,7 +103,13 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             <Button
               variant={isPublished ? "outline" : "primary"}
               className="w-full sm:w-auto"
-              leftIcon={isPublished ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              leftIcon={
+                isPublished ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )
+              }
               isLoading={publishLoading}
               onClick={handlePublish}
             >
@@ -188,7 +183,8 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                   No curriculum modules yet
                 </h3>
                 <p className="text-sm text-[#6E6678] font-sans max-w-sm mx-auto">
-                  Click &quot;Add Lesson&quot; to begin building chapters, video lectures, and quizzes for this course.
+                  Click &quot;Add Lesson&quot; to begin building chapters, video
+                  lectures, and quizzes for this course.
                 </p>
                 <Button
                   variant="primary"
@@ -239,7 +235,6 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
 
             <CurriculumMetricsCard lessons={lessons} />
           </div>
-
         </div>
       </main>
 

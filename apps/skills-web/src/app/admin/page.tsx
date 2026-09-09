@@ -26,19 +26,33 @@ interface StatCardProps {
   textColor: string;
 }
 
-function StatCard({ label, value, subtext, loading, icon, bgColor, textColor }: StatCardProps) {
+function StatCard({
+  label,
+  value,
+  subtext,
+  loading,
+  icon,
+  bgColor,
+  textColor,
+}: StatCardProps) {
   return (
     <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-xs text-[#6E6678] uppercase">{label}</span>
-        <div className={`w-8 h-8 rounded-xl ${bgColor} ${textColor} flex items-center justify-center`}>
+        <span className="font-mono text-xs text-[#6E6678] uppercase">
+          {label}
+        </span>
+        <div
+          className={`w-8 h-8 rounded-xl ${bgColor} ${textColor} flex items-center justify-center`}
+        >
           {icon}
         </div>
       </div>
       {loading ? (
         <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
       ) : (
-        <p className="font-display text-3xl font-bold text-[#17131F]">{value ?? 0}</p>
+        <p className="font-display text-3xl font-bold text-[#17131F]">
+          {value ?? 0}
+        </p>
       )}
       <p className="text-xs text-[#6E6678]">{subtext}</p>
     </div>

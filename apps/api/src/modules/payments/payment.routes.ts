@@ -30,6 +30,11 @@ router.get("/skills/access-status", requireAuth, getSkillsAccessStatus);
 router.get("/history", requireAuth, listUserPayments);
 
 router.get("/verify/:txRef", requireAuth, verifyPayment);
-router.post("/verify", requireAuth, validate(verifyPaymentSchema), verifyPayment);
+router.post(
+  "/verify",
+  requireAuth,
+  validate(verifyPaymentSchema),
+  verifyPayment,
+);
 
 export default router;

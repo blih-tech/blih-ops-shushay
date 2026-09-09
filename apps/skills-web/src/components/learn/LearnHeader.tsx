@@ -49,17 +49,21 @@ export function LearnHeader({
 
         <div className="flex items-center gap-3 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="hidden sm:inline font-mono text-xs text-[#6E6678]">Progress:</span>
+            <span className="hidden sm:inline font-mono text-xs text-[#6E6678]">
+              Progress:
+            </span>
             <div className="w-20 sm:w-32 bg-[#EEF3FF] h-2 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-500 ${isComplete ? "bg-[#2E8F79]" : "bg-[#1E5BFF]"
-                  }`}
+                className={`h-full rounded-full transition-all duration-500 ${
+                  isComplete ? "bg-[#2E8F79]" : "bg-[#1E5BFF]"
+                }`}
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
             <span
-              className={`font-mono text-xs font-bold ${isComplete ? "text-[#2E8F79]" : "text-[#1E5BFF]"
-                }`}
+              className={`font-mono text-xs font-bold ${
+                isComplete ? "text-[#2E8F79]" : "text-[#1E5BFF]"
+              }`}
             >
               {progressPercent}%
             </span>

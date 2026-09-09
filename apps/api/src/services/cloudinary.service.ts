@@ -45,7 +45,6 @@ export function uploadStream(
 }
 
 async function saveLocalFile(
-
   buffer: Buffer,
   filename: string,
 ): Promise<CloudinaryUploadResult> {
@@ -91,7 +90,10 @@ export async function uploadBuffer(
     readable.push(null);
     return await uploadStream(readable, options);
   } catch (err) {
-    console.warn("Cloudinary upload failed, falling back to local file storage:", err);
+    console.warn(
+      "Cloudinary upload failed, falling back to local file storage:",
+      err,
+    );
     const ext = options.resource_type === "raw" ? ".pdf" : ".png";
     const filename = `${options.public_id || "file"}-${Date.now()}${ext}`;
     return saveLocalFile(buffer, filename);
@@ -127,7 +129,6 @@ export async function deleteFromCloudinary(
     console.error(`Failed to delete asset ${publicId} from Cloudinary:`, error);
   }
 }
-
 
 /**
  * Logical folders and resource types mappings

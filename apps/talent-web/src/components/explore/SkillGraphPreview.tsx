@@ -222,10 +222,11 @@ export function SkillGraphPreview() {
                 onClick={() => setActiveNodeId(n.id)}
                 onMouseMove={(e) => handleMouseMove(e, n.id)}
                 onMouseLeave={handleMouseLeave}
-                className={`skill-node absolute cursor-pointer border rounded-[18px] p-2 flex flex-col justify-center items-center transition-all shadow-sm ${n.bgColor} ${n.borderColor} ${isActive
+                className={`skill-node absolute cursor-pointer border rounded-[18px] p-2 flex flex-col justify-center items-center transition-all shadow-sm ${n.bgColor} ${n.borderColor} ${
+                  isActive
                     ? "ring-2 ring-[#1E5BFF] ring-offset-2 scale-105 z-20"
                     : ""
-                  }`}
+                }`}
                 style={{
                   left: `${n.x}px`,
                   top: `${n.y}px`,

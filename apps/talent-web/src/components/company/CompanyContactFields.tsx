@@ -36,7 +36,8 @@ export function CompanyContactFields({
           <User className="h-5 w-5 text-[#1E5BFF]" /> Primary Recruiter Contact
         </CardTitle>
         <CardDescription>
-          Direct contact info for candidate inquiries and candidate notifications.
+          Direct contact info for candidate inquiries and candidate
+          notifications.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6 sm:p-8 space-y-6">

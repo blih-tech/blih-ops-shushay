@@ -5,7 +5,6 @@ import type {
   AdminCompanyItem,
 } from "@/types/admin";
 
-
 export async function fetchAdminStats(): Promise<AdminStats> {
   return apiFetch<AdminStats>("/admin/stats");
 }

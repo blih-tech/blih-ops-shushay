@@ -2,10 +2,7 @@ import { Router } from "express";
 import * as learningController from "./learning.controller";
 import { requireAuth, requireSkillsAccess } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
-import {
-  markLessonCompleteSchema,
-  submitQuizSchema,
-} from "./learning.schemas";
+import { markLessonCompleteSchema, submitQuizSchema } from "./learning.schemas";
 
 const router = Router();
 

@@ -115,7 +115,8 @@ export function LearnVideoPlayer({
         ref={playerContainerRef}
         onMouseMove={() => {
           setShowControls(true);
-          if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+          if (controlsTimeoutRef.current)
+            clearTimeout(controlsTimeoutRef.current);
           controlsTimeoutRef.current = setTimeout(() => {
             if (isPlaying) setShowControls(false);
           }, 3500);
@@ -136,8 +137,12 @@ export function LearnVideoPlayer({
           />
         ) : videoError ? (
           <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white select-none gap-3">
-            <p className="font-mono text-xs text-[#BFD0FF] uppercase tracking-wider font-semibold">Video unavailable</p>
-            <p className="font-sans text-xs text-white/50">Could not load the video for this lesson.</p>
+            <p className="font-mono text-xs text-[#BFD0FF] uppercase tracking-wider font-semibold">
+              Video unavailable
+            </p>
+            <p className="font-sans text-xs text-white/50">
+              Could not load the video for this lesson.
+            </p>
           </div>
         ) : (
           <div
@@ -257,7 +262,9 @@ export function LearnVideoPlayer({
               <div className="relative inline-block">
                 <select
                   value={playbackSpeed}
-                  onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleSpeedChange(parseFloat(e.target.value))
+                  }
                   aria-label="Playback Speed"
                   className="bg-[#0F172A]/90 text-white border border-[#D9CEDF]/30 hover:border-[#1E5BFF] rounded-lg px-2.5 py-1 text-[11px] font-mono font-semibold cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1E5BFF] appearance-none pr-6 transition-colors"
                   style={{
@@ -267,13 +274,27 @@ export function LearnVideoPlayer({
                     backgroundSize: "0.85em",
                   }}
                 >
-                  <option value={0.5} className="bg-[#0F172A] text-white">0.5x</option>
-                  <option value={0.75} className="bg-[#0F172A] text-white">0.75x</option>
-                  <option value={1} className="bg-[#0F172A] text-white">1.0x</option>
-                  <option value={1.25} className="bg-[#0F172A] text-white">1.25x</option>
-                  <option value={1.5} className="bg-[#0F172A] text-white">1.5x</option>
-                  <option value={1.75} className="bg-[#0F172A] text-white">1.75x</option>
-                  <option value={2} className="bg-[#0F172A] text-white">2.0x</option>
+                  <option value={0.5} className="bg-[#0F172A] text-white">
+                    0.5x
+                  </option>
+                  <option value={0.75} className="bg-[#0F172A] text-white">
+                    0.75x
+                  </option>
+                  <option value={1} className="bg-[#0F172A] text-white">
+                    1.0x
+                  </option>
+                  <option value={1.25} className="bg-[#0F172A] text-white">
+                    1.25x
+                  </option>
+                  <option value={1.5} className="bg-[#0F172A] text-white">
+                    1.5x
+                  </option>
+                  <option value={1.75} className="bg-[#0F172A] text-white">
+                    1.75x
+                  </option>
+                  <option value={2} className="bg-[#0F172A] text-white">
+                    2.0x
+                  </option>
                 </select>
               </div>
 
@@ -305,7 +326,9 @@ export function LearnVideoPlayer({
           </p>
         ) : (
           <p className="font-sans text-sm text-[#6E6678] leading-relaxed">
-            In this lesson, we cover architectural boundaries, state design patterns, and system scalability constraints for production interfaces.
+            In this lesson, we cover architectural boundaries, state design
+            patterns, and system scalability constraints for production
+            interfaces.
           </p>
         )}
       </div>
@@ -339,4 +362,3 @@ export function LearnVideoPlayer({
     </div>
   );
 }
-

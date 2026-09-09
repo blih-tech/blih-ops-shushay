@@ -2,7 +2,12 @@ import { randomBytes } from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
-import { PaymentStatus, PaymentType, SubscriptionPlan, SubscriptionStatus } from "@prisma/client";
+import {
+  PaymentStatus,
+  PaymentType,
+  SubscriptionPlan,
+  SubscriptionStatus,
+} from "@prisma/client";
 import { chapaService } from "./chapa.service";
 import {
   createNotification,
@@ -65,7 +70,9 @@ export async function initializeSkillsPayment(userId: string) {
     },
   });
 
-  const nameParts = (user.talentProfile?.fullName || "Blih Learner").trim().split(" ");
+  const nameParts = (user.talentProfile?.fullName || "Blih Learner")
+    .trim()
+    .split(" ");
   const firstName = nameParts[0] || "Learner";
   const lastName = nameParts.slice(1).join(" ") || "User";
 
@@ -82,7 +89,8 @@ export async function initializeSkillsPayment(userId: string) {
     returnUrl,
     callbackUrl,
     title: "Blih Skills Permanent Access",
-    description: "One-time 1,000 ETB payment for permanent access to all Blih Skills courses.",
+    description:
+      "One-time 1,000 ETB payment for permanent access to all Blih Skills courses.",
   });
 
   if (chapaRes.checkoutUrl) {
@@ -108,7 +116,10 @@ export async function initializeSkillsPayment(userId: string) {
  * @param callerUserId - The authenticated user making the request; when provided, the txRef must
  *   belong to this user. Pass undefined for server-to-server webhook calls (already HMAC-verified).
  */
-export async function verifyAndCompletePayment(txRef: string, callerUserId?: string) {
+export async function verifyAndCompletePayment(
+  txRef: string,
+  callerUserId?: string,
+) {
   const transaction = await prisma.paymentTransaction.findUnique({
     where: { txRef },
     include: {
@@ -128,7 +139,10 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
   // Ownership check: ensure the authenticated caller owns this transaction.
   // Skipped for webhook path (callerUserId is undefined, already HMAC-verified).
   if (callerUserId && transaction.userId !== callerUserId) {
-    throw new AppError(403, "You do not have permission to verify this transaction.");
+    throw new AppError(
+      403,
+      "You do not have permission to verify this transaction.",
+    );
   }
 
   // Idempotency: If payment was already verified as SUCCESSFUL, return existing state cleanly
@@ -180,7 +194,10 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
     verification.currency?.toUpperCase() === SKILLS_ACCESS_CURRENCY;
 
   if (verification.status === "pending") {
-    throw new AppError(400, "Payment is still pending. Please complete the payment steps on Chapa.");
+    throw new AppError(
+      400,
+      "Payment is still pending. Please complete the payment steps on Chapa.",
+    );
   }
 
   if (!isSuccessStatus || !isAmountValid || !isCurrencyValid) {
@@ -189,7 +206,9 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
       where: { id: transaction.id },
       data: {
         status: PaymentStatus.FAILED,
-        metadata: verification.rawResponse ?? { reason: "Verification criteria failed" },
+        metadata: verification.rawResponse ?? {
+          reason: "Verification criteria failed",
+        },
       },
     });
 
@@ -212,8 +231,13 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
       throw new AppError(404, "Company profile not found for this transaction");
     }
 
-    const metadataPlan = (transaction.metadata as any)?.plan as string | undefined;
-    const plan: SubscriptionPlan = metadataPlan === "YEARLY" || transaction.amount >= 10000 ? "YEARLY" : "MONTHLY";
+    const metadataPlan = (transaction.metadata as any)?.plan as
+      | string
+      | undefined;
+    const plan: SubscriptionPlan =
+      metadataPlan === "YEARLY" || transaction.amount >= 10000
+        ? "YEARLY"
+        : "MONTHLY";
     const durationMonths = plan === "YEARLY" ? 12 : 1;
 
     const now = new Date();
@@ -221,12 +245,18 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
     let baseDate = now;
 
     // If currently active and unexpired, extend from existing expiresAt
-    if (existingSub && existingSub.expiresAt > now && existingSub.status === SubscriptionStatus.ACTIVE) {
+    if (
+      existingSub &&
+      existingSub.expiresAt > now &&
+      existingSub.status === SubscriptionStatus.ACTIVE
+    ) {
       baseDate = existingSub.expiresAt;
     }
 
     const calculatedExpiresAt = new Date(baseDate);
-    calculatedExpiresAt.setMonth(calculatedExpiresAt.getMonth() + durationMonths);
+    calculatedExpiresAt.setMonth(
+      calculatedExpiresAt.getMonth() + durationMonths,
+    );
 
     const result = await prisma.$transaction(async (tx) => {
       const updatedPayment = await tx.paymentTransaction.update({
@@ -291,7 +321,8 @@ export async function verifyAndCompletePayment(txRef: string, callerUserId?: str
       verified: true,
       payment: result.updatedPayment,
       subscription: result.subscription,
-      message: "Payment successfully verified and Company Subscription activated",
+      message:
+        "Payment successfully verified and Company Subscription activated",
     };
   }
 

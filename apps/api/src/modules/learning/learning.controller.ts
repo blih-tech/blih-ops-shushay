@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import * as learningService from "./learning.service";
 import { documentUpload } from "../../middleware/upload";
-import { uploadBuffer, CloudinaryFolders } from "../../services/cloudinary.service";
+import {
+  uploadBuffer,
+  CloudinaryFolders,
+} from "../../services/cloudinary.service";
 
 // Helper
 function p(req: Request, key: string): string {

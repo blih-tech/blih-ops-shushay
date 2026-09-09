@@ -13,11 +13,10 @@ import { LandingProfileMockup } from "@/components/explore/LandingProfileMockup"
 import { GrowthCycleStrip } from "@/components/explore/GrowthCycleStrip";
 
 export default function SkillsHomePage() {
-  const { user, loading, logout } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
-  const TALENT_URL =
-    process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002";
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);

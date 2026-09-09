@@ -39,7 +39,6 @@ interface LearnPlayerSurfaceProps {
 export function LearnPlayerSurface({
   activeLesson,
   activeLessonIndex = 0,
-  onNextLesson,
   activeTab,
   setActiveTab,
   selectedQuizOption,
@@ -68,15 +67,35 @@ export function LearnPlayerSurface({
 
   // Determine available tabs
   const tabs = [
-    hasVideo && { key: "video" as const, label: "Video", icon: <Play className="w-3.5 h-3.5" /> },
-    hasContent && { key: "reading" as const, label: "Reading", icon: <FileText className="w-3.5 h-3.5" /> },
-    hasQuiz && { key: "quiz" as const, label: "Quiz", icon: <HelpCircle className="w-3.5 h-3.5" /> },
-    hasAssignment && { key: "exercise" as const, label: "Assignment", icon: <Code className="w-3.5 h-3.5" /> },
-  ].filter(Boolean) as { key: typeof activeTab; label: string; icon: React.ReactNode }[];
+    hasVideo && {
+      key: "video" as const,
+      label: "Video",
+      icon: <Play className="w-3.5 h-3.5" />,
+    },
+    hasContent && {
+      key: "reading" as const,
+      label: "Reading",
+      icon: <FileText className="w-3.5 h-3.5" />,
+    },
+    hasQuiz && {
+      key: "quiz" as const,
+      label: "Quiz",
+      icon: <HelpCircle className="w-3.5 h-3.5" />,
+    },
+    hasAssignment && {
+      key: "exercise" as const,
+      label: "Assignment",
+      icon: <Code className="w-3.5 h-3.5" />,
+    },
+  ].filter(Boolean) as {
+    key: typeof activeTab;
+    label: string;
+    icon: React.ReactNode;
+  }[];
 
   const effectiveTab = tabs.find((t) => t.key === activeTab)
     ? activeTab
-    : tabs[0]?.key ?? "video";
+    : (tabs[0]?.key ?? "video");
 
   return (
     <div className="lg:col-span-8 p-4 sm:p-8 space-y-6 overflow-y-auto">

@@ -35,7 +35,10 @@ export function UploadProgressCard({
               </p>
             </div>
             <p className="text-xs font-mono text-[#6E6678] pt-0.5">
-              {statusText ?? (type === "video" ? "Uploading & Processing Video..." : "Uploading Document...")}
+              {statusText ??
+                (type === "video"
+                  ? "Uploading & Processing Video..."
+                  : "Uploading Document...")}
               {fileSize && ` · ${fileSize}`}
             </p>
           </div>

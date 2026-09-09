@@ -1,9 +1,6 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import {
-  SubmitQuizInput,
-  SubmitAssignmentInput,
-} from "./learning.schemas";
+import { SubmitQuizInput, SubmitAssignmentInput } from "./learning.schemas";
 import { checkAndGenerateCertificate } from "../certificates/certificate.service";
 
 export async function markLessonComplete(userId: string, lessonId: string) {
@@ -20,7 +17,7 @@ export async function markLessonComplete(userId: string, lessonId: string) {
   if (lesson.quiz || lesson.assignment) {
     throw new AppError(
       400,
-      "Cannot mark lesson complete. It requires a quiz or assignment submission."
+      "Cannot mark lesson complete. It requires a quiz or assignment submission.",
     );
   }
 
@@ -59,7 +56,7 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
   // Calculate score
   const questions = quiz.questions as any[];
   let correctCount = 0;
-  
+
   if (!Array.isArray(questions) || questions.length !== data.answers.length) {
     throw new AppError(400, "Invalid number of answers provided");
   }
@@ -111,7 +108,7 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
 export async function submitAssignment(
   userId: string,
   data: SubmitAssignmentInput,
-  fileInfo?: { fileUrl: string; filePublicId?: string }
+  fileInfo?: { fileUrl: string; filePublicId?: string },
 ) {
   const assignment = await prisma.assignment.findUnique({
     where: { id: data.assignmentId },
@@ -203,7 +200,7 @@ export async function getCourseProgress(userId: string, courseId: string) {
       userId,
       lessonId: { in: lessonIds },
     },
-    select: { lessonId: true }
+    select: { lessonId: true },
   });
 
   const completedCount = completed.length;

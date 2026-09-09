@@ -63,7 +63,9 @@ export function getNavLinks({
       {
         label: "My Applications",
         href: `${talentUrl}/applications`,
-        active: currentPath ? isMatch("/applications") : currentApp === "applications",
+        active: currentPath
+          ? isMatch("/applications")
+          : currentApp === "applications",
       },
     ];
   }

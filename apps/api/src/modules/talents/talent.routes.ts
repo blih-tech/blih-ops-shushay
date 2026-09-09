@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { requireAuth, requireRole, requireActiveSubscription } from "../../middleware/auth";
+import {
+  requireAuth,
+  requireRole,
+  requireActiveSubscription,
+} from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import { Role } from "@prisma/client";
 import {

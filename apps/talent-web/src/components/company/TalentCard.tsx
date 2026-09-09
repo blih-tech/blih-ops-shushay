@@ -11,7 +11,8 @@ interface TalentCardProps {
 }
 
 export function TalentCard({ talent }: TalentCardProps) {
-  const location = [talent.city, talent.country].filter(Boolean).join(", ") || "Remote";
+  const location =
+    [talent.city, talent.country].filter(Boolean).join(", ") || "Remote";
 
   return (
     <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 hover:shadow-md transition-all duration-300">
@@ -36,7 +37,12 @@ export function TalentCard({ talent }: TalentCardProps) {
                   src={talent.photoUrl}
                   alt={talent.fullName}
                   className="w-full h-full object-cover rounded-full"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "50%",
+                  }}
                 />
               ) : (
                 <div className="w-full h-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs rounded-full">
@@ -95,7 +101,10 @@ export function TalentCard({ talent }: TalentCardProps) {
           <div className="text-right">
             {talent.englishLevel && (
               <>
-                <span className="text-[#17131F] font-bold">{talent.englishLevel}</span> English
+                <span className="text-[#17131F] font-bold">
+                  {talent.englishLevel}
+                </span>{" "}
+                English
               </>
             )}
           </div>
@@ -104,10 +113,15 @@ export function TalentCard({ talent }: TalentCardProps) {
 
       <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
         <span className="text-xs font-mono text-[#6E6678]">
-          {talent.experienceCount} exp item{talent.experienceCount !== 1 ? "s" : ""}
+          {talent.experienceCount} exp item
+          {talent.experienceCount !== 1 ? "s" : ""}
         </span>
         <Link href={`/company/talents/${talent.id}`}>
-          <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+          <Button
+            size="sm"
+            variant="ghost"
+            leftIcon={<Eye className="h-3.5 w-3.5" />}
+          >
             View Profile
           </Button>
         </Link>

@@ -145,134 +145,134 @@ function ProfileSetupContent() {
 
   return (
     <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
-        {error && (
-          <Alert variant="error" className="mb-6">
-            {error}
-          </Alert>
-        )}
+      {error && (
+        <Alert variant="error" className="mb-6">
+          {error}
+        </Alert>
+      )}
 
-        <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
-          {/* Stepper rail */}
-          <aside className="w-full lg:w-80 shrink-0 bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-6 shadow-sm">
-            <div>
-              <p className="text-xs font-mono font-bold text-[#6E6678] uppercase tracking-wider">
-                Profile Setup Progress
-              </p>
-              <h2 className="font-display font-bold text-xl text-[#17131F] mt-1">
-                Build your verified profile
-              </h2>
-            </div>
+      <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
+        {/* Stepper rail */}
+        <aside className="w-full lg:w-80 shrink-0 bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-6 shadow-sm">
+          <div>
+            <p className="text-xs font-mono font-bold text-[#6E6678] uppercase tracking-wider">
+              Profile Setup Progress
+            </p>
+            <h2 className="font-display font-bold text-xl text-[#17131F] mt-1">
+              Build your verified profile
+            </h2>
+          </div>
 
-            <div className="space-y-4">
-              {steps.map((s, index) => {
-                const isActive = step === s.id;
-                const isCompleted = step > s.id;
+          <div className="space-y-4">
+            {steps.map((s, index) => {
+              const isActive = step === s.id;
+              const isCompleted = step > s.id;
 
-                return (
-                  <div key={s.id} className="relative">
-                    {index !== steps.length - 1 && (
-                      <div
-                        className={`absolute left-5 top-12 bottom-[-16px] w-0.5 ${
-                          isCompleted ? "bg-[#2E8F79]" : "bg-[#D9CEDF]"
-                        }`}
-                      />
-                    )}
-
+              return (
+                <div key={s.id} className="relative">
+                  {index !== steps.length - 1 && (
                     <div
-                      className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all ${
+                      className={`absolute left-5 top-12 bottom-[-16px] w-0.5 ${
+                        isCompleted ? "bg-[#2E8F79]" : "bg-[#D9CEDF]"
+                      }`}
+                    />
+                  )}
+
+                  <div
+                    className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all ${
+                      isActive
+                        ? "bg-[#EEF3FF] border border-[#1E5BFF]/30 text-[#1E5BFF]"
+                        : isCompleted
+                          ? "text-[#17131F]"
+                          : "text-[#6E6678]"
+                    }`}
+                  >
+                    <div
+                      className={`shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-xs font-mono font-bold transition-all shadow-xs ${
                         isActive
-                          ? "bg-[#EEF3FF] border border-[#1E5BFF]/30 text-[#1E5BFF]"
+                          ? "bg-[#1E5BFF] text-white"
                           : isCompleted
-                            ? "text-[#17131F]"
-                            : "text-[#6E6678]"
+                            ? "bg-[#2E8F79] text-white"
+                            : "bg-white border border-[#D9CEDF] text-[#6E6678]"
                       }`}
                     >
-                      <div
-                        className={`shrink-0 h-10 w-10 rounded-xl flex items-center justify-center text-xs font-mono font-bold transition-all shadow-xs ${
-                          isActive
-                            ? "bg-[#1E5BFF] text-white"
-                            : isCompleted
-                              ? "bg-[#2E8F79] text-white"
-                              : "bg-white border border-[#D9CEDF] text-[#6E6678]"
-                        }`}
-                      >
-                        {isCompleted ? <Check className="h-5 w-5" /> : s.id}
-                      </div>
-                      <div className="pt-0.5 min-w-0">
-                        <p className="text-sm font-bold leading-tight font-display">
-                          {s.title}
-                        </p>
-                        <p className="text-xs text-[#6E6678] mt-1 font-sans">
-                          {s.desc}
-                        </p>
-                      </div>
+                      {isCompleted ? <Check className="h-5 w-5" /> : s.id}
+                    </div>
+                    <div className="pt-0.5 min-w-0">
+                      <p className="text-sm font-bold leading-tight font-display">
+                        {s.title}
+                      </p>
+                      <p className="text-xs text-[#6E6678] mt-1 font-sans">
+                        {s.desc}
+                      </p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </aside>
-
-          {/* Form card */}
-          <div className="flex-1 w-full min-w-0">
-            <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_8px_30px_rgba(23,19,31,0.04)] overflow-hidden bg-white">
-              {/* Form header */}
-              <div className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8">
-                <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1E5BFF] uppercase tracking-wider mb-2">
-                  Step {step} of 3 <ChevronRight className="h-3.5 w-3.5" />
                 </div>
-                <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#17131F]">
-                  {step === 1 && "Personal Information"}
-                  {step === 2 && "Expertise & Technical Stack"}
-                  {step === 3 && "Media & Curriculum Vitae"}
-                </h3>
-                <p className="text-sm text-[#6E6678] font-sans mt-1">
-                  {step === 1 &&
-                    "Provide your official contact details and current location."}
-                  {step === 2 &&
-                    "Select your English proficiency level and list your core capabilities."}
-                  {step === 3 &&
-                    "Upload your professional headshot and PDF curriculum vitae."}
-                </p>
-              </div>
-
-              {/* Form body */}
-              <CardContent className="p-6 sm:p-8 bg-white">
-                {step === 1 && (
-                  <StepPersonalInfo
-                    form={form}
-                    saving={saving}
-                    onNext={handleNextStep}
-                  />
-                )}
-
-                {step === 2 && (
-                  <StepExpertise
-                    form={form}
-                    saving={saving}
-                    onNext={handleNextStep}
-                    onBack={() => setStep(1)}
-                  />
-                )}
-
-                {step === 3 && (
-                  <StepMedia
-                    photoUrl={profile?.photoUrl}
-                    cvUrl={profile?.cvUrl}
-                    onPhotoUpload={handlePhotoUpload}
-                    onPhotoDelete={handlePhotoDelete}
-                    onCvUpload={handleCvUpload}
-                    onCvDelete={handleCvDelete}
-                    onComplete={() => handleNextStep()}
-                    onBack={() => setStep(2)}
-                    saving={saving}
-                  />
-                )}
-              </CardContent>
-            </Card>
+              );
+            })}
           </div>
+        </aside>
+
+        {/* Form card */}
+        <div className="flex-1 w-full min-w-0">
+          <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_8px_30px_rgba(23,19,31,0.04)] overflow-hidden bg-white">
+            {/* Form header */}
+            <div className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1E5BFF] uppercase tracking-wider mb-2">
+                Step {step} of 3 <ChevronRight className="h-3.5 w-3.5" />
+              </div>
+              <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#17131F]">
+                {step === 1 && "Personal Information"}
+                {step === 2 && "Expertise & Technical Stack"}
+                {step === 3 && "Media & Curriculum Vitae"}
+              </h3>
+              <p className="text-sm text-[#6E6678] font-sans mt-1">
+                {step === 1 &&
+                  "Provide your official contact details and current location."}
+                {step === 2 &&
+                  "Select your English proficiency level and list your core capabilities."}
+                {step === 3 &&
+                  "Upload your professional headshot and PDF curriculum vitae."}
+              </p>
+            </div>
+
+            {/* Form body */}
+            <CardContent className="p-6 sm:p-8 bg-white">
+              {step === 1 && (
+                <StepPersonalInfo
+                  form={form}
+                  saving={saving}
+                  onNext={handleNextStep}
+                />
+              )}
+
+              {step === 2 && (
+                <StepExpertise
+                  form={form}
+                  saving={saving}
+                  onNext={handleNextStep}
+                  onBack={() => setStep(1)}
+                />
+              )}
+
+              {step === 3 && (
+                <StepMedia
+                  photoUrl={profile?.photoUrl}
+                  cvUrl={profile?.cvUrl}
+                  onPhotoUpload={handlePhotoUpload}
+                  onPhotoDelete={handlePhotoDelete}
+                  onCvUpload={handleCvUpload}
+                  onCvDelete={handleCvDelete}
+                  onComplete={() => handleNextStep()}
+                  onBack={() => setStep(2)}
+                  saving={saving}
+                />
+              )}
+            </CardContent>
+          </Card>
         </div>
-      </main>
+      </div>
+    </main>
   );
 }
 

@@ -25,11 +25,12 @@ export function LearnQuizTab({
   onSubmitQuiz,
 }: LearnQuizTabProps) {
   const hasQuiz = !!activeLesson.quiz;
-  const questions = ((activeLesson.quiz as any)?.questions as Array<{
-    text: string;
-    options: string[];
-    correctOptionIndex: number;
-  }>) ?? [];
+  const questions =
+    ((activeLesson.quiz as any)?.questions as Array<{
+      text: string;
+      options: string[];
+      correctOptionIndex: number;
+    }>) ?? [];
 
   return (
     <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
@@ -98,7 +99,9 @@ export function LearnQuizTab({
                       key={optIdx}
                       role="radio"
                       aria-checked={isSelected}
-                      onClick={() => !quizSubmitted && setSelectedQuizOption(qIdx, optIdx)}
+                      onClick={() =>
+                        !quizSubmitted && setSelectedQuizOption(qIdx, optIdx)
+                      }
                       className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
                         isSelected
                           ? "bg-[#EEF3FF] border-[#1E5BFF] ring-2 ring-[#1E5BFF]/20 text-[#17131F]"

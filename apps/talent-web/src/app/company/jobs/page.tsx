@@ -3,7 +3,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Plus, Building2 } from "lucide-react";
-import { Button, Badge, Card, Skeleton, Alert, EmptyState, ConfirmDialog } from "@blih/ui";
+import {
+  Button,
+  Badge,
+  Card,
+  Skeleton,
+  Alert,
+  EmptyState,
+  ConfirmDialog,
+} from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useCompanyJobs } from "@/hooks/useCompanyJobs";
 import { CompanyJobCard } from "@/components/company/CompanyJobCard";
@@ -42,7 +50,8 @@ function CompanyJobsContent() {
             <Badge variant="primary">{activeJobsCount} ACTIVE</Badge>
           </div>
           <p className="text-sm sm:text-base text-[#6E6678] font-sans">
-            Publish positions, specify verified skill criteria, and review candidate applications.
+            Publish positions, specify verified skill criteria, and review
+            candidate applications.
           </p>
         </div>
 
@@ -76,12 +85,30 @@ function CompanyJobsContent() {
       {loading ? (
         <div className="space-y-4">
           {[0, 1, 2].map((i) => (
-            <Card key={i} className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4">
-              <Skeleton variant="rectangular" width={220} height={24} className="rounded-md" />
+            <Card
+              key={i}
+              className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4"
+            >
+              <Skeleton
+                variant="rectangular"
+                width={220}
+                height={24}
+                className="rounded-md"
+              />
               <Skeleton variant="text" className="w-3/4" />
               <div className="flex gap-4">
-                <Skeleton variant="rectangular" width={100} height={16} className="rounded-md" />
-                <Skeleton variant="rectangular" width={80} height={16} className="rounded-md" />
+                <Skeleton
+                  variant="rectangular"
+                  width={100}
+                  height={16}
+                  className="rounded-md"
+                />
+                <Skeleton
+                  variant="rectangular"
+                  width={80}
+                  height={16}
+                  className="rounded-md"
+                />
               </div>
             </Card>
           ))}
@@ -93,7 +120,11 @@ function CompanyJobsContent() {
           description="Create your first job listing to start receiving applications from verified candidates."
           action={
             <Link href="/company/jobs/new">
-              <Button variant="primary" size="sm" leftIcon={<Plus className="h-4 w-4" />}>
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon={<Plus className="h-4 w-4" />}
+              >
                 Create First Job
               </Button>
             </Link>

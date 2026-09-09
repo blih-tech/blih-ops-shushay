@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
 @import "tailwindcss";
 @source "../../../../packages/ui";
 
@@ -8,20 +8,20 @@
   --bg: 255 255 255;
   --paper: 255 255 255;
   --surface: 238 243 255; /* #EEF3FF */
-  --lav: 221 231 255;     /* #DDE7FF */
+  --lav: 221 231 255; /* #DDE7FF */
 
   /* Text */
-  --ink: 23 19 31;        /* #17131F */
-  --muted: 110 102 120;   /* #6E6678 */
+  --ink: 23 19 31; /* #17131F */
+  --muted: 110 102 120; /* #6E6678 */
 
   /* Structural */
-  --line: 217 206 223;    /* #D9CEDF */
+  --line: 217 206 223; /* #D9CEDF */
 
   /* Brand / Action */
-  --accent: 30 91 255;    /* #1E5BFF */
-  --accent2: 255 138 91;  /* #FF8A5B */
-  --amber: 221 170 60;    /* #DDAA3C */
-  --ok: 46 143 121;       /* #2E8F79 */
+  --accent: 30 91 255; /* #1E5BFF */
+  --accent2: 255 138 91; /* #FF8A5B */
+  --amber: 221 170 60; /* #DDAA3C */
+  --ok: 46 143 121; /* #2E8F79 */
 
   /* Tailwind compatibility */
   --background: 255 255 255;
@@ -36,7 +36,7 @@
   --destructive: 239 68 68;
 
   /* Radius */
-   --radius-sm: 2px;
+  --radius-sm: 2px;
   --radius-md: 4px;
   --radius-lg: 8px;
   --radius-xl: 12px;
@@ -46,17 +46,17 @@
 }
 
 @theme {
-  --color-bg: #FFFFFF;
-  --color-paper: #FFFFFF;
-  --color-surface: #EEF3FF;
-  --color-lav: #DDE7FF;
-  --color-ink: #17131F;
-  --color-muted: #6E6678;
-  --color-line: #D9CEDF;
-  --color-accent: #1E5BFF;
-  --color-accent2: #FF8A5B;
-  --color-amber: #DDAA3C;
-  --color-ok: #2E8F79;
+  --color-bg: #ffffff;
+  --color-paper: #ffffff;
+  --color-surface: #eef3ff;
+  --color-lav: #dde7ff;
+  --color-ink: #17131f;
+  --color-muted: #6e6678;
+  --color-line: #d9cedf;
+  --color-accent: #1e5bff;
+  --color-accent2: #ff8a5b;
+  --color-amber: #ddaa3c;
+  --color-ok: #2e8f79;
 
   --color-background: rgb(var(--background));
   --color-foreground: rgb(var(--foreground));
@@ -70,10 +70,17 @@
   --color-destructive: rgb(var(--destructive));
 
   /* Fonts */
-  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display:
+    "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-serif:
+    "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
 }
 
 /* ─── Thin Scrollbar ───────────────────────────────────────────────────────── */
@@ -82,10 +89,20 @@
   scrollbar-color: rgba(110, 102, 120, 0.3) transparent;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background-color: rgba(110, 102, 120, 0.2); border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background-color: rgba(110, 102, 120, 0.4); }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(110, 102, 120, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(110, 102, 120, 0.4);
+}
 
 /* ─── Base Layout Normalization ────────────────────────────────────────────── */
 *,
@@ -109,56 +126,110 @@ html {
 }
 
 @media (min-width: 1400px) {
-  html { font-size: 16px; } /* Medium desktops */
+  html {
+    font-size: 16px;
+  } /* Medium desktops */
 }
 
 @media (min-width: 1920px) {
-  html { font-size: 18px; } /* FHD / Wide Desktop (1920px+): +12.5% type scale */
+  html {
+    font-size: 18px;
+  } /* FHD / Wide Desktop (1920px+): +12.5% type scale */
 }
 
 @media (min-width: 2560px) {
-  html { font-size: 20px; } /* QHD / 4K (2560px+): +25% type scale */
+  html {
+    font-size: 20px;
+  } /* QHD / 4K (2560px+): +25% type scale */
 }
 
 /* Container overrides — fills ~90% of viewport at large breakpoints */
 @media (min-width: 1536px) {
   /* 2XL: 1536px viewport → ~90% = 1380px, use 1440px */
-  .max-w-7xl { max-width: 1440px; }
-  .max-w-6xl { max-width: 1280px; }
-  .max-w-5xl { max-width: 1120px; }
-  .max-w-4xl { max-width: 960px; }
-  .max-w-3xl { max-width: 800px; }
-  .max-w-2xl { max-width: 680px; }
-  .max-w-xl  { max-width: 560px; }
+  .max-w-7xl {
+    max-width: 1440px;
+  }
+  .max-w-6xl {
+    max-width: 1280px;
+  }
+  .max-w-5xl {
+    max-width: 1120px;
+  }
+  .max-w-4xl {
+    max-width: 960px;
+  }
+  .max-w-3xl {
+    max-width: 800px;
+  }
+  .max-w-2xl {
+    max-width: 680px;
+  }
+  .max-w-xl {
+    max-width: 560px;
+  }
 }
 
 @media (min-width: 1920px) {
   /* FHD: 1920px viewport → ~91% = 1747px, use 1760px */
-  .max-w-7xl { max-width: 1760px; }
-  .max-w-6xl { max-width: 1560px; }
-  .max-w-5xl { max-width: 1360px; }
-  .max-w-4xl { max-width: 1160px; }
-  .max-w-3xl { max-width: 960px; }
-  .max-w-2xl { max-width: 800px; }
-  .max-w-xl  { max-width: 640px; }
+  .max-w-7xl {
+    max-width: 1760px;
+  }
+  .max-w-6xl {
+    max-width: 1560px;
+  }
+  .max-w-5xl {
+    max-width: 1360px;
+  }
+  .max-w-4xl {
+    max-width: 1160px;
+  }
+  .max-w-3xl {
+    max-width: 960px;
+  }
+  .max-w-2xl {
+    max-width: 800px;
+  }
+  .max-w-xl {
+    max-width: 640px;
+  }
 }
 
 @media (min-width: 2560px) {
   /* QHD: 2560px viewport → ~90% = 2304px, use 2320px */
-  .max-w-7xl { max-width: 2320px; }
-  .max-w-6xl { max-width: 2100px; }
-  .max-w-5xl { max-width: 1880px; }
-  .max-w-4xl { max-width: 1640px; }
-  .max-w-3xl { max-width: 1380px; }
-  .max-w-2xl { max-width: 1100px; }
-  .max-w-xl  { max-width: 880px; }
+  .max-w-7xl {
+    max-width: 2320px;
+  }
+  .max-w-6xl {
+    max-width: 2100px;
+  }
+  .max-w-5xl {
+    max-width: 1880px;
+  }
+  .max-w-4xl {
+    max-width: 1640px;
+  }
+  .max-w-3xl {
+    max-width: 1380px;
+  }
+  .max-w-2xl {
+    max-width: 1100px;
+  }
+  .max-w-xl {
+    max-width: 880px;
+  }
 }
 
 /* ─── Body ─────────────────────────────────────────────────────────────────── */
 body {
-  background-color: #FFFFFF;
-  color: #17131F;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #ffffff;
+  color: #17131f;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   min-height: 100vh;
 }
 
@@ -218,12 +289,21 @@ select:disabled {
 }
 
 /* ─── Text Overflow Normalization ──────────────────────────────────────────── */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
 }
 
-p, li, span, td, th {
+p,
+li,
+span,
+td,
+th {
   overflow-wrap: break-word;
 }

@@ -56,7 +56,12 @@ const companyOnly = requireRole([Role.COMPANY]);
  *       400: { description: Validation error }
  */
 router.get("/profile", companyOnly, getProfile);
-router.patch("/profile", companyOnly, validate(updateCompanyProfileSchema), updateProfile);
+router.patch(
+  "/profile",
+  companyOnly,
+  validate(updateCompanyProfileSchema),
+  updateProfile,
+);
 
 /**
  * @openapi
@@ -99,5 +104,3 @@ router.delete("/profile/logo", companyOnly, deleteLogo);
 router.get("/:companyId", getCompanyById);
 
 export default router;
-
-

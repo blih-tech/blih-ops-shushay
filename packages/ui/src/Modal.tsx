@@ -53,7 +53,6 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen, onClose]);
 
-
   if (!isOpen) return null;
 
   const sizes = {

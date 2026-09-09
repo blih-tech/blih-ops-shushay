@@ -116,4 +116,3 @@ export async function getCompanyById(companyId: string) {
 
   return company;
 }
-

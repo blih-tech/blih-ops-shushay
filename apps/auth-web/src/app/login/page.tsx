@@ -13,7 +13,10 @@ export default function LoginPage() {
       {/* Top Header */}
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-4">
         <div className="bg-white/90 backdrop-blur-md border border-[#D9CEDF] rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex justify-between items-center gap-3 sm:gap-4 shadow-[0_8px_30px_rgba(23,19,31,0.04)]">
-          <Link href={TALENT_URL} className="flex items-baseline gap-2 group shrink-0">
+          <Link
+            href={TALENT_URL}
+            className="flex items-baseline gap-2 group shrink-0"
+          >
             <span className="font-display text-xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:opacity-90 transition-opacity whitespace-nowrap">
               BLIH OPS
             </span>
@@ -22,7 +25,11 @@ export default function LoginPage() {
             href="/register"
             className="font-mono text-[10px] sm:text-xs font-medium uppercase tracking-wider text-[#6E6678] hover:text-[#1E5BFF] transition-colors px-2.5 sm:px-4 py-1.5 sm:py-2 border border-[#D9CEDF] hover:border-[#1E5BFF]/30 rounded-xl cursor-pointer bg-white whitespace-nowrap shrink-0"
           >
-            New to BLIH OPS? <span className="text-[#1E5BFF] underline underline-offset-3"> Create account</span>
+            New to BLIH OPS?{" "}
+            <span className="text-[#1E5BFF] underline underline-offset-3">
+              {" "}
+              Create account
+            </span>
           </Link>
         </div>
       </header>
