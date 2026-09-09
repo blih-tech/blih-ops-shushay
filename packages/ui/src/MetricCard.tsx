@@ -14,9 +14,9 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   className = "",
 }) => {
   const variantStyles = {
-    primary: "bg-[#DDE7FF] border border-[#1E5BFF]/20 text-[#1E5BFF]",
-    surface: "bg-[#EEF3FF] border border-[#D9CEDF]/70 text-[#17131F]",
-    white: "bg-white border border-[#D9CEDF] text-[#17131F] shadow-sm",
+    primary: "bg-gradient-to-br from-[#EEF3FF] to-[#DDE7FF] border border-[#1E5BFF]/30 text-[#1E5BFF] shadow-xs",
+    surface: "bg-gradient-to-br from-white via-[#F8FAFF] to-[#EEF3FF]/70 border border-[#D9CEDF]/80 text-[#17131F] shadow-xs",
+    white: "bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs",
   };
 
   const valueColors = {
@@ -27,7 +27,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 
   return (
     <div
-      className={`rounded-2xl p-4 sm:p-5 flex flex-col justify-center items-center text-center gap-1 transition-all ${variantStyles[variant]} ${className}`}
+      className={`rounded-2xl p-4 sm:p-5 flex flex-col justify-center items-center text-center gap-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md ${variantStyles[variant]} ${className}`}
     >
       <span
         className={`font-display text-2xl sm:text-3xl font-bold tracking-tight ${valueColors[variant]}`}

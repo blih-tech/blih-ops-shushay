@@ -22,12 +22,7 @@ function formatSalary(job: any): string {
 function getStatusBadge(status: string) {
   switch (status) {
     case "IN_REVIEW":
-      return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#FFF4EE] text-[#FF8A5B] border border-[#FF8A5B]/30">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#FF8A5B]" />
-          Reviewing
-        </span>
-      );
+      return <Badge variant="secondary">In Review</Badge>;
     case "INTERVIEW_SCHEDULED":
       return <Badge variant="verified">Interview Scheduled</Badge>;
     case "OFFER_EXTENDED":
@@ -36,12 +31,7 @@ function getStatusBadge(status: string) {
       return <Badge variant="outline">Declined</Badge>;
     case "SUBMITTED":
     default:
-      return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/20">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1E5BFF]" />
-          Applied
-        </span>
-      );
+      return <Badge variant="primary">Applied</Badge>;
   }
 }
 
@@ -187,13 +177,30 @@ function ApplicationsContent() {
                       </span>
                     </div>
                   </div>
-                  {companyId && (
-                    <Link href={`/companies/${companyId}`}>
-                      <Button size="sm" variant="outline">
-                        View Hiring Organization
-                      </Button>
-                    </Link>
-                  )}
+                  <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+                    {job.id && (
+                      <Link href={`/jobs/${job.id}`}>
+                        <Button
+                          size="sm"
+                          variant="primary"
+                          rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                        >
+                          View Job Details
+                        </Button>
+                      </Link>
+                    )}
+                    {companyId && (
+                      <Link href={`/companies/${companyId}`}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          leftIcon={<Building2 className="w-3.5 h-3.5 text-[#1E5BFF]" />}
+                        >
+                          View Hiring Org
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
 
                 {app.coverLetter && (

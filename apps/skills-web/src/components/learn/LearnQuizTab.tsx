@@ -54,7 +54,7 @@ export function LearnQuizTab({
         >
           <div
             className={`flex items-center gap-2 ${
-              quizPassed ? "text-[#2E8F79]" : "text-[#CC3333]"
+              quizPassed ? "text-[#2E8F79]" : "text-[#EF4444]"
             }`}
           >
             {quizPassed ? (
@@ -71,7 +71,7 @@ export function LearnQuizTab({
             {!quizPassed && " — Minimum 80% required to pass."}
           </p>
           {!quizPassed && (
-            <p className="text-xs text-[#CC3333] mt-2">
+            <p className="text-xs text-[#EF4444] mt-2">
               Navigate away and return to this lesson to retry the quiz.
             </p>
           )}
@@ -86,12 +86,18 @@ export function LearnQuizTab({
               <p className="font-sans text-sm font-semibold text-[#17131F]">
                 {qIdx + 1}. {question.text}
               </p>
-              <div className="space-y-2.5">
+              <div
+                className="space-y-2.5"
+                role="radiogroup"
+                aria-label={`Question ${qIdx + 1}`}
+              >
                 {question.options.map((optionText, optIdx) => {
                   const isSelected = selectedQuizOption[qIdx] === optIdx;
                   return (
                     <button
                       key={optIdx}
+                      role="radio"
+                      aria-checked={isSelected}
                       onClick={() => !quizSubmitted && setSelectedQuizOption(qIdx, optIdx)}
                       className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
                         isSelected

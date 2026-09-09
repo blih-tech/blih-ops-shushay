@@ -153,10 +153,17 @@ function JobsFeedContent() {
                 const salary = formatSalary(job);
 
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={job.id}
-                    onClick={() => setSelectedJobId(job.id)}
-                    className={`bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
+                    onClick={() => {
+                      setSelectedJobId(job.id);
+                      // Scroll to detail on mobile viewports
+                      if (window.innerWidth < 1024) {
+                        document.getElementById("job-detail-panel")?.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    className={`w-full text-left bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
                       isSelected
                         ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
                         : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
@@ -204,7 +211,7 @@ function JobsFeedContent() {
                         {new Date(job.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -212,7 +219,7 @@ function JobsFeedContent() {
         </div>
 
         {/* Right Column: Detail Panel */}
-        <div className="lg:col-span-5 sticky top-24 space-y-6">
+        <div id="job-detail-panel" className="lg:col-span-5 sticky top-24 space-y-6">
           <JobPreviewDetail
             job={selectedJob}
             formatSalary={formatSalary}

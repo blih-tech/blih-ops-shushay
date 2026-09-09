@@ -42,16 +42,6 @@ export function getNavLinks({
         active: currentPath ? isMatch("/", true) : currentApp === "explore",
       },
       {
-        label: "Opportunities",
-        href: `${talentUrl}/jobs`,
-        active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
-      },
-      {
-        label: "My Applications",
-        href: `${talentUrl}/applications`,
-        active: currentPath ? isMatch("/applications") : currentApp === "applications",
-      },
-      {
         label: "Courses",
         href: `${skillsUrl}/courses`,
         active: currentPath
@@ -64,6 +54,16 @@ export function getNavLinks({
         active: currentPath
           ? isMatch("/dashboard")
           : currentApp === "dashboard",
+      },
+      {
+        label: "Opportunities",
+        href: `${talentUrl}/jobs`,
+        active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
+      },
+      {
+        label: "My Applications",
+        href: `${talentUrl}/applications`,
+        active: currentPath ? isMatch("/applications") : currentApp === "applications",
       },
     ];
   }
@@ -83,16 +83,16 @@ export function getNavLinks({
           : currentApp === "company" || currentApp === "business",
       },
       {
+        label: "Job Posts",
+        href: `${talentUrl}/company/jobs`,
+        active: currentPath ? isMatch("/company/jobs") : currentApp === "jobs",
+      },
+      {
         label: "Talent Search",
         href: `${talentUrl}/company/talents`,
         active: currentPath
           ? isMatch("/company/talents")
           : currentApp === "talents",
-      },
-      {
-        label: "Job Posts",
-        href: `${talentUrl}/company/jobs`,
-        active: currentPath ? isMatch("/company/jobs") : currentApp === "jobs",
       },
       {
         label: "Subscription",

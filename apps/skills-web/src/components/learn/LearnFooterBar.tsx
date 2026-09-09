@@ -36,7 +36,7 @@ export function LearnFooterBar({
             isMarkingComplete ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <CheckCircle2 className="w-4 h-4 text-[#00A859]" />
+              <CheckCircle2 className="w-4 h-4 text-[#2E8F79]" />
             )
           }
           onClick={onCompleteLesson}
@@ -53,21 +53,23 @@ export function LearnFooterBar({
       )}
 
       {completionError && (
-        <div className="flex items-center gap-2 text-[#CC3333] text-sm">
+        <div className="flex items-center gap-2 text-[#EF4444] text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span>{completionError}</span>
         </div>
       )}
 
-      <Button
-        variant="ghost"
-        size="sm"
-        rightIcon={<ArrowRight className="w-4 h-4" />}
-        onClick={onCompleteLesson}
-        disabled={isMarkingComplete}
-      >
-        Skip to Next Lesson
-      </Button>
+      {!isCurrentLessonComplete && (
+        <Button
+          variant="ghost"
+          size="sm"
+          rightIcon={<ArrowRight className="w-4 h-4" />}
+          onClick={onCompleteLesson}
+          disabled={isMarkingComplete}
+        >
+          Skip to Next Lesson
+        </Button>
+      )}
     </div>
   );
 }

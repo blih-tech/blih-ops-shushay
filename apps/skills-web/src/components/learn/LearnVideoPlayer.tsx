@@ -30,6 +30,7 @@ export function LearnVideoPlayer({
   const [isMuted, setIsMuted] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [showControls, setShowControls] = useState(true);
+  const [videoError, setVideoError] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const hasVideo = !!activeLesson.videoUrl;
@@ -101,7 +102,7 @@ export function LearnVideoPlayer({
   };
 
   const formatTime = (seconds: number) => {
-    if (isNaN(seconds) || seconds === 0) return "00:00";
+    if (isNaN(seconds) || seconds <= 0) return "00:00";
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins < 10 ? "0" : ""}${mins}:${secs < 10 ? "0" : ""}${secs}`;
@@ -131,7 +132,13 @@ export function LearnVideoPlayer({
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={() => setIsPlaying(false)}
+            onError={() => setVideoError(true)}
           />
+        ) : videoError ? (
+          <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white select-none gap-3">
+            <p className="font-mono text-xs text-[#BFD0FF] uppercase tracking-wider font-semibold">Video unavailable</p>
+            <p className="font-sans text-xs text-white/50">Could not load the video for this lesson.</p>
+          </div>
         ) : (
           <div
             className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] text-white cursor-pointer select-none"
@@ -161,9 +168,6 @@ export function LearnVideoPlayer({
                 {activeLesson.title}
               </h2>
             </div>
-            <Badge variant="verified" size="sm">
-              HD 1080p
-            </Badge>
           </div>
         </div>
 
@@ -244,7 +248,7 @@ export function LearnVideoPlayer({
               </div>
 
               <span className="font-mono text-xs text-white/80">
-                {formatTime(currentTime)} / {formatTime(duration || 765)}
+                {formatTime(currentTime)} / {formatTime(duration)}
               </span>
             </div>
 

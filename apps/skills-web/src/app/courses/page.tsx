@@ -52,7 +52,13 @@ export default function CourseCatalogPage() {
     const matchesSearch =
       course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       course.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
+    
+    const matchesCategory =
+      activeCategory === "All" ||
+      course.title.toLowerCase().includes(activeCategory.toLowerCase()) ||
+      course.description.toLowerCase().includes(activeCategory.toLowerCase());
+
+    return matchesSearch && matchesCategory;
   });
 
   return (

@@ -56,20 +56,20 @@ function CompanyDashboardContent() {
 
       {/* Metrics Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <MetricCard value="3" label="Active Job Postings" variant="surface" />
+        <MetricCard value="Live" label="Active Job Postings" variant="surface" />
         <MetricCard
-          value="18"
-          label="Applicants in Review"
+          value="Active"
+          label="Candidate Review Queue"
           variant="primary"
         />
         <MetricCard
-          value="92%"
-          label="Avg Talent Capability Fit"
+          value="Verified"
+          label="Capability Match Engine"
           variant="surface"
         />
         <MetricCard
           value="Active"
-          label="Subscription Status"
+          label="Subscription Access"
           variant="surface"
         />
       </div>

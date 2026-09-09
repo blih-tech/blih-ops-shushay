@@ -2,7 +2,7 @@
 
 import React from "react";
 import { CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { Button, Badge } from "@blih/ui";
+import { Button, Badge, Textarea } from "@blih/ui";
 import type { PublicLesson } from "@/types/course";
 
 interface LearnAssignmentTabProps {
@@ -65,17 +65,13 @@ export function LearnAssignmentTab({
             </div>
           )}
 
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-[#17131F]">
-              Your Response
-            </label>
-            <textarea
-              value={assignmentContent}
-              onChange={(e) => setAssignmentContent(e.target.value)}
-              className="w-full p-4 border border-[#D9CEDF] rounded-2xl text-sm text-[#17131F] min-h-[140px] focus:ring-2 focus:ring-[#1E5BFF] focus:border-[#1E5BFF] outline-none resize-y"
-              placeholder="Write your response here..."
-            />
-          </div>
+          <Textarea
+            label="Your Response"
+            value={assignmentContent}
+            onChange={(e) => setAssignmentContent(e.target.value)}
+            placeholder="Write your response here..."
+            rows={5}
+          />
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-[#17131F]">
@@ -95,7 +91,7 @@ export function LearnAssignmentTab({
           </div>
 
           {assignmentError && (
-            <div className="flex items-center gap-2 text-[#CC3333] text-sm">
+            <div className="flex items-center gap-2 text-[#EF4444] text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{assignmentError}</span>
             </div>

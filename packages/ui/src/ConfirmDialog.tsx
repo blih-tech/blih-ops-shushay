@@ -52,7 +52,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </>
       }
     >
-      <p className="text-sm text-body leading-relaxed font-sans">{message}</p>
+      <p className="text-sm text-[#17131F] leading-relaxed font-sans">{message}</p>
     </Modal>
   );
 };

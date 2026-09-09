@@ -31,11 +31,11 @@ export const Pagination: React.FC<PaginationProps> = ({
       >
         Previous
       </Button>
-      <span className="text-xs xl:text-sm text-muted-foreground">
+      <span className="text-xs xl:text-sm text-[#6E6678]">
         Page{" "}
-        <strong className="text-foreground font-semibold">{currentPage}</strong>{" "}
+        <strong className="text-[#17131F] font-semibold">{currentPage}</strong>{" "}
         of{" "}
-        <strong className="text-foreground font-semibold">{totalPages}</strong>
+        <strong className="text-[#17131F] font-semibold">{totalPages}</strong>
       </span>
       <Button
         variant="outline"

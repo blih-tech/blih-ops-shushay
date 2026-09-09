@@ -50,7 +50,7 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
             course.lessons.map((lesson: PublicLesson, idx: number) => (
               <div
                 key={lesson.id || idx}
-                className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-center justify-between gap-4 hover:border-[#1E5BFF]/30 transition-all shadow-sm"
+                className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-center justify-between gap-4 shadow-sm"
               >
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center font-mono font-bold text-[#1E5BFF] shrink-0 text-sm">
@@ -61,7 +61,8 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
                       {lesson.title}
                     </h3>
                     <p className="font-mono text-xs text-[#6E6678] mt-0.5">
-                      Preview Available · Verified Assessment Included
+                      {lesson.quiz ? "Assessment Quiz Included" : "Video Content"} ·{" "}
+                      {lesson.assignment ? "Practical Task Included" : "Self-Paced"}
                     </p>
                   </div>
                 </div>

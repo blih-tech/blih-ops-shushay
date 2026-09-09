@@ -130,19 +130,6 @@ function CertificatesContent() {
             >
               {copied ? "Link Copied!" : "Share Credential"}
             </Button>
-            <a
-              href={getCertificateDownloadUrl(displayedCertificates[0].id)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                variant="primary"
-                size="sm"
-                leftIcon={<Download className="w-4 h-4" />}
-              >
-                Download PDF Record
-              </Button>
-            </a>
           </div>
         )}
       </div>

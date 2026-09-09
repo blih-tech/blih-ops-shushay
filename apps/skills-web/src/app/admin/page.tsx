@@ -16,6 +16,35 @@ import { Button, Card, Badge, Alert, Skeleton } from "@blih/ui";
 import { fetchAdminStats } from "@/lib/adminApi";
 import type { AdminStats } from "@/types/admin";
 
+interface StatCardProps {
+  label: string;
+  value?: number | string;
+  subtext: string;
+  loading: boolean;
+  icon: React.ReactNode;
+  bgColor: string;
+  textColor: string;
+}
+
+function StatCard({ label, value, subtext, loading, icon, bgColor, textColor }: StatCardProps) {
+  return (
+    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-xs text-[#6E6678] uppercase">{label}</span>
+        <div className={`w-8 h-8 rounded-xl ${bgColor} ${textColor} flex items-center justify-center`}>
+          {icon}
+        </div>
+      </div>
+      {loading ? (
+        <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
+      ) : (
+        <p className="font-display text-3xl font-bold text-[#17131F]">{value ?? 0}</p>
+      )}
+      <p className="text-xs text-[#6E6678]">{subtext}</p>
+    </div>
+  );
+}
+
 function AdminContent() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -69,83 +98,42 @@ function AdminContent() {
 
       {/* Live Platform Statistics Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
-              Talents
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
-              <Users className="h-4 w-4" />
-            </div>
-          </div>
-          {loading ? (
-            <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
-          ) : (
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {stats?.totalTalents ?? 0}
-            </p>
-          )}
-          <p className="text-xs text-[#6E6678]">Registered candidates</p>
-        </div>
-
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
-              Companies
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#2E8F79] flex items-center justify-center">
-              <Building2 className="h-4 w-4" />
-            </div>
-          </div>
-          {loading ? (
-            <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
-          ) : (
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {stats?.totalCompanies ?? 0}
-            </p>
-          )}
-          <p className="text-xs text-[#6E6678]">Hiring organizations</p>
-        </div>
-
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
-              Courses
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#FF8A5B] flex items-center justify-center">
-              <BookOpen className="h-4 w-4" />
-            </div>
-          </div>
-          {loading ? (
-            <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
-          ) : (
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {stats?.totalCourses ?? 0}
-            </p>
-          )}
-          <p className="text-xs text-[#6E6678]">
-            {stats?.publishedCourses ?? 0} published catalog
-          </p>
-        </div>
-
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
-              Modules
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
-              <Layers className="h-4 w-4" />
-            </div>
-          </div>
-          {loading ? (
-            <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
-          ) : (
-            <p className="font-display text-3xl font-bold text-[#17131F]">
-              {stats?.totalLessons ?? 0}
-            </p>
-          )}
-          <p className="text-xs text-[#6E6678]">Total lesson lectures</p>
-        </div>
+        <StatCard
+          label="Talents"
+          value={stats?.totalTalents}
+          subtext="Registered candidates"
+          loading={loading}
+          icon={<Users className="h-4 w-4" />}
+          bgColor="bg-[#EEF3FF]"
+          textColor="text-[#1E5BFF]"
+        />
+        <StatCard
+          label="Companies"
+          value={stats?.totalCompanies}
+          subtext="Hiring organizations"
+          loading={loading}
+          icon={<Building2 className="h-4 w-4" />}
+          bgColor="bg-[#E6F5F0]"
+          textColor="text-[#2E8F79]"
+        />
+        <StatCard
+          label="Courses"
+          value={stats?.totalCourses}
+          subtext={`${stats?.publishedCourses ?? 0} published catalog`}
+          loading={loading}
+          icon={<BookOpen className="h-4 w-4" />}
+          bgColor="bg-[#FFF4EE]"
+          textColor="text-[#FF8A5B]"
+        />
+        <StatCard
+          label="Modules"
+          value={stats?.totalLessons}
+          subtext="Total lesson lectures"
+          loading={loading}
+          icon={<Layers className="h-4 w-4" />}
+          bgColor="bg-[#FFF9EE]"
+          textColor="text-[#D97706]"
+        />
       </div>
 
       {/* 3 Major Management Gateways */}

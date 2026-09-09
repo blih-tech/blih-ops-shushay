@@ -35,7 +35,7 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`w-full bg-white rounded-3xl border border-[#D9CEDF] shadow-[0_12px_40px_rgba(30,91,255,0.06)] px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3 transition-all focus-within:border-[#1E5BFF] focus-within:shadow-[0_12px_40px_rgba(30,91,255,0.12)] ${className}`}
+      className={`w-full bg-white rounded-3xl border border-[#D9CEDF] shadow-[0_8px_30px_rgba(23,19,31,0.04)] px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3 transition-all duration-300 focus-within:border-[#1E5BFF] focus-within:ring-4 focus-within:ring-[#1E5BFF]/10 focus-within:shadow-[0_12px_40px_rgba(30,91,255,0.12)] ${className}`}
     >
       <div className="flex items-center gap-3 flex-1">
         <Search className="h-5 w-5 text-[#6E6678] shrink-0" />

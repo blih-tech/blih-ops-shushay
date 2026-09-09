@@ -125,7 +125,7 @@ export function CourseDetailSidebar({
               "Self-paced with progress tracking",
             ].map((item, idx) => (
               <li key={idx} className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#00A859] shrink-0" />
+                <CheckCircle2 className="w-4 h-4 text-[#2E8F79] shrink-0" />
                 <span>{item}</span>
               </li>
             ))}

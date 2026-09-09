@@ -8,10 +8,10 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ children, variant = "default", className = "", ...props }, ref) => {
     const variantStyles = {
       default:
-        "bg-white border border-[#D9CEDF] shadow-[0_4px_24px_rgba(23,19,31,0.04)]",
-      surface: "bg-[#EEF3FF] border border-[#D9CEDF]/70",
+        "bg-white border border-[#D9CEDF] shadow-[0_4px_24px_rgba(23,19,31,0.04)] hover:shadow-[0_8px_32px_rgba(23,19,31,0.08)] transition-all duration-300",
+      surface: "bg-gradient-to-br from-[#FDFBFD] via-[#F8FAFF] to-[#EEF3FF]/60 border border-[#D9CEDF]/80 shadow-xs",
       interactive:
-        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/60 hover:shadow-[0_8px_32px_rgba(30,91,255,0.08)] transition-all duration-300 cursor-pointer group",
+        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(30,91,255,0.1)] transition-all duration-300 cursor-pointer group",
     };
 
     return (

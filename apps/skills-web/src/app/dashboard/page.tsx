@@ -193,12 +193,12 @@ function DashboardContent() {
             variant="surface"
           />
           <MetricCard
-            value={totalCompleted > 0 ? "100" : "94"}
+            value={totalCompleted > 0 ? "100" : "—"}
             label="Top Capability Score"
             variant="primary"
           />
           <MetricCard
-            value="100%"
+            value={totalCompleted > 0 ? "Verified" : "In Progress"}
             label="Verification Status"
             variant="surface"
           />
@@ -272,7 +272,7 @@ function DashboardContent() {
                       <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all duration-500 ${
-                            isCompleted ? "bg-[#00A859]" : "bg-[#1E5BFF]"
+                            isCompleted ? "bg-[#2E8F79]" : "bg-[#1E5BFF]"
                           }`}
                           style={{ width: `${percent}%` }}
                         />

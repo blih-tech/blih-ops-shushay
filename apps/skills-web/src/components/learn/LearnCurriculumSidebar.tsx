@@ -21,7 +21,7 @@ export function LearnCurriculumSidebar({
   const totalLessons = lessons?.length || 1;
 
   return (
-    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF] p-4 sm:p-6 lg:p-8 space-y-6 bg-[#F7F9FF]">
+    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF] p-4 sm:p-6 lg:p-8 space-y-6 bg-[#EEF3FF]">
       <div className="space-y-1">
         <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F] tracking-tight">
           Course structure
@@ -41,6 +41,7 @@ export function LearnCurriculumSidebar({
               <button
                 key={lesson.id || idx}
                 onClick={() => onSelectLesson(idx)}
+                aria-current={isActive ? "page" : undefined}
                 className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                   isActive
                     ? "bg-white border-[#1E5BFF] shadow-md text-[#1E5BFF] ring-2 ring-[#1E5BFF]/10"
