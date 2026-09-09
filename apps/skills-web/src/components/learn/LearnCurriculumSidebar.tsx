@@ -21,13 +21,13 @@ export function LearnCurriculumSidebar({
   const totalLessons = lessons?.length || 1;
 
   return (
-    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF] p-4 sm:p-6 space-y-6 bg-[#EEF3FF]/40">
+    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF] p-4 sm:p-6 lg:p-8 space-y-6 bg-[#F7F9FF]">
       <div className="space-y-1">
-        <h2 className="font-display text-lg font-bold text-[#17131F]">
-          Module Curriculum
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F] tracking-tight">
+          Course structure
         </h2>
         <p className="font-mono text-xs text-[#6E6678]">
-          {completedLessons.length} of {totalLessons} completed
+          {completedLessons.length} of {totalLessons} modules completed
         </p>
       </div>
 
@@ -36,38 +36,48 @@ export function LearnCurriculumSidebar({
           lessons.map((lesson: PublicLesson, idx: number) => {
             const isActive = idx === activeLessonIndex;
             const isCompleted = completedLessons.includes(idx);
+            const lessonNum = (idx + 1).toString().padStart(2, "0");
             return (
               <button
                 key={lesson.id || idx}
                 onClick={() => onSelectLesson(idx)}
-                className={`w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${isActive
-                    ? "bg-white border-[#1E5BFF] shadow-sm text-[#1E5BFF]"
-                    : "bg-white/80 border-[#D9CEDF] hover:bg-white text-[#17131F]"
-                  }`}
+                className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                  isActive
+                    ? "bg-white border-[#1E5BFF] shadow-md text-[#1E5BFF] ring-2 ring-[#1E5BFF]/10"
+                    : "bg-white/90 border-[#D9CEDF] hover:bg-white text-[#17131F]"
+                }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`w-7 h-7 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${isCompleted
-                        ? "bg-[#E6F5F0] text-[#2E8F79]"
+                    className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
+                      isCompleted
+                        ? "bg-[#2E8F79]/10 text-[#2E8F79]"
                         : isActive
-                          ? "bg-[#1E5BFF] text-white"
-                          : "bg-[#EEF3FF] text-[#6E6678]"
-                      }`}
+                        ? "bg-[#1E5BFF] text-white shadow-xs"
+                        : "bg-[#EEF3FF] text-[#6E6678]"
+                    }`}
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="w-4 h-4" />
+                      <CheckCircle2 className="w-4.5 h-4.5" />
                     ) : (
-                      idx + 1
+                      lessonNum
                     )}
                   </div>
-                  <span className="font-sans text-xs sm:text-sm font-medium truncate">
-                    {lesson.title}
-                  </span>
+                  <div className="min-w-0">
+                    <span className="font-sans text-xs sm:text-sm font-medium block truncate">
+                      {lesson.title}
+                    </span>
+                    {isActive && (
+                      <span className="font-mono text-[10px] text-[#1E5BFF] font-semibold block mt-0.5">
+                        · current
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {isCompleted && (
                   <Badge variant="verified" size="sm">
-                    Done
+                    ✓
                   </Badge>
                 )}
               </button>

@@ -149,8 +149,8 @@ export const CvUpload: React.FC<CvUploadProps> = ({
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           className={`border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all ${isDragging
-              ? "border-[#1E5BFF] bg-[#EEF3FF]"
-              : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
+            ? "border-[#1E5BFF] bg-[#EEF3FF]"
+            : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
             }`}
         >
           {loading ? (

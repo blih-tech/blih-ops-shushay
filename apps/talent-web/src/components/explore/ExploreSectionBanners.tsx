@@ -20,9 +20,8 @@ export function MetricsBar() {
         {MOCK_EXPLORE_METRICS.map((metric, idx) => (
           <div
             key={idx}
-            className={`flex flex-col space-y-2 ${
-              idx > 0 ? "pt-4 sm:pt-0 sm:pl-6 lg:pl-8" : ""
-            }`}
+            className={`flex flex-col space-y-2 ${idx > 0 ? "pt-4 sm:pt-0 sm:pl-6 lg:pl-8" : ""
+              }`}
           >
             <div className="flex items-center gap-2.5">
               <div className="p-2 bg-white rounded-xl border border-[#D9CEDF]/50 shadow-2xs">

@@ -255,7 +255,7 @@ function LearnContent({ courseId }: { courseId: string }) {
               </p>
             </div>
           </div>
-          <Link href="/certificates">
+          <Link href={`/certificates?courseId=${course?.id}`}>
             <Button variant="secondary" size="sm">
               View Certificate
             </Button>
@@ -267,6 +267,12 @@ function LearnContent({ courseId }: { courseId: string }) {
         <LearnPlayerSurface
           courseTitle={course?.title}
           activeLesson={activeLesson}
+          activeLessonIndex={activeLessonIndex}
+          onNextLesson={() => {
+            if (activeLessonIndex + 1 < totalLessons) {
+              setActiveLessonIndex(activeLessonIndex + 1);
+            }
+          }}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           selectedQuizOption={quizAnswers}

@@ -72,9 +72,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
       <div className="flex flex-col items-center gap-4 bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-3xl p-6">
         {/* Avatar Preview */}
         <div
-          className={`relative h-28 w-28 rounded-full border-2 ${
-            isDragging ? "border-[#1E5BFF] scale-105" : "border-[#1E5BFF]/20"
-          } bg-[#EEF3FF] flex items-center justify-center overflow-hidden cursor-pointer group transition-all shadow-sm`}
+          className={`relative h-28 w-28 rounded-full border-2 ${isDragging ? "border-[#1E5BFF] scale-105" : "border-[#1E5BFF]/20"
+            } bg-[#EEF3FF] flex items-center justify-center overflow-hidden cursor-pointer group transition-all shadow-sm`}
           onClick={() => !loading && fileInputRef.current?.click()}
           onDragOver={(e) => {
             e.preventDefault();

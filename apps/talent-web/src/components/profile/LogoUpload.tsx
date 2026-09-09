@@ -136,11 +136,10 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => !loading && fileInputRef.current?.click()}
-            className={`p-3.5 rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-3 ${
-              isDragging
+            className={`p-3.5 rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer flex flex-col sm:flex-row items-center justify-between gap-3 ${isDragging
                 ? "border-[#1E5BFF] bg-[#EEF3FF]"
                 : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/60 hover:bg-[#EEF3FF]/30"
-            }`}
+              }`}
           >
             <div className="flex items-center gap-2.5 text-xs text-[#4E4656] pointer-events-none">
               <Upload className="w-4 h-4 text-[#1E5BFF] shrink-0" />

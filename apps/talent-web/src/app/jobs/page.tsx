@@ -15,30 +15,7 @@ import { MapPin, DollarSign, Sparkles, Building2 } from "lucide-react";
 import { useJobs } from "@/hooks/useJobs";
 import { Job } from "@/types/job";
 import { JobPreviewDetail } from "@/components/jobs/JobPreviewDetail";
-
-function JobCardSkeleton() {
-  return (
-    <Card className="border border-[#D9CEDF] rounded-3xl bg-white p-5 sm:p-7 space-y-4 h-[180px] flex flex-col justify-between">
-      <div className="space-y-3">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2 flex-1">
-            <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
-            <Skeleton variant="rectangular" width={200} height={20} className="rounded-md" />
-          </div>
-          <Skeleton variant="rectangular" width={75} height={22} className="rounded-lg" />
-        </div>
-        <Skeleton variant="text" className="w-full" />
-      </div>
-      <div className="pt-3 border-t border-[#D9CEDF]/50 flex justify-between items-center">
-        <div className="flex gap-4">
-          <Skeleton variant="rectangular" width={80} height={12} className="rounded-md" />
-          <Skeleton variant="rectangular" width={60} height={12} className="rounded-md" />
-        </div>
-        <Skeleton variant="rectangular" width={50} height={10} className="rounded-md" />
-      </div>
-    </Card>
-  );
-}
+import { JobCardSkeleton } from "@/components/jobs/JobCardSkeleton";
 
 function formatSalary(job: Job): string {
   if (job.salaryDisplay) return job.salaryDisplay;
@@ -158,7 +135,7 @@ function JobsFeedContent() {
           {loading ? (
             <div className="space-y-4">
               {[0, 1, 2, 3].map((i) => (
-                <JobCardSkeleton key={i} />
+                <JobCardSkeleton key={i} themeIndex={i} />
               ))}
             </div>
           ) : jobs.length === 0 ? (

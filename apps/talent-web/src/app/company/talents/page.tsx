@@ -18,25 +18,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { useTalentSearch } from "@/hooks/useTalentSearch";
 import { TalentSearchResultItem } from "@/lib/talentApi";
 import { TalentCard } from "@/components/company/TalentCard";
-
-function TalentCardSkeleton() {
-  return (
-    <Card className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4">
-      <div className="flex items-center gap-3">
-        <Skeleton variant="rectangular" width={48} height={48} className="rounded-full" />
-        <div className="space-y-2 flex-1">
-          <Skeleton variant="rectangular" width={140} height={18} className="rounded-md" />
-          <Skeleton variant="rectangular" width={100} height={14} className="rounded-md" />
-        </div>
-      </div>
-      <Skeleton variant="text" className="w-full" />
-      <div className="flex gap-2">
-        <Skeleton variant="rectangular" width={60} height={20} className="rounded-md" />
-        <Skeleton variant="rectangular" width={60} height={20} className="rounded-md" />
-      </div>
-    </Card>
-  );
-}
+import { TalentCardSkeleton } from "@/components/company/TalentCardSkeleton";
 
 const englishLevelFilterOptions = [
   { value: "", label: "All English Levels" },
@@ -177,7 +159,7 @@ function CompanyTalentsSearchContent() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
               {[0, 1, 2, 3, 4, 5].map((i) => (
-                <TalentCardSkeleton key={i} />
+                <TalentCardSkeleton key={i} themeIndex={i} />
               ))}
             </div>
           ) : talents.length === 0 ? (

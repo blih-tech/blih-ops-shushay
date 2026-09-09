@@ -12,6 +12,7 @@ import {
   Skeleton,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
+import { AdminCompanySkeletonGrid } from "@/components/admin/AdminSkeletonList";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchAdminCompanies } from "@/lib/adminApi";
 import type { AdminCompanyItem } from "@/types/admin";
@@ -87,35 +88,7 @@ function AdminCompaniesContent() {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="p-6 space-y-4">
-              <div className="flex items-center gap-4">
-                <Skeleton variant="circular" className="h-12 w-12" />
-                <div className="space-y-2 flex-1">
-                  <Skeleton
-                    variant="rectangular"
-                    className="h-6 w-3/4 rounded-lg"
-                  />
-                  <Skeleton
-                    variant="rectangular"
-                    className="h-4 w-1/2 rounded-lg"
-                  />
-                </div>
-              </div>
-              <div className="pt-4 border-t border-[#D9CEDF] space-y-2">
-                <Skeleton
-                  variant="rectangular"
-                  className="h-4 w-full rounded"
-                />
-                <Skeleton
-                  variant="rectangular"
-                  className="h-4 w-5/6 rounded"
-                />
-              </div>
-            </Card>
-          ))}
-        </div>
+        <AdminCompanySkeletonGrid />
       ) : filteredCompanies.length === 0 ? (
         <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
           <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">

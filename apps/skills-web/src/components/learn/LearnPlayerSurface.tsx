@@ -12,6 +12,8 @@ import { LearnFooterBar } from "./LearnFooterBar";
 interface LearnPlayerSurfaceProps {
   courseTitle?: string;
   activeLesson?: PublicLesson;
+  activeLessonIndex?: number;
+  onNextLesson?: () => void;
   activeTab: "video" | "reading" | "quiz" | "exercise";
   setActiveTab: (tab: "video" | "reading" | "quiz" | "exercise") => void;
   selectedQuizOption: Record<number, number>;
@@ -36,6 +38,8 @@ interface LearnPlayerSurfaceProps {
 
 export function LearnPlayerSurface({
   activeLesson,
+  activeLessonIndex = 0,
+  onNextLesson,
   activeTab,
   setActiveTab,
   selectedQuizOption,
@@ -115,7 +119,10 @@ export function LearnPlayerSurface({
 
       {/* Tab Panels */}
       {activeLesson && effectiveTab === "video" && (
-        <LearnVideoPlayer activeLesson={activeLesson} />
+        <LearnVideoPlayer
+          activeLesson={activeLesson}
+          activeLessonIndex={activeLessonIndex}
+        />
       )}
 
       {activeLesson && effectiveTab === "reading" && (

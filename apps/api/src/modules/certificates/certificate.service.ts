@@ -26,13 +26,14 @@ export async function checkAndGenerateCertificate(userId: string, courseId: stri
     return null; // Not 100% complete yet
   }
 
-  // Check if certificate already exists (idempotent duplicate prevention)
-  const existingCert = await prisma.certificate.findUnique({
+  // Check if certificate already exists (idempotent duplicate prevention by courseId or course title)
+  const existingCert = await prisma.certificate.findFirst({
     where: {
-      userId_courseId: {
-        userId,
-        courseId,
-      },
+      userId,
+      OR: [
+        { courseId },
+        { course: { title: course.title } },
+      ],
     },
     include: {
       course: { select: { id: true, title: true, description: true } },
@@ -77,7 +78,7 @@ export async function checkAndGenerateCertificate(userId: string, courseId: stri
 }
 
 export async function getUserCertificates(userId: string) {
-  return prisma.certificate.findMany({
+  const certs = await prisma.certificate.findMany({
     where: { userId },
     include: {
       course: {
@@ -90,6 +91,17 @@ export async function getUserCertificates(userId: string) {
     },
     orderBy: { createdAt: "desc" },
   });
+
+  // Deduplicate by course title to ensure 1 certificate per course track
+  const uniqueMap = new Map<string, (typeof certs)[0]>();
+  for (const cert of certs) {
+    const key = cert.course?.title?.trim() || cert.courseId;
+    if (!uniqueMap.has(key)) {
+      uniqueMap.set(key, cert);
+    }
+  }
+
+  return Array.from(uniqueMap.values());
 }
 
 export async function getCertificateById(

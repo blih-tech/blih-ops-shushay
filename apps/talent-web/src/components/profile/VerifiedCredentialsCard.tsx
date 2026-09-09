@@ -12,7 +12,14 @@ export const VerifiedCredentialsCard: React.FC<VerifiedCredentialsCardProps> = (
   certificates,
   completedCourses,
 }) => {
-  const items = certificates || completedCourses || [];
+  const rawItems = certificates || completedCourses || [];
+  const items = rawItems.reduce((acc: any[], item: any) => {
+    const titleKey = item.course?.title?.trim() || item.title?.trim() || item.id;
+    if (!acc.some((i) => (i.course?.title?.trim() || i.title?.trim() || i.id) === titleKey)) {
+      acc.push(item);
+    }
+    return acc;
+  }, []);
   if (items.length === 0) return null;
 
   return (

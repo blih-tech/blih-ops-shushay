@@ -130,17 +130,15 @@ export function EcosystemCanvas() {
               key={idx}
               onMouseEnter={onCardEnter}
               onMouseLeave={onCardLeave}
-              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
-                item.highlight
-                  ? "bg-[#DDE7FF] border-2 border-[#1E5BFF]"
-                  : "bg-white border border-[#D9CEDF]"
-              }`}
+              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${item.highlight
+                ? "bg-[#DDE7FF] border-2 border-[#1E5BFF]"
+                : "bg-white border border-[#D9CEDF]"
+                }`}
               style={{ opacity: 0 }}
             >
               <h4
-                className={`font-display text-base font-bold mb-1 ${
-                  item.highlight ? "text-[#1E5BFF]" : "text-[#17131F]"
-                }`}
+                className={`font-display text-base font-bold mb-1 ${item.highlight ? "text-[#1E5BFF]" : "text-[#17131F]"
+                  }`}
               >
                 {item.title}
               </h4>
@@ -238,24 +236,21 @@ export function EcosystemCanvas() {
               key={idx}
               onMouseEnter={onCardEnter}
               onMouseLeave={onCardLeave}
-              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
-                item.highlight
-                  ? "bg-[#1E5BFF] border-2 border-[#1E5BFF] text-white"
-                  : "bg-white border border-[#D9CEDF]"
-              }`}
+              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${item.highlight
+                ? "bg-[#1E5BFF] border-2 border-[#1E5BFF] text-white"
+                : "bg-white border border-[#D9CEDF]"
+                }`}
               style={{ opacity: 0 }}
             >
               <h4
-                className={`font-display text-base font-bold mb-1 ${
-                  item.highlight ? "text-white" : "text-[#17131F]"
-                }`}
+                className={`font-display text-base font-bold mb-1 ${item.highlight ? "text-white" : "text-[#17131F]"
+                  }`}
               >
                 {item.title}
               </h4>
               <span
-                className={`font-mono text-[9px] uppercase tracking-wider ${
-                  item.highlight ? "text-white/80" : "text-[#6E6678]"
-                }`}
+                className={`font-mono text-[9px] uppercase tracking-wider ${item.highlight ? "text-white/80" : "text-[#6E6678]"
+                  }`}
               >
                 {item.label}
               </span>

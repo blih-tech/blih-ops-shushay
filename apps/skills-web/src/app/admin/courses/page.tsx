@@ -8,6 +8,7 @@ import {
   Alert,
   ConfirmDialog,
   UniversalSearch,
+  Skeleton,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import {
@@ -17,6 +18,7 @@ import {
   deleteCourse,
 } from "@/lib/courses";
 import { AdminCourseCard } from "@/components/admin/AdminCourseCard";
+import { AdminCourseSkeletonList } from "@/components/admin/AdminSkeletonList";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
@@ -85,7 +87,15 @@ function CoursesContent() {
     }
   }
 
-  const filteredCourses = courses.filter((c) => {
+  const filteredCourses = courses.filter((c, index, self) => {
+    // Deduplicate duplicate seed/db entries by ID or Title
+    const isFirstOccurrence =
+      self.findIndex(
+        (item) => item.id === c.id || item.title.toLowerCase() === c.title.toLowerCase()
+      ) === index;
+
+    if (!isFirstOccurrence) return false;
+
     const q = searchQuery.toLowerCase();
     if (!q) return true;
     return (
@@ -142,16 +152,7 @@ function CoursesContent() {
         />
       </div>
 
-      {loading && (
-        <div className="space-y-4">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={i}
-              className="h-20 bg-[#EEF3FF]/60 rounded-2xl animate-pulse"
-            />
-          ))}
-        </div>
-      )}
+      {loading && <AdminCourseSkeletonList />}
 
       {!loading && !error && filteredCourses.length === 0 && (
         <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
