@@ -85,7 +85,7 @@ function AdminApplicationsContent() {
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full sm:w-48 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "SUBMITTED", label: "Submitted" },

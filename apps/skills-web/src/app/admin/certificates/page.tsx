@@ -11,7 +11,7 @@ import { fetchAdminCertificates } from "@/lib/adminApi";
 import type { AdminCertificate } from "@/types/admin";
 import { Button } from "@blih/ui";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 25;
 
 function AdminCertificatesContent() {
   const [certs, setCerts] = useState<AdminCertificate[]>([]);

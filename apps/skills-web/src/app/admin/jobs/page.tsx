@@ -97,7 +97,7 @@ function AdminJobsContent() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const formatEmploymentType = (t: string) =>
-    t.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    t.toLowerCase().replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -132,7 +132,7 @@ function AdminJobsContent() {
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full sm:w-40 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "ACTIVE", label: "Active" },
@@ -143,7 +143,7 @@ function AdminJobsContent() {
           id="employment-filter"
           value={employmentTypeFilter}
           onChange={(e) => setEmploymentTypeFilter(e.target.value)}
-          className="w-full sm:w-48 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Types" },
             { value: "FULL_TIME", label: "Full Time" },

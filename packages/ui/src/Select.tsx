@@ -96,7 +96,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className={`block text-xs font-mono uppercase tracking-wider transition-colors duration-200 ${
+            className={`block text-xs sm:text-sm font-medium transition-colors duration-200 ${
               error
                 ? "text-[#EF4444]"
                 : isOpen

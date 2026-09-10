@@ -13,7 +13,7 @@ import { formatPhone } from "@/lib/formatPhone";
 import type { AdminCompanyItem } from "@/types/admin";
 import { Button } from "@blih/ui";
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 25;
 
 function getDaysRemaining(expiresAt: string | null | undefined) {
   if (!expiresAt) return null;
@@ -93,11 +93,11 @@ function AdminCompaniesContent() {
           id="sub-filter"
           value={subFilter}
           onChange={(e) => setSubFilter(e.target.value)}
-          className="w-full sm:w-52 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Subscriptions" },
-            { value: "ACTIVE", label: "Active Subscription" },
-            { value: "EXPIRED", label: "Expired Subscription" },
+            { value: "ACTIVE", label: "Active" },
+            { value: "EXPIRED", label: "Expired" },
           ]}
         />
       </div>

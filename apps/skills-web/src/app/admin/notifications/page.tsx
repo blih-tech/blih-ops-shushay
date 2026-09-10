@@ -100,12 +100,15 @@ function AdminNotificationsContent() {
           id="type-filter"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="w-full sm:w-56 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Types" },
             ...notificationTypes.map((t) => ({
               value: t,
-              label: t.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
+              label: t
+                .toLowerCase()
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (c) => c.toUpperCase()),
             })),
           ]}
         />
@@ -113,9 +116,9 @@ function AdminNotificationsContent() {
           id="read-filter"
           value={readFilter}
           onChange={(e) => setReadFilter(e.target.value)}
-          className="w-full sm:w-36 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
-            { value: "", label: "All" },
+            { value: "", label: "All Statuses" },
             { value: "true", label: "Read" },
             { value: "false", label: "Unread" },
           ]}

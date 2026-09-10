@@ -3,12 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import {
-  Award,
-  CheckCircle,
-  Download,
-} from "lucide-react";
-import { Alert, Badge, Button } from "@blih/ui";
+import { Award, Download } from "lucide-react";
+import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminCertificateById } from "@/lib/adminApi";
@@ -37,7 +33,7 @@ function AdminCertificateDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
           items={[{ label: "Certificates", href: "/admin/certificates" }, { label: "Loading..." }]}
         />
@@ -48,7 +44,7 @@ function AdminCertificateDetailContent() {
 
   if (error || !cert) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
           items={[{ label: "Certificates", href: "/admin/certificates" }, { label: "Error" }]}
         />
@@ -62,14 +58,24 @@ function AdminCertificateDetailContent() {
   const courseTitle = cert.course?.title || "Course Certificate";
 
   return (
-    <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Breadcrumb */}
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       <AdminBreadcrumb
         items={[
           { label: "Certificates", href: "/admin/certificates" },
           { label: cert.certificateNumber || "Certificate" },
         ]}
       />
+
+      {/* Stat Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <MetricCard value={cert.certificateNumber} label="Certificate Code" variant="primary" />
+        <MetricCard
+          value={new Date(cert.createdAt || cert.issueDate).toLocaleDateString()}
+          label="Issue Date"
+          variant="surface"
+        />
+        <MetricCard value="Valid" label="Status" variant="surface" />
+      </div>
 
       {/* Main Single Seamless Container */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
@@ -78,7 +84,7 @@ function AdminCertificateDetailContent() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-[#F3F0FF] text-[#7C3AED] flex items-center justify-center shrink-0">
-                <Award className="h-7 w-[#7C3AED]" />
+                <Award className="h-7 w-7" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5 flex-wrap">
@@ -104,34 +110,14 @@ function AdminCertificateDetailContent() {
             )}
           </div>
 
-          {/* Integrated Stat Strip */}
-          <div className="mt-6 pt-6 border-t border-[#EBE5F0] grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Certificate Code</p>
-              <p className="font-mono font-semibold text-[#17131F] mt-0.5 truncate" title={cert.certificateNumber}>
-                {cert.certificateNumber}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Issue Date</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {new Date(cert.createdAt || cert.issueDate).toLocaleDateString()}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Verification Status</p>
-              <p className="font-display font-semibold text-[#2E8F79] flex items-center gap-1 mt-0.5">
-                <CheckCircle className="h-4 w-4" /> Valid
-              </p>
-            </div>
-          </div>
+
         </div>
 
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
           {/* Certificate Details */}
           <div className="space-y-4">
-            <h2 className="font-display font-bold text-base text-[#17131F]">Certificate Overview</h2>
+            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Certificate Overview</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
                 <p className="font-mono text-xs text-[#6E6678] uppercase">Certificate ID</p>
@@ -153,7 +139,7 @@ function AdminCertificateDetailContent() {
           {/* Recipient Account */}
           <div className="pt-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-base text-[#17131F]">Recipient Information</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Recipient</h2>
               {cert.user?.id && (
                 <Link href={`/admin/users/${cert.user.id}`}>
                   <Button size="sm" variant="ghost" className="text-xs">

@@ -68,7 +68,7 @@ function AdminTalentsContent() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+            <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
               Talent Management
             </h1>
             <Badge variant="primary">{total} REGISTERED</Badge>

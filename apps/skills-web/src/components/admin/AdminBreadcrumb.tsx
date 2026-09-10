@@ -15,17 +15,17 @@ interface AdminBreadcrumbProps {
 
 export function AdminBreadcrumb({ items }: AdminBreadcrumbProps) {
   return (
-    <nav className="flex items-center gap-1.5 text-xs font-mono text-[#6E6678]">
+    <nav className="flex items-center gap-1.5 text-sm font-mono text-[#6E6678]">
       <Link
         href="/admin"
-        className="inline-flex items-center gap-1 text-[#1E5BFF] hover:underline"
+        className="inline-flex items-center gap-1.5 text-[#1E5BFF] hover:underline"
       >
-        <LayoutDashboard className="h-3 w-3" />
+        <LayoutDashboard className="h-4 w-4" />
         Admin
       </Link>
       {items.map((item, idx) => (
         <React.Fragment key={idx}>
-          <ChevronRight className="h-3 w-3 text-[#D9CEDF]" />
+          <ChevronRight className="h-4 w-4 text-[#D9CEDF]" />
           {item.href ? (
             <Link href={item.href} className="text-[#1E5BFF] hover:underline">
               {item.label}

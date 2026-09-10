@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { CreditCard } from "lucide-react";
-import { Alert, Button } from "@blih/ui";
+import { CreditCard, User, Calendar, Tag, Hash } from "lucide-react";
+import { Alert, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
@@ -34,7 +34,7 @@ function AdminPaymentDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
           items={[{ label: "Payments", href: "/admin/payments" }, { label: "Loading..." }]}
         />
@@ -45,7 +45,7 @@ function AdminPaymentDetailContent() {
 
   if (error || !payment) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
           items={[{ label: "Payments", href: "/admin/payments" }, { label: "Error" }]}
         />
@@ -60,9 +60,10 @@ function AdminPaymentDetailContent() {
     payment.user?.email ||
     "Unknown User";
 
+  const userInitial = userDisplayName.charAt(0).toUpperCase();
+
   return (
-    <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Breadcrumb */}
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
       <AdminBreadcrumb
         items={[
           { label: "Payments", href: "/admin/payments" },
@@ -70,109 +71,122 @@ function AdminPaymentDetailContent() {
         ]}
       />
 
-      {/* Main Single Seamless Container */}
+      {/* Stat Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <MetricCard value={`${payment.amount} ${payment.currency}`} label="Amount" variant="primary" />
+        <MetricCard value={payment.status} label="Status" variant="surface" />
+        <MetricCard value={payment.paymentType.replace(/_/g, " ")} label="Purpose" variant="surface" />
+        <MetricCard value={new Date(payment.createdAt).toLocaleDateString()} label="Date" variant="surface" />
+      </div>
+
+      {/* Main Card */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Banner Header */}
-        <div className="p-6 sm:p-8 border-b border-[#EBE5F0] bg-gradient-to-r from-[#F9F8FC] to-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0">
-                <CreditCard className="h-7 w-7" />
-              </div>
-              <div className="space-y-1">
+
+        {/* Header — hero amount + inline data row */}
+        <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
+          <div className="flex items-start gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0">
+              <CreditCard className="h-7 w-7" />
+            </div>
+            <div className="flex-1 min-w-0 space-y-3">
+              <div>
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                    {payment.amount} {payment.currency}
+                  <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+                    {payment.amount} <span className="text-lg font-semibold text-[#6E6678]">{payment.currency}</span>
                   </h1>
                   <AdminStatusBadge type="payment" value={payment.status} />
                   <AdminStatusBadge type="paymentType" value={payment.paymentType} />
                 </div>
-                <p className="text-sm font-mono text-[#6E6678] flex items-center gap-2">
-                  Tx Ref: {payment.txRef}
-                </p>
               </div>
-            </div>
-          </div>
 
-          {/* Integrated Stat Strip */}
-          <div className="mt-6 pt-6 border-t border-[#EBE5F0] grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Amount Charged</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {payment.amount} {payment.currency}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Status</p>
-              <div className="mt-1">
-                <AdminStatusBadge type="payment" value={payment.status} />
+              {/* Inline data chips */}
+              <div className="flex flex-wrap gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                  <Hash className="h-3 w-3 shrink-0" />
+                  <span className="font-mono truncate max-w-[160px]" title={payment.txRef}>{payment.txRef}</span>
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                  <Calendar className="h-3 w-3 shrink-0" />
+                  {new Date(payment.createdAt).toLocaleString()}
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                  <Tag className="h-3 w-3 shrink-0" />
+                  {payment.paymentType.replace(/_/g, " ")}
+                </span>
               </div>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Payment Purpose</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {payment.paymentType}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Transaction Date</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {new Date(payment.createdAt).toLocaleDateString()}
-              </p>
             </div>
           </div>
         </div>
 
         {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
-          {/* Details */}
-          <div className="space-y-4">
-            <h2 className="font-display font-bold text-base text-[#17131F]">Transaction Reference Information</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Internal Payment ID</p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">{payment.id}</p>
+        <div className="divide-y divide-[#EBE5F0]">
+
+          {/* Transaction Reference */}
+          <div className="p-6 sm:p-8 space-y-4">
+            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+              Transaction Reference
+            </h2>
+            <div className="space-y-3">
+              <div className="flex items-start justify-between gap-4 py-2.5 border-b border-[#F9F8FC]">
+                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">Internal Payment ID</span>
+                <code className="font-mono text-xs text-[#17131F] bg-[#F9F8FC] border border-[#EBE5F0] px-2.5 py-1.5 rounded-lg break-all text-right">
+                  {payment.id}
+                </code>
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Chapa Tx Reference</p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">{payment.txRef}</p>
+              <div className="flex items-start justify-between gap-4 py-2.5 border-b border-[#F9F8FC]">
+                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">Chapa Tx Reference</span>
+                <code className="font-mono text-xs text-[#17131F] bg-[#F9F8FC] border border-[#EBE5F0] px-2.5 py-1.5 rounded-lg break-all text-right">
+                  {payment.txRef}
+                </code>
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Timestamp</p>
-                <p className="font-medium text-[#17131F] mt-1">
+              <div className="flex items-center justify-between gap-4 py-2.5">
+                <span className="text-xs text-[#6E6678] w-36">Timestamp</span>
+                <span className="text-sm font-medium text-[#17131F]">
                   {new Date(payment.createdAt).toLocaleString()}
-                </p>
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Payer */}
-          <div className="pt-8 space-y-4">
+          {/* Payer Account */}
+          <div className="p-6 sm:p-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-base text-[#17131F]">Payer Account</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                Payer Account
+              </h2>
               {payment.user?.id && (
                 <Link href={`/admin/users/${payment.user.id}`}>
                   <Button size="sm" variant="ghost" className="text-xs">
-                    View Payer Account →
+                    View Account →
                   </Button>
                 </Link>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Entity / Payer Name</p>
-                <p className="font-medium text-[#17131F] mt-1">{userDisplayName}</p>
+
+            <div className="flex items-center gap-4 p-4 bg-[#F9F8FC] rounded-2xl border border-[#EBE5F0]">
+              <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-base shrink-0">
+                {payment.user?.talentProfile?.photoUrl || payment.user?.companyProfile?.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={payment.user.talentProfile?.photoUrl || payment.user.companyProfile?.logoUrl}
+                    alt=""
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                ) : (
+                  <User className="h-5 w-5" />
+                )}
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Account Email</p>
-                <p className="font-medium text-[#17131F] mt-1">{payment.user?.email || "—"}</p>
+              <div className="flex-1 min-w-0 space-y-0.5">
+                <p className="font-medium text-[#17131F] text-sm truncate">{userDisplayName}</p>
+                <p className="text-xs text-[#6E6678] truncate">{payment.user?.email || "—"}</p>
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Role</p>
-                <p className="font-medium text-[#17131F] mt-1">{payment.user?.role || "—"}</p>
+              <div className="text-right shrink-0">
+                <p className="text-xs text-[#6E6678]">Role</p>
+                <p className="text-sm font-medium text-[#17131F]">{payment.user?.role || "—"}</p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </main>

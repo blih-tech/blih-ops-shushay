@@ -147,7 +147,7 @@ function AdminPaymentsContent() {
           id="type-filter"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="w-full sm:w-52 shrink-0"
+          className="w-full sm:w-44 shrink-0"
           options={[
             { value: "", label: "All Types" },
             { value: "SKILLS_ACCESS", label: "Skills Access" },

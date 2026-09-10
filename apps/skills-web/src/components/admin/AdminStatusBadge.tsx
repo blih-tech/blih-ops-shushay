@@ -3,95 +3,83 @@
 import React from "react";
 import { Badge } from "@blih/ui";
 
-type StatusVariant = "primary" | "secondary" | "verified" | "danger" | "outline" | "success" | "warning" | "coral" | "amber" | "default" | "dark";
-
-interface StatusConfig {
-  label: string;
-  variant: StatusVariant;
-}
-
-const JOB_STATUS: Record<string, StatusConfig> = {
-  ACTIVE: { label: "Active", variant: "verified" },
-  CLOSED: { label: "Closed", variant: "secondary" },
-};
-
-const APPLICATION_STATUS: Record<string, StatusConfig> = {
-  SUBMITTED: { label: "Submitted", variant: "primary" },
-  IN_REVIEW: { label: "In Review", variant: "outline" },
-  INTERVIEW_SCHEDULED: { label: "Interview", variant: "verified" },
-  OFFER_EXTENDED: { label: "Offer Extended", variant: "verified" },
-  REJECTED: { label: "Rejected", variant: "danger" },
-  WITHDRAWN: { label: "Withdrawn", variant: "secondary" },
-};
-
-const PAYMENT_STATUS: Record<string, StatusConfig> = {
-  PENDING: { label: "Pending", variant: "outline" },
-  SUCCESSFUL: { label: "Successful", variant: "verified" },
-  FAILED: { label: "Failed", variant: "danger" },
-  CANCELLED: { label: "Cancelled", variant: "secondary" },
-};
-
-const SUBSCRIPTION_STATUS: Record<string, StatusConfig> = {
-  ACTIVE: { label: "Active", variant: "verified" },
-  EXPIRED: { label: "Expired", variant: "secondary" },
-};
-
-const COURSE_STATUS: Record<string, StatusConfig> = {
-  PUBLISHED: { label: "Published", variant: "verified" },
-  DRAFT: { label: "Draft", variant: "secondary" },
-};
-
-const PAYMENT_TYPE: Record<string, StatusConfig> = {
-  SKILLS_ACCESS: { label: "Skills Access", variant: "primary" },
-  COMPANY_SUBSCRIPTION: { label: "Subscription", variant: "outline" },
-};
-
-const USER_ROLE: Record<string, StatusConfig> = {
-  ADMIN: { label: "Admin", variant: "danger" },
-  TALENT: { label: "Talent", variant: "primary" },
-  COMPANY: { label: "Company", variant: "verified" },
-};
-
-const SUB_PLAN: Record<string, StatusConfig> = {
-  MONTHLY: { label: "Monthly", variant: "primary" },
-  YEARLY: { label: "Yearly", variant: "verified" },
-};
-
-type StatusType =
-  | "job"
-  | "application"
-  | "payment"
-  | "subscription"
-  | "course"
-  | "paymentType"
+type BadgeType =
   | "role"
-  | "subPlan";
+  | "subscription"
+  | "subPlan"
+  | "payment"
+  | "paymentType"
+  | "job"
+  | "application";
 
 interface AdminStatusBadgeProps {
-  type: StatusType;
+  type: BadgeType;
   value: string;
   size?: "sm" | "md";
 }
 
-const STATUS_MAPS: Record<StatusType, Record<string, StatusConfig>> = {
-  job: JOB_STATUS,
-  application: APPLICATION_STATUS,
-  payment: PAYMENT_STATUS,
-  subscription: SUBSCRIPTION_STATUS,
-  course: COURSE_STATUS,
-  paymentType: PAYMENT_TYPE,
-  role: USER_ROLE,
-  subPlan: SUB_PLAN,
+const BADGE_CONFIGS: Record<
+  BadgeType,
+  Record<string, { label: string; variant: "success" | "warning" | "danger" | "primary" | "secondary" }>
+> = {
+  role: {
+    ADMIN: { label: "Admin", variant: "danger" },
+    COMPANY: { label: "Company", variant: "primary" },
+    TALENT: { label: "Talent", variant: "secondary" },
+  },
+  subscription: {
+    ACTIVE: { label: "Active", variant: "success" },
+    EXPIRED: { label: "Expired", variant: "danger" },
+    CANCELLED: { label: "Cancelled", variant: "warning" },
+  },
+  subPlan: {
+    MONTHLY: { label: "Monthly", variant: "primary" },
+    ANNUAL: { label: "Annual", variant: "success" },
+    ENTERPRISE: { label: "Enterprise", variant: "secondary" },
+  },
+  payment: {
+    SUCCESSFUL: { label: "Successful", variant: "success" },
+    PENDING: { label: "Pending", variant: "warning" },
+    FAILED: { label: "Failed", variant: "danger" },
+    CANCELLED: { label: "Cancelled", variant: "secondary" },
+  },
+  paymentType: {
+    SKILLS_ACCESS: { label: "Skills Access", variant: "primary" },
+    COMPANY_SUBSCRIPTION: { label: "Subscription", variant: "secondary" },
+  },
+  job: {
+    ACTIVE: { label: "Active", variant: "success" },
+    CLOSED: { label: "Closed", variant: "secondary" },
+    DRAFT: { label: "Draft", variant: "warning" },
+  },
+  application: {
+    SUBMITTED: { label: "Submitted", variant: "primary" },
+    IN_REVIEW: { label: "In Review", variant: "warning" },
+    INTERVIEW_SCHEDULED: { label: "Interview Scheduled", variant: "primary" },
+    OFFER_EXTENDED: { label: "Offer Extended", variant: "success" },
+    REJECTED: { label: "Rejected", variant: "danger" },
+    WITHDRAWN: { label: "Withdrawn", variant: "secondary" },
+  },
 };
 
-export function AdminStatusBadge({ type, value, size = "sm" }: AdminStatusBadgeProps) {
-  const map = STATUS_MAPS[type];
-  const config = map?.[value];
+export const AdminStatusBadge: React.FC<AdminStatusBadgeProps> = ({
+  type,
+  value,
+  size = "sm",
+}) => {
+  const config = BADGE_CONFIGS[type]?.[value];
 
   if (!config) {
+    const formatted = value
+      ? value
+          .replace(/_/g, " ")
+          .toLowerCase()
+          .replace(/\b\w/g, (c) => c.toUpperCase())
+      : value;
+
     return (
       <Badge variant="secondary" size={size}>
-        {value}
+        {formatted}
       </Badge>
     );
   }
@@ -101,4 +89,4 @@ export function AdminStatusBadge({ type, value, size = "sm" }: AdminStatusBadgeP
       {config.label}
     </Badge>
   );
-}
+};

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { CreditCard, Building2 } from "lucide-react";
-import { Alert, Badge, Button } from "@blih/ui";
+import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
@@ -34,7 +34,7 @@ function AdminSubscriptionDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
           items={[{ label: "Subscriptions", href: "/admin/subscriptions" }, { label: "Loading..." }]}
         />
@@ -45,7 +45,7 @@ function AdminSubscriptionDetailContent() {
 
   if (error || !subscription) {
     return (
-      <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
           items={[{ label: "Subscriptions", href: "/admin/subscriptions" }, { label: "Error" }]}
         />
@@ -57,14 +57,29 @@ function AdminSubscriptionDetailContent() {
   const companyName = subscription.companyProfile?.companyName || "Unknown Company";
 
   return (
-    <main className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Breadcrumb */}
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
       <AdminBreadcrumb
         items={[
           { label: "Subscriptions", href: "/admin/subscriptions" },
           { label: `${companyName} (${subscription.plan})` },
         ]}
       />
+
+      {/* Stat Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <MetricCard value={subscription.plan} label="Plan" variant="primary" />
+        <MetricCard value={`${subscription.amount} ${subscription.currency}`} label="Amount" variant="surface" />
+        <MetricCard
+          value={new Date(subscription.startDate).toLocaleDateString()}
+          label="Started"
+          variant="surface"
+        />
+        <MetricCard
+          value={subscription.expiresAt ? new Date(subscription.expiresAt).toLocaleDateString() : "Never"}
+          label="Expires"
+          variant="surface"
+        />
+      </div>
 
       {/* Main Single Seamless Container */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
@@ -91,38 +106,14 @@ function AdminSubscriptionDetailContent() {
             </div>
           </div>
 
-          {/* Integrated Stat Strip */}
-          <div className="mt-6 pt-6 border-t border-[#EBE5F0] grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Plan Type</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">{subscription.plan}</p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Amount Charged</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {subscription.amount} {subscription.currency}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Started Date</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {new Date(subscription.startDate).toLocaleDateString()}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Expires Date</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {subscription.expiresAt ? new Date(subscription.expiresAt).toLocaleDateString() : "Never"}
-              </p>
-            </div>
-          </div>
+
         </div>
 
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
           {/* Subscription Info */}
           <div className="space-y-4">
-            <h2 className="font-display font-bold text-base text-[#17131F]">Subscription Information</h2>
+            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Subscription Details</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
                 <p className="font-mono text-xs text-[#6E6678] uppercase">Subscription ID</p>
@@ -146,7 +137,7 @@ function AdminSubscriptionDetailContent() {
           {/* Subscribed Company */}
           <div className="pt-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-base text-[#17131F]">Subscribed Company Account</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Company Account</h2>
               {subscription.companyProfile?.id && (
                 <Link href={`/admin/companies/${subscription.companyProfile.id}`}>
                   <Button size="sm" variant="ghost" className="text-xs">
@@ -176,7 +167,7 @@ function AdminSubscriptionDetailContent() {
           {/* Linked Payment */}
           {subscription.payment && (
             <div className="pt-8 space-y-4">
-              <h2 className="font-display font-bold text-base text-[#17131F]">Linked Payment Transaction</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Linked Payment</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
                 <div>
                   <p className="font-mono text-xs text-[#6E6678] uppercase">Transaction Ref</p>

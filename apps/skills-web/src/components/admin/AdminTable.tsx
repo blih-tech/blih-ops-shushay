@@ -57,8 +57,23 @@ export function AdminTable<T>({
 }: AdminTableProps<T>) {
   if (loading) {
     return (
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden">
-        <div className="overflow-x-auto">
+      <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-sm">
+        <style>{`
+          @keyframes adminTableRowFadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(6px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-admin-table-row {
+            animation: adminTableRowFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+          }
+        `}</style>
+        <div className="overflow-x-auto overflow-y-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[#F9F8FC] border-b border-[#D9CEDF]">
               <tr>
@@ -75,7 +90,11 @@ export function AdminTable<T>({
             </thead>
             <tbody className="divide-y divide-[#D9CEDF]/50">
               {Array.from({ length: skeletonRows }).map((_, i) => (
-                <tr key={i}>
+                <tr
+                  key={i}
+                  className="animate-admin-table-row"
+                  style={{ animationDelay: `${Math.min(i * 35, 450)}ms` }}
+                >
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-3.5">
                       <Skeleton
@@ -110,7 +129,22 @@ export function AdminTable<T>({
 
   return (
     <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-sm">
-      <div className="overflow-x-auto">
+      <style>{`
+        @keyframes adminTableRowFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-admin-table-row {
+          animation: adminTableRowFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+      `}</style>
+      <div className="overflow-x-auto overflow-y-hidden">
         <table className="w-full text-sm">
           <thead className="bg-[#F9F8FC] border-b border-[#D9CEDF]">
             <tr>
@@ -132,10 +166,13 @@ export function AdminTable<T>({
             </tr>
           </thead>
           <tbody className="divide-y divide-[#D9CEDF]/40">
-            {data.map((row) => (
+            {data.map((row, idx) => (
               <tr
                 key={rowKey(row)}
-                className="hover:bg-[#F9F8FC]/60 transition-colors"
+                className="animate-admin-table-row hover:bg-[#F9F8FC]/60 transition-colors"
+                style={{
+                  animationDelay: `${Math.min(idx * 35, 450)}ms`,
+                }}
               >
                 {columns.map((col) => (
                   <td

@@ -8,8 +8,10 @@ import {
   Trash2,
   CheckCircle,
   XCircle,
+  Calendar,
+  Shield,
 } from "lucide-react";
-import { Alert, Badge, Button, ConfirmDialog } from "@blih/ui";
+import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
@@ -90,7 +92,7 @@ function AdminUserDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb items={[{ label: "Users", href: "/admin/users" }, { label: "Loading..." }]} />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
@@ -99,7 +101,7 @@ function AdminUserDetailContent() {
 
   if (error || !user) {
     return (
-      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb items={[{ label: "Users", href: "/admin/users" }, { label: "Error" }]} />
         <Alert variant="error">{error || "User not found"}</Alert>
       </main>
@@ -112,13 +114,9 @@ function AdminUserDetailContent() {
     user.email.split("@")[0];
 
   return (
-    <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      {/* Breadcrumb */}
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
       <AdminBreadcrumb
-        items={[
-          { label: "Users", href: "/admin/users" },
-          { label: displayName },
-        ]}
+        items={[{ label: "Users", href: "/admin/users" }, { label: displayName }]}
       />
 
       {actionError && (
@@ -127,13 +125,22 @@ function AdminUserDetailContent() {
         </Alert>
       )}
 
-      {/* Main Single Seamless Container */}
+      {/* Stat Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <MetricCard value={user.role} label="Role" variant="primary" />
+        <MetricCard value={user.emailVerified ? "Verified" : "Unverified"} label="Email Status" variant="surface" />
+        <MetricCard value={user._count?.certificates ?? 0} label="Certificates" variant="surface" />
+        <MetricCard value={user._count?.paymentTransactions ?? 0} label="Transactions" variant="surface" />
+      </div>
+
+      {/* Main Card */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Banner Header */}
-        <div className="p-6 sm:p-8 border-b border-[#EBE5F0] bg-gradient-to-r from-[#F9F8FC] to-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-xl shrink-0">
+
+        {/* Header */}
+        <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden">
                 {user.talentProfile?.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={user.talentProfile.photoUrl} alt="" className="w-full h-full object-cover rounded-2xl" />
@@ -141,26 +148,35 @@ function AdminUserDetailContent() {
                   displayName.charAt(0).toUpperCase()
                 )}
               </div>
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
                     {displayName}
                   </h1>
                   <AdminStatusBadge type="role" value={user.role} />
-                  {user.skillsEntitlement && (
-                    <Badge variant="success">SKILLS ACCESS</Badge>
-                  )}
+                  {user.skillsEntitlement && <Badge variant="success">SKILLS ACCESS</Badge>}
                 </div>
-                <p className="text-sm text-[#6E6678] flex items-center gap-2">
-                  <Mail className="h-3.5 w-3.5" />
-                  {user.email}
-                  <span className="text-[#D9CEDF]">·</span>
-                  <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
-                </p>
+                {/* Inline data chips */}
+                <div className="flex flex-wrap gap-2">
+                  <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                    <Mail className="h-3 w-3 shrink-0" />
+                    {user.email}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                    <Calendar className="h-3 w-3 shrink-0" />
+                    Joined {new Date(user.createdAt).toLocaleDateString()}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-xs bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
+                    <Shield className="h-3 w-3 shrink-0 text-[#6E6678]" />
+                    <span className={user.emailVerified ? "text-[#2E8F79]" : "text-[#D97706]"}>
+                      Email {user.emailVerified ? "Verified" : "Unverified"}
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 flex-wrap shrink-0 pt-2 sm:pt-0">
+            <div className="flex items-center gap-2 flex-wrap shrink-0">
               {user.skillsEntitlement ? (
                 <Button
                   size="sm"
@@ -192,94 +208,77 @@ function AdminUserDetailContent() {
               </Button>
             </div>
           </div>
-
-          {/* Integrated Stat Strip */}
-          <div className="mt-6 pt-6 border-t border-[#EBE5F0] grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Account Role</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">{user.role}</p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Email Verification</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {user.emailVerified ? "Verified" : "Unverified"}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Certificates Earned</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {user._count?.certificates || 0}
-              </p>
-            </div>
-            <div>
-              <p className="font-mono text-xs text-[#6E6678] uppercase">Transactions</p>
-              <p className="font-display font-semibold text-[#17131F] mt-0.5">
-                {user._count?.paymentTransactions || 0}
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
-          {/* Account Details */}
-          <div className="space-y-4">
-            <h2 className="font-display font-bold text-base text-[#17131F]">Account Overview</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">User ID</p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">{user.id}</p>
+        <div className="divide-y divide-[#EBE5F0]">
+
+          {/* Account Overview */}
+          <div className="p-6 sm:p-8 space-y-4">
+            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+              Account Overview
+            </h2>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                <span className="text-xs text-[#6E6678] w-40 shrink-0">User ID</span>
+                <code className="font-mono text-xs text-[#17131F] bg-[#F9F8FC] border border-[#EBE5F0] px-2.5 py-1.5 rounded-lg break-all text-right">
+                  {user.id}
+                </code>
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Email Address</p>
-                <p className="font-medium text-[#17131F] mt-1">{user.email}</p>
+              <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                <span className="text-xs text-[#6E6678] w-40 shrink-0">Certificates Earned</span>
+                <span className="font-medium text-sm text-[#17131F]">{user._count?.certificates ?? 0}</span>
               </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Blih Skills Access</p>
-                <p className="font-medium text-[#17131F] mt-1 flex items-center gap-1.5">
+              <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                <span className="text-xs text-[#6E6678] w-40 shrink-0">Payment Transactions</span>
+                <span className="font-medium text-sm text-[#17131F]">{user._count?.paymentTransactions ?? 0}</span>
+              </div>
+              <div className="flex items-center justify-between gap-4 py-2">
+                <span className="text-xs text-[#6E6678] w-40 shrink-0">Blih Skills Access</span>
+                <span className="font-medium text-sm">
                   {user.skillsEntitlement ? (
                     <span className="text-[#2E8F79] flex items-center gap-1">
-                      <CheckCircle className="h-4 w-4" /> Granted on{" "}
-                      {new Date(user.skillsEntitlement.grantedAt).toLocaleDateString()}
+                      <CheckCircle className="h-4 w-4" />
+                      Granted {new Date(user.skillsEntitlement.grantedAt).toLocaleDateString()}
                     </span>
                   ) : (
                     <span className="text-[#6E6678]">Not granted</span>
                   )}
-                </p>
+                </span>
               </div>
             </div>
           </div>
 
           {/* Talent Profile section */}
           {user.talentProfile && (
-            <div className="pt-8 space-y-4">
+            <div className="p-6 sm:p-8 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-display font-bold text-base text-[#17131F]">Associated Talent Profile</h2>
+                <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                  Associated Talent Profile
+                </h2>
                 <Link href={`/admin/talents/${user.talentProfile.id}`}>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Full Profile →
-                  </Button>
+                  <Button size="sm" variant="ghost" className="text-xs">View Profile →</Button>
                 </Link>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Full Name</p>
-                  <p className="font-medium text-[#17131F] mt-1">{user.talentProfile.fullName}</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Full Name</span>
+                  <span className="font-medium text-sm text-[#17131F]">{user.talentProfile.fullName}</span>
                 </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Professional Title</p>
-                  <p className="font-medium text-[#17131F] mt-1">{user.talentProfile.title || "—"}</p>
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Professional Title</span>
+                  <span className="font-medium text-sm text-[#17131F]">{user.talentProfile.title || "—"}</span>
                 </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Location</p>
-                  <p className="font-medium text-[#17131F] mt-1">
+                <div className="flex items-center justify-between gap-4 py-2">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Location</span>
+                  <span className="font-medium text-sm text-[#17131F]">
                     {[user.talentProfile.city, user.talentProfile.country].filter(Boolean).join(", ") || "—"}
-                  </p>
+                  </span>
                 </div>
               </div>
               {user.talentProfile.skills && user.talentProfile.skills.length > 0 && (
-                <div className="pt-2">
-                  <p className="font-mono text-xs text-[#6E6678] uppercase mb-2">Skills</p>
+                <div className="pt-1">
+                  <p className="text-xs text-[#6E6678] mb-2">Skills</p>
                   <div className="flex flex-wrap gap-1.5">
                     {user.talentProfile.skills.map((s: string) => (
                       <span key={s} className="px-2.5 py-0.5 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium">
@@ -294,33 +293,34 @@ function AdminUserDetailContent() {
 
           {/* Company Profile section */}
           {user.companyProfile && (
-            <div className="pt-8 space-y-4">
+            <div className="p-6 sm:p-8 space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-display font-bold text-base text-[#17131F]">Associated Company Profile</h2>
+                <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                  Associated Company Profile
+                </h2>
                 <Link href={`/admin/companies/${user.companyProfile.id}`}>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Full Profile →
-                  </Button>
+                  <Button size="sm" variant="ghost" className="text-xs">View Profile →</Button>
                 </Link>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Company Name</p>
-                  <p className="font-medium text-[#17131F] mt-1">{user.companyProfile.companyName}</p>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Company Name</span>
+                  <span className="font-medium text-sm text-[#17131F]">{user.companyProfile.companyName}</span>
                 </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Website</p>
-                  <p className="font-medium text-[#17131F] mt-1">{user.companyProfile.website || "—"}</p>
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Website</span>
+                  <span className="font-medium text-sm text-[#17131F]">{user.companyProfile.website || "—"}</span>
                 </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">Location</p>
-                  <p className="font-medium text-[#17131F] mt-1">
+                <div className="flex items-center justify-between gap-4 py-2">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">Location</span>
+                  <span className="font-medium text-sm text-[#17131F]">
                     {[user.companyProfile.city, user.companyProfile.country].filter(Boolean).join(", ") || "—"}
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
           )}
+
         </div>
       </div>
 
