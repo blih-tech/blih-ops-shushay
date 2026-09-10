@@ -91,7 +91,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div
         ref={containerRef}
-        className={`group font-sans space-y-1.5 ${isOpen ? "relative z-50" : "relative z-10"} ${fullWidth ? "w-full" : "inline-block"}`}
+        className={`group font-sans space-y-1.5 ${isOpen ? "relative z-50" : "relative z-10"} ${fullWidth && !className?.includes("w-") ? "w-full" : ""} ${className}`}
       >
         {label && (
           <label
@@ -115,7 +115,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             id={selectId}
             disabled={disabled}
             onClick={() => !disabled && setIsOpen(!isOpen)}
-            className={`${triggerStyles} ${className}`}
+            className={triggerStyles}
             aria-haspopup="listbox"
             aria-expanded={isOpen}
           >

@@ -19,7 +19,7 @@ interface AuthGuardProps {
   allowedRoles?: Role[];
 }
 
-export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
+export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const { user, loading } = useAuth();
   const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003";
 
@@ -85,3 +85,5 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
 
   return <>{children}</>;
 }
+
+export default AuthGuard;

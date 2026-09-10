@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Plus, GraduationCap, ArrowLeft } from "lucide-react";
+import { Plus, GraduationCap } from "lucide-react";
 import {
   Button,
   Alert,
   ConfirmDialog,
   UniversalSearch,
-  Skeleton,
 } from "@blih/ui";
-import AuthGuard from "@/components/auth/AuthGuard";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import {
   fetchAdminCourses,
   publishCourse,
@@ -109,15 +109,7 @@ function CoursesContent() {
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
-      <Link href="/admin">
-        <Button
-          variant="ghost"
-          leftIcon={<ArrowLeft className="h-4 w-4" />}
-          size="sm"
-        >
-          Back to Admin Portal
-        </Button>
-      </Link>
+      <AdminBreadcrumb items={[{ label: "Course Studio" }]} />
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
         <div className="space-y-1">

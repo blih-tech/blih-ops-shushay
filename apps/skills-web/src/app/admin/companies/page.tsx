@@ -1,189 +1,218 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { formatPhone } from "@/lib/formatPhone";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, Building2, MapPin, Phone, Globe } from "lucide-react";
-import { Badge, Alert, Card, UniversalSearch } from "@blih/ui";
-import AuthGuard from "@/components/auth/AuthGuard";
-import { AdminCompanySkeletonGrid } from "@/components/admin/AdminSkeletonList";
-import { useAuth } from "@/providers/AuthProvider";
+import { Building2, Globe, Phone, Eye } from "lucide-react";
+import { Alert, Badge, Card, UniversalSearch, Pagination, Select } from "@blih/ui";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { AdminTable } from "@/components/admin/AdminTable";
+import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminCompanies } from "@/lib/adminApi";
+import { formatPhone } from "@/lib/formatPhone";
 import type { AdminCompanyItem } from "@/types/admin";
+import { Button } from "@blih/ui";
+
+const PAGE_SIZE = 20;
+
+function getDaysRemaining(expiresAt: string | null | undefined) {
+  if (!expiresAt) return null;
+  const diff = new Date(expiresAt).getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
 
 function AdminCompaniesContent() {
-  const { user, logout } = useAuth();
   const [companies, setCompanies] = useState<AdminCompanyItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [subFilter, setSubFilter] = useState("");
+  const [selected, setSelected] = useState<AdminCompanyItem | null>(null);
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchAdminCompanies();
-        setCompanies(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load company records");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
 
-  const filteredCompanies = companies.filter((c) => {
-    const q = searchQuery.toLowerCase();
-    if (!q) return true;
-    return (
-      (c.companyName && c.companyName.toLowerCase().includes(q)) ||
-      (c.contactName && c.contactName.toLowerCase().includes(q)) ||
-      (c.user.email && c.user.email.toLowerCase().includes(q)) ||
-      (c.country && c.country.toLowerCase().includes(q)) ||
-      (c.city && c.city.toLowerCase().includes(q))
-    );
-  });
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchAdminCompanies({
+        page,
+        limit: PAGE_SIZE,
+        search: debouncedSearch || undefined,
+        subscriptionStatus: subFilter || undefined,
+      });
+      setCompanies(data.companies);
+      setTotal(data.total);
+      setTotalPages(data.totalPages);
+    } catch (err: any) {
+      setError(err.message || "Failed to load company records");
+    } finally {
+      setLoading(false);
+    }
+  }, [page, debouncedSearch, subFilter]);
+
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { setPage(1); }, [debouncedSearch, subFilter]);
 
   return (
-    <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1">
-      {/* Header */}
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <AdminBreadcrumb items={[{ label: "Companies" }]} />
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1.5">
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-1"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Admin Hub
-          </Link>
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
-              Hiring Companies
+              Company Management
             </h1>
-            <Badge variant="primary">{companies.length} REGISTERED</Badge>
+            <Badge variant="primary">{total} REGISTERED</Badge>
           </div>
           <p className="text-sm text-[#6E6678]">
-            Monitor hiring company profiles, organization descriptions,
-            websites, and point-of-contact details.
+            Monitor hiring organizations, subscription status, and contact details.
           </p>
         </div>
       </div>
 
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
 
-      {/* Search Bar */}
-      <div className="w-full">
-        <UniversalSearch
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search companies by name, email, country, or contact..."
+      <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
+        <div className="flex-1 min-w-0 w-full">
+          <UniversalSearch
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search companies by name, email, or country..."
+          />
+        </div>
+        <Select
+          id="sub-filter"
+          value={subFilter}
+          onChange={(e) => setSubFilter(e.target.value)}
+          className="w-full sm:w-52 shrink-0"
+          options={[
+            { value: "", label: "All Subscriptions" },
+            { value: "ACTIVE", label: "Active Subscription" },
+            { value: "EXPIRED", label: "Expired Subscription" },
+          ]}
         />
       </div>
 
-      {loading ? (
-        <AdminCompanySkeletonGrid />
-      ) : filteredCompanies.length === 0 ? (
-        <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
-            <Building2 className="h-6 w-6" />
-          </div>
-          <h3 className="font-display font-bold text-lg text-[#17131F]">
-            No companies registered
-          </h3>
-          <p className="text-sm text-[#6E6678] max-w-sm mx-auto">
-            {searchQuery
-              ? "No companies match your search query."
-              : "Hiring company accounts will appear here."}
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCompanies.map((comp) => (
-            <Card
-              key={comp.id}
-              className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 transition-all"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-lg overflow-hidden shrink-0 shadow-xs">
-                    {comp.logoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={comp.logoUrl}
-                        alt="Logo"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span>
-                        {(comp.companyName || comp.user.email)
-                          .charAt(0)
-                          .toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-lg font-bold text-[#17131F] truncate">
-                      {comp.companyName || "Hiring Organization"}
-                    </h3>
-                    <p className="text-xs text-[#6E6678] truncate">
-                      {comp.user.email}
-                    </p>
-                  </div>
+      <AdminTable<AdminCompanyItem>
+        loading={loading}
+        data={companies}
+        rowKey={(c) => c.id}
+        emptyIcon={<Building2 className="h-6 w-6" />}
+        emptyTitle="No companies found"
+        emptySubtext={searchQuery || subFilter ? "Try adjusting your filters." : "No hiring organizations registered yet."}
+        columns={[
+          {
+            key: "company",
+            header: "Company",
+            render: (c) => (
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                  {c.logoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={c.logoUrl} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    (c.companyName || c.user.email).charAt(0).toUpperCase()
+                  )}
                 </div>
-
-                {comp.description && (
-                  <p className="text-xs text-[#6E6678] font-sans line-clamp-3 leading-relaxed">
-                    {comp.description}
+                <div className="min-w-0">
+                  <p className="font-medium text-[#17131F] truncate">{c.companyName || "Unnamed Company"}</p>
+                  <p className="text-xs text-[#6E6678] truncate">{c.user.email}</p>
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: "location",
+            header: "Location",
+            width: "140px",
+            render: (c) => (
+              <span className="text-xs text-[#6E6678]">
+                {[c.city, c.country].filter(Boolean).join(", ") || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "jobs",
+            header: "Jobs",
+            width: "60px",
+            render: (c) => (
+              <span className="font-mono text-sm font-medium text-[#17131F]">{c._count.jobs}</span>
+            ),
+          },
+          {
+            key: "subscription",
+            header: "Subscription",
+            width: "130px",
+            render: (c) =>
+              c.companySubscription ? (
+                <div className="flex items-center gap-1.5">
+                  <AdminStatusBadge type="subscription" value={c.companySubscription.status} size="sm" />
+                  <span className="text-xs font-mono text-[#6E6678]">
+                    {c.companySubscription.plan.charAt(0) + c.companySubscription.plan.slice(1).toLowerCase()}
+                  </span>
+                </div>
+              ) : (
+                <Badge variant="secondary" size="sm">None</Badge>
+              ),
+          },
+          {
+            key: "expires",
+            header: "Expires",
+            width: "120px",
+            render: (c) => {
+              if (!c.companySubscription) return <span className="text-[#6E6678] text-xs">—</span>;
+              const days = getDaysRemaining(c.companySubscription.expiresAt);
+              return (
+                <div>
+                  <p className="text-xs font-mono text-[#6E6678]">
+                    {new Date(c.companySubscription.expiresAt).toLocaleDateString()}
                   </p>
-                )}
-
-                <div className="space-y-1.5 pt-2 border-t border-[#D9CEDF]/60 text-xs font-sans text-[#6E6678]">
-                  {comp.city && (
-                    <p className="flex items-center gap-2">
-                      <MapPin className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                      <span>
-                        {comp.city}
-                        {comp.country ? `, ${comp.country}` : ""}
-                      </span>
-                    </p>
-                  )}
-                  {comp.website && (
-                    <p className="flex items-center gap-2 truncate">
-                      <Globe className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                      <a
-                        href={
-                          comp.website.startsWith("http")
-                            ? comp.website
-                            : `https://${comp.website}`
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[#1E5BFF] hover:underline truncate"
-                      >
-                        {comp.website}
-                      </a>
-                    </p>
-                  )}
-                  {comp.contactPhone && (
-                    <p className="flex items-center gap-2">
-                      <Phone className="h-3.5 w-3.5 text-[#1E5BFF]" />
-                      <span>{formatPhone(comp.contactPhone)}</span>
+                  {days !== null && (
+                    <p className={`text-xs font-mono font-medium ${days === 0 ? "text-[#D32F2F]" : days <= 7 ? "text-[#D97706]" : "text-[#2E8F79]"}`}>
+                      {days === 0 ? "Expired" : `${days}d left`}
                     </p>
                   )}
                 </div>
-              </div>
+              );
+            },
+          },
+          {
+            key: "joined",
+            header: "Joined",
+            width: "100px",
+            render: (c) => (
+              <span className="text-xs font-mono text-[#6E6678]">
+                {new Date(c.createdAt).toLocaleDateString()}
+              </span>
+            ),
+          },
+          {
+            key: "actions",
+            header: "",
+            width: "80px",
+            render: (c) => (
+              <Link href={`/admin/companies/${c.id}`}>
+                <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                  View
+                </Button>
+              </Link>
+            ),
+          },
+        ]}
+      />
 
-              <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between text-xs font-mono text-[#6E6678]">
-                <span>
-                  Member since {new Date(comp.createdAt).getFullYear()}
-                </span>
-                <Badge variant="verified" size="sm">
-                  ACTIVE
-                </Badge>
-              </div>
-            </Card>
-          ))}
+      {totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
     </main>

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import AuthGuard from "@/components/auth/AuthGuard";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 import { EditCourseContent } from "@/components/courses/edit/EditCourseContent";
 
 export default function EditCoursePage() {

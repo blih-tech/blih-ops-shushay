@@ -1,199 +1,213 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  User,
+  FileText,
+  Eye,
+} from "lucide-react";
+import {
+  Button,
+  Badge,
+  Alert,
+  UniversalSearch,
+  Pagination,
+} from "@blih/ui";
 import Link from "next/link";
-import { ArrowLeft, User, FileText, Eye } from "lucide-react";
-import { Button, Badge, Alert, Card, UniversalSearch } from "@blih/ui";
-import AuthGuard from "@/components/auth/AuthGuard";
-import { AdminTalentSkeletonGrid } from "@/components/admin/AdminSkeletonList";
-import { useAuth } from "@/providers/AuthProvider";
-import { fetchAdminTalents } from "@/lib/adminApi";
-import { TalentInspectModal } from "@/components/admin/TalentInspectModal";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { AdminTable } from "@/components/admin/AdminTable";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
+import {
+  fetchAdminTalents,
+} from "@/lib/adminApi";
 import type { AdminTalentItem } from "@/types/admin";
 
+const PAGE_SIZE = 20;
+
 function AdminTalentsContent() {
-  const { user, logout } = useAuth();
   const [talents, setTalents] = useState<AdminTalentItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTalent, setSelectedTalent] = useState<AdminTalentItem | null>(
-    null,
-  );
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   useEffect(() => {
-    async function load() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchAdminTalents();
-        setTalents(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load talent records");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
-  }, []);
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
 
-  const filteredTalents = talents.filter((t) => {
-    const q = searchQuery.toLowerCase();
-    if (!q) return true;
-    return (
-      (t.fullName && t.fullName.toLowerCase().includes(q)) ||
-      (t.title && t.title.toLowerCase().includes(q)) ||
-      (t.user.email && t.user.email.toLowerCase().includes(q)) ||
-      t.skills.some((s) => s.toLowerCase().includes(q)) ||
-      (t.city && t.city.toLowerCase().includes(q))
-    );
-  });
+  const load = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchAdminTalents({
+        page,
+        limit: PAGE_SIZE,
+        search: debouncedSearch || undefined,
+      });
+      setTalents(data.talents);
+      setTotal(data.total);
+      setTotalPages(data.totalPages);
+    } catch (err: any) {
+      setError(err.message || "Failed to load talent records");
+    } finally {
+      setLoading(false);
+    }
+  }, [page, debouncedSearch]);
+
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { setPage(1); }, [debouncedSearch]);
 
   return (
-    <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <AdminBreadcrumb items={[{ label: "Talents" }]} />
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
-        <div className="space-y-1.5">
-          <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-1"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Admin Hub
-          </Link>
+        <div className="space-y-1">
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
               Talent Management
             </h1>
-            <Badge variant="primary">{talents.length} REGISTERED</Badge>
+            <Badge variant="primary">{total} REGISTERED</Badge>
           </div>
           <p className="text-sm text-[#6E6678]">
-            Inspect registered talent profiles, verify competencies, CV
-            attachments, and career history.
+            Inspect candidate profiles, manage skills access, CV attachments, and career history.
           </p>
         </div>
       </div>
 
-      {error && <Alert variant="error">{error}</Alert>}
+      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
 
-      <div className="w-full">
-        <UniversalSearch
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search talents by name, skill, email, or title..."
-        />
-      </div>
+      <UniversalSearch
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search by name, email, skill, title, or location..."
+      />
 
-      {loading ? (
-        <AdminTalentSkeletonGrid />
-      ) : filteredTalents.length === 0 ? (
-        <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
-            <User className="h-6 w-6" />
-          </div>
-          <h3 className="font-display font-bold text-lg text-[#17131F]">
-            No talent profiles found
-          </h3>
-          <p className="text-sm text-[#6E6678] max-w-sm mx-auto">
-            {searchQuery
-              ? "No candidates match your search query."
-              : "Registered candidates will appear here."}
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTalents.map((talent) => (
-            <Card
-              key={talent.id}
-              className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 transition-all"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex items-start gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg overflow-hidden shrink-0 shadow-xs">
-                    {talent.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={talent.photoUrl}
-                        alt="Photo"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span>
-                        {(talent.fullName || talent.user.email)
-                          .charAt(0)
-                          .toUpperCase()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-lg font-bold text-[#17131F] truncate">
-                      {talent.fullName || "Candidate"}
-                    </h3>
-                    <p className="text-xs font-mono text-[#1E5BFF] truncate font-medium">
-                      {talent.title || "Talent Member"}
-                    </p>
-                    <p className="text-xs text-[#6E6678] truncate mt-0.5">
-                      {talent.user.email}
-                    </p>
-                  </div>
+      <AdminTable<AdminTalentItem>
+        loading={loading}
+        data={talents}
+        rowKey={(t) => t.id}
+        emptyIcon={<User className="h-6 w-6" />}
+        emptyTitle="No talent profiles found"
+        emptySubtext={searchQuery ? "No candidates match your search." : "Registered candidates will appear here."}
+        columns={[
+          {
+            key: "talent",
+            header: "Talent",
+            render: (t) => (
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                  {t.photoUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={t.photoUrl} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    (t.fullName || t.user.email).charAt(0).toUpperCase()
+                  )}
                 </div>
-
-                {talent.bio && (
-                  <p className="text-xs text-[#6E6678] font-sans line-clamp-2 leading-relaxed">
-                    {talent.bio}
-                  </p>
-                )}
-
-                {talent.skills && talent.skills.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {talent.skills.slice(0, 4).map((skill, si) => (
-                      <span
-                        key={si}
-                        className="px-2.5 py-0.5 rounded-lg bg-[#EEF3FF] border border-[#1E5BFF]/15 text-[11px] font-mono text-[#1E5BFF] font-medium"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                    {talent.skills.length > 4 && (
-                      <span className="text-[11px] font-mono text-[#6E6678] self-center">
-                        +{talent.skills.length - 4} more
-                      </span>
-                    )}
-                  </div>
+                <div className="min-w-0">
+                  <p className="font-medium text-[#17131F] truncate">{t.fullName || "Unnamed"}</p>
+                  <p className="text-xs text-[#6E6678] truncate">{t.user.email}</p>
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: "title",
+            header: "Title",
+            render: (t) => (
+              <span className="text-sm text-[#6E6678] truncate max-w-[160px] block">
+                {t.title || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "location",
+            header: "Location",
+            width: "130px",
+            render: (t) => (
+              <span className="text-xs text-[#6E6678]">
+                {[t.city, t.country].filter(Boolean).join(", ") || "—"}
+              </span>
+            ),
+          },
+          {
+            key: "skills",
+            header: "Skills",
+            render: (t) => (
+              <div className="flex flex-wrap gap-1 max-w-[200px]">
+                {t.skills.slice(0, 3).map((s) => (
+                  <span key={s} className="px-2 py-0.5 rounded-lg bg-[#EEF3FF] text-[10px] font-mono text-[#1E5BFF] font-medium">
+                    {s}
+                  </span>
+                ))}
+                {t.skills.length > 3 && (
+                  <span className="text-[10px] font-mono text-[#6E6678]">+{t.skills.length - 3}</span>
                 )}
               </div>
-
-              <div className="px-6 py-3.5 bg-[#EEF3FF]/30 border-t border-[#D9CEDF]/70 flex items-center justify-between">
-                {talent.cvUrl ? (
-                  <a
-                    href={talent.cvUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-mono text-[#1E5BFF] hover:underline inline-flex items-center gap-1 font-semibold"
-                  >
-                    <FileText className="h-3.5 w-3.5" /> View CV
-                  </a>
-                ) : (
-                  <span className="text-xs font-mono text-[#6E6678]">
-                    No CV Attached
-                  </span>
-                )}
+            ),
+          },
+          {
+            key: "apps",
+            header: "Apps",
+            width: "60px",
+            render: (t) => (
+              <span className="font-mono text-sm text-[#17131F] font-medium">{t._count.jobApplications}</span>
+            ),
+          },
+          {
+            key: "access",
+            header: "Skills Access",
+            width: "120px",
+            render: (t) =>
+              t.user.skillsEntitlement ? (
+                <Badge variant="verified" size="sm">Granted</Badge>
+              ) : (
+                <Badge variant="secondary" size="sm">Not Granted</Badge>
+              ),
+          },
+          {
+            key: "cv",
+            header: "CV",
+            width: "60px",
+            render: (t) =>
+              t.cvUrl ? (
+                <a href={t.cvUrl} target="_blank" rel="noreferrer">
+                  <Button size="sm" variant="ghost" leftIcon={<FileText className="h-3 w-3" />}>
+                    CV
+                  </Button>
+                </a>
+              ) : (
+                <span className="text-xs text-[#D9CEDF]">—</span>
+              ),
+          },
+          {
+            key: "actions",
+            header: "Actions",
+            width: "80px",
+            render: (t) => (
+              <Link href={`/admin/talents/${t.id}`}>
                 <Button
                   size="sm"
                   variant="ghost"
                   leftIcon={<Eye className="h-3.5 w-3.5" />}
-                  onClick={() => setSelectedTalent(talent)}
                 >
-                  Inspect
+                  View
                 </Button>
-              </div>
-            </Card>
-          ))}
+              </Link>
+            ),
+          },
+        ]}
+      />
+
+      {totalPages > 1 && (
+        <div className="flex justify-center">
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       )}
-
-      <TalentInspectModal
-        talent={selectedTalent}
-        onClose={() => setSelectedTalent(null)}
-      />
     </main>
   );
 }

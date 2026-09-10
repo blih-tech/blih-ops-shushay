@@ -16,7 +16,6 @@ export interface UniversalSearchProps {
 export const UniversalSearch: React.FC<UniversalSearchProps> = ({
   placeholder = "What do you want to learn, do, or hire for?",
   onSearch,
-  shortcut = "⌘K",
   actionText = "Search",
   className = "",
   value,
@@ -35,9 +34,9 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`w-full bg-white rounded-3xl border border-[#D9CEDF] shadow-[0_8px_30px_rgba(23,19,31,0.04)] px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3 transition-all duration-300 focus-within:border-[#1E5BFF] focus-within:ring-4 focus-within:ring-[#1E5BFF]/10 focus-within:shadow-[0_12px_40px_rgba(30,91,255,0.12)] ${className}`}
+      className={`w-full flex items-center gap-2.5 sm:gap-3 ${className}`}
     >
-      <div className="flex items-center gap-3 flex-1">
+      <div className="flex-1 h-12 bg-white rounded-xl sm:rounded-2xl border border-[#D9CEDF] shadow-[0_8px_30px_rgba(23,19,31,0.04)] px-4 sm:px-6 flex items-center gap-3 transition-all duration-300 focus-within:border-[#1E5BFF] focus-within:ring-4 focus-within:ring-[#1E5BFF]/10 focus-within:shadow-[0_12px_40px_rgba(30,91,255,0.12)]">
         <Search className="h-5 w-5 text-[#6E6678] shrink-0" />
         <input
           type="text"
@@ -51,21 +50,14 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        {shortcut && (
-          <span className="hidden sm:inline-flex items-center font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-2.5 py-1 rounded-lg">
-            {shortcut}
-          </span>
-        )}
-        {actionText && (
-          <button
-            type="submit"
-            className="font-mono text-xs font-medium text-white bg-[#1E5BFF] hover:bg-[#1546CC] px-4 py-2 rounded-xl transition-colors cursor-pointer select-none active:scale-[0.98]"
-          >
-            {actionText}
-          </button>
-        )}
-      </div>
+      {actionText && (
+        <button
+          type="submit"
+          className="h-12 flex items-center justify-center font-mono text-xs sm:text-sm font-semibold text-white bg-[#1E5BFF] hover:bg-[#1546CC] px-5 sm:px-6 rounded-xl sm:rounded-2xl transition-all shadow-[0_4px_14px_rgba(30,91,255,0.25)] hover:shadow-[0_6px_20px_rgba(30,91,255,0.35)] cursor-pointer select-none active:scale-[0.98] shrink-0"
+        >
+          {actionText}
+        </button>
+      )}
     </form>
   );
 };

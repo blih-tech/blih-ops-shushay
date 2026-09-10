@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, BookOpen, Plus } from "lucide-react";
+import { BookOpen, Plus } from "lucide-react";
 import {
   Button,
   Input,
@@ -16,7 +16,8 @@ import {
   CardContent,
   Badge,
 } from "@blih/ui";
-import AuthGuard from "@/components/auth/AuthGuard";
+import { AuthGuard } from "@/components/auth/AuthGuard";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { createCourse } from "@/lib/courses";
 
 function NewCourseContent() {
@@ -61,14 +62,15 @@ function NewCourseContent() {
 
   return (
     <main className="max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1">
+      <AdminBreadcrumb
+        items={[
+          { label: "Course Studio", href: "/admin/courses" },
+          { label: "Create Course" },
+        ]}
+      />
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1.5">
-          <Link
-            href="/admin/courses"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-1"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to Course Management
-          </Link>
           <div className="flex items-center gap-3">
             <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
               Create Course
