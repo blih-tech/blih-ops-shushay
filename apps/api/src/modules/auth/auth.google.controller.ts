@@ -75,13 +75,12 @@ export async function handleGoogleCallback(
   res: Response,
   next: NextFunction,
 ) {
-  // Determine a safe fallback URL for error redirects
-  const TALENT_URL =
-    process.env.NEXT_PUBLIC_TALENT_URL ?? "http://localhost:3002";
-  const AUTH_URL = env.authUrl;
+  const APP_URL = env.appUrl ?? "http://localhost:3000";
+  const TALENT_URL = APP_URL;
+  const AUTH_URL = APP_URL;
 
   const errorRedirect = (message: string) =>
-    res.redirect(`${AUTH_URL}/login?error=${encodeURIComponent(message)}`);
+    res.redirect(`${APP_URL}/login?error=${encodeURIComponent(message)}`);
 
   try {
     const { clientId, clientSecret } = env.google;
@@ -244,13 +243,11 @@ export async function handleGoogleCallback(
 
     if (!destination) {
       if (user.role === "ADMIN") {
-        const SKILLS_URL =
-          process.env.NEXT_PUBLIC_SKILLS_URL ?? "http://localhost:3001";
-        destination = `${SKILLS_URL}/admin`;
+        destination = `${APP_URL}/admin`;
       } else if (user.role === "COMPANY") {
-        destination = `${TALENT_URL}/company`;
+        destination = `${APP_URL}/company`;
       } else {
-        destination = `${TALENT_URL}/profile`;
+        destination = `${APP_URL}/profile`;
       }
     }
 

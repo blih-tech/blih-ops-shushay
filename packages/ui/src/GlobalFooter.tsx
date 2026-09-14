@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Sparkles, ShieldCheck, ArrowUpRight } from "lucide-react";
+import { toRelativeUrl } from "./GlobalNavbar/GlobalNavbar.helpers";
 
 export interface GlobalFooterProps {
   user?: { email?: string; role?: string } | null;
@@ -12,9 +14,9 @@ export interface GlobalFooterProps {
 
 export const GlobalFooter: React.FC<GlobalFooterProps> = ({
   user,
-  authUrl = process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:3003",
-  skillsUrl = process.env.NEXT_PUBLIC_SKILLS_URL || "http://localhost:3001",
-  talentUrl = process.env.NEXT_PUBLIC_TALENT_URL || "http://localhost:3002",
+  authUrl = process.env.NEXT_PUBLIC_APP_URL || "",
+  skillsUrl = process.env.NEXT_PUBLIC_APP_URL || "",
+  talentUrl = process.env.NEXT_PUBLIC_APP_URL || "",
 }) => {
   const role = user?.role?.toUpperCase();
 
@@ -98,13 +100,13 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
             <ul className="space-y-2.5">
               {roleLinks.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    href={toRelativeUrl(link.href)}
                     className="text-sm text-[#17131F] hover:text-[#1E5BFF] transition-colors flex items-center gap-1.5 group font-medium"
                   >
                     <span>{link.label}</span>
                     <ArrowUpRight className="w-3.5 h-3.5 text-[#6E6678] group-hover:text-[#1E5BFF] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -132,26 +134,26 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-xs font-mono text-[#6E6678]">
           <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
           <div className="flex flex-wrap gap-4 items-center">
-            <a
-              href={`${talentUrl}/company/subscription`}
+            <Link
+              href={toRelativeUrl(`${talentUrl}/company/subscription`)}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Subscription
-            </a>
+            </Link>
             <span className="text-[#D9CEDF]">·</span>
-            <a
-              href={`${skillsUrl}/courses`}
+            <Link
+              href={toRelativeUrl(`${skillsUrl}/courses`)}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Courses
-            </a>
+            </Link>
             <span className="text-[#D9CEDF]">·</span>
-            <a
-              href={`${talentUrl}/jobs`}
+            <Link
+              href={toRelativeUrl(`${talentUrl}/jobs`)}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Opportunities
-            </a>
+            </Link>
             <span className="text-[#D9CEDF]">·</span>
             <span className="text-[#6E6678]">ETB Chapa Payments</span>
           </div>

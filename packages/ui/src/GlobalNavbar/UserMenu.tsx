@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   LogOut,
   User as UserIcon,
@@ -12,6 +13,7 @@ import {
   Building,
 } from "lucide-react";
 import { Badge } from "../Badge";
+import { toRelativeUrl } from "./GlobalNavbar.helpers";
 
 interface UserMenuProps {
   user: { email?: string; role?: string; photoUrl?: string };
@@ -94,68 +96,68 @@ export function UserMenu({
           <div className="space-y-1 py-1">
             {role === "COMPANY" ? (
               <>
-                <a
-                  href={`${talentUrl}/company/profile`}
+                <Link
+                  href={toRelativeUrl(`${talentUrl}/company/profile`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <Building className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Company Profile</span>
-                </a>
-                <a
-                  href={`${talentUrl}/company/jobs`}
+                </Link>
+                <Link
+                  href={toRelativeUrl(`${talentUrl}/company/jobs`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Manage Jobs</span>
-                </a>
+                </Link>
               </>
             ) : role === "ADMIN" ? (
               <>
-                <a
-                  href={`${skillsUrl}/admin`}
+                <Link
+                  href={toRelativeUrl(`${skillsUrl}/admin`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <Shield className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Admin Portal</span>
-                </a>
-                <a
-                  href={`${skillsUrl}/admin/courses`}
+                </Link>
+                <Link
+                  href={toRelativeUrl(`${skillsUrl}/admin/courses`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <BookOpen className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Course Studio</span>
-                </a>
+                </Link>
               </>
             ) : (
               <>
-                <a
-                  href={`${talentUrl}/applications`}
+                <Link
+                  href={toRelativeUrl(`${talentUrl}/applications`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
                   <span>My Applications</span>
-                </a>
-                <a
-                  href={`${talentUrl}/profile`}
+                </Link>
+                <Link
+                  href={toRelativeUrl(`${talentUrl}/profile`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <UserIcon className="h-4 w-4 text-[#1E5BFF]" />
                   <span>View Talent Profile</span>
-                </a>
-                <a
-                  href={`${talentUrl}/profile/edit`}
+                </Link>
+                <Link
+                  href={toRelativeUrl(`${talentUrl}/profile/edit`)}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                 >
                   <Settings className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Edit Profile Details</span>
-                </a>
+                </Link>
               </>
             )}
           </div>

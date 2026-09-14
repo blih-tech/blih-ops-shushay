@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import {
   LogOut,
   User as UserIcon,
@@ -11,7 +12,7 @@ import {
   Building,
 } from "lucide-react";
 import { Button } from "../Button";
-import type { NavLinkItem } from "./GlobalNavbar.helpers";
+import { toRelativeUrl, type NavLinkItem } from "./GlobalNavbar.helpers";
 import { Skeleton } from "../Skeleton";
 
 interface MobileNavProps {
@@ -71,9 +72,9 @@ export function MobileNav({
             </div>
           ) : (
             navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
-                href={link.href}
+                href={toRelativeUrl(link.href)}
                 className={`px-3.5 py-2.5 rounded-xl text-sm transition-all duration-300 ease-out flex items-center ${
                   link.active
                     ? "bg-gradient-to-r from-[#EEF3FF] to-transparent text-[#1E5BFF] font-bold translate-x-1 border-l-2 border-[#1E5BFF]"
@@ -82,7 +83,7 @@ export function MobileNav({
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))
           )}
         </div>
@@ -108,60 +109,60 @@ export function MobileNav({
               <div className="space-y-1 py-1">
                 {role === "COMPANY" ? (
                   <>
-                    <a
-                      href={`${talentUrl}/company/profile`}
+                    <Link
+                      href={toRelativeUrl(`${talentUrl}/company/profile`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <Building className="h-4 w-4 text-[#1E5BFF]" />
                       <span>Company Profile</span>
-                    </a>
-                    <a
-                      href={`${talentUrl}/company/jobs`}
+                    </Link>
+                    <Link
+                      href={toRelativeUrl(`${talentUrl}/company/jobs`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
                       <span>Manage Jobs</span>
-                    </a>
+                    </Link>
                   </>
                 ) : role === "ADMIN" ? (
                   <>
-                    <a
-                      href={`${skillsUrl}/admin`}
+                    <Link
+                      href={toRelativeUrl(`${skillsUrl}/admin`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <Shield className="h-4 w-4 text-[#1E5BFF]" />
                       <span>Admin Portal</span>
-                    </a>
-                    <a
-                      href={`${skillsUrl}/admin/courses`}
+                    </Link>
+                    <Link
+                      href={toRelativeUrl(`${skillsUrl}/admin/courses`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <BookOpen className="h-4 w-4 text-[#1E5BFF]" />
                       <span>Course Studio</span>
-                    </a>
+                    </Link>
                   </>
                 ) : (
                   <>
-                    <a
-                      href={`${talentUrl}/profile`}
+                    <Link
+                      href={toRelativeUrl(`${talentUrl}/profile`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <UserIcon className="h-4 w-4 text-[#1E5BFF]" />
                       <span>View Talent Profile</span>
-                    </a>
-                    <a
-                      href={`${talentUrl}/profile/edit`}
+                    </Link>
+                    <Link
+                      href={toRelativeUrl(`${talentUrl}/profile/edit`)}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
                     >
                       <Settings className="h-4 w-4 text-[#1E5BFF]" />
                       <span>Edit Profile Details</span>
-                    </a>
+                    </Link>
                   </>
                 )}
               </div>
@@ -181,16 +182,16 @@ export function MobileNav({
             </div>
           ) : (
             <>
-              <a href={`${authUrl}/login`} className="w-full">
+              <Link href={toRelativeUrl(`${authUrl}/login`)} className="w-full">
                 <Button variant="outline" fullWidth size="sm">
                   Sign in
                 </Button>
-              </a>
-              <a href={`${authUrl}/register`} className="w-full">
+              </Link>
+              <Link href={toRelativeUrl(`${authUrl}/register`)} className="w-full">
                 <Button variant="primary" fullWidth size="sm">
                   Create account
                 </Button>
-              </a>
+              </Link>
             </>
           )}
         </div>

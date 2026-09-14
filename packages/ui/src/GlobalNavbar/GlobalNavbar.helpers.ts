@@ -4,6 +4,20 @@ export interface NavLinkItem {
   active?: boolean;
 }
 
+export function toRelativeUrl(url: string): string {
+  if (!url) return "/";
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    try {
+      const parsed = new URL(url);
+      return (parsed.pathname + parsed.search + parsed.hash) || "/";
+    } catch {
+      return url;
+    }
+  }
+  return url.startsWith("/") ? url : `/${url}`;
+}
+
+
 export function isPathMatch(
   currentPath: string,
   targetPath: string,

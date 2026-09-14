@@ -17,14 +17,14 @@ The platform provides a modern editorial interface connecting ambitious learners
 
 ```text
                                ┌─────────────────┐
-                               │    Auth Web     │
-                               │  (Port 3003)    │
+                               │     Web App     │
+                               │  (Port 3000)    │
                                └────────┬────────┘
                                         │ (JWT / Cookies)
- ┌─────────────────┐           ┌────────▼────────┐           ┌─────────────────┐
- │   Skills Web    │───────────►    Core API     ◄───────────│   Talent Web    │
- │   (Port 3001)   │           │  (Port 4000)    │           │   (Port 3002)   │
- └─────────────────┘           └────────┬────────┘           └─────────────────┘
+                               ┌────────▼────────┐
+                               │    Core API     │
+                               │  (Port 4000)    │
+                               └────────┬────────┘
                                         │ (Prisma ORM)
                                ┌────────▼────────┐
                                │   PostgreSQL    │
@@ -34,9 +34,7 @@ The platform provides a modern editorial interface connecting ambitious learners
 
 | Application    | URL / Port                          | Role & Key Functionality                                                                                                                  |
 | :------------- | :---------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| **Auth Web**   | `http://localhost:3003`             | Centralized identity provider, Google OAuth 2.0, login/registration, password reset, and session management.                              |
-| **Skills Web** | `http://localhost:3001`             | Course catalog, interactive learning workspace (video, reading, quizzes, assignment uploads), payment checkout, and digital certificates. |
-| **Talent Web** | `http://localhost:3002`             | Verified talent directory, candidate profile management, verified credentials display, CV attachments, and recruiter search.              |
+| **Web App**    | `http://localhost:3000`             | Single unified frontend containing Auth, Skills learning/courses marketplace, Talent profiles/jobs, and Admin portal with route groups.   |
 | **Core API**   | `http://localhost:4000`             | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming.                                    |
 | **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing.                                                                      |
 
@@ -118,17 +116,17 @@ The platform provides a modern editorial interface connecting ambitious learners
 ### Monorepo Development (All Apps in Parallel)
 
 ```bash
-# Run all dev servers in parallel (Ports 4000, 3001, 3002, 3003)
+# Run API and Web dev servers in parallel (Ports 4000 and 3000)
 pnpm dev
 ```
 
 ### Production Build & Execution
 
 ```bash
-# 1. Build all production bundles
+# 1. Build production bundles
 pnpm build
 
-# 2. Start all production servers in parallel
+# 2. Start production servers in parallel
 pnpm start
 ```
 
@@ -136,9 +134,7 @@ pnpm start
 
 ```bash
 pnpm dev:api      # Start API & Swagger Docs (Port 4000)
-pnpm dev:skills   # Start Skills Web (Port 3001)
-pnpm dev:talent   # Start Talent Web (Port 3002)
-pnpm dev:auth     # Start Auth Web (Port 3003)
+pnpm dev:web      # Start Web App (Port 3000)
 ```
 
 ---

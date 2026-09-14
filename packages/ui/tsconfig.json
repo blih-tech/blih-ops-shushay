@@ -8,7 +8,11 @@
     "jsx": "react-jsx",
     "declaration": true,
     "skipLibCheck": true,
-    "strict": false
+    "strict": false,
+    "paths": {
+      "next": ["../../apps/web/node_modules/next"],
+      "next/*": ["../../apps/web/node_modules/next/*"]
+    }
   },
   "include": ["src/**/*"]
 }

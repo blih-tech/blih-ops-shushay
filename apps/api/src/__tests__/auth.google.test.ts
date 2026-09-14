@@ -310,7 +310,7 @@ describe("GET /api/v1/auth/google/callback", () => {
       sub: "google-returnto-uid",
     });
 
-    const returnTo = "http://localhost:3002/profile/preview";
+    const returnTo = "http://localhost:3000/profile/preview";
     const state = buildState("TALENT", returnTo);
 
     const res = await request(app)

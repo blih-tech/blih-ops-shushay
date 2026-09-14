@@ -18,9 +18,7 @@ Before implementing, modifying, or refactoring code, review and follow these gui
 blih-ops/
 ├── apps/
 │   ├── api/            # Express Backend API & Prisma ORM Service
-│   ├── auth-web/       # Authentication Portal
-│   ├── skills-web/     # Learning Management System & Course Studio
-│   └── talent-web/     # Talent Marketplace, Profiles & Job Opportunities
+│   └── web/            # Unified Web Application (Auth, Skills, Talent, Admin)
 │
 ├── packages/
 │   ├── api-client/     # Shared Typed API Client & Data Fetchers

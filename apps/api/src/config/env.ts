@@ -20,9 +20,6 @@ export const env = {
       ? (process.env.CORS_ORIGINS ?? "").split(",").filter(Boolean)
       : [
           "http://localhost:3000",
-          "http://localhost:3001",
-          "http://localhost:3002",
-          "http://localhost:3003",
         ],
   nodeEnv: process.env.NODE_ENV ?? "development",
   uploadsBaseUrl:
@@ -32,10 +29,11 @@ export const env = {
     apiKey: required("CLOUDINARY_API_KEY"),
     apiSecret: required("CLOUDINARY_API_SECRET"),
   },
-  authUrl: process.env.AUTH_URL ?? "http://localhost:3003",
+  appUrl: process.env.APP_URL ?? "http://localhost:3000",
+  authUrl: process.env.AUTH_URL ?? process.env.APP_URL ?? "http://localhost:3000",
   apiUrl: process.env.API_URL ?? "http://localhost:4000",
-  talentWebUrl: process.env.TALENT_WEB_URL ?? "http://localhost:3002",
-  skillsWebUrl: process.env.SKILLS_WEB_URL ?? "http://localhost:3001",
+  talentWebUrl: process.env.TALENT_WEB_URL ?? process.env.APP_URL ?? "http://localhost:3000",
+  skillsWebUrl: process.env.SKILLS_WEB_URL ?? process.env.APP_URL ?? "http://localhost:3000",
   chapa: {
     secretKey: process.env.CHAPA_SECRET_KEY || "mock-secret-key",
     apiUrl: process.env.CHAPA_API_URL || "https://api.chapa.co/v1",
