@@ -10,6 +10,15 @@ export function HeroProfileMockup() {
   useGSAP(
     () => {
       // Initial staggered entry animation for the lifecycle badges
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(".floating-badge-container", { opacity: 1, scale: 1, y: 0 });
+        gsap.set(".profile-card", { opacity: 1, scale: 1, y: 0 });
+        gsap.set(".progress-fill", {
+          width: (_index, element) => element.dataset.width || "0%",
+        });
+        return;
+      }
+
       gsap.fromTo(
         ".floating-badge-container",
         { opacity: 0, scale: 0.3, y: 15 },
@@ -23,20 +32,6 @@ export function HeroProfileMockup() {
           delay: 0.3,
         },
       );
-
-      // Continuous gentle floating overlay loop (starts after reveal)
-      gsap.to(".floating-badge-container", {
-        y: -6,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-        delay: 1,
-        stagger: {
-          each: 0.3,
-          from: "random",
-        },
-      });
 
       // Initial scale/fade reveal of the profile surface
       gsap.fromTo(
@@ -70,10 +65,13 @@ export function HeroProfileMockup() {
 
   // Creative Magnetic Hover Interaction
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - rect.width / 2;
     const y = e.clientY - rect.top - rect.height / 2;
 
+    gsap.killTweensOf(e.currentTarget);
     gsap.to(e.currentTarget, {
       x: x * 0.1,
       y: y * 0.1,
@@ -85,7 +83,10 @@ export function HeroProfileMockup() {
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const isPrimary = e.currentTarget.classList.contains("bg-[#1E5BFF]");
+    gsap.killTweensOf(e.currentTarget);
     gsap.to(e.currentTarget, {
       x: 0,
       y: 0,

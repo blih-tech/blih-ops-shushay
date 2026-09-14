@@ -2,12 +2,11 @@
 
 ## 1. Domain architecture
 
-Blih will have three user-facing web applications and one backend API:
+Blih currently has one unified user-facing web application and one backend API:
 
 ```text
-skills.blih.com  →  Skills Web
-talent.blih.com  →  Talent Web
-auth.blih.com    →  Auth Web
+app.blih.com     →  Unified Next.js Web App
+api.blih.com     →  Express API
 api.blih.com     →  One API
 ```
 
@@ -15,11 +14,11 @@ The exact production domains can change later. These names describe the planned 
 
 ### Repository Architecture
 
-The entire Blih platform is structured as a single Nx Monorepo (in `blih-ops`). This approach allows all projects to share code while remaining independently deployable:
+The entire Blih platform is structured as a single Nx Monorepo (in `blih-ops`). The current implementation keeps product areas together in one Next.js application using route groups, while the API remains independently deployable:
 
 - **Apps (`apps/`)**:
   - `api`: The backend API (Express + Prisma).
-  - `web`: Unified Web application (Next.js) containing Auth, Skills learning, Talent directory/jobs, and Admin portal with route groups.
+  - `web`: Unified Next.js application containing Auth, Skills learning, Talent directory/jobs, and Admin portal with route groups.
 - **Shared Packages (`packages/`)**:
   - `api-client`: Centralized data fetching and API hooks.
   - `types`: Shared TypeScript definitions across the stack.
@@ -110,7 +109,7 @@ The route names are initial planning names and can change during implementation.
 /company/jobs/:jobId/applications
 ```
 
-## 4. Auth Web
+## 4. Authentication routes
 
 ### Responsibilities
 
@@ -122,7 +121,7 @@ The route names are initial planning names and can change during implementation.
 - Role selection during registration
 - Redirect users to the correct product after authentication
 
-The Auth Web is the central authentication interface. It should not contain course, job, talent, company, or payment business logic.
+Authentication is implemented as route groups inside the unified web application. These routes should not contain course, job, talent, company, or payment business logic.
 
 ### Suggested routes
 
@@ -143,7 +142,7 @@ Administrator access is handled separately through the administrator account and
 
 ## 5. One API
 
-The API is the single backend for all three web applications.
+The API is the single backend for the unified web application.
 
 ### API responsibilities
 
@@ -186,9 +185,7 @@ These are modules within one API application, not separate services.
 The API owns the database. The web applications communicate with the API and do not access the database directly.
 
 ```text
-Skills Web ─┐
-Talent Web ─┼── API ─── Database
-Auth Web ───┘
+Unified Web ─── API ─── Database
 ```
 
 The API is responsible for authorization. Each request must verify that the user has permission to access the requested resource.
@@ -204,10 +201,10 @@ Examples:
 ## 7. Shared authentication flow
 
 ```text
-User opens Skills Web or Talent Web
-→ User is redirected to Auth Web if not logged in
+User opens the unified web application
+→ User is redirected to the authentication routes if not logged in
 → User logs in or registers
-→ Auth Web creates the authenticated session
+→ The API creates the authenticated session
 → User is redirected back to the original product
 → Product Web requests data from the API
 ```
@@ -1145,14 +1142,9 @@ This folder contains the current planning documents for the Blih product family.
 
 ## Documents
 
-| Document                                        | Purpose                                                               |
-| ----------------------------------------------- | --------------------------------------------------------------------- |
-| [Product brief](./product-brief.md)             | Product vision, users, business model, and goals                      |
-| [PRD](./prd.md)                                 | Functional requirements for the MVP                                   |
-| [User flows](./user-flows.md)                   | Main learner, talent, and company journeys                            |
-| [Scope and decisions](./scope-and-decisions.md) | Confirmed decisions, boundaries, and out-of-scope features            |
-| [Domain plan](./domain-plan.md)                 | Skills Web, Talent Web, Auth Web, and the shared API responsibilities |
-| [Implementation plan](./implementation-plan.md) | Step-by-step development order, tasks, and completion checkpoints     |
+The product brief, domain plan, implementation plan, scope decisions, and user
+flows are maintained in this document. The repository README contains the
+current implementation commands and workspace structure.
 
 ## Important principle
 

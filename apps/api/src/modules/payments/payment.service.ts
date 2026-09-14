@@ -259,6 +259,20 @@ export async function verifyAndCompletePayment(
     );
 
     const result = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transaction.id} FOR UPDATE`;
+      const lockedPayment = await tx.paymentTransaction.findUnique({
+        where: { id: transaction.id },
+      });
+      if (lockedPayment?.status === PaymentStatus.SUCCESSFUL) {
+        return {
+          alreadyCompleted: true,
+          updatedPayment: lockedPayment,
+          subscription: await tx.companySubscription.findUnique({
+            where: { companyProfileId: companyProfile.id },
+          }),
+        };
+      }
+
       const updatedPayment = await tx.paymentTransaction.update({
         where: { id: transaction.id },
         data: {
@@ -301,6 +315,15 @@ export async function verifyAndCompletePayment(
       return { updatedPayment, subscription };
     });
 
+    if (result.alreadyCompleted) {
+      return {
+        verified: true,
+        payment: result.updatedPayment,
+        subscription: result.subscription,
+        message: "Payment already successfully verified",
+      };
+    }
+
     await createNotification({
       userId: transaction.userId,
       type: "COMPANY_SUBSCRIPTION_SUCCESS",
@@ -328,6 +351,20 @@ export async function verifyAndCompletePayment(
 
   // Verification succeeded for SKILLS_ACCESS! Execute atomic DB transaction
   const result = await prisma.$transaction(async (tx) => {
+    await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transaction.id} FOR UPDATE`;
+    const lockedPayment = await tx.paymentTransaction.findUnique({
+      where: { id: transaction.id },
+    });
+    if (lockedPayment?.status === PaymentStatus.SUCCESSFUL) {
+      return {
+        alreadyCompleted: true,
+        updatedPayment: lockedPayment,
+        entitlement: await tx.skillsEntitlement.findUnique({
+          where: { userId: transaction.userId },
+        }),
+      };
+    }
+
     const updatedPayment = await tx.paymentTransaction.update({
       where: { id: transaction.id },
       data: {
@@ -350,6 +387,15 @@ export async function verifyAndCompletePayment(
 
     return { updatedPayment, entitlement };
   });
+
+  if (result.alreadyCompleted) {
+    return {
+      verified: true,
+      payment: result.updatedPayment,
+      entitlement: result.entitlement,
+      message: "Payment already successfully verified",
+    };
+  }
 
   // Create in-app notification
   await createNotification({

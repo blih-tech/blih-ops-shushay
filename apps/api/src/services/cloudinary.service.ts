@@ -47,12 +47,14 @@ export function uploadStream(
 async function saveLocalFile(
   buffer: Buffer,
   filename: string,
+  isPrivate = false,
 ): Promise<CloudinaryUploadResult> {
-  const dir = path.join(process.cwd(), "uploads", "media");
+  const folder = isPrivate ? "private" : "media";
+  const dir = path.join(process.cwd(), "uploads", folder);
   await fs.mkdir(dir, { recursive: true });
   const localPath = path.join(dir, filename);
   await fs.writeFile(localPath, buffer);
-  const secure_url = `/uploads/media/${filename}`;
+  const secure_url = `/uploads/${folder}/${filename}`;
   return {
     secure_url,
     public_id: `local:${filename}`,
@@ -81,7 +83,7 @@ export async function uploadBuffer(
   if (!isCloudinaryConfigured) {
     const ext = options.resource_type === "raw" ? ".pdf" : ".png";
     const filename = `${options.public_id || "file"}-${Date.now()}${ext}`;
-    return saveLocalFile(buffer, filename);
+    return saveLocalFile(buffer, filename, options.resource_type === "raw");
   }
 
   try {
@@ -96,7 +98,7 @@ export async function uploadBuffer(
     );
     const ext = options.resource_type === "raw" ? ".pdf" : ".png";
     const filename = `${options.public_id || "file"}-${Date.now()}${ext}`;
-    return saveLocalFile(buffer, filename);
+    return saveLocalFile(buffer, filename, options.resource_type === "raw");
   }
 }
 

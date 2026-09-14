@@ -58,14 +58,12 @@ export async function chapaWebhook(
       // Production: unconditionally require a valid HMAC signature
       if (
         !signature ||
-        !chapaService.verifyWebhookSignature(req.body, signature)
+        !chapaService.verifyWebhookSignature(req.rawBody ?? req.body, signature)
       ) {
-        res
-          .status(401)
-          .json({
-            status: "error",
-            message: "Invalid or missing webhook signature",
-          });
+        res.status(401).json({
+          status: "error",
+          message: "Invalid or missing webhook signature",
+        });
         return;
       }
     } else if (!signature) {
@@ -73,7 +71,9 @@ export async function chapaWebhook(
       console.warn(
         "[chapaWebhook] Unsigned webhook received in mock/dev mode — HMAC verification skipped",
       );
-    } else if (!chapaService.verifyWebhookSignature(req.body, signature)) {
+    } else if (
+      !chapaService.verifyWebhookSignature(req.rawBody ?? req.body, signature)
+    ) {
       // Dev/test: signature present but wrong — still reject
       res
         .status(401)

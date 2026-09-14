@@ -8,6 +8,7 @@ import { env } from "./config/env";
 import prisma from "./config/prisma";
 import { swaggerSpec } from "./config/swagger";
 import { errorHandler } from "./middleware/errorHandler";
+import { requireAuth } from "./middleware/auth";
 import routes from "./routes";
 
 const app = express();
@@ -19,8 +20,21 @@ app.use(
 );
 app.use(cors({ origin: env.corsOrigins, credentials: true }));
 app.use(cookieParser());
-app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use(
+  express.json({
+    verify: (req, _res, buffer) => {
+      const expressRequest = req as typeof req & {
+        originalUrl?: string;
+        rawBody?: Buffer;
+      };
+      if (expressRequest.originalUrl === "/api/v1/payments/webhook") {
+        expressRequest.rawBody = Buffer.from(buffer);
+      }
+    },
+  }),
+);
+app.use("/uploads/media", express.static("uploads/media"));
+app.use("/uploads/private", requireAuth, express.static("uploads/private"));
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
 // Swagger Documentation Endpoints
@@ -36,11 +50,11 @@ app.get("/api/v1/health", async (_req, res) => {
       database: "connected",
       timestamp: new Date().toISOString(),
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("[health] Database check failed", error);
     res.status(500).json({
       status: "error",
       database: "disconnected",
-      error: error.message,
       timestamp: new Date().toISOString(),
     });
   }

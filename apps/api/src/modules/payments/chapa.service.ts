@@ -186,16 +186,18 @@ export class ChapaService {
    * Verifies Chapa HMAC SHA-256 webhook signature header.
    */
   verifyWebhookSignature(
-    rawBody: string | object,
+    rawBody: string | Buffer | object,
     signature: string | undefined,
   ): boolean {
     if (!signature || !this.secretKey) return false;
     try {
-      const payloadString =
-        typeof rawBody === "string" ? rawBody : JSON.stringify(rawBody);
+      const payload =
+        typeof rawBody === "string" || Buffer.isBuffer(rawBody)
+          ? rawBody
+          : JSON.stringify(rawBody);
       const expectedSignature = require("crypto")
         .createHmac("sha256", this.secretKey)
-        .update(payloadString)
+        .update(payload)
         .digest("hex");
       return require("crypto").timingSafeEqual(
         Buffer.from(signature.trim()),

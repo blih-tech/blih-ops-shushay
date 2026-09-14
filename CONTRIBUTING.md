@@ -43,11 +43,11 @@ Common commands include:
 
 | Command             | Action                           |
 | :------------------ | :------------------------------- |
-| `npm run dev`       | Launch local development servers |
-| `npm run build`     | Build production bundles         |
-| `npm run typecheck` | Run TypeScript type checking     |
-| `npm run lint`      | Run ESLint                       |
-| `npm test`          | Run the test suite               |
+| `pnpm dev`          | Launch local development servers |
+| `pnpm build`        | Build production bundles         |
+| `pnpm typecheck`    | Run TypeScript type checking     |
+| `pnpm lint`         | Run ESLint                       |
+| `pnpm test`         | Run the test suite               |
 
 If a command does not exist in the current workspace, do not invent or document it as an available command. Check `package.json` and Nx configuration first.
 
