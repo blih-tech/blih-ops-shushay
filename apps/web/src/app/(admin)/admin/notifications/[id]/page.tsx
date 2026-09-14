@@ -3,10 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import {
-  Bell,
-  Clock,
-} from "lucide-react";
+import { Bell, Clock } from "lucide-react";
 import { Alert, Badge, Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
@@ -38,7 +35,10 @@ function AdminNotificationDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
-          items={[{ label: "Notifications", href: "/admin/notifications" }, { label: "Loading..." }]}
+          items={[
+            { label: "Notifications", href: "/admin/notifications" },
+            { label: "Loading..." },
+          ]}
         />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
@@ -49,7 +49,10 @@ function AdminNotificationDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
-          items={[{ label: "Notifications", href: "/admin/notifications" }, { label: "Error" }]}
+          items={[
+            { label: "Notifications", href: "/admin/notifications" },
+            { label: "Error" },
+          ]}
         />
         <Alert variant="error">{error || "Notification not found"}</Alert>
       </main>
@@ -135,11 +138,15 @@ function AdminNotificationDetailContent() {
               </div>
               <div>
                 <p className="text-xs text-[#6E6678] mb-1">Email</p>
-                <p className="font-medium text-[#17131F]">{notification.user?.email}</p>
+                <p className="font-medium text-[#17131F]">
+                  {notification.user?.email}
+                </p>
               </div>
               <div>
                 <p className="text-xs text-[#6E6678] mb-1">Role</p>
-                <p className="font-medium text-[#17131F]">{notification.user?.role}</p>
+                <p className="font-medium text-[#17131F]">
+                  {notification.user?.role}
+                </p>
               </div>
             </div>
           </div>

@@ -1,25 +1,13 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  User,
-  FileText,
-  Eye,
-} from "lucide-react";
-import {
-  Button,
-  Badge,
-  Alert,
-  UniversalSearch,
-  Pagination,
-} from "@blih/ui";
+import { User, FileText, Eye } from "lucide-react";
+import { Button, Badge, Alert, UniversalSearch, Pagination } from "@blih/ui";
 import Link from "next/link";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import {
-  fetchAdminTalents,
-} from "@/lib/adminApi";
+import { fetchAdminTalents } from "@/lib/adminApi";
 import type { AdminTalentItem } from "@/types/admin";
 
 const PAGE_SIZE = 20;
@@ -58,8 +46,12 @@ function AdminTalentsContent() {
     }
   }, [page, debouncedSearch]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -74,12 +66,17 @@ function AdminTalentsContent() {
             <Badge variant="primary">{total} REGISTERED</Badge>
           </div>
           <p className="text-sm text-[#6E6678]">
-            Inspect candidate profiles, manage skills access, CV attachments, and career history.
+            Inspect candidate profiles, manage skills access, CV attachments,
+            and career history.
           </p>
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       <UniversalSearch
         value={searchQuery}
@@ -93,7 +90,11 @@ function AdminTalentsContent() {
         rowKey={(t) => t.id}
         emptyIcon={<User className="h-6 w-6" />}
         emptyTitle="No talent profiles found"
-        emptySubtext={searchQuery ? "No candidates match your search." : "Registered candidates will appear here."}
+        emptySubtext={
+          searchQuery
+            ? "No candidates match your search."
+            : "Registered candidates will appear here."
+        }
         columns={[
           {
             key: "talent",
@@ -103,14 +104,22 @@ function AdminTalentsContent() {
                 <div className="w-9 h-9 rounded-xl bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
                   {t.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={t.photoUrl} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={t.photoUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     (t.fullName || t.user.email).charAt(0).toUpperCase()
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-[#17131F] truncate">{t.fullName || "Unnamed"}</p>
-                  <p className="text-xs text-[#6E6678] truncate">{t.user.email}</p>
+                  <p className="font-medium text-[#17131F] truncate">
+                    {t.fullName || "Unnamed"}
+                  </p>
+                  <p className="text-xs text-[#6E6678] truncate">
+                    {t.user.email}
+                  </p>
                 </div>
               </div>
             ),
@@ -140,12 +149,17 @@ function AdminTalentsContent() {
             render: (t) => (
               <div className="flex flex-wrap gap-1 max-w-[200px]">
                 {t.skills.slice(0, 3).map((s) => (
-                  <span key={s} className="px-2 py-0.5 rounded-lg bg-[#EEF3FF] text-[10px] font-mono text-[#1E5BFF] font-medium">
+                  <span
+                    key={s}
+                    className="px-2 py-0.5 rounded-lg bg-[#EEF3FF] text-[10px] font-mono text-[#1E5BFF] font-medium"
+                  >
                     {s}
                   </span>
                 ))}
                 {t.skills.length > 3 && (
-                  <span className="text-[10px] font-mono text-[#6E6678]">+{t.skills.length - 3}</span>
+                  <span className="text-[10px] font-mono text-[#6E6678]">
+                    +{t.skills.length - 3}
+                  </span>
                 )}
               </div>
             ),
@@ -155,7 +169,9 @@ function AdminTalentsContent() {
             header: "Apps",
             width: "60px",
             render: (t) => (
-              <span className="font-mono text-sm text-[#17131F] font-medium">{t._count.jobApplications}</span>
+              <span className="font-mono text-sm text-[#17131F] font-medium">
+                {t._count.jobApplications}
+              </span>
             ),
           },
           {
@@ -164,9 +180,13 @@ function AdminTalentsContent() {
             width: "120px",
             render: (t) =>
               t.user.skillsEntitlement ? (
-                <Badge variant="verified" size="sm">Granted</Badge>
+                <Badge variant="verified" size="sm">
+                  Granted
+                </Badge>
               ) : (
-                <Badge variant="secondary" size="sm">Not Granted</Badge>
+                <Badge variant="secondary" size="sm">
+                  Not Granted
+                </Badge>
               ),
           },
           {
@@ -176,7 +196,11 @@ function AdminTalentsContent() {
             render: (t) =>
               t.cvUrl ? (
                 <a href={t.cvUrl} target="_blank" rel="noreferrer">
-                  <Button size="sm" variant="ghost" leftIcon={<FileText className="h-3 w-3" />}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<FileText className="h-3 w-3" />}
+                  >
                     CV
                   </Button>
                 </a>
@@ -205,7 +229,11 @@ function AdminTalentsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </main>

@@ -102,7 +102,9 @@ function ProfileContent() {
 
   const handlePhotoUpload = async (file: File) => {
     const updated = await uploadTalentPhoto(file);
-    setProfile((prev) => (prev ? { ...prev, photoUrl: updated.photoUrl ?? null } : null));
+    setProfile((prev) =>
+      prev ? { ...prev, photoUrl: updated.photoUrl ?? null } : null,
+    );
     await refresh();
   };
 
@@ -114,7 +116,9 @@ function ProfileContent() {
 
   const handleCvUpload = async (file: File) => {
     const updated = await uploadTalentCv(file);
-    setProfile((prev) => (prev ? { ...prev, cvUrl: updated.cvUrl ?? null } : null));
+    setProfile((prev) =>
+      prev ? { ...prev, cvUrl: updated.cvUrl ?? null } : null,
+    );
     await refresh();
   };
 
@@ -266,7 +270,8 @@ function ProfileContent() {
                 Profile Photo & Resume Document
               </CardTitle>
               <CardDescription className="font-sans text-sm text-[#6E6678] mt-1">
-                Upload a professional headshot and your latest CV (PDF) to boost employer credibility.
+                Upload a professional headshot and your latest CV (PDF) to boost
+                employer credibility.
               </CardDescription>
             </div>
 
@@ -286,10 +291,7 @@ function ProfileContent() {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <ProfileCompletionCard
-            profile={profile}
-            loading={loading}
-          />
+          <ProfileCompletionCard profile={profile} loading={loading} />
         </div>
       </div>
     </main>

@@ -20,7 +20,7 @@ export default function PublicCourseDetailPage() {
   const params = useParams();
   const router = useRouter();
   const courseId = params.courseId as string;
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [course, setCourse] = useState<PublicCourse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +73,9 @@ export default function PublicCourseDetailPage() {
 
   const handleUnlockClick = async () => {
     if (!user) {
-      router.push(`/login?returnTo=${encodeURIComponent(window.location.pathname)}`);
+      router.push(
+        `/login?returnTo=${encodeURIComponent(window.location.pathname)}`,
+      );
       return;
     }
 

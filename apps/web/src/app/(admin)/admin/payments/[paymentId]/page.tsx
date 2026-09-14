@@ -36,7 +36,10 @@ function AdminPaymentDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
-          items={[{ label: "Payments", href: "/admin/payments" }, { label: "Loading..." }]}
+          items={[
+            { label: "Payments", href: "/admin/payments" },
+            { label: "Loading..." },
+          ]}
         />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
@@ -47,9 +50,14 @@ function AdminPaymentDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
-          items={[{ label: "Payments", href: "/admin/payments" }, { label: "Error" }]}
+          items={[
+            { label: "Payments", href: "/admin/payments" },
+            { label: "Error" },
+          ]}
         />
-        <Alert variant="error">{error || "Payment transaction not found"}</Alert>
+        <Alert variant="error">
+          {error || "Payment transaction not found"}
+        </Alert>
       </main>
     );
   }
@@ -73,15 +81,26 @@ function AdminPaymentDetailContent() {
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MetricCard value={`${payment.amount} ${payment.currency}`} label="Amount" variant="primary" />
+        <MetricCard
+          value={`${payment.amount} ${payment.currency}`}
+          label="Amount"
+          variant="primary"
+        />
         <MetricCard value={payment.status} label="Status" variant="surface" />
-        <MetricCard value={payment.paymentType.replace(/_/g, " ")} label="Purpose" variant="surface" />
-        <MetricCard value={new Date(payment.createdAt).toLocaleDateString()} label="Date" variant="surface" />
+        <MetricCard
+          value={payment.paymentType.replace(/_/g, " ")}
+          label="Purpose"
+          variant="surface"
+        />
+        <MetricCard
+          value={new Date(payment.createdAt).toLocaleDateString()}
+          label="Date"
+          variant="surface"
+        />
       </div>
 
       {/* Main Card */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-
         {/* Header — hero amount + inline data row */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
           <div className="flex items-start gap-5">
@@ -92,10 +111,16 @@ function AdminPaymentDetailContent() {
               <div>
                 <div className="flex items-center gap-2.5 flex-wrap">
                   <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
-                    {payment.amount} <span className="text-lg font-semibold text-[#6E6678]">{payment.currency}</span>
+                    {payment.amount}{" "}
+                    <span className="text-lg font-semibold text-[#6E6678]">
+                      {payment.currency}
+                    </span>
                   </h1>
                   <AdminStatusBadge type="payment" value={payment.status} />
-                  <AdminStatusBadge type="paymentType" value={payment.paymentType} />
+                  <AdminStatusBadge
+                    type="paymentType"
+                    value={payment.paymentType}
+                  />
                 </div>
               </div>
 
@@ -103,7 +128,12 @@ function AdminPaymentDetailContent() {
               <div className="flex flex-wrap gap-2">
                 <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
                   <Hash className="h-3 w-3 shrink-0" />
-                  <span className="font-mono truncate max-w-[160px]" title={payment.txRef}>{payment.txRef}</span>
+                  <span
+                    className="font-mono truncate max-w-[160px]"
+                    title={payment.txRef}
+                  >
+                    {payment.txRef}
+                  </span>
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
                   <Calendar className="h-3 w-3 shrink-0" />
@@ -120,7 +150,6 @@ function AdminPaymentDetailContent() {
 
         {/* Content Body */}
         <div className="divide-y divide-[#EBE5F0]">
-
           {/* Transaction Reference */}
           <div className="p-6 sm:p-8 space-y-4">
             <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
@@ -128,13 +157,17 @@ function AdminPaymentDetailContent() {
             </h2>
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-4 py-2.5 border-b border-[#F9F8FC]">
-                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">Internal Payment ID</span>
+                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">
+                  Internal Payment ID
+                </span>
                 <code className="font-mono text-xs text-[#17131F] bg-[#F9F8FC] border border-[#EBE5F0] px-2.5 py-1.5 rounded-lg break-all text-right">
                   {payment.id}
                 </code>
               </div>
               <div className="flex items-start justify-between gap-4 py-2.5 border-b border-[#F9F8FC]">
-                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">Chapa Tx Reference</span>
+                <span className="text-xs text-[#6E6678] shrink-0 pt-0.5 w-36">
+                  Chapa Tx Reference
+                </span>
                 <code className="font-mono text-xs text-[#17131F] bg-[#F9F8FC] border border-[#EBE5F0] px-2.5 py-1.5 rounded-lg break-all text-right">
                   {payment.txRef}
                 </code>
@@ -165,10 +198,14 @@ function AdminPaymentDetailContent() {
 
             <div className="flex items-center gap-4 p-4 bg-[#F9F8FC] rounded-2xl border border-[#EBE5F0]">
               <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-base shrink-0">
-                {payment.user?.talentProfile?.photoUrl || payment.user?.companyProfile?.logoUrl ? (
+                {payment.user?.talentProfile?.photoUrl ||
+                payment.user?.companyProfile?.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={payment.user.talentProfile?.photoUrl || payment.user.companyProfile?.logoUrl}
+                    src={
+                      payment.user.talentProfile?.photoUrl ||
+                      payment.user.companyProfile?.logoUrl
+                    }
                     alt=""
                     className="w-full h-full object-cover rounded-xl"
                   />
@@ -177,16 +214,21 @@ function AdminPaymentDetailContent() {
                 )}
               </div>
               <div className="flex-1 min-w-0 space-y-0.5">
-                <p className="font-medium text-[#17131F] text-sm truncate">{userDisplayName}</p>
-                <p className="text-xs text-[#6E6678] truncate">{payment.user?.email || "—"}</p>
+                <p className="font-medium text-[#17131F] text-sm truncate">
+                  {userDisplayName}
+                </p>
+                <p className="text-xs text-[#6E6678] truncate">
+                  {payment.user?.email || "—"}
+                </p>
               </div>
               <div className="text-right shrink-0">
                 <p className="text-xs text-[#6E6678]">Role</p>
-                <p className="text-sm font-medium text-[#17131F]">{payment.user?.role || "—"}</p>
+                <p className="text-sm font-medium text-[#17131F]">
+                  {payment.user?.role || "—"}
+                </p>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </main>

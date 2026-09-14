@@ -2,8 +2,22 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { CreditCard, TrendingUp, DollarSign, AlertCircle, Eye } from "lucide-react";
-import { Alert, Badge, UniversalSearch, Pagination, Select, Card, Button } from "@blih/ui";
+import {
+  CreditCard,
+  TrendingUp,
+  DollarSign,
+  AlertCircle,
+  Eye,
+} from "lucide-react";
+import {
+  Alert,
+  Badge,
+  UniversalSearch,
+  Pagination,
+  Select,
+  Card,
+  Button,
+} from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
@@ -23,7 +37,10 @@ function AdminPaymentsContent() {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
-  const [summary, setSummary] = useState({ totalRevenue: 0, successfulCount: 0 });
+  const [summary, setSummary] = useState({
+    totalRevenue: 0,
+    successfulCount: 0,
+  });
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
@@ -53,8 +70,12 @@ function AdminPaymentsContent() {
     }
   }, [page, debouncedSearch, statusFilter, typeFilter]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter, typeFilter]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, statusFilter, typeFilter]);
 
   const displayName = (p: AdminPayment) =>
     p.user.talentProfile?.fullName ||
@@ -79,13 +100,19 @@ function AdminPaymentsContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">Total Revenue</span>
+            <span className="font-mono text-xs text-[#6E6678] uppercase">
+              Total Revenue
+            </span>
             <div className="w-8 h-8 rounded-xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center">
               <TrendingUp className="h-4 w-4" />
             </div>
@@ -93,23 +120,31 @@ function AdminPaymentsContent() {
           <p className="font-display text-2xl font-bold text-[#17131F]">
             {summary.totalRevenue.toLocaleString()} ETB
           </p>
-          <p className="text-xs text-[#6E6678]">{summary.successfulCount} successful</p>
+          <p className="text-xs text-[#6E6678]">
+            {summary.successfulCount} successful
+          </p>
         </Card>
 
         <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">All Transactions</span>
+            <span className="font-mono text-xs text-[#6E6678] uppercase">
+              All Transactions
+            </span>
             <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
               <CreditCard className="h-4 w-4" />
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-[#17131F]">{total}</p>
+          <p className="font-display text-2xl font-bold text-[#17131F]">
+            {total}
+          </p>
           <p className="text-xs text-[#6E6678]">Across all payment types</p>
         </Card>
 
         <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">Pending</span>
+            <span className="font-mono text-xs text-[#6E6678] uppercase">
+              Pending
+            </span>
             <div className="w-8 h-8 rounded-xl bg-[#FFF9EE] text-[#D97706] flex items-center justify-center">
               <AlertCircle className="h-4 w-4" />
             </div>
@@ -162,15 +197,23 @@ function AdminPaymentsContent() {
         rowKey={(p) => p.id}
         emptyIcon={<DollarSign className="h-6 w-6" />}
         emptyTitle="No payments found"
-        emptySubtext={searchQuery || statusFilter || typeFilter ? "Try adjusting your filters." : "No payment transactions recorded yet."}
+        emptySubtext={
+          searchQuery || statusFilter || typeFilter
+            ? "Try adjusting your filters."
+            : "No payment transactions recorded yet."
+        }
         columns={[
           {
             key: "user",
             header: "User",
             render: (p) => (
               <div className="min-w-0">
-                <p className="font-medium text-[#17131F] truncate">{displayName(p)}</p>
-                <p className="text-xs text-[#6E6678] truncate">{p.user.email}</p>
+                <p className="font-medium text-[#17131F] truncate">
+                  {displayName(p)}
+                </p>
+                <p className="text-xs text-[#6E6678] truncate">
+                  {p.user.email}
+                </p>
               </div>
             ),
           },
@@ -178,7 +221,10 @@ function AdminPaymentsContent() {
             key: "txRef",
             header: "Tx Reference",
             render: (p) => (
-              <span className="font-mono text-xs text-[#6E6678] truncate max-w-[180px] block" title={p.txRef}>
+              <span
+                className="font-mono text-xs text-[#6E6678] truncate max-w-[180px] block"
+                title={p.txRef}
+              >
                 {p.txRef}
               </span>
             ),
@@ -187,7 +233,9 @@ function AdminPaymentsContent() {
             key: "type",
             header: "Type",
             width: "150px",
-            render: (p) => <AdminStatusBadge type="paymentType" value={p.paymentType} />,
+            render: (p) => (
+              <AdminStatusBadge type="paymentType" value={p.paymentType} />
+            ),
           },
           {
             key: "amount",
@@ -221,7 +269,11 @@ function AdminPaymentsContent() {
             width: "80px",
             render: (p) => (
               <Link href={`/admin/payments/${p.id}`}>
-                <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                >
                   View
                 </Button>
               </Link>
@@ -232,7 +284,11 @@ function AdminPaymentsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </main>

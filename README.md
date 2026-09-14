@@ -32,11 +32,11 @@ The platform provides a modern editorial interface connecting ambitious learners
                                └─────────────────┘
 ```
 
-| Application    | URL / Port                          | Role & Key Functionality                                                                                                                  |
-| :------------- | :---------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| **Web App**    | `http://localhost:3000`             | Single unified frontend containing Auth, Skills learning/courses marketplace, Talent profiles/jobs, and Admin portal with route groups.   |
-| **Core API**   | `http://localhost:4000`             | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming.                                    |
-| **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing.                                                                      |
+| Application    | URL / Port                          | Role & Key Functionality                                                                                                                |
+| :------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| **Web App**    | `http://localhost:3000`             | Single unified frontend containing Auth, Skills learning/courses marketplace, Talent profiles/jobs, and Admin portal with route groups. |
+| **Core API**   | `http://localhost:4000`             | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming.                                  |
+| **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing.                                                                    |
 
 ---
 

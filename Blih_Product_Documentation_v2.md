@@ -1002,10 +1002,10 @@ A company can create and edit a profile containing:
 
 Companies can select one of two plans:
 
-| Plan | Price | Features |
-|---|---:|---|
-| Monthly | 2,000 ETB | Same as yearly plan |
-| Yearly | 10,000 ETB | Same as monthly plan |
+| Plan    |      Price | Features             |
+| ------- | ---------: | -------------------- |
+| Monthly |  2,000 ETB | Same as yearly plan  |
+| Yearly  | 10,000 ETB | Same as monthly plan |
 
 Requirements:
 
@@ -1145,14 +1145,14 @@ This folder contains the current planning documents for the Blih product family.
 
 ## Documents
 
-| Document | Purpose |
-|---|---|
-| [Product brief](./product-brief.md) | Product vision, users, business model, and goals |
-| [PRD](./prd.md) | Functional requirements for the MVP |
-| [User flows](./user-flows.md) | Main learner, talent, and company journeys |
-| [Scope and decisions](./scope-and-decisions.md) | Confirmed decisions, boundaries, and out-of-scope features |
-| [Domain plan](./domain-plan.md) | Skills Web, Talent Web, Auth Web, and the shared API responsibilities |
-| [Implementation plan](./implementation-plan.md) | Step-by-step development order, tasks, and completion checkpoints |
+| Document                                        | Purpose                                                               |
+| ----------------------------------------------- | --------------------------------------------------------------------- |
+| [Product brief](./product-brief.md)             | Product vision, users, business model, and goals                      |
+| [PRD](./prd.md)                                 | Functional requirements for the MVP                                   |
+| [User flows](./user-flows.md)                   | Main learner, talent, and company journeys                            |
+| [Scope and decisions](./scope-and-decisions.md) | Confirmed decisions, boundaries, and out-of-scope features            |
+| [Domain plan](./domain-plan.md)                 | Skills Web, Talent Web, Auth Web, and the shared API responsibilities |
+| [Implementation plan](./implementation-plan.md) | Step-by-step development order, tasks, and completion checkpoints     |
 
 ## Important principle
 
@@ -1164,34 +1164,34 @@ Keep the first version simple. Blih Skills provides training and Blih Talent con
 
 ## Confirmed decisions
 
-| Area | Decision |
-|---|---|
-| Blih Skills price | 1,000 ETB one-time payment |
-| Blih Skills access | All current and future courses; access does not expire |
-| Blih Skills audience | Everyone |
-| Course preview | Course title and description are visible before payment |
-| Course administrators | Blih administrators only |
-| Course content | Written lessons, videos, downloadable documents, quizzes, assignments |
-| Course completion | Certificate and completed course displayed on talent profile |
-| Talent access | Free |
-| Talent profile | Required before applying and searchable by companies |
-| Company plans | 2,000 ETB monthly or 10,000 ETB yearly |
-| Company plan features | Same features; yearly plan is cheaper overall |
-| Subscription renewal | Manual |
-| Job posting | Unlimited and published immediately |
-| Company approval | Not required in the MVP |
-| Company access | Active subscribers can view full talent information |
-| Talent saving | Not included |
-| Communication | External contact; no internal chat |
-| Application statuses | Applied and Reviewing only |
-| Hiring workflow | Managed externally; company closes the job after hiring |
-| Job expiration | Job remains active until company closes it |
-| Payment provider | Chapa |
-| Notifications | Payment and new applications by email and internally |
-| User roles | One role per account |
-| Websites | Separate websites with shared login |
-| Primary company market | Germany, Poland, and Europe |
-| Success metrics | Not documented at this stage |
+| Area                   | Decision                                                              |
+| ---------------------- | --------------------------------------------------------------------- |
+| Blih Skills price      | 1,000 ETB one-time payment                                            |
+| Blih Skills access     | All current and future courses; access does not expire                |
+| Blih Skills audience   | Everyone                                                              |
+| Course preview         | Course title and description are visible before payment               |
+| Course administrators  | Blih administrators only                                              |
+| Course content         | Written lessons, videos, downloadable documents, quizzes, assignments |
+| Course completion      | Certificate and completed course displayed on talent profile          |
+| Talent access          | Free                                                                  |
+| Talent profile         | Required before applying and searchable by companies                  |
+| Company plans          | 2,000 ETB monthly or 10,000 ETB yearly                                |
+| Company plan features  | Same features; yearly plan is cheaper overall                         |
+| Subscription renewal   | Manual                                                                |
+| Job posting            | Unlimited and published immediately                                   |
+| Company approval       | Not required in the MVP                                               |
+| Company access         | Active subscribers can view full talent information                   |
+| Talent saving          | Not included                                                          |
+| Communication          | External contact; no internal chat                                    |
+| Application statuses   | Applied and Reviewing only                                            |
+| Hiring workflow        | Managed externally; company closes the job after hiring               |
+| Job expiration         | Job remains active until company closes it                            |
+| Payment provider       | Chapa                                                                 |
+| Notifications          | Payment and new applications by email and internally                  |
+| User roles             | One role per account                                                  |
+| Websites               | Separate websites with shared login                                   |
+| Primary company market | Germany, Poland, and Europe                                           |
+| Success metrics        | Not documented at this stage                                          |
 
 ## MVP boundaries
 
@@ -1471,21 +1471,21 @@ Payment types:
 
 ## Permission summary
 
-| Action | Talent | Company | Admin |
-|---|---:|---:|---:|
-| Manage own account | Yes | Yes | Yes |
-| Manage own talent profile | Yes | No | No |
-| Manage own company profile | No | Yes | No |
-| View active jobs | Yes | Yes | Yes |
-| Apply to jobs | Yes | No | No |
-| Search talents | No | Active subscription | No |
-| View full talent profile | No | Active subscription | No |
-| Create jobs | No | Active subscription | No |
-| Manage own jobs | No | Active subscription | No |
-| Review applications | No | Own jobs | No |
-| Manage courses | No | No | Yes |
-| Manage users | No | No | No |
-| Manage company/job moderation | No | No | No |
+| Action                        | Talent |             Company | Admin |
+| ----------------------------- | -----: | ------------------: | ----: |
+| Manage own account            |    Yes |                 Yes |   Yes |
+| Manage own talent profile     |    Yes |                  No |    No |
+| Manage own company profile    |     No |                 Yes |    No |
+| View active jobs              |    Yes |                 Yes |   Yes |
+| Apply to jobs                 |    Yes |                  No |    No |
+| Search talents                |     No | Active subscription |    No |
+| View full talent profile      |     No | Active subscription |    No |
+| Create jobs                   |     No | Active subscription |    No |
+| Manage own jobs               |     No | Active subscription |    No |
+| Review applications           |     No |            Own jobs |    No |
+| Manage courses                |     No |                  No |   Yes |
+| Manage users                  |     No |                  No |    No |
+| Manage company/job moderation |     No |                  No |    No |
 
 ## Privacy rule
 
@@ -1613,25 +1613,25 @@ description: A calm, editorial operations interface where disciplined structure
   motion make intelligent outsourcing feel measurable rather than abstract.
 
 colors:
-  primary: '#3B82F6'
-  primary-foreground: '#FFFFFF'
-  foreground: '#333333'
-  body: '#4B5563'
-  muted-foreground: '#6B7280'
-  background: '#FFFFFF'
-  card: '#FFFFFF'
-  muted: '#F9FAFB'
-  secondary: '#F3F4F6'
-  border: '#E5E7EB'
-  accent: '#E0F2FE'
-  accent-foreground: '#1E3A8A'
-  destructive: '#EF4444'
-  dark-background: '#171717'
-  dark-card: '#262626'
-  dark-foreground: '#E5E5E5'
-  dark-muted: '#1F1F1F'
-  dark-muted-foreground: '#A3A3A3'
-  dark-border: '#404040'
+  primary: "#3B82F6"
+  primary-foreground: "#FFFFFF"
+  foreground: "#333333"
+  body: "#4B5563"
+  muted-foreground: "#6B7280"
+  background: "#FFFFFF"
+  card: "#FFFFFF"
+  muted: "#F9FAFB"
+  secondary: "#F3F4F6"
+  border: "#E5E7EB"
+  accent: "#E0F2FE"
+  accent-foreground: "#1E3A8A"
+  destructive: "#EF4444"
+  dark-background: "#171717"
+  dark-card: "#262626"
+  dark-foreground: "#E5E5E5"
+  dark-muted: "#1F1F1F"
+  dark-muted-foreground: "#A3A3A3"
+  dark-border: "#404040"
 
 typography:
   display-hero:
@@ -1653,25 +1653,25 @@ typography:
     lineHeight: 1.3
     letterSpacing: -0.2px
   body-lg:
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: "Inter, sans-serif"
     fontSize: 18px
     fontWeight: 400
     lineHeight: 1.625
     letterSpacing: 0
   body-md:
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: "Inter, sans-serif"
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.625
     letterSpacing: 0
   body-sm:
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: "Inter, sans-serif"
     fontSize: 14px
     fontWeight: 400
     lineHeight: 1.625
     letterSpacing: 0
   label:
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: "Inter, sans-serif"
     fontSize: 12px
     fontWeight: 500
     lineHeight: 1.25
@@ -1683,7 +1683,7 @@ typography:
     lineHeight: 1.4
     letterSpacing: 0.6px
   button:
-    fontFamily: 'Inter, sans-serif'
+    fontFamily: "Inter, sans-serif"
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1
@@ -1711,8 +1711,8 @@ spacing:
   section-desktop: 96px
 
 motion:
-  ease-out: 'cubic-bezier(0.22, 1, 0.36, 1)'
-  ease-snappy: 'cubic-bezier(0.16, 1, 0.3, 1)'
+  ease-out: "cubic-bezier(0.22, 1, 0.36, 1)"
+  ease-snappy: "cubic-bezier(0.16, 1, 0.3, 1)"
   micro: 180ms
   interactive: 300ms
   entrance: 450ms
@@ -1722,64 +1722,64 @@ motion:
 
 components:
   button-primary:
-    backgroundColor: '{colors.primary}'
-    textColor: '{colors.primary-foreground}'
-    typography: '{typography.button}'
-    rounded: '{rounded.md}'
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
+    typography: "{typography.button}"
+    rounded: "{rounded.md}"
     height: 40px
-    padding: '0 {spacing.base}'
+    padding: "0 {spacing.base}"
   button-outline:
-    backgroundColor: '{colors.background}'
-    textColor: '{colors.foreground}'
-    borderColor: '{colors.border}'
-    typography: '{typography.button}'
-    rounded: '{rounded.md}'
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    typography: "{typography.button}"
+    rounded: "{rounded.md}"
     height: 40px
-    padding: '0 {spacing.base}'
+    padding: "0 {spacing.base}"
   eyebrow-label:
-    textColor: '{colors.muted-foreground}'
-    typography: '{typography.label}'
-    rounded: '{rounded.md}'
+    textColor: "{colors.muted-foreground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.md}"
   section-heading:
-    textColor: '{colors.foreground}'
-    typography: '{typography.display-section}'
+    textColor: "{colors.foreground}"
+    typography: "{typography.display-section}"
   section-intro:
-    textColor: '{colors.muted-foreground}'
-    typography: '{typography.body-md}'
+    textColor: "{colors.muted-foreground}"
+    typography: "{typography.body-md}"
   structural-panel:
-    backgroundColor: '{colors.card}'
-    textColor: '{colors.foreground}'
-    borderColor: '{colors.border}'
-    rounded: '{rounded.none}'
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    rounded: "{rounded.none}"
   operational-card:
-    backgroundColor: '{colors.card}'
-    textColor: '{colors.foreground}'
-    borderColor: '{colors.border}'
-    rounded: '{rounded.xl}'
-    padding: '{spacing.lg}'
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    rounded: "{rounded.xl}"
+    padding: "{spacing.lg}"
   status-badge:
-    backgroundColor: '{colors.muted}'
-    textColor: '{colors.muted-foreground}'
-    borderColor: '{colors.border}'
-    typography: '{typography.label}'
-    rounded: '{rounded.full}'
+    backgroundColor: "{colors.muted}"
+    textColor: "{colors.muted-foreground}"
+    borderColor: "{colors.border}"
+    typography: "{typography.label}"
+    rounded: "{rounded.full}"
   metric-card:
-    backgroundColor: '{colors.muted}'
-    textColor: '{colors.foreground}'
-    borderColor: '{colors.border}'
-    rounded: '{rounded.xl}'
-    padding: '{spacing.xl}'
+    backgroundColor: "{colors.muted}"
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    rounded: "{rounded.xl}"
+    padding: "{spacing.xl}"
   image-cta-panel:
-    backgroundColor: '{colors.dark-background}'
-    textColor: '{colors.primary-foreground}'
-    borderColor: '{colors.border}'
-    rounded: '{rounded.2xl}'
+    backgroundColor: "{colors.dark-background}"
+    textColor: "{colors.primary-foreground}"
+    borderColor: "{colors.border}"
+    rounded: "{rounded.2xl}"
   form-control:
-    backgroundColor: '{colors.background}'
-    textColor: '{colors.foreground}'
-    borderColor: '{colors.border}'
-    typography: '{typography.body-sm}'
-    rounded: '{rounded.md}'
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    borderColor: "{colors.border}"
+    typography: "{typography.body-sm}"
+    rounded: "{rounded.md}"
     height: 40px
 ```
 

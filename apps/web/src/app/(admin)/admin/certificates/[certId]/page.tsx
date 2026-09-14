@@ -35,7 +35,10 @@ function AdminCertificateDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <AdminBreadcrumb
-          items={[{ label: "Certificates", href: "/admin/certificates" }, { label: "Loading..." }]}
+          items={[
+            { label: "Certificates", href: "/admin/certificates" },
+            { label: "Loading..." },
+          ]}
         />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
@@ -46,7 +49,10 @@ function AdminCertificateDetailContent() {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
         <AdminBreadcrumb
-          items={[{ label: "Certificates", href: "/admin/certificates" }, { label: "Error" }]}
+          items={[
+            { label: "Certificates", href: "/admin/certificates" },
+            { label: "Error" },
+          ]}
         />
         <Alert variant="error">{error || "Certificate not found"}</Alert>
       </main>
@@ -54,7 +60,9 @@ function AdminCertificateDetailContent() {
   }
 
   const recipientName =
-    cert.user?.talentProfile?.fullName || cert.user?.email || "Unknown Recipient";
+    cert.user?.talentProfile?.fullName ||
+    cert.user?.email ||
+    "Unknown Recipient";
   const courseTitle = cert.course?.title || "Course Certificate";
 
   return (
@@ -68,9 +76,15 @@ function AdminCertificateDetailContent() {
 
       {/* Stat Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <MetricCard value={cert.certificateNumber} label="Certificate Code" variant="primary" />
         <MetricCard
-          value={new Date(cert.createdAt || cert.issueDate).toLocaleDateString()}
+          value={cert.certificateNumber}
+          label="Certificate Code"
+          variant="primary"
+        />
+        <MetricCard
+          value={new Date(
+            cert.createdAt || cert.issueDate,
+          ).toLocaleDateString()}
           label="Issue Date"
           variant="surface"
         />
@@ -94,7 +108,10 @@ function AdminCertificateDetailContent() {
                   <Badge variant="success">VERIFIED CERTIFICATE</Badge>
                 </div>
                 <p className="text-sm text-[#6E6678] flex items-center gap-2">
-                  Awarded to <span className="font-medium text-[#17131F]">{recipientName}</span>
+                  Awarded to{" "}
+                  <span className="font-medium text-[#17131F]">
+                    {recipientName}
+                  </span>
                 </p>
               </div>
             </div>
@@ -102,33 +119,45 @@ function AdminCertificateDetailContent() {
             {cert.pdfUrl && (
               <div className="flex items-center gap-2 shrink-0">
                 <a href={cert.pdfUrl} target="_blank" rel="noreferrer">
-                  <Button size="sm" variant="outline" leftIcon={<Download className="h-3.5 w-3.5" />}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    leftIcon={<Download className="h-3.5 w-3.5" />}
+                  >
                     PDF
                   </Button>
                 </a>
               </div>
             )}
           </div>
-
-
         </div>
 
         {/* Content Body */}
         <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
           {/* Certificate Details */}
           <div className="space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Certificate Overview</h2>
+            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+              Certificate Overview
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Certificate ID</p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">{cert.id}</p>
+                <p className="font-mono text-xs text-[#6E6678] uppercase">
+                  Certificate ID
+                </p>
+                <p className="font-mono text-xs text-[#17131F] break-all mt-1">
+                  {cert.id}
+                </p>
               </div>
               <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Course Title</p>
+                <p className="font-mono text-xs text-[#6E6678] uppercase">
+                  Course Title
+                </p>
                 <p className="font-medium text-[#17131F] mt-1">{courseTitle}</p>
               </div>
               <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Issued Timestamp</p>
+                <p className="font-mono text-xs text-[#6E6678] uppercase">
+                  Issued Timestamp
+                </p>
                 <p className="font-medium text-[#17131F] mt-1">
                   {new Date(cert.createdAt || cert.issueDate).toLocaleString()}
                 </p>
@@ -139,7 +168,9 @@ function AdminCertificateDetailContent() {
           {/* Recipient Account */}
           <div className="pt-8 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Recipient</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                Recipient
+              </h2>
               {cert.user?.id && (
                 <Link href={`/admin/users/${cert.user.id}`}>
                   <Button size="sm" variant="ghost" className="text-xs">
@@ -150,12 +181,20 @@ function AdminCertificateDetailContent() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
               <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Full Name</p>
-                <p className="font-medium text-[#17131F] mt-1">{recipientName}</p>
+                <p className="font-mono text-xs text-[#6E6678] uppercase">
+                  Full Name
+                </p>
+                <p className="font-medium text-[#17131F] mt-1">
+                  {recipientName}
+                </p>
               </div>
               <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">Account Email</p>
-                <p className="font-medium text-[#17131F] mt-1">{cert.user?.email || "—"}</p>
+                <p className="font-mono text-xs text-[#6E6678] uppercase">
+                  Account Email
+                </p>
+                <p className="font-medium text-[#17131F] mt-1">
+                  {cert.user?.email || "—"}
+                </p>
               </div>
             </div>
           </div>

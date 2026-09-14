@@ -60,8 +60,8 @@ export default function RegisterPage() {
               Compete for better work.
             </h1>
             <p className="font-sans text-base sm:text-lg text-[#6E6678] leading-relaxed">
-              Create a free BLIH OPS account to learn, build a verified
-              profile, discover opportunities and apply with evidence.
+              Create a free BLIH OPS account to learn, build a verified profile,
+              discover opportunities and apply with evidence.
             </p>
           </div>
 

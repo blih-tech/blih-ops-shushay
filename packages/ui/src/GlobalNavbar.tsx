@@ -4,7 +4,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "./Button";
-import { getNavLinks, toRelativeUrl } from "./GlobalNavbar/GlobalNavbar.helpers";
+import {
+  getNavLinks,
+  toRelativeUrl,
+} from "./GlobalNavbar/GlobalNavbar.helpers";
 import type { NavLinkItem } from "./GlobalNavbar/GlobalNavbar.helpers";
 import { UserMenu } from "./GlobalNavbar/UserMenu";
 import { MobileNav } from "./GlobalNavbar/MobileNav";
@@ -15,19 +18,19 @@ export type { NavLinkItem };
 
 export interface GlobalNavbarProps {
   currentApp?:
-  | "auth"
-  | "skills"
-  | "talent"
-  | "talents"
-  | "explore"
-  | "courses"
-  | "opportunities"
-  | "jobs"
-  | "business"
-  | "dashboard"
-  | "subscription"
-  | "admin"
-  | "company";
+    | "auth"
+    | "skills"
+    | "talent"
+    | "talents"
+    | "explore"
+    | "courses"
+    | "opportunities"
+    | "jobs"
+    | "business"
+    | "dashboard"
+    | "subscription"
+    | "admin"
+    | "company";
   pathname?: string;
   user?: { email?: string; role?: string; photoUrl?: string } | null;
   loading?: boolean;
@@ -138,10 +141,11 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               <Link
                 key={link.label}
                 href={toRelativeUrl(link.href)}
-                className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${link.active
-                  ? "text-[#1E5BFF] font-bold bg-white shadow-sm ring-1 ring-[#D9CEDF]/50"
-                  : "text-[#6E6678] hover:text-[#17131F] hover:bg-white/60 font-medium"
-                  }`}
+                className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${
+                  link.active
+                    ? "text-[#1E5BFF] font-bold bg-white shadow-sm ring-1 ring-[#D9CEDF]/50"
+                    : "text-[#6E6678] hover:text-[#17131F] hover:bg-white/60 font-medium"
+                }`}
               >
                 {link.label}
               </Link>
@@ -182,12 +186,18 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Link href={toRelativeUrl(authUrl ? `${authUrl}/login` : "/login")}>
+              <Link
+                href={toRelativeUrl(authUrl ? `${authUrl}/login` : "/login")}
+              >
                 <Button variant="ghost" size="sm">
                   Sign in
                 </Button>
               </Link>
-              <Link href={toRelativeUrl(authUrl ? `${authUrl}/register` : "/register")}>
+              <Link
+                href={toRelativeUrl(
+                  authUrl ? `${authUrl}/register` : "/register",
+                )}
+              >
                 <Button variant="primary" size="sm">
                   Create account
                 </Button>
@@ -211,16 +221,18 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <span className="sr-only">Toggle navigation menu</span>
             <div className="relative w-5 h-5 flex items-center justify-center">
               <Menu
-                className={`h-5 w-5 absolute transition-all duration-300 transform ${mobileMenuOpen
-                  ? "rotate-90 opacity-0 scale-75"
-                  : "rotate-0 opacity-100 scale-100"
-                  }`}
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen
+                    ? "rotate-90 opacity-0 scale-75"
+                    : "rotate-0 opacity-100 scale-100"
+                }`}
               />
               <X
-                className={`h-5 w-5 absolute transition-all duration-300 transform ${mobileMenuOpen
-                  ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]"
-                  : "-rotate-90 opacity-0 scale-75"
-                  }`}
+                className={`h-5 w-5 absolute transition-all duration-300 transform ${
+                  mobileMenuOpen
+                    ? "rotate-0 opacity-100 scale-100 text-[#1E5BFF]"
+                    : "-rotate-90 opacity-0 scale-75"
+                }`}
               />
             </div>
           </button>

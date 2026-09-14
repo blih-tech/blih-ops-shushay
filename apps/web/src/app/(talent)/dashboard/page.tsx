@@ -16,7 +16,14 @@ import {
 } from "@blih/ui";
 import { DashboardCoursesSkeleton } from "@/components/dashboard/DashboardCoursesSkeleton";
 import { VerifiedSkillsCard } from "@/components/dashboard/VerifiedSkillsCard";
-import { BookOpen, Award, Sparkles, ArrowRight, Briefcase, User } from "lucide-react";
+import {
+  BookOpen,
+  Award,
+  Sparkles,
+  ArrowRight,
+  Briefcase,
+  User,
+} from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import { getCourseProgress } from "@blih/api-client";
 import type { PublicCourseListItem } from "@/types/course";

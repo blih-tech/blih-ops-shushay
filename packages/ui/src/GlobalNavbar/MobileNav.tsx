@@ -187,7 +187,10 @@ export function MobileNav({
                   Sign in
                 </Button>
               </Link>
-              <Link href={toRelativeUrl(`${authUrl}/register`)} className="w-full">
+              <Link
+                href={toRelativeUrl(`${authUrl}/register`)}
+                className="w-full"
+              >
                 <Button variant="primary" fullWidth size="sm">
                   Create account
                 </Button>

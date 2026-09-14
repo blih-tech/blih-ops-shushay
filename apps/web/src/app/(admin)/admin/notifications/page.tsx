@@ -52,8 +52,12 @@ function AdminNotificationsContent() {
     }
   }, [page, debouncedSearch, typeFilter, readFilter]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch, typeFilter, readFilter]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, typeFilter, readFilter]);
 
   const recipientName = (n: AdminNotification) =>
     n.user.talentProfile?.fullName ||
@@ -86,7 +90,11 @@ function AdminNotificationsContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">
@@ -131,15 +139,23 @@ function AdminNotificationsContent() {
         rowKey={(n) => n.id}
         emptyIcon={<Bell className="h-6 w-6" />}
         emptyTitle="No notifications found"
-        emptySubtext={searchQuery || typeFilter ? "Try adjusting your filters." : "No notifications recorded yet."}
+        emptySubtext={
+          searchQuery || typeFilter
+            ? "Try adjusting your filters."
+            : "No notifications recorded yet."
+        }
         columns={[
           {
             key: "recipient",
             header: "Recipient",
             render: (n) => (
               <div className="min-w-0">
-                <p className="font-medium text-sm text-[#17131F] truncate">{recipientName(n)}</p>
-                <p className="text-xs text-[#6E6678] truncate">{n.user.email}</p>
+                <p className="font-medium text-sm text-[#17131F] truncate">
+                  {recipientName(n)}
+                </p>
+                <p className="text-xs text-[#6E6678] truncate">
+                  {n.user.email}
+                </p>
               </div>
             ),
           },
@@ -147,7 +163,9 @@ function AdminNotificationsContent() {
             key: "role",
             header: "Role",
             width: "90px",
-            render: (n) => <AdminStatusBadge type="role" value={n.user.role} size="sm" />,
+            render: (n) => (
+              <AdminStatusBadge type="role" value={n.user.role} size="sm" />
+            ),
           },
           {
             key: "type",
@@ -162,7 +180,9 @@ function AdminNotificationsContent() {
             key: "title",
             header: "Title",
             render: (n) => (
-              <span className="text-sm text-[#17131F] truncate max-w-[200px] block">{n.title}</span>
+              <span className="text-sm text-[#17131F] truncate max-w-[200px] block">
+                {n.title}
+              </span>
             ),
           },
           {
@@ -170,7 +190,9 @@ function AdminNotificationsContent() {
             header: "Read",
             width: "70px",
             render: (n) => (
-              <div className={`w-2 h-2 rounded-full mx-auto ${n.read ? "bg-[#D9CEDF]" : "bg-[#1E5BFF]"}`} />
+              <div
+                className={`w-2 h-2 rounded-full mx-auto ${n.read ? "bg-[#D9CEDF]" : "bg-[#1E5BFF]"}`}
+              />
             ),
           },
           {
@@ -189,7 +211,11 @@ function AdminNotificationsContent() {
             width: "80px",
             render: (n) => (
               <Link href={`/admin/notifications/${n.id}`}>
-                <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                >
                   View
                 </Button>
               </Link>
@@ -200,7 +226,11 @@ function AdminNotificationsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </main>

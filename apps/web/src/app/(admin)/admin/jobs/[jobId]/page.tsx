@@ -2,14 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import {
-  Building2,
-  Calendar,
-  MapPin,
-  Users,
-  Globe,
-  Clock,
-} from "lucide-react";
+import { Building2, Calendar, MapPin, Users, Globe, Clock } from "lucide-react";
 import Link from "next/link";
 import { Alert, Badge, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
@@ -42,7 +35,12 @@ function AdminJobDetailContent() {
   if (loading) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb items={[{ label: "Jobs", href: "/admin/jobs" }, { label: "Loading..." }]} />
+        <AdminBreadcrumb
+          items={[
+            { label: "Jobs", href: "/admin/jobs" },
+            { label: "Loading..." },
+          ]}
+        />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -51,14 +49,21 @@ function AdminJobDetailContent() {
   if (error || !job) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <AdminBreadcrumb items={[{ label: "Jobs", href: "/admin/jobs" }, { label: "Error" }]} />
-        <Alert variant="error" className="mt-6">{error || "Job not found"}</Alert>
+        <AdminBreadcrumb
+          items={[{ label: "Jobs", href: "/admin/jobs" }, { label: "Error" }]}
+        />
+        <Alert variant="error" className="mt-6">
+          {error || "Job not found"}
+        </Alert>
       </main>
     );
   }
 
   const formatType = (t: string) =>
-    t.toLowerCase().replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    t
+      .toLowerCase()
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
 
   const salaryDisplay =
     job.salaryDisplay ||
@@ -68,14 +73,28 @@ function AdminJobDetailContent() {
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
-      <AdminBreadcrumb items={[{ label: "Jobs", href: "/admin/jobs" }, { label: job.title }]} />
+      <AdminBreadcrumb
+        items={[{ label: "Jobs", href: "/admin/jobs" }, { label: job.title }]}
+      />
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MetricCard value={job.applications.length} label="Applications" variant="primary" />
-        <MetricCard value={formatType(job.experienceLevel)} label="Experience" variant="surface" />
         <MetricCard
-          value={job.applicationDeadline ? new Date(job.applicationDeadline).toLocaleDateString() : "None"}
+          value={job.applications.length}
+          label="Applications"
+          variant="primary"
+        />
+        <MetricCard
+          value={formatType(job.experienceLevel)}
+          label="Experience"
+          variant="surface"
+        />
+        <MetricCard
+          value={
+            job.applicationDeadline
+              ? new Date(job.applicationDeadline).toLocaleDateString()
+              : "None"
+          }
           label="Deadline"
           variant="surface"
         />
@@ -104,7 +123,10 @@ function AdminJobDetailContent() {
                   {job.companyProfile.city && (
                     <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
                       <MapPin className="h-3 w-3 shrink-0" />
-                      {job.companyProfile.city}{job.companyProfile.country ? `, ${job.companyProfile.country}` : ""}
+                      {job.companyProfile.city}
+                      {job.companyProfile.country
+                        ? `, ${job.companyProfile.country}`
+                        : ""}
                     </span>
                   )}
                   <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
@@ -169,25 +191,44 @@ function AdminJobDetailContent() {
                 ) : (
                   <div className="divide-y divide-[#EBE5F0]">
                     {job.applications.map((app) => (
-                      <div key={app.id} className="py-3 flex items-center justify-between gap-4">
+                      <div
+                        key={app.id}
+                        className="py-3 flex items-center justify-between gap-4"
+                      >
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
                             {app.talentProfile.photoUrl ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img src={app.talentProfile.photoUrl} alt="" className="w-full h-full object-cover" />
+                              <img
+                                src={app.talentProfile.photoUrl}
+                                alt=""
+                                className="w-full h-full object-cover"
+                              />
                             ) : (
-                              (app.talentProfile.fullName || app.talentProfile.user.email).charAt(0).toUpperCase()
+                              (
+                                app.talentProfile.fullName ||
+                                app.talentProfile.user.email
+                              )
+                                .charAt(0)
+                                .toUpperCase()
                             )}
                           </div>
                           <div className="min-w-0">
                             <p className="font-medium text-sm text-[#17131F] truncate">
-                              {app.talentProfile.fullName || app.talentProfile.user.email}
+                              {app.talentProfile.fullName ||
+                                app.talentProfile.user.email}
                             </p>
-                            <p className="text-xs text-[#6E6678] truncate">{app.talentProfile.user.email}</p>
+                            <p className="text-xs text-[#6E6678] truncate">
+                              {app.talentProfile.user.email}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
-                          <AdminStatusBadge type="application" value={app.status} size="sm" />
+                          <AdminStatusBadge
+                            type="application"
+                            value={app.status}
+                            size="sm"
+                          />
                           <span className="text-xs font-mono text-[#6E6678]">
                             {new Date(app.createdAt).toLocaleDateString()}
                           </span>
@@ -214,13 +255,17 @@ function AdminJobDetailContent() {
                   {job.companyProfile.country && (
                     <p className="flex items-center gap-1.5">
                       <Globe className="h-3.5 w-3.5" />
-                      {job.companyProfile.city ? `${job.companyProfile.city}, ` : ""}
+                      {job.companyProfile.city
+                        ? `${job.companyProfile.city}, `
+                        : ""}
                       {job.companyProfile.country}
                     </p>
                   )}
                   {job.companyProfile.companySubscription && (
                     <div className="pt-2 border-t border-[#EBE5F0]">
-                      <p className="text-xs font-mono text-[#6E6678] uppercase mb-1.5">Subscription</p>
+                      <p className="text-xs font-mono text-[#6E6678] uppercase mb-1.5">
+                        Subscription
+                      </p>
                       <div className="flex items-center gap-2">
                         <AdminStatusBadge
                           type="subscription"
@@ -232,7 +277,10 @@ function AdminJobDetailContent() {
                         </span>
                       </div>
                       <p className="text-xs text-[#6E6678] mt-1">
-                        Expires: {new Date(job.companyProfile.companySubscription.expiresAt).toLocaleDateString()}
+                        Expires:{" "}
+                        {new Date(
+                          job.companyProfile.companySubscription.expiresAt,
+                        ).toLocaleDateString()}
                       </p>
                     </div>
                   )}

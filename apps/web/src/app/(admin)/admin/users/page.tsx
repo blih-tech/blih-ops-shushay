@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  Users,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Eye,
-} from "lucide-react";
+import { Users, Trash2, CheckCircle, XCircle, Eye } from "lucide-react";
 import {
   Button,
   Alert,
@@ -22,10 +16,7 @@ import { AuthGuard as AuthGuardComponent } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import {
-  fetchAdminUsers,
-  deleteAdminUser,
-} from "@/lib/adminApi";
+import { fetchAdminUsers, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminUser } from "@/types/admin";
 
 const PAGE_SIZE = 20;
@@ -119,9 +110,15 @@ function AdminUsersContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
       {actionError && (
-        <Alert variant="error" onClose={() => setActionError(null)}>{actionError}</Alert>
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
       )}
 
       {/* Filters */}
@@ -154,7 +151,11 @@ function AdminUsersContent() {
         rowKey={(u) => u.id}
         emptyIcon={<Users className="h-6 w-6" />}
         emptyTitle="No users found"
-        emptySubtext={searchQuery || roleFilter ? "Try adjusting your filters." : "No users registered yet."}
+        emptySubtext={
+          searchQuery || roleFilter
+            ? "Try adjusting your filters."
+            : "No users registered yet."
+        }
         columns={[
           {
             key: "user",
@@ -165,7 +166,10 @@ function AdminUsersContent() {
                   {u.companyProfile?.logoUrl || u.talentProfile?.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={(u.companyProfile?.logoUrl || u.talentProfile?.photoUrl)!}
+                      src={
+                        (u.companyProfile?.logoUrl ||
+                          u.talentProfile?.photoUrl)!
+                      }
                       alt=""
                       className="w-full h-full object-cover"
                     />
@@ -174,7 +178,9 @@ function AdminUsersContent() {
                   )}
                 </div>
                 <div className="min-w-0">
-                  <p className="font-medium text-[#17131F] truncate">{displayName(u)}</p>
+                  <p className="font-medium text-[#17131F] truncate">
+                    {displayName(u)}
+                  </p>
                   <p className="text-xs text-[#6E6678] truncate">{u.email}</p>
                 </div>
               </div>
@@ -204,9 +210,13 @@ function AdminUsersContent() {
             render: (u) =>
               u.role === "TALENT" ? (
                 u.skillsEntitlement ? (
-                  <Badge variant="verified" size="sm">Granted</Badge>
+                  <Badge variant="verified" size="sm">
+                    Granted
+                  </Badge>
                 ) : (
-                  <Badge variant="secondary" size="sm">None</Badge>
+                  <Badge variant="secondary" size="sm">
+                    None
+                  </Badge>
                 )
               ) : (
                 <span className="text-[#6E6678] text-xs">—</span>

@@ -41,8 +41,8 @@ export default function LoginPage() {
                 Sign in
               </h2>
               <p className="font-sans text-sm text-[#6E6678]">
-                Access your BLIH OPS learning, profile evidence and
-                opportunity workspace.
+                Access your BLIH OPS learning, profile evidence and opportunity
+                workspace.
               </p>
             </div>
 

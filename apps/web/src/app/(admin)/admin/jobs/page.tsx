@@ -61,8 +61,12 @@ function AdminJobsContent() {
     }
   }, [page, debouncedSearch, statusFilter, employmentTypeFilter]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter, employmentTypeFilter]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, statusFilter, employmentTypeFilter]);
 
   async function handleCloseJob() {
     if (!closeTarget) return;
@@ -97,7 +101,10 @@ function AdminJobsContent() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   const formatEmploymentType = (t: string) =>
-    t.toLowerCase().replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    t
+      .toLowerCase()
+      .replace(/_/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -117,8 +124,16 @@ function AdminJobsContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
-      {actionError && <Alert variant="error" onClose={() => setActionError(null)}>{actionError}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">
@@ -161,14 +176,20 @@ function AdminJobsContent() {
         rowKey={(j) => j.id}
         emptyIcon={<Briefcase className="h-6 w-6" />}
         emptyTitle="No jobs found"
-        emptySubtext={searchQuery || statusFilter ? "Try adjusting your filters." : "No jobs posted yet."}
+        emptySubtext={
+          searchQuery || statusFilter
+            ? "Try adjusting your filters."
+            : "No jobs posted yet."
+        }
         columns={[
           {
             key: "title",
             header: "Job",
             render: (j) => (
               <div className="min-w-0">
-                <p className="font-medium text-[#17131F] truncate max-w-xs">{j.title}</p>
+                <p className="font-medium text-[#17131F] truncate max-w-xs">
+                  {j.title}
+                </p>
                 <p className="text-xs text-[#6E6678] truncate">
                   {j.companyProfile.companyName || "Unknown Company"}
                 </p>
@@ -186,7 +207,9 @@ function AdminJobsContent() {
             header: "Type",
             width: "130px",
             render: (j) => (
-              <span className="text-xs text-[#6E6678]">{formatEmploymentType(j.employmentType)}</span>
+              <span className="text-xs text-[#6E6678]">
+                {formatEmploymentType(j.employmentType)}
+              </span>
             ),
           },
           {
@@ -238,7 +261,11 @@ function AdminJobsContent() {
             render: (j) => (
               <div className="flex items-center gap-1.5">
                 <Link href={`/admin/jobs/${j.id}`}>
-                  <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<Eye className="h-3.5 w-3.5" />}
+                  >
                     View
                   </Button>
                 </Link>
@@ -272,7 +299,11 @@ function AdminJobsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
 

@@ -34,24 +34,41 @@ interface StatCardProps {
   delta?: number;
 }
 
-function StatCard({ label, value, subtext, loading, icon, bgColor, textColor, delta }: StatCardProps) {
+function StatCard({
+  label,
+  value,
+  subtext,
+  loading,
+  icon,
+  bgColor,
+  textColor,
+  delta,
+}: StatCardProps) {
   return (
     <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-sm space-y-2">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-xs text-[#6E6678] uppercase">{label}</span>
-        <div className={`w-8 h-8 rounded-xl ${bgColor} ${textColor} flex items-center justify-center`}>
+        <span className="font-mono text-xs text-[#6E6678] uppercase">
+          {label}
+        </span>
+        <div
+          className={`w-8 h-8 rounded-xl ${bgColor} ${textColor} flex items-center justify-center`}
+        >
           {icon}
         </div>
       </div>
       {loading ? (
         <Skeleton variant="rectangular" className="h-8 w-16 rounded" />
       ) : (
-        <p className="font-display text-3xl font-bold text-[#17131F]">{value ?? 0}</p>
+        <p className="font-display text-3xl font-bold text-[#17131F]">
+          {value ?? 0}
+        </p>
       )}
       <div className="flex items-center justify-between">
         <p className="text-xs text-[#6E6678]">{subtext}</p>
         {delta !== undefined && delta > 0 && (
-          <span className="text-xs font-mono text-[#2E8F79] font-medium">+{delta} this week</span>
+          <span className="text-xs font-mono text-[#2E8F79] font-medium">
+            +{delta} this week
+          </span>
         )}
       </div>
     </div>
@@ -69,12 +86,23 @@ interface NavTileProps {
   footerColor: string;
 }
 
-function NavTile({ href, icon, iconBg, iconColor, title, description, footerText, footerColor }: NavTileProps) {
+function NavTile({
+  href,
+  icon,
+  iconBg,
+  iconColor,
+  title,
+  description,
+  footerText,
+  footerColor,
+}: NavTileProps) {
   return (
     <Link href={href} className="block group">
       <Card className="rounded-3xl border border-[#D9CEDF] p-6 hover:border-[#1E5BFF]/60 hover:shadow-lg transition-all h-full bg-white flex flex-col justify-between">
         <div className="space-y-3">
-          <div className={`w-10 h-10 rounded-2xl ${iconBg} ${iconColor} flex items-center justify-center shadow-xs`}>
+          <div
+            className={`w-10 h-10 rounded-2xl ${iconBg} ${iconColor} flex items-center justify-center shadow-xs`}
+          >
             {icon}
           </div>
           <div>
@@ -82,10 +110,14 @@ function NavTile({ href, icon, iconBg, iconColor, title, description, footerText
               {title}
               <ArrowUpRight className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
-            <p className="text-xs text-[#6E6678] font-sans mt-1 leading-relaxed">{description}</p>
+            <p className="text-xs text-[#6E6678] font-sans mt-1 leading-relaxed">
+              {description}
+            </p>
           </div>
         </div>
-        <div className={`pt-4 border-t border-[#D9CEDF]/70 flex items-center justify-between text-xs font-mono ${footerColor} font-semibold mt-4`}>
+        <div
+          className={`pt-4 border-t border-[#D9CEDF]/70 flex items-center justify-between text-xs font-mono ${footerColor} font-semibold mt-4`}
+        >
           <span>{footerText}</span>
           <ChevronRight className="h-3.5 w-3.5 text-[#6E6678] group-hover:translate-x-1 transition-transform" />
         </div>
@@ -130,7 +162,11 @@ function AdminContent() {
         </div>
         <div className="flex items-center gap-3">
           <Link href="/admin/courses/new">
-            <Button size="sm" variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
+            <Button
+              size="sm"
+              variant="primary"
+              leftIcon={<Plus className="h-4 w-4" />}
+            >
               New Course
             </Button>
           </Link>
@@ -141,7 +177,9 @@ function AdminContent() {
 
       {/* Platform Statistics — Row 1 */}
       <div className="space-y-3">
-        <h2 className="font-mono text-xs text-[#6E6678] uppercase tracking-wide">Platform Overview</h2>
+        <h2 className="font-mono text-xs text-[#6E6678] uppercase tracking-wide">
+          Platform Overview
+        </h2>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             label="Total Users"
@@ -215,7 +253,9 @@ function AdminContent() {
           />
           <StatCard
             label="Revenue"
-            value={stats ? `${stats.totalRevenue.toLocaleString()} ETB` : undefined}
+            value={
+              stats ? `${stats.totalRevenue.toLocaleString()} ETB` : undefined
+            }
             subtext={`from ${stats?.totalPayments ?? 0} transactions`}
             loading={loading}
             icon={<CreditCard className="h-4 w-4" />}
@@ -227,7 +267,9 @@ function AdminContent() {
 
       {/* Management Tiles */}
       <div className="space-y-4">
-        <h2 className="font-display text-xl font-bold text-[#17131F]">Management Workspaces</h2>
+        <h2 className="font-display text-xl font-bold text-[#17131F]">
+          Management Workspaces
+        </h2>
 
         {/* Row 1 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -349,23 +391,41 @@ function AdminContent() {
           {stats.recentUsers.length > 0 && (
             <Card className="rounded-3xl border border-[#D9CEDF] bg-white p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-display font-bold text-lg text-[#17131F]">Recent Registrations</h3>
-                <Link href="/admin/users" className="text-xs font-mono text-[#1E5BFF] hover:underline">
+                <h3 className="font-display font-bold text-lg text-[#17131F]">
+                  Recent Registrations
+                </h3>
+                <Link
+                  href="/admin/users"
+                  className="text-xs font-mono text-[#1E5BFF] hover:underline"
+                >
                   View All →
                 </Link>
               </div>
               <div className="divide-y divide-[#D9CEDF]/50">
                 {stats.recentUsers.map((u) => (
-                  <div key={u.id} className="py-3 flex items-center justify-between gap-3">
+                  <div
+                    key={u.id}
+                    className="py-3 flex items-center justify-between gap-3"
+                  >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-xs font-bold shrink-0">
-                        {(u.talentProfile?.fullName || u.companyProfile?.companyName || u.email).charAt(0).toUpperCase()}
+                        {(
+                          u.talentProfile?.fullName ||
+                          u.companyProfile?.companyName ||
+                          u.email
+                        )
+                          .charAt(0)
+                          .toUpperCase()}
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-medium text-[#17131F] truncate">
-                          {u.talentProfile?.fullName || u.companyProfile?.companyName || u.email.split("@")[0]}
+                          {u.talentProfile?.fullName ||
+                            u.companyProfile?.companyName ||
+                            u.email.split("@")[0]}
                         </p>
-                        <p className="text-xs text-[#6E6678] truncate">{u.email}</p>
+                        <p className="text-xs text-[#6E6678] truncate">
+                          {u.email}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -384,16 +444,26 @@ function AdminContent() {
           {stats.recentJobs.length > 0 && (
             <Card className="rounded-3xl border border-[#D9CEDF] bg-white p-6 space-y-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-display font-bold text-lg text-[#17131F]">Recent Job Postings</h3>
-                <Link href="/admin/jobs" className="text-xs font-mono text-[#1E5BFF] hover:underline">
+                <h3 className="font-display font-bold text-lg text-[#17131F]">
+                  Recent Job Postings
+                </h3>
+                <Link
+                  href="/admin/jobs"
+                  className="text-xs font-mono text-[#1E5BFF] hover:underline"
+                >
                   View All →
                 </Link>
               </div>
               <div className="divide-y divide-[#D9CEDF]/50">
                 {stats.recentJobs.map((j) => (
-                  <div key={j.id} className="py-3 flex items-center justify-between gap-3">
+                  <div
+                    key={j.id}
+                    className="py-3 flex items-center justify-between gap-3"
+                  >
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-[#17131F] truncate">{j.title}</p>
+                      <p className="text-sm font-medium text-[#17131F] truncate">
+                        {j.title}
+                      </p>
                       <p className="text-xs text-[#6E6678] truncate">
                         {j.companyProfile.companyName || "Unknown Company"}
                       </p>

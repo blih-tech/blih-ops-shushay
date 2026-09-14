@@ -75,11 +75,11 @@ export function HeroProfileMockup() {
     const y = e.clientY - rect.top - rect.height / 2;
 
     gsap.to(e.currentTarget, {
-      x: x * 0.45,
-      y: y * 0.45,
-      scale: 1.12,
+      x: x * 0.1,
+      y: y * 0.1,
+      scale: 1.03,
       boxShadow: "0 15px 30px rgba(30,91,255,0.18)",
-      duration: 0.35,
+      duration: 0.2,
       ease: "power2.out",
     });
   };
@@ -93,8 +93,8 @@ export function HeroProfileMockup() {
       boxShadow: isPrimary
         ? "0 12px 24px rgba(30,91,255,0.3)"
         : "0 4px 12px rgba(23,19,31,0.05)",
-      duration: 0.6,
-      ease: "elastic.out(1.2, 0.4)",
+      duration: 0.25,
+      ease: "power2.out",
     });
   };
 

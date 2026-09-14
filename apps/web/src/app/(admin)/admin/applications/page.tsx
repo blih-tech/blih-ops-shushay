@@ -48,8 +48,12 @@ function AdminApplicationsContent() {
     }
   }, [page, debouncedSearch, statusFilter]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, statusFilter]);
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
@@ -71,7 +75,11 @@ function AdminApplicationsContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">
@@ -104,7 +112,11 @@ function AdminApplicationsContent() {
         rowKey={(a) => a.id}
         emptyIcon={<FileText className="h-6 w-6" />}
         emptyTitle="No applications found"
-        emptySubtext={searchQuery || statusFilter ? "Try adjusting your filters." : "No applications submitted yet."}
+        emptySubtext={
+          searchQuery || statusFilter
+            ? "Try adjusting your filters."
+            : "No applications submitted yet."
+        }
         columns={[
           {
             key: "applicant",
@@ -114,16 +126,24 @@ function AdminApplicationsContent() {
                 <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
                   {a.talentProfile.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={a.talentProfile.photoUrl} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={a.talentProfile.photoUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    (a.talentProfile.fullName || a.talentProfile.user.email).charAt(0).toUpperCase()
+                    (a.talentProfile.fullName || a.talentProfile.user.email)
+                      .charAt(0)
+                      .toUpperCase()
                   )}
                 </div>
                 <div className="min-w-0">
                   <p className="font-medium text-[#17131F] truncate">
                     {a.talentProfile.fullName || a.talentProfile.user.email}
                   </p>
-                  <p className="text-xs text-[#6E6678] truncate">{a.talentProfile.user.email}</p>
+                  <p className="text-xs text-[#6E6678] truncate">
+                    {a.talentProfile.user.email}
+                  </p>
                 </div>
               </div>
             ),
@@ -133,7 +153,9 @@ function AdminApplicationsContent() {
             header: "Job",
             render: (a) => (
               <div className="min-w-0">
-                <p className="font-medium text-sm text-[#17131F] truncate max-w-[200px]">{a.job.title}</p>
+                <p className="font-medium text-sm text-[#17131F] truncate max-w-[200px]">
+                  {a.job.title}
+                </p>
                 <p className="text-xs text-[#6E6678] truncate">
                   {a.job.companyProfile.companyName || "Unknown Company"}
                 </p>
@@ -144,13 +166,17 @@ function AdminApplicationsContent() {
             key: "status",
             header: "Status",
             width: "150px",
-            render: (a) => <AdminStatusBadge type="application" value={a.status} />,
+            render: (a) => (
+              <AdminStatusBadge type="application" value={a.status} />
+            ),
           },
           {
             key: "jobStatus",
             header: "Job Status",
             width: "90px",
-            render: (a) => <AdminStatusBadge type="job" value={a.job.status} size="sm" />,
+            render: (a) => (
+              <AdminStatusBadge type="job" value={a.job.status} size="sm" />
+            ),
           },
           {
             key: "applied",
@@ -168,7 +194,11 @@ function AdminApplicationsContent() {
             width: "80px",
             render: (a) => (
               <Link href={`/admin/applications/${a.id}`}>
-                <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                >
                   View
                 </Button>
               </Link>
@@ -179,7 +209,11 @@ function AdminApplicationsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </main>

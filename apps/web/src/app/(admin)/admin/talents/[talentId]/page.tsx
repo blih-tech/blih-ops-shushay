@@ -79,7 +79,12 @@ function AdminTalentDetailContent() {
   if (loading) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb items={[{ label: "Talents", href: "/admin/talents" }, { label: "Loading..." }]} />
+        <AdminBreadcrumb
+          items={[
+            { label: "Talents", href: "/admin/talents" },
+            { label: "Loading..." },
+          ]}
+        />
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -88,7 +93,12 @@ function AdminTalentDetailContent() {
   if (error || !talent) {
     return (
       <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb items={[{ label: "Talents", href: "/admin/talents" }, { label: "Error" }]} />
+        <AdminBreadcrumb
+          items={[
+            { label: "Talents", href: "/admin/talents" },
+            { label: "Error" },
+          ]}
+        />
         <Alert variant="error">{error || "Talent profile not found"}</Alert>
       </main>
     );
@@ -98,23 +108,45 @@ function AdminTalentDetailContent() {
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-      <AdminBreadcrumb items={[{ label: "Talents", href: "/admin/talents" }, { label: talent.fullName }]} />
+      <AdminBreadcrumb
+        items={[
+          { label: "Talents", href: "/admin/talents" },
+          { label: talent.fullName },
+        ]}
+      />
 
       {actionError && (
-        <Alert variant="error" onClose={() => setActionError(null)}>{actionError}</Alert>
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
       )}
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MetricCard value={talent._count?.jobApplications ?? 0} label="Applications" variant="primary" />
-        <MetricCard value={talent.experience?.length ?? 0} label="Work History" variant="surface" />
-        <MetricCard value={talent.englishLevel || "—"} label="English Level" variant="surface" />
-        <MetricCard value={talent.skills?.length ?? 0} label="Skills Listed" variant="surface" />
+        <MetricCard
+          value={talent._count?.jobApplications ?? 0}
+          label="Applications"
+          variant="primary"
+        />
+        <MetricCard
+          value={talent.experience?.length ?? 0}
+          label="Work History"
+          variant="surface"
+        />
+        <MetricCard
+          value={talent.englishLevel || "—"}
+          label="English Level"
+          variant="surface"
+        />
+        <MetricCard
+          value={talent.skills?.length ?? 0}
+          label="Skills Listed"
+          variant="surface"
+        />
       </div>
 
       {/* Main Card */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-
         {/* Header */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
@@ -122,7 +154,11 @@ function AdminTalentDetailContent() {
               <div className="w-16 h-16 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden">
                 {talent.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={talent.photoUrl} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={talent.photoUrl}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   talent.fullName?.charAt(0).toUpperCase() || "T"
                 )}
@@ -140,7 +176,9 @@ function AdminTalentDetailContent() {
                     )}
                   </div>
                   {talent.title && (
-                    <p className="text-sm font-medium text-[#6E6678]">{talent.title}</p>
+                    <p className="text-sm font-medium text-[#6E6678]">
+                      {talent.title}
+                    </p>
                   )}
                 </div>
                 {/* Inline data chips */}
@@ -171,19 +209,33 @@ function AdminTalentDetailContent() {
 
             <div className="flex items-center gap-2 flex-wrap shrink-0">
               {hasAccess ? (
-                <Button size="sm" variant="outline" onClick={handleRevokeAccess} isLoading={actionLoading}
-                  leftIcon={<XCircle className="h-3.5 w-3.5 text-[#D32F2F]" />}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleRevokeAccess}
+                  isLoading={actionLoading}
+                  leftIcon={<XCircle className="h-3.5 w-3.5 text-[#D32F2F]" />}
+                >
                   Revoke Access
                 </Button>
               ) : (
-                <Button size="sm" variant="secondary" onClick={handleGrantAccess} isLoading={actionLoading}
-                  leftIcon={<CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" />}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleGrantAccess}
+                  isLoading={actionLoading}
+                  leftIcon={
+                    <CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" />
+                  }
+                >
                   Grant Access
                 </Button>
               )}
               {talent.user?.id && (
                 <Link href={`/admin/users/${talent.user.id}`}>
-                  <Button size="sm" variant="outline">User Account</Button>
+                  <Button size="sm" variant="outline">
+                    User Account
+                  </Button>
                 </Link>
               )}
             </div>
@@ -192,22 +244,30 @@ function AdminTalentDetailContent() {
 
         {/* Content Body */}
         <div className="divide-y divide-[#EBE5F0]">
-
           {/* Bio */}
           {talent.bio && (
             <div className="p-6 sm:p-8 space-y-3">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Bio</h2>
-              <p className="text-sm text-[#6E6678] leading-relaxed whitespace-pre-line">{talent.bio}</p>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                Bio
+              </h2>
+              <p className="text-sm text-[#6E6678] leading-relaxed whitespace-pre-line">
+                {talent.bio}
+              </p>
             </div>
           )}
 
           {/* Skills */}
           {talent.skills && talent.skills.length > 0 && (
             <div className="p-6 sm:p-8 space-y-3">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">Skills</h2>
+              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
+                Skills
+              </h2>
               <div className="flex flex-wrap gap-2">
                 {talent.skills.map((skill: string) => (
-                  <span key={skill} className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium">
+                  <span
+                    key={skill}
+                    className="px-3 py-1 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium"
+                  >
                     {skill}
                   </span>
                 ))}
@@ -223,18 +283,33 @@ function AdminTalentDetailContent() {
               </h2>
               <div className="space-y-4">
                 {talent.experience.map((exp: any, i: number) => (
-                  <div key={exp.id} className={`flex gap-4 ${i > 0 ? "pt-4 border-t border-[#F9F8FC]" : ""}`}>
+                  <div
+                    key={exp.id}
+                    className={`flex gap-4 ${i > 0 ? "pt-4 border-t border-[#F9F8FC]" : ""}`}
+                  >
                     <div className="w-8 h-8 rounded-xl bg-[#F9F8FC] border border-[#EBE5F0] flex items-center justify-center shrink-0 mt-0.5">
                       <Briefcase className="h-3.5 w-3.5 text-[#6E6678]" />
                     </div>
                     <div className="space-y-0.5 flex-1 min-w-0">
                       <p className="font-medium text-[#17131F] text-sm">
-                        {exp.title} <span className="text-[#6E6678] font-normal">at {exp.company}</span>
+                        {exp.title}{" "}
+                        <span className="text-[#6E6678] font-normal">
+                          at {exp.company}
+                        </span>
                       </p>
                       <p className="text-xs font-mono text-[#6E6678]">
-                        {new Date(exp.startDate).toLocaleDateString()} – {exp.current ? "Present" : exp.endDate ? new Date(exp.endDate).toLocaleDateString() : ""}
+                        {new Date(exp.startDate).toLocaleDateString()} –{" "}
+                        {exp.current
+                          ? "Present"
+                          : exp.endDate
+                            ? new Date(exp.endDate).toLocaleDateString()
+                            : ""}
                       </p>
-                      {exp.description && <p className="text-sm text-[#6E6678] mt-1">{exp.description}</p>}
+                      {exp.description && (
+                        <p className="text-sm text-[#6E6678] mt-1">
+                          {exp.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -250,7 +325,10 @@ function AdminTalentDetailContent() {
               </h2>
               <div className="space-y-3">
                 {talent.education.map((edu: any, i: number) => (
-                  <div key={edu.id} className={`flex gap-4 ${i > 0 ? "pt-3 border-t border-[#F9F8FC]" : ""}`}>
+                  <div
+                    key={edu.id}
+                    className={`flex gap-4 ${i > 0 ? "pt-3 border-t border-[#F9F8FC]" : ""}`}
+                  >
                     <div className="w-8 h-8 rounded-xl bg-[#F3F0FF] border border-[#7C3AED]/10 flex items-center justify-center shrink-0 mt-0.5">
                       <GraduationCap className="h-3.5 w-3.5 text-[#7C3AED]" />
                     </div>
@@ -259,7 +337,8 @@ function AdminTalentDetailContent() {
                         {edu.degree} in {edu.fieldOfStudy || edu.field}
                       </p>
                       <p className="text-xs text-[#6E6678]">
-                        {edu.institution} · {edu.startYear} – {edu.endYear || "Present"}
+                        {edu.institution} · {edu.startYear} –{" "}
+                        {edu.endYear || "Present"}
                       </p>
                     </div>
                   </div>
@@ -269,40 +348,58 @@ function AdminTalentDetailContent() {
           )}
 
           {/* Documents */}
-          {(talent.cvUrl || talent.portfolioUrl || talent.githubUrl || talent.linkedinUrl) && (
+          {(talent.cvUrl ||
+            talent.portfolioUrl ||
+            talent.githubUrl ||
+            talent.linkedinUrl) && (
             <div className="p-6 sm:p-8 space-y-3">
               <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
                 Portfolio &amp; Documents
               </h2>
               <div className="flex flex-wrap gap-3">
                 {talent.cvUrl && (
-                  <a href={talent.cvUrl} target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#1E5BFF] font-medium text-xs bg-[#EEF3FF] hover:bg-[#DDE7FF] px-3 py-2 rounded-xl border border-[#1E5BFF]/15 transition-colors">
+                  <a
+                    href={talent.cvUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#1E5BFF] font-medium text-xs bg-[#EEF3FF] hover:bg-[#DDE7FF] px-3 py-2 rounded-xl border border-[#1E5BFF]/15 transition-colors"
+                  >
                     <FileText className="h-4 w-4" /> Resume / CV
                   </a>
                 )}
                 {talent.portfolioUrl && (
-                  <a href={talent.portfolioUrl} target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#17131F] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors">
+                  <a
+                    href={talent.portfolioUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#17131F] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors"
+                  >
                     <Globe className="h-4 w-4" /> Portfolio
                   </a>
                 )}
                 {talent.githubUrl && (
-                  <a href={talent.githubUrl} target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#17131F] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors">
+                  <a
+                    href={talent.githubUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#17131F] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors"
+                  >
                     <Globe className="h-4 w-4" /> GitHub
                   </a>
                 )}
                 {talent.linkedinUrl && (
-                  <a href={talent.linkedinUrl} target="_blank" rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[#0A66C2] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors">
+                  <a
+                    href={talent.linkedinUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[#0A66C2] font-medium text-xs bg-[#F9F8FC] hover:bg-[#EBE5F0] px-3 py-2 rounded-xl border border-[#D9CEDF] transition-colors"
+                  >
                     <Globe className="h-4 w-4" /> LinkedIn
                   </a>
                 )}
               </div>
             </div>
           )}
-
         </div>
       </div>
     </main>

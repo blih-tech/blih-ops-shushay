@@ -3,12 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Plus, GraduationCap } from "lucide-react";
-import {
-  Button,
-  Alert,
-  ConfirmDialog,
-  UniversalSearch,
-} from "@blih/ui";
+import { Button, Alert, ConfirmDialog, UniversalSearch } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import {

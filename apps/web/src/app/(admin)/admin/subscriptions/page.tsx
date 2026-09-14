@@ -55,8 +55,12 @@ function AdminSubscriptionsContent() {
     }
   }, [page, debouncedSearch, statusFilter]);
 
-  useEffect(() => { load(); }, [load]);
-  useEffect(() => { setPage(1); }, [debouncedSearch, statusFilter]);
+  useEffect(() => {
+    load();
+  }, [load]);
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, statusFilter]);
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -76,7 +80,11 @@ function AdminSubscriptionsContent() {
         </div>
       </div>
 
-      {error && <Alert variant="error" onClose={() => setError(null)}>{error}</Alert>}
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">
@@ -105,7 +113,11 @@ function AdminSubscriptionsContent() {
         rowKey={(s) => s.id}
         emptyIcon={<Building2 className="h-6 w-6" />}
         emptyTitle="No subscriptions found"
-        emptySubtext={searchQuery || statusFilter ? "Try adjusting your filters." : "No company subscriptions yet."}
+        emptySubtext={
+          searchQuery || statusFilter
+            ? "Try adjusting your filters."
+            : "No company subscriptions yet."
+        }
         columns={[
           {
             key: "company",
@@ -115,16 +127,27 @@ function AdminSubscriptionsContent() {
                 <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
                   {s.companyProfile.logoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={s.companyProfile.logoUrl} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={s.companyProfile.logoUrl}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
-                    (s.companyProfile.companyName || s.companyProfile.user.email).charAt(0).toUpperCase()
+                    (
+                      s.companyProfile.companyName ||
+                      s.companyProfile.user.email
+                    )
+                      .charAt(0)
+                      .toUpperCase()
                   )}
                 </div>
                 <div className="min-w-0">
                   <p className="font-medium text-[#17131F] truncate">
                     {s.companyProfile.companyName || "Unknown Company"}
                   </p>
-                  <p className="text-xs text-[#6E6678] truncate">{s.companyProfile.user.email}</p>
+                  <p className="text-xs text-[#6E6678] truncate">
+                    {s.companyProfile.user.email}
+                  </p>
                 </div>
               </div>
             ),
@@ -139,7 +162,9 @@ function AdminSubscriptionsContent() {
             key: "status",
             header: "Status",
             width: "90px",
-            render: (s) => <AdminStatusBadge type="subscription" value={s.status} />,
+            render: (s) => (
+              <AdminStatusBadge type="subscription" value={s.status} />
+            ),
           },
           {
             key: "amount",
@@ -168,7 +193,9 @@ function AdminSubscriptionsContent() {
             render: (s) => {
               const days = getDaysRemaining(s.expiresAt);
               return (
-                <span className={`text-xs font-mono font-medium ${days === 0 ? "text-[#D32F2F]" : days <= 7 ? "text-[#D97706]" : "text-[#2E8F79]"}`}>
+                <span
+                  className={`text-xs font-mono font-medium ${days === 0 ? "text-[#D32F2F]" : days <= 7 ? "text-[#D97706]" : "text-[#2E8F79]"}`}
+                >
                   {s.status === "EXPIRED" ? "Expired" : `${days}d`}
                 </span>
               );
@@ -180,7 +207,11 @@ function AdminSubscriptionsContent() {
             width: "80px",
             render: (s) => (
               <Link href={`/admin/subscriptions/${s.id}`}>
-                <Button size="sm" variant="ghost" leftIcon={<Eye className="h-3.5 w-3.5" />}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                >
                   View
                 </Button>
               </Link>
@@ -191,7 +222,11 @@ function AdminSubscriptionsContent() {
 
       {totalPages > 1 && (
         <div className="flex justify-center">
-          <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </main>
