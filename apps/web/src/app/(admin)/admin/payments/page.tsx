@@ -21,7 +21,6 @@ import {
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminPayments } from "@/lib/adminApi";
 import type { AdminPayment } from "@/types/admin";
 
@@ -83,18 +82,17 @@ function AdminPaymentsContent() {
     p.user.email.split("@")[0];
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <AdminBreadcrumb items={[{ label: "Payments" }]} />
+    <main className="w-full px-6 py-6 space-y-8">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
               Payment Transactions
             </h1>
             <Badge variant="primary">{total} TOTAL</Badge>
           </div>
-          <p className="text-sm text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
             Monitor all Chapa payment transactions across the platform.
           </p>
         </div>
@@ -106,54 +104,60 @@ function AdminPaymentsContent() {
         </Alert>
       )}
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
+      {/* Summary Stats — Compact */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
+          <div>
+            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
               Total Revenue
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center">
-              <TrendingUp className="h-4 w-4" />
+            </p>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              <span className="font-display text-base font-bold text-[#17131F]">
+                {summary.totalRevenue.toLocaleString()} ETB
+              </span>
+              <span className="text-[11px] text-[#2E8F79]">
+                ({summary.successfulCount} successful)
+              </span>
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-[#17131F]">
-            {summary.totalRevenue.toLocaleString()} ETB
-          </p>
-          <p className="text-xs text-[#6E6678]">
-            {summary.successfulCount} successful
-          </p>
-        </Card>
+          <div className="w-7 h-7 rounded-lg bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0">
+            <TrendingUp className="h-3.5 w-3.5" />
+          </div>
+        </div>
 
-        <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
+        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
+          <div>
+            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
               All Transactions
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center">
-              <CreditCard className="h-4 w-4" />
+            </p>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              <span className="font-display text-base font-bold text-[#17131F]">
+                {total}
+              </span>
+              <span className="text-[11px] text-[#9B8FA8]">total count</span>
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-[#17131F]">
-            {total}
-          </p>
-          <p className="text-xs text-[#6E6678]">Across all payment types</p>
-        </Card>
+          <div className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
+            <CreditCard className="h-3.5 w-3.5" />
+          </div>
+        </div>
 
-        <Card className="rounded-2xl border border-[#D9CEDF] bg-white p-5 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-xs text-[#6E6678] uppercase">
+        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
+          <div>
+            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
               Pending
-            </span>
-            <div className="w-8 h-8 rounded-xl bg-[#FFF9EE] text-[#D97706] flex items-center justify-center">
-              <AlertCircle className="h-4 w-4" />
+            </p>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              <span className="font-display text-base font-bold text-[#17131F]">
+                {payments.filter((p) => p.status === "PENDING").length}
+              </span>
+              <span className="text-[11px] text-[#D97706]">on page</span>
             </div>
           </div>
-          <p className="font-display text-2xl font-bold text-[#17131F]">
-            {payments.filter((p) => p.status === "PENDING").length}
-          </p>
-          <p className="text-xs text-[#6E6678]">On current page</p>
-        </Card>
+          <div className="w-7 h-7 rounded-lg bg-[#FFF9EE] text-[#D97706] flex items-center justify-center shrink-0">
+            <AlertCircle className="h-3.5 w-3.5" />
+          </div>
+        </div>
       </div>
 
       {/* Filters */}

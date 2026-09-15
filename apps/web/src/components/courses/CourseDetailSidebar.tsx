@@ -8,6 +8,7 @@ import { Button, Badge, Alert } from "@blih/ui";
 interface CourseDetailSidebarProps {
   courseId: string;
   hasAccess: boolean;
+  isAuthenticated?: boolean;
   isCompleted?: boolean;
   progressPercentage?: number;
   initiatingPayment: boolean;
@@ -18,6 +19,7 @@ interface CourseDetailSidebarProps {
 export function CourseDetailSidebar({
   courseId,
   hasAccess,
+  isAuthenticated = false,
   isCompleted = false,
   progressPercentage = 0,
   initiatingPayment,
@@ -111,12 +113,16 @@ export function CourseDetailSidebar({
               isLoading={initiatingPayment}
               leftIcon={<ShieldCheck className="w-5 h-5" />}
             >
-              Unlock All Courses (1,000 ETB)
+              {isAuthenticated
+                ? "Unlock All Courses (1,000 ETB)"
+                : "Sign In to Unlock (1,000 ETB)"}
             </Button>
           )}
 
           <p className="text-[11px] font-mono text-center text-[#6E6678]">
-            Instant server-side verification via Chapa payment gateway
+            {isAuthenticated
+              ? "Instant server-side verification via Chapa payment gateway"
+              : "Sign in or register to unlock course content and track progress"}
           </p>
         </div>
 

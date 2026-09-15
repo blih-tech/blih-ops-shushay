@@ -177,7 +177,7 @@ export function getNavLinks({
       active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
     },
     {
-      label: "Business",
+      label: "Companies",
       href: `${talentUrl}/company`,
       active: currentPath ? isMatch("/company") : currentApp === "business",
     },

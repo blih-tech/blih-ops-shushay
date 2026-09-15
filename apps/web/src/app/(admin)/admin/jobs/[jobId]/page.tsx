@@ -7,7 +7,6 @@ import Link from "next/link";
 import { Alert, Badge, MetricCard, Button, ConfirmDialog } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminJobById, updateAdminJobStatus, deleteAdminJob } from "@/lib/adminApi";
 import type { AdminJobDetail } from "@/types/admin";
 
@@ -82,13 +81,8 @@ function AdminJobDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Jobs", href: "/admin/jobs" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -96,10 +90,8 @@ function AdminJobDetailContent() {
 
   if (error || !job) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <AdminBreadcrumb
-          items={[{ label: "Jobs", href: "/admin/jobs" }, { label: "Error" }]}
-        />
+      <main className="w-full px-6 py-6">
+
         <Alert variant="error" className="mt-6">
           {error || "Job not found"}
         </Alert>
@@ -120,10 +112,8 @@ function AdminJobDetailContent() {
       : "Not disclosed");
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
-      <AdminBreadcrumb
-        items={[{ label: "Jobs", href: "/admin/jobs" }, { label: job.title }]}
-      />
+    <main className="w-full px-6 py-6 space-y-5">
+
 
       {actionError && (
         <Alert variant="error" onClose={() => setActionError(null)}>

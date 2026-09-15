@@ -7,7 +7,6 @@ import { CreditCard, Building2 } from "lucide-react";
 import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminSubscriptionById } from "@/lib/adminApi";
 
 function AdminSubscriptionDetailContent() {
@@ -34,13 +33,8 @@ function AdminSubscriptionDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Subscriptions", href: "/admin/subscriptions" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -48,13 +42,8 @@ function AdminSubscriptionDetailContent() {
 
   if (error || !subscription) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb
-          items={[
-            { label: "Subscriptions", href: "/admin/subscriptions" },
-            { label: "Error" },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-4">
+
         <Alert variant="error">{error || "Subscription not found"}</Alert>
       </main>
     );
@@ -64,13 +53,8 @@ function AdminSubscriptionDetailContent() {
     subscription.companyProfile?.companyName || "Unknown Company";
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
-      <AdminBreadcrumb
-        items={[
-          { label: "Subscriptions", href: "/admin/subscriptions" },
-          { label: `${companyName} (${subscription.plan})` },
-        ]}
-      />
+    <main className="w-full px-6 py-6 space-y-5">
+
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

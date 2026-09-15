@@ -13,7 +13,6 @@ import {
 import Link from "next/link";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminTalents, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminTalentItem } from "@/types/admin";
 
@@ -81,18 +80,17 @@ function AdminTalentsContent() {
   }
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <AdminBreadcrumb items={[{ label: "Talents" }]} />
+    <main className="w-full px-6 py-6 space-y-8">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
               Talent Management
             </h1>
             <Badge variant="primary">{total} REGISTERED</Badge>
           </div>
-          <p className="text-sm text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
             Inspect candidate profiles, manage skills access, CV attachments,
             and career history.
           </p>

@@ -9,8 +9,6 @@ build/
 out/
 
 # Environment variables
-.env
-.env.local
 .env.*.local
 
 # Logs
@@ -25,7 +23,6 @@ yarn-error.log*
 Thumbs.db
 
 # IDE
-.vscode/settings.json
 .idea/
 
 # TypeScript

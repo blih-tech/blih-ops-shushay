@@ -6,7 +6,6 @@ import { Award, Download, Eye, Trash2 } from "lucide-react";
 import { Alert, Badge, UniversalSearch, Pagination, ConfirmDialog, Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminCertificates, deleteAdminCertificate } from "@/lib/adminApi";
 import type { AdminCertificate } from "@/types/admin";
 
@@ -75,18 +74,17 @@ function AdminCertificatesContent() {
     c.user.talentProfile?.fullName || c.user.email.split("@")[0];
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <AdminBreadcrumb items={[{ label: "Certificates" }]} />
+    <main className="w-full px-6 py-6 space-y-8">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
               Certificates
             </h1>
             <Badge variant="primary">{total} ISSUED</Badge>
           </div>
-          <p className="text-sm text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
             All verified course completion certificates issued on the platform.
           </p>
         </div>

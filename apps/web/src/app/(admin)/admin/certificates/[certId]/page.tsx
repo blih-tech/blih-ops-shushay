@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Award, Download } from "lucide-react";
 import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminCertificateById } from "@/lib/adminApi";
 
 function AdminCertificateDetailContent() {
@@ -33,13 +32,8 @@ function AdminCertificateDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Certificates", href: "/admin/certificates" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -47,13 +41,8 @@ function AdminCertificateDetailContent() {
 
   if (error || !cert) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb
-          items={[
-            { label: "Certificates", href: "/admin/certificates" },
-            { label: "Error" },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-4">
+
         <Alert variant="error">{error || "Certificate not found"}</Alert>
       </main>
     );
@@ -66,13 +55,8 @@ function AdminCertificateDetailContent() {
   const courseTitle = cert.course?.title || "Course Certificate";
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <AdminBreadcrumb
-        items={[
-          { label: "Certificates", href: "/admin/certificates" },
-          { label: cert.certificateNumber || "Certificate" },
-        ]}
-      />
+    <main className="w-full px-6 py-6 space-y-6">
+
 
       {/* Stat Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

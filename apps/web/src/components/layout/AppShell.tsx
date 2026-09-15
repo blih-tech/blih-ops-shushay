@@ -5,10 +5,16 @@ import { usePathname } from "next/navigation";
 import { GlobalNavbar, GlobalFooter } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { NotificationMenu } from "./NotificationMenu";
+import { AdminShell } from "./AdminShell";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const pathname = usePathname();
+
+  // Admin routes get the dedicated full-width sidebar layout
+  if (pathname.startsWith("/admin")) {
+    return <AdminShell>{children}</AdminShell>;
+  }
 
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased relative selection:bg-[#DDE7FF] selection:text-[#1E5BFF]">

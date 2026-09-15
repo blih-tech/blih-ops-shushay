@@ -148,6 +148,7 @@ export default function PublicCourseDetailPage() {
         <CourseDetailSidebar
           courseId={courseId}
           hasAccess={hasAccess}
+          isAuthenticated={!!user}
           isCompleted={isCompleted}
           progressPercentage={progressPercentage}
           initiatingPayment={initiatingPayment}

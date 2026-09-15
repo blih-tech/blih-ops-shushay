@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Plus, GraduationCap } from "lucide-react";
 import { Button, Alert, ConfirmDialog, UniversalSearch } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import {
   fetchAdminCourses,
   publishCourse,
@@ -103,15 +102,14 @@ function CoursesContent() {
   });
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 font-sans">
-      <AdminBreadcrumb items={[{ label: "Course Studio" }]} />
+    <main className="w-full px-6 py-6 space-y-8 font-sans">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#D9CEDF] gap-4">
         <div className="space-y-1">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+          <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
             Manage Courses
           </h1>
-          <p className="text-sm sm:text-base text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
             Create, edit, and publish courses for Blih Skills.
           </p>
         </div>

@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "next/link";
-import { ArrowLeft, Eye, EyeOff, CheckCircle, Plus, BookOpen, Layers } from "lucide-react";
-import { Button, Badge, Alert, ConfirmDialog } from "@blih/ui";
+import React, { useRef, useEffect } from "react";
+import { Eye, EyeOff, CheckCircle, Plus, BookOpen, Layers, Save, X } from "lucide-react";
+
+import { Button, Badge, Alert, ConfirmDialog, Input, Textarea } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { LessonPanel } from "./LessonPanel";
 import { CourseOverviewCard } from "./CourseOverviewCard";
@@ -51,22 +51,21 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
     handleMove,
   } = useEditCourse(courseId);
 
+  const metaFormRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (editingMeta && metaFormRef.current) {
+      metaFormRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [editingMeta]);
+
   if (loading) {
     return <EditCourseSkeleton user={user} onSignOut={logout} />;
   }
 
   if (loadError || !course) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 py-8 space-y-4 flex-1">
-        <Link href="/admin/courses">
-          <Button
-            variant="ghost"
-            leftIcon={<ArrowLeft className="h-4 w-4" />}
-            size="sm"
-          >
-            Back to Courses
-          </Button>
-        </Link>
+      <main className="w-full px-6 py-6 space-y-4 flex-1">
         <Alert variant="error">{loadError ?? "Course not found"}</Alert>
       </main>
     );
@@ -76,24 +75,18 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
 
   return (
     <>
-      <main className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8 flex-1">
+      <main className="w-full px-6 py-6 space-y-8 flex-1">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
           <div className="space-y-1.5">
-            <Link
-              href="/admin/courses"
-              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline mb-1"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" /> Back to Course Management
-            </Link>
             <div className="flex items-center gap-3 flex-wrap">
-              <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-[#17131F]">
+              <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
                 {course.title}
               </h1>
               <Badge variant={isPublished ? "verified" : "secondary"}>
                 {isPublished ? "PUBLISHED" : "DRAFT"}
               </Badge>
             </div>
-            <p className="text-sm text-[#6E6678]">
+            <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
               Manage curriculum structure, video lectures, assessments, and
               learning resources.
             </p>
@@ -217,21 +210,78 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                 />
               ))}
             </div>
+
+            {/* Inline course meta edit form — appears below lessons */}
+            {editingMeta && (
+              <div
+                ref={metaFormRef}
+                className="border border-[#1E5BFF]/30 rounded-2xl bg-white shadow-sm overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-5 py-4 bg-[#EEF3FF]/60 border-b border-[#1E5BFF]/20">
+                  <h3 className="text-sm font-semibold font-display text-[#17131F]">
+                    Edit Course Details
+                  </h3>
+                  <button
+                    onClick={() => setEditingMeta(false)}
+                    className="p-1.5 text-[#6E6678] hover:text-[#17131F] hover:bg-white rounded-lg transition-colors cursor-pointer"
+                    title="Cancel"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="px-5 py-5 space-y-4">
+                  {metaError && (
+                    <Alert variant="error" onClose={() => setMetaError(null)}>
+                      {metaError}
+                    </Alert>
+                  )}
+                  <Input
+                    label="Title"
+                    value={metaTitle}
+                    onChange={(e) => setMetaTitle(e.target.value)}
+                    maxLength={200}
+                  />
+                  <Textarea
+                    label="Description"
+                    value={metaDesc}
+                    onChange={(e) => setMetaDesc(e.target.value)}
+                    rows={4}
+                    maxLength={2000}
+                    placeholder="Course description..."
+                  />
+                  <div className="flex justify-end gap-2 pt-1">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditingMeta(false)}
+                      disabled={metaSaving}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="primary"
+                      leftIcon={<Save className="h-3.5 w-3.5" />}
+                      isLoading={metaSaving}
+                      onClick={saveMeta}
+                    >
+                      Save Details
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="lg:col-span-4 space-y-6">
             <CourseOverviewCard
               course={course}
               editingMeta={editingMeta}
-              setEditingMeta={setEditingMeta}
-              metaTitle={metaTitle}
-              setMetaTitle={setMetaTitle}
-              metaDesc={metaDesc}
-              setMetaDesc={setMetaDesc}
-              metaSaving={metaSaving}
-              metaError={metaError}
-              setMetaError={setMetaError}
-              saveMeta={saveMeta}
+              onEditClick={() => {
+                setMetaTitle(course.title);
+                setMetaDesc(course.description);
+                setEditingMeta(!editingMeta);
+              }}
             />
 
             <CurriculumMetricsCard lessons={lessons} />

@@ -56,7 +56,7 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
       { label: "Explore Ecosystem", href: `${talentUrl}/` },
       { label: "Blih Skills Courses", href: `${skillsUrl}/courses` },
       { label: "Verified Opportunities", href: `${talentUrl}/jobs` },
-      { label: "Business Hiring Pass", href: `${talentUrl}/company` },
+      { label: "Companies", href: `${talentUrl}/company` },
       { label: "Sign In", href: `${authUrl}/login` },
     ];
   };

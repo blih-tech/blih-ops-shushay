@@ -7,7 +7,6 @@ import { CreditCard, User, Calendar, Tag, Hash } from "lucide-react";
 import { Alert, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminPaymentById } from "@/lib/adminApi";
 
 function AdminPaymentDetailContent() {
@@ -34,13 +33,8 @@ function AdminPaymentDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Payments", href: "/admin/payments" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -48,13 +42,8 @@ function AdminPaymentDetailContent() {
 
   if (error || !payment) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb
-          items={[
-            { label: "Payments", href: "/admin/payments" },
-            { label: "Error" },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-4">
+
         <Alert variant="error">
           {error || "Payment transaction not found"}
         </Alert>
@@ -71,13 +60,8 @@ function AdminPaymentDetailContent() {
   const userInitial = userDisplayName.charAt(0).toUpperCase();
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-      <AdminBreadcrumb
-        items={[
-          { label: "Payments", href: "/admin/payments" },
-          { label: payment.txRef || "Transaction" },
-        ]}
-      />
+    <main className="w-full px-6 py-6 space-y-4">
+
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -110,7 +94,7 @@ function AdminPaymentDetailContent() {
             <div className="flex-1 min-w-0 space-y-3">
               <div>
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+                  <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
                     {payment.amount}{" "}
                     <span className="text-lg font-semibold text-[#6E6678]">
                       {payment.currency}

@@ -7,7 +7,6 @@ import { Alert, Badge, UniversalSearch, Pagination, Select } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminNotifications } from "@/lib/adminApi";
 import type { AdminNotification } from "@/types/admin";
 import { Button } from "@blih/ui";
@@ -73,18 +72,17 @@ function AdminNotificationsContent() {
   ];
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <AdminBreadcrumb items={[{ label: "Notifications" }]} />
+    <main className="w-full px-6 py-6 space-y-8">
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
+            <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
               Notification Logs
             </h1>
             <Badge variant="primary">{total} TOTAL</Badge>
           </div>
-          <p className="text-sm text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
             Platform notification log — all system and user notifications.
           </p>
         </div>

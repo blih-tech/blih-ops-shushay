@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Bell, Clock } from "lucide-react";
 import { Alert, Badge, Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { fetchAdminNotificationById } from "@/lib/adminApi";
 
 function AdminNotificationDetailContent() {
@@ -33,13 +32,8 @@ function AdminNotificationDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Notifications", href: "/admin/notifications" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -47,13 +41,8 @@ function AdminNotificationDetailContent() {
 
   if (error || !notification) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb
-          items={[
-            { label: "Notifications", href: "/admin/notifications" },
-            { label: "Error" },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-4">
+
         <Alert variant="error">{error || "Notification not found"}</Alert>
       </main>
     );
@@ -65,13 +54,8 @@ function AdminNotificationDetailContent() {
     notification.user?.email;
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-5">
-      <AdminBreadcrumb
-        items={[
-          { label: "Notifications", href: "/admin/notifications" },
-          { label: notification.title },
-        ]}
-      />
+    <main className="w-full px-6 py-6 space-y-5">
+
 
       {/* Main Content Card */}
       <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">

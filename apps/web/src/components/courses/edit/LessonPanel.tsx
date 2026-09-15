@@ -90,15 +90,45 @@ export function LessonPanel({
   }
 
   return (
-    <div className="border border-[#D9CEDF] rounded-3xl overflow-hidden bg-white shadow-xs transition-all">
-      {/* Header row */}
-      <div className="flex items-center gap-3.5 px-6 py-4.5 bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white hover:bg-[#EEF3FF]/40 transition-colors">
-        <span className="w-8 h-8 rounded-xl bg-[#1E5BFF] text-white text-xs font-mono font-bold flex items-center justify-center shrink-0 shadow-xs">
+    <div className="border border-[#D9CEDF] rounded-2xl overflow-hidden bg-white shadow-xs transition-all">
+      {/* Header row — click anywhere to expand/collapse */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => !editingTitle && setExpanded(!expanded)}
+        onKeyDown={(e) => {
+          if (!editingTitle && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            setExpanded(!expanded);
+          }
+        }}
+        className={`flex items-center gap-3.5 px-5 py-4 transition-colors select-none ${
+          editingTitle
+            ? "bg-white"
+            : "cursor-pointer hover:bg-[#F4F1F8] active:bg-[#EBE5F0]"
+        } ${expanded ? "bg-[#F9F8FC]" : "bg-white"}`}
+      >
+        {/* Expand indicator */}
+        <span className="shrink-0 text-[#9B8FA8] transition-transform duration-200">
+          {expanded ? (
+            <ChevronDown className="h-4 w-4 text-[#1E5BFF]" />
+          ) : (
+            <ChevronRight className="h-4 w-4" />
+          )}
+        </span>
+
+        {/* Lesson index badge */}
+        <span className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] text-xs font-mono font-bold flex items-center justify-center shrink-0">
           {lessonIndex + 1}
         </span>
+
+        {/* Title / inline edit */}
         <div className="flex-1 min-w-0">
           {editingTitle ? (
-            <div className="flex items-center gap-2">
+            <div
+              className="flex items-center gap-2"
+              onClick={(e) => e.stopPropagation()}
+            >
               <input
                 value={titleVal}
                 onChange={(e) => setTitleVal(e.target.value)}
@@ -110,72 +140,74 @@ export function LessonPanel({
                   }
                 }}
                 autoFocus
-                className="flex-1 text-base font-bold bg-white border border-[#1E5BFF] rounded-xl px-3 py-1.5 focus:outline-none font-display text-[#17131F]"
+                className="flex-1 text-sm font-semibold bg-white border border-[#1E5BFF] rounded-lg px-3 py-1.5 focus:outline-none font-display text-[#17131F]"
               />
               <button
                 onClick={saveTitle}
                 disabled={saving}
-                className="p-1 text-[#1E5BFF] cursor-pointer"
+                className="p-1.5 text-[#1E5BFF] hover:bg-[#EEF3FF] rounded-lg cursor-pointer transition-colors"
+                title="Save"
               >
-                <Check className="h-5 w-5" />
+                <Check className="h-4 w-4" />
               </button>
               <button
                 onClick={() => {
                   setEditingTitle(false);
                   setTitleVal(lesson.title);
                 }}
-                className="p-1 text-[#6E6678] hover:text-[#17131F] cursor-pointer"
+                className="p-1.5 text-[#6E6678] hover:bg-[#F4F1F8] rounded-lg cursor-pointer transition-colors"
+                title="Cancel"
               >
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => setEditingTitle(true)}
-              className="text-base font-bold text-[#17131F] font-display hover:text-[#1E5BFF] cursor-pointer text-left group flex items-center gap-2"
-            >
-              <span>{lesson.title}</span>
-              <Pencil className="h-3.5 w-3.5 opacity-0 group-hover:opacity-60 transition-opacity" />
-            </button>
+            <p className="text-sm font-semibold text-[#17131F] font-display truncate">
+              {lesson.title}
+            </p>
           )}
         </div>
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            onClick={onMoveUp}
-            disabled={lessonIndex === 0 || saving}
-            className="p-2 text-[#6E6678] hover:text-[#17131F] hover:bg-white rounded-xl cursor-pointer disabled:opacity-30 transition-colors"
-            title="Move Up"
+
+        {/* Action buttons — stop propagation so they don't toggle expand */}
+        {!editingTitle && (
+          <div
+            className="flex items-center gap-0.5 shrink-0"
+            onClick={(e) => e.stopPropagation()}
           >
-            <ArrowUp className="h-4 w-4" />
-          </button>
-          <button
-            onClick={onMoveDown}
-            disabled={lessonIndex === totalLessons - 1 || saving}
-            className="p-2 text-[#6E6678] hover:text-[#17131F] hover:bg-white rounded-xl cursor-pointer disabled:opacity-30 transition-colors"
-            title="Move Down"
-          >
-            <ArrowDown className="h-4 w-4" />
-          </button>
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="p-2 text-[#17131F] hover:bg-white rounded-xl cursor-pointer transition-colors"
-            title={expanded ? "Collapse" : "Expand"}
-          >
-            {expanded ? (
-              <ChevronDown className="h-5 w-5 text-[#1E5BFF]" />
-            ) : (
-              <ChevronRight className="h-5 w-5" />
-            )}
-          </button>
-          <button
-            onClick={() => setConfirmDelete(true)}
-            className="p-2 text-[#6E6678] hover:text-[#EF4444] hover:bg-[#FFF0F0] rounded-xl cursor-pointer transition-colors"
-            title="Delete Lesson"
-          >
-            <Trash2 className="h-4 w-4" />
-          </button>
-        </div>
+            <button
+              onClick={() => setEditingTitle(true)}
+              className="p-2 text-[#9B8FA8] hover:text-[#1E5BFF] hover:bg-[#EEF3FF] rounded-lg cursor-pointer transition-colors"
+              title="Rename lesson"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={onMoveUp}
+              disabled={lessonIndex === 0 || saving}
+              className="p-2 text-[#9B8FA8] hover:text-[#17131F] hover:bg-[#F4F1F8] rounded-lg cursor-pointer disabled:opacity-30 transition-colors"
+              title="Move Up"
+            >
+              <ArrowUp className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={onMoveDown}
+              disabled={lessonIndex === totalLessons - 1 || saving}
+              className="p-2 text-[#9B8FA8] hover:text-[#17131F] hover:bg-[#F4F1F8] rounded-lg cursor-pointer disabled:opacity-30 transition-colors"
+              title="Move Down"
+            >
+              <ArrowDown className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="p-2 text-[#9B8FA8] hover:text-[#EF4444] hover:bg-[#FFF0F0] rounded-lg cursor-pointer transition-colors"
+              title="Delete Lesson"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
       </div>
+
 
       {/* Lesson body */}
       {expanded && (

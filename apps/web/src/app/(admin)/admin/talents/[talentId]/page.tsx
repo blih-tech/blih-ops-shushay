@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import {
   fetchAdminTalentById,
   deleteAdminUser,
@@ -97,13 +96,8 @@ function AdminTalentDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <AdminBreadcrumb
-          items={[
-            { label: "Talents", href: "/admin/talents" },
-            { label: "Loading..." },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-6">
+
         <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
       </main>
     );
@@ -111,13 +105,8 @@ function AdminTalentDetailContent() {
 
   if (error || !talent) {
     return (
-      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-        <AdminBreadcrumb
-          items={[
-            { label: "Talents", href: "/admin/talents" },
-            { label: "Error" },
-          ]}
-        />
+      <main className="w-full px-6 py-6 space-y-4">
+
         <Alert variant="error">{error || "Talent profile not found"}</Alert>
       </main>
     );
@@ -126,13 +115,8 @@ function AdminTalentDetailContent() {
   const hasAccess = !!talent.user?.skillsEntitlement;
 
   return (
-    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
-      <AdminBreadcrumb
-        items={[
-          { label: "Talents", href: "/admin/talents" },
-          { label: talent.fullName },
-        ]}
-      />
+    <main className="w-full px-6 py-6 space-y-4">
+
 
       {actionError && (
         <Alert variant="error" onClose={() => setActionError(null)}>
