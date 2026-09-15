@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Briefcase, Eye, XCircle, RefreshCw } from "lucide-react";
+import { Briefcase, Eye, XCircle, RefreshCw, Trash2 } from "lucide-react";
 import {
   Button,
   Alert,
@@ -16,7 +16,7 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminJobs, updateAdminJobStatus } from "@/lib/adminApi";
+import { fetchAdminJobs, updateAdminJobStatus, deleteAdminJob } from "@/lib/adminApi";
 import type { AdminJob } from "@/types/admin";
 
 const PAGE_SIZE = 20;
@@ -35,6 +35,7 @@ function AdminJobsContent() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [closeTarget, setCloseTarget] = useState<AdminJob | null>(null);
   const [reopenTarget, setReopenTarget] = useState<AdminJob | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminJob | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
@@ -93,6 +94,21 @@ function AdminJobsContent() {
       load();
     } catch (err: any) {
       setActionError(err.message || "Failed to reopen job");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleDeleteJob() {
+    if (!deleteTarget) return;
+    setActionLoading(deleteTarget.id);
+    setActionError(null);
+    try {
+      await deleteAdminJob(deleteTarget.id);
+      setDeleteTarget(null);
+      load();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete job");
     } finally {
       setActionLoading(null);
     }
@@ -257,7 +273,7 @@ function AdminJobsContent() {
           {
             key: "actions",
             header: "Actions",
-            width: "160px",
+            width: "220px",
             render: (j) => (
               <div className="flex items-center gap-1.5">
                 <Link href={`/admin/jobs/${j.id}`}>
@@ -291,6 +307,16 @@ function AdminJobsContent() {
                     Reopen
                   </Button>
                 )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setDeleteTarget(j)}
+                  isLoading={actionLoading === j.id}
+                >
+                  Delete
+                </Button>
               </div>
             ),
           },
@@ -321,12 +347,23 @@ function AdminJobsContent() {
       <ConfirmDialog
         isOpen={!!reopenTarget}
         title="Reopen Job"
-        message={`Reopen "${reopenTarget?.title}"? It will become active and accept new applications.`}
+        message={`Reopen "${reopenTarget?.title}"? It will become active with a new 30-day application deadline and accept new candidates.`}
         confirmText="Reopen Job"
         cancelText="Cancel"
         variant="primary"
         onConfirm={handleReopenJob}
         onClose={() => setReopenTarget(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Job"
+        message={`Are you sure you want to permanently delete "${deleteTarget?.title}"? This action cannot be undone and will delete all associated job applications.`}
+        confirmText="Delete Job"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleDeleteJob}
+        onClose={() => setDeleteTarget(null)}
       />
     </main>
   );

@@ -36,7 +36,16 @@ function CompanyJobsContent() {
     }
   };
 
-  const activeJobsCount = jobs.filter((j) => j.status === "ACTIVE").length;
+  const activeJobsCount = jobs.filter((j) => {
+    if (j.status !== "ACTIVE") return false;
+    if (
+      j.applicationDeadline &&
+      new Date(j.applicationDeadline) < new Date()
+    ) {
+      return false;
+    }
+    return true;
+  }).length;
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">

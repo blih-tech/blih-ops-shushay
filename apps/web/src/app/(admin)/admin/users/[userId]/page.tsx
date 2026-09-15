@@ -143,16 +143,49 @@ function AdminUserDetailContent() {
           label="Email Status"
           variant="surface"
         />
-        <MetricCard
-          value={user._count?.certificates ?? 0}
-          label="Certificates"
-          variant="surface"
-        />
-        <MetricCard
-          value={user._count?.paymentTransactions ?? 0}
-          label="Transactions"
-          variant="surface"
-        />
+        {user.role === "TALENT" ? (
+          <>
+            <MetricCard
+              value={user.talentProfile?._count?.jobApplications ?? 0}
+              label="Applications"
+              variant="surface"
+            />
+            <MetricCard
+              value={user._count?.certificates ?? 0}
+              label="Certificates"
+              variant="surface"
+            />
+          </>
+        ) : user.role === "COMPANY" ? (
+          <>
+            <MetricCard
+              value={user.companyProfile?._count?.jobs ?? 0}
+              label="Jobs Posted"
+              variant="surface"
+            />
+            <MetricCard
+              value={
+                user.companyProfile?.companySubscription?.status ||
+                (user.companyProfile?.subscriptionActive ? "ACTIVE" : "INACTIVE")
+              }
+              label="Subscription"
+              variant="surface"
+            />
+          </>
+        ) : (
+          <>
+            <MetricCard
+              value={user._count?.certificates ?? 0}
+              label="Certificates"
+              variant="surface"
+            />
+            <MetricCard
+              value={user._count?.paymentTransactions ?? 0}
+              label="Transactions"
+              variant="surface"
+            />
+          </>
+        )}
       </div>
 
       {/* Main Card */}
@@ -167,7 +200,14 @@ function AdminUserDetailContent() {
                   <img
                     src={user.talentProfile.photoUrl}
                     alt=""
-                    className="w-full h-full object-cover rounded-2xl"
+                    className="w-full h-full object-cover rounded-2xl aspect-square"
+                  />
+                ) : user.companyProfile?.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.companyProfile.logoUrl}
+                    alt=""
+                    className="w-full h-full object-cover rounded-2xl aspect-square"
                   />
                 ) : (
                   displayName.charAt(0).toUpperCase()
@@ -259,6 +299,26 @@ function AdminUserDetailContent() {
                   {user.id}
                 </code>
               </div>
+              {user.role === "TALENT" && (
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">
+                    Job Applications
+                  </span>
+                  <span className="font-medium text-sm text-[#17131F]">
+                    {user.talentProfile?._count?.jobApplications ?? 0}
+                  </span>
+                </div>
+              )}
+              {user.role === "COMPANY" && (
+                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
+                  <span className="text-xs text-[#6E6678] w-40 shrink-0">
+                    Jobs Posted
+                  </span>
+                  <span className="font-medium text-sm text-[#17131F]">
+                    {user.companyProfile?._count?.jobs ?? 0}
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
                 <span className="text-xs text-[#6E6678] w-40 shrink-0">
                   Certificates Earned
@@ -339,18 +399,9 @@ function AdminUserDetailContent() {
               </div>
               {user.talentProfile.skills &&
                 user.talentProfile.skills.length > 0 && (
-                  <div className="pt-1">
-                    <p className="text-xs text-[#6E6678] mb-2">Skills</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {user.talentProfile.skills.map((s: string) => (
-                        <span
-                          key={s}
-                          className="px-2.5 py-0.5 rounded-xl bg-[#EEF3FF] border border-[#1E5BFF]/15 text-xs font-mono text-[#1E5BFF] font-medium"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
+                  <div className="pt-2 border-t border-[#F9F8FC] flex items-center gap-2 text-xs font-mono text-[#6E6678]">
+                    <span className="text-[#17131F] font-semibold">Skills: </span>
+                    <span>{user.talentProfile.skills.join(" · ")}</span>
                   </div>
                 )}
             </div>

@@ -94,7 +94,10 @@ export function getNavLinks({
         label: "Hiring Hub",
         href: `${talentUrl}/company`,
         active: currentPath
-          ? isMatch("/company", true)
+          ? isMatch("/company") &&
+            !isMatch("/company/jobs") &&
+            !isMatch("/company/talents") &&
+            !isMatch("/company/subscription")
           : currentApp === "company" || currentApp === "business",
       },
       {
@@ -129,7 +132,12 @@ export function getNavLinks({
       {
         label: "Admin Hub",
         href: `${skillsUrl}/admin`,
-        active: currentPath ? isMatch("/admin", true) : currentApp === "admin",
+        active: currentPath
+          ? isMatch("/admin") &&
+            !isMatch("/admin/courses") &&
+            !isMatch("/admin/talents") &&
+            !isMatch("/admin/companies")
+          : currentApp === "admin",
       },
       {
         label: "Course Studio",

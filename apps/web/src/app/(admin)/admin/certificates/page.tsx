@@ -2,14 +2,13 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Award, Download, Eye } from "lucide-react";
-import { Alert, Badge, UniversalSearch, Pagination } from "@blih/ui";
+import { Award, Download, Eye, Trash2 } from "lucide-react";
+import { Alert, Badge, UniversalSearch, Pagination, ConfirmDialog, Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminCertificates } from "@/lib/adminApi";
+import { fetchAdminCertificates, deleteAdminCertificate } from "@/lib/adminApi";
 import type { AdminCertificate } from "@/types/admin";
-import { Button } from "@blih/ui";
 
 const PAGE_SIZE = 25;
 
@@ -19,6 +18,9 @@ function AdminCertificatesContent() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminCertificate | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
@@ -54,6 +56,21 @@ function AdminCertificatesContent() {
     setPage(1);
   }, [debouncedSearch]);
 
+  async function handleDeleteCert() {
+    if (!deleteTarget) return;
+    setActionLoading(deleteTarget.id);
+    setActionError(null);
+    try {
+      await deleteAdminCertificate(deleteTarget.id);
+      setDeleteTarget(null);
+      load();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete certificate");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   const recipientName = (c: AdminCertificate) =>
     c.user.talentProfile?.fullName || c.user.email.split("@")[0];
 
@@ -78,6 +95,11 @@ function AdminCertificatesContent() {
       {error && (
         <Alert variant="error" onClose={() => setError(null)}>
           {error}
+        </Alert>
+      )}
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
         </Alert>
       )}
 
@@ -160,8 +182,8 @@ function AdminCertificatesContent() {
           },
           {
             key: "actions",
-            header: "",
-            width: "120px",
+            header: "Actions",
+            width: "180px",
             render: (c) => (
               <div className="flex items-center gap-1.5">
                 <Link href={`/admin/certificates/${c.id}`}>
@@ -184,6 +206,16 @@ function AdminCertificatesContent() {
                     </Button>
                   </a>
                 )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setDeleteTarget(c)}
+                  isLoading={actionLoading === c.id}
+                >
+                  Delete
+                </Button>
               </div>
             ),
           },
@@ -199,6 +231,17 @@ function AdminCertificatesContent() {
           />
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Certificate"
+        message={`Are you sure you want to delete certificate ${deleteTarget?.certificateNumber}?`}
+        confirmText="Delete Certificate"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleDeleteCert}
+        onClose={() => setDeleteTarget(null)}
+      />
     </main>
   );
 }

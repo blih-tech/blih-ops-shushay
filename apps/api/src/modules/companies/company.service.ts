@@ -91,7 +91,6 @@ export async function getCompanyById(companyId: string) {
       logoUrl: true,
       createdAt: true,
       jobs: {
-        where: { status: "ACTIVE" },
         select: {
           id: true,
           title: true,
@@ -103,6 +102,8 @@ export async function getCompanyById(companyId: string) {
           salaryCurrency: true,
           salaryDisplay: true,
           countryRestrictions: true,
+          applicationDeadline: true,
+          status: true,
           createdAt: true,
         },
         orderBy: { createdAt: "desc" },
@@ -114,5 +115,18 @@ export async function getCompanyById(companyId: string) {
     throw new AppError(404, "Company profile not found");
   }
 
-  return company;
+  const now = new Date();
+  const isJobActive = (j: any) =>
+    j.status === "ACTIVE" &&
+    (!j.applicationDeadline || new Date(j.applicationDeadline) >= now);
+
+  const sortedJobs = (company.jobs || []).sort((a, b) => {
+    const aActive = isJobActive(a);
+    const bActive = isJobActive(b);
+    if (aActive && !bActive) return -1;
+    if (!aActive && bActive) return 1;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  return { ...company, jobs: sortedJobs };
 }

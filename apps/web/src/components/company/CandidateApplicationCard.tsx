@@ -115,18 +115,20 @@ export function CandidateApplicationCard({
       {/* Top Header: Candidate Identity & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex items-start gap-3.5 flex-1 min-w-0">
-          {/* Circular Avatar */}
-          {photo ? (
-            <img
-              src={photo}
-              alt={name}
-              className="w-12 h-12 rounded-full object-cover ring-2 ring-[#EEF3FF] shrink-0"
-            />
-          ) : (
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white flex items-center justify-center font-display font-bold text-lg ring-2 ring-[#EEF3FF] shrink-0 shadow-xs">
-              {initial}
-            </div>
-          )}
+          {/* Circular Avatar Container */}
+          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#BFD0FF] shrink-0 bg-[#EEF3FF] relative flex items-center justify-center aspect-square shadow-xs">
+            {photo ? (
+              <img
+                src={photo}
+                alt={name}
+                className="w-full h-full object-cover rounded-full aspect-square"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white flex items-center justify-center font-display font-bold text-lg rounded-full">
+                {initial}
+              </div>
+            )}
+          </div>
 
           <div className="space-y-1 flex-1 min-w-0">
             <div className="flex items-center gap-2.5 flex-wrap">

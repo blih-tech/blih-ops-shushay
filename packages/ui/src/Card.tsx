@@ -8,17 +8,17 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ children, variant = "default", className = "", ...props }, ref) => {
     const variantStyles = {
       default:
-        "bg-white border border-[#D9CEDF] shadow-[0_4px_24px_rgba(23,19,31,0.04)] hover:shadow-[0_8px_32px_rgba(23,19,31,0.08)] transition-all duration-300",
+        "bg-white border border-[#D9CEDF] shadow-[0_4px_20px_rgba(23,19,31,0.04)] hover:shadow-[0_8px_28px_rgba(23,19,31,0.07)] transition-shadow duration-300",
       surface:
         "bg-gradient-to-br from-[#FDFBFD] via-[#F8FAFF] to-[#EEF3FF]/60 border border-[#D9CEDF]/80 shadow-xs",
       interactive:
-        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:-translate-y-1 hover:shadow-[0_12px_36px_rgba(30,91,255,0.1)] transition-all duration-300 cursor-pointer group",
+        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 motion-safe:hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(30,91,255,0.08)] transition-all duration-300 cursor-pointer group",
     };
 
     return (
       <div
         ref={ref}
-        className={`rounded-2xl sm:rounded-3xl p-5 sm:p-6 md:p-8 text-[#17131F] ${variantStyles[variant]} ${className}`}
+        className={`rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-[#17131F] ${variantStyles[variant]} ${className}`}
         {...props}
       >
         {children}

@@ -10,6 +10,8 @@ export interface TalentProfile {
   skills: string[];
   photoUrl: string | null;
   cvUrl: string | null;
+  experience?: any[];
+  education?: any[];
   profileCompletion: {
     percentage: number;
     missingFields: string[];

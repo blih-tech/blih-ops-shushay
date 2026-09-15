@@ -2,15 +2,22 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Building2, Eye } from "lucide-react";
-import { Alert, Badge, UniversalSearch, Pagination, Select } from "@blih/ui";
+import { Building2, Eye, Trash2 } from "lucide-react";
+import {
+  Alert,
+  Badge,
+  UniversalSearch,
+  Pagination,
+  Select,
+  ConfirmDialog,
+  Button,
+} from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminCompanies } from "@/lib/adminApi";
+import { fetchAdminCompanies, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminCompanyItem } from "@/types/admin";
-import { Button } from "@blih/ui";
 
 const PAGE_SIZE = 25;
 
@@ -27,10 +34,14 @@ function AdminCompaniesContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [subFilter, setSubFilter] = useState("");
-  const [selected, setSelected] = useState<AdminCompanyItem | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<AdminCompanyItem | null>(
+    null,
+  );
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
@@ -64,6 +75,21 @@ function AdminCompaniesContent() {
     setPage(1);
   }, [debouncedSearch, subFilter]);
 
+  async function handleDelete() {
+    if (!deleteTarget?.user?.id) return;
+    setActionLoading(deleteTarget.id);
+    setActionError(null);
+    try {
+      await deleteAdminUser(deleteTarget.user.id);
+      setDeleteTarget(null);
+      load();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete company account");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <AdminBreadcrumb items={[{ label: "Companies" }]} />
@@ -88,6 +114,11 @@ function AdminCompaniesContent() {
           {error}
         </Alert>
       )}
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">
@@ -101,7 +132,7 @@ function AdminCompaniesContent() {
           id="sub-filter"
           value={subFilter}
           onChange={(e) => setSubFilter(e.target.value)}
-          className="w-full sm:w-44 shrink-0"
+          className="w-full sm:w-56 shrink-0"
           options={[
             { value: "", label: "All Subscriptions" },
             { value: "ACTIVE", label: "Active" },
@@ -133,7 +164,7 @@ function AdminCompaniesContent() {
                     <img
                       src={c.logoUrl}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-xl aspect-square"
                     />
                   ) : (
                     (c.companyName || c.user.email).charAt(0).toUpperCase()
@@ -231,18 +262,30 @@ function AdminCompaniesContent() {
           },
           {
             key: "actions",
-            header: "",
-            width: "80px",
+            header: "Actions",
+            width: "140px",
             render: (c) => (
-              <Link href={`/admin/companies/${c.id}`}>
+              <div className="flex items-center gap-1.5">
+                <Link href={`/admin/companies/${c.id}`}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<Eye className="h-3.5 w-3.5" />}
+                  >
+                    View
+                  </Button>
+                </Link>
                 <Button
                   size="sm"
                   variant="ghost"
-                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                  className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setDeleteTarget(c)}
+                  isLoading={actionLoading === c.id}
                 >
-                  View
+                  Delete
                 </Button>
-              </Link>
+              </div>
             ),
           },
         ]}
@@ -257,6 +300,17 @@ function AdminCompaniesContent() {
           />
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Company Account"
+        message={`Are you sure you want to permanently delete company "${deleteTarget?.companyName || deleteTarget?.user?.email}"? This will remove their user account, job postings, and company profile. This action cannot be undone.`}
+        confirmText="Delete Account"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleDelete}
+        onClose={() => setDeleteTarget(null)}
+      />
     </main>
   );
 }

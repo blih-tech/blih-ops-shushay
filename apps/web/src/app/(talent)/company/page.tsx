@@ -20,8 +20,78 @@ import {
   Users,
 } from "lucide-react";
 
+import { listCompanyJobs } from "@/lib/jobApi";
+import { getCompanySubscriptionStatus } from "@blih/api-client";
+
 function CompanyDashboardContent() {
   const { user } = useAuth();
+  const [loadingMetrics, setLoadingMetrics] = React.useState(true);
+  const [metrics, setMetrics] = React.useState({
+    activeJobsCount: 0,
+    totalApplications: 0,
+    subscriptionPlan: "Free Tier",
+    subscriptionActive: false,
+  });
+
+  React.useEffect(() => {
+    async function loadDashboardMetrics() {
+      setLoadingMetrics(true);
+      try {
+        const [jobsRes, subRes] = await Promise.allSettled([
+          listCompanyJobs(),
+          getCompanySubscriptionStatus(),
+        ]);
+
+        let activeJobsCount = 0;
+        let totalApplications = 0;
+
+        if (jobsRes.status === "fulfilled" && jobsRes.value?.jobs) {
+          activeJobsCount = jobsRes.value.jobs.filter((j) => {
+            if (j.status !== "ACTIVE") return false;
+            if (
+              j.applicationDeadline &&
+              new Date(j.applicationDeadline) < new Date()
+            ) {
+              return false;
+            }
+            return true;
+          }).length;
+          totalApplications = jobsRes.value.jobs.reduce(
+            (sum, j) => sum + (j._count?.applications || 0),
+            0
+          );
+        }
+
+        let subscriptionPlan = "Free Tier";
+        let subscriptionActive = false;
+
+        if (subRes.status === "fulfilled" && subRes.value) {
+          subscriptionActive = subRes.value.hasActiveSubscription;
+          if (subRes.value.subscription) {
+            subscriptionPlan =
+              subRes.value.subscription.plan === "YEARLY"
+                ? "Annual Plan"
+                : "Monthly Plan";
+          } else if (subRes.value.hasActiveSubscription) {
+            subscriptionPlan = "Active Plan";
+          }
+        }
+
+        setMetrics({
+          activeJobsCount,
+          totalApplications,
+          subscriptionPlan,
+          subscriptionActive,
+        });
+      } catch (err) {
+        console.error("Failed to fetch company metrics:", err);
+      } finally {
+        setLoadingMetrics(false);
+      }
+    }
+
+    loadDashboardMetrics();
+  }, []);
 
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
@@ -57,13 +127,13 @@ function CompanyDashboardContent() {
       {/* Metrics Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <MetricCard
-          value="Live"
+          value={loadingMetrics ? "..." : String(metrics.activeJobsCount)}
           label="Active Job Postings"
           variant="surface"
         />
         <MetricCard
-          value="Active"
-          label="Candidate Review Queue"
+          value={loadingMetrics ? "..." : String(metrics.totalApplications)}
+          label="Candidate Applications"
           variant="primary"
         />
         <MetricCard
@@ -72,8 +142,14 @@ function CompanyDashboardContent() {
           variant="surface"
         />
         <MetricCard
-          value="Active"
-          label="Subscription Access"
+          value={
+            loadingMetrics
+              ? "..."
+              : metrics.subscriptionActive
+              ? metrics.subscriptionPlan
+              : "Inactive"
+          }
+          label="Subscription Status"
           variant="surface"
         />
       </div>

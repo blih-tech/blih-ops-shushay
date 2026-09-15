@@ -1,22 +1,26 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { Globe, Mail, MapPin, Briefcase, Eye } from "lucide-react";
-import { Alert, Badge, Button, MetricCard } from "@blih/ui";
+import { Globe, Mail, MapPin, Briefcase, Eye, Trash2 } from "lucide-react";
+import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminCompanyById } from "@/lib/adminApi";
+import { fetchAdminCompanyById, deleteAdminUser } from "@/lib/adminApi";
 
 function AdminCompanyDetailContent() {
   const params = useParams();
+  const router = useRouter();
   const companyId = params.companyId as string;
 
   const [company, setCompany] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -31,6 +35,21 @@ function AdminCompanyDetailContent() {
     }
     load();
   }, [companyId]);
+
+  async function handleDelete() {
+    if (!company?.user?.id) return;
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await deleteAdminUser(company.user.id);
+      router.push("/admin/companies");
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete company account");
+    } finally {
+      setActionLoading(false);
+      setShowDeleteConfirm(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -70,6 +89,12 @@ function AdminCompanyDetailContent() {
           { label: company.companyName },
         ]}
       />
+
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -111,7 +136,7 @@ function AdminCompanyDetailContent() {
                   <img
                     src={company.logoUrl}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-2xl aspect-square"
                   />
                 ) : (
                   company.companyName?.charAt(0).toUpperCase() || "C"
@@ -163,11 +188,25 @@ function AdminCompanyDetailContent() {
               </div>
             </div>
             {company.user?.id && (
-              <Link href={`/admin/users/${company.user.id}`}>
-                <Button size="sm" variant="outline">
-                  User Account
+              <div className="flex items-center gap-2 shrink-0">
+                <Link href={`/admin/users/${company.user.id}`}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    leftIcon={<Mail className="h-3.5 w-3.5" />}
+                  >
+                    View User Account
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                >
+                  Delete Account
                 </Button>
-              </Link>
+              </div>
             )}
           </div>
         </div>
@@ -311,6 +350,16 @@ function AdminCompanyDetailContent() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Company Account"
+        message={`Are you sure you want to delete company "${company.companyName}" (${company.user?.email || "N/A"})? This action is permanent.`}
+        confirmText="Delete Account"
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteConfirm(false)}
+        variant="destructive"
+      />
     </main>
   );
 }

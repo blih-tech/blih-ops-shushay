@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Briefcase, GraduationCap, Award } from "lucide-react";
+import { Briefcase, GraduationCap, Award, Download, ExternalLink } from "lucide-react";
 import { Badge, Card } from "@blih/ui";
+import { getCertificateDownloadUrl } from "@blih/api-client";
 
 interface TalentCredentialSectionsProps {
   experience?: any[];
@@ -95,29 +96,52 @@ export function TalentCredentialSections({
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {certificates.map((cert: any) => (
-              <Card
-                key={cert.id}
-                className="p-4 border border-[#D9CEDF] rounded-2xl bg-white space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <Badge variant="verified" size="sm">
-                    Verified
-                  </Badge>
-                  <span className="text-[10px] font-mono text-[#6E6678]">
-                    {new Date(
-                      cert.createdAt || cert.issueDate,
-                    ).toLocaleDateString()}
-                  </span>
-                </div>
-                <h4 className="font-display text-base font-bold text-[#17131F]">
-                  {cert.course?.title || "Specialized Certification"}
-                </h4>
-                <p className="font-mono text-xs text-[#2E8F79]">
-                  ID: {cert.certificateNumber}
-                </p>
-              </Card>
-            ))}
+            {certificates.map((cert: any) => {
+              const certId = cert.id || cert.certificateId;
+              const certNumber = cert.certificateNumber || "BLIH-CERT-VERIFIED";
+
+              return (
+                <Card
+                  key={cert.id || certNumber}
+                  className="p-5 border border-[#D9CEDF] rounded-2xl bg-white space-y-3 flex flex-col justify-between hover:border-[#1E5BFF]/40 transition-all shadow-xs"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="verified" size="sm">
+                        Verified
+                      </Badge>
+                      <span className="text-[10px] font-mono text-[#6E6678]">
+                        {new Date(
+                          cert.createdAt || cert.issueDate,
+                        ).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+                    <h4 className="font-display text-base font-bold text-[#17131F]">
+                      {cert.course?.title || "Specialized Certification"}
+                    </h4>
+                    <p className="font-mono text-xs text-[#2E8F79] font-medium">
+                      ID: {certNumber}
+                    </p>
+                  </div>
+
+                  {certId && (
+                    <a
+                      href={getCertificateDownloadUrl(certId)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="pt-2.5 border-t border-[#E6EAF3] flex items-center justify-between font-mono text-xs text-[#1E5BFF] hover:underline font-semibold"
+                    >
+                      <span>Download Verified Certificate</span>
+                      <Download className="w-3.5 h-3.5" />
+                    </a>
+                  )}
+                </Card>
+              );
+            })}
           </div>
         </section>
       )}

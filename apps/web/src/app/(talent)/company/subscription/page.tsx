@@ -96,7 +96,7 @@ function CompanySubscriptionContent() {
           <span>Company Subscription & Billing</span>
         </div>
         <h1 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-[#17131F]">
-          Hire verified African engineering talent with confidence.
+          Hire top verified engineering talent with confidence.
         </h1>
         <p className="text-base sm:text-lg text-[#6E6678] font-sans leading-relaxed">
           Gain full access to the graduate evidence catalog, direct contact

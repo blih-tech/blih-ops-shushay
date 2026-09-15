@@ -49,6 +49,7 @@ const BADGE_CONFIGS: Record<
   },
   job: {
     ACTIVE: { label: "Active", variant: "success" },
+    EXPIRED: { label: "Expired", variant: "warning" },
     CLOSED: { label: "Closed", variant: "secondary" },
     DRAFT: { label: "Draft", variant: "warning" },
   },

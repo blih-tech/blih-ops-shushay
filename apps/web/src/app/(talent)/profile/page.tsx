@@ -6,10 +6,13 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { useAuth } from "@/providers/AuthProvider";
 import { useTalentProfile } from "@/hooks/useTalentProfile";
 import { formatPhone } from "@/lib/formatPhone";
-import { Button, Badge, Alert, SkillBar, MetricCard } from "@blih/ui";
+import { Button, Badge, Alert, MetricCard } from "@blih/ui";
 import { ProfileSkeleton } from "@/components/profile/ProfileSkeleton";
 import { ProfileCompletionBanner } from "@/components/profile/ProfileCompletionBanner";
-import { VerifiedCredentialsCard } from "@/components/profile/VerifiedCredentialsCard";
+import {
+  VerifiedCredentialsCard,
+  getUniqueCertificates,
+} from "@/components/profile/VerifiedCredentialsCard";
 import { ExperienceEducationCard } from "@/components/profile/ExperienceEducationCard";
 import {
   Edit3,
@@ -39,8 +42,11 @@ function ProfileContent() {
     );
   }
 
-  const certCount =
-    profile?.certificates?.length ?? profile?.completedCourses?.length ?? 0;
+  const uniqueCerts = getUniqueCertificates(
+    profile?.certificates,
+    profile?.completedCourses,
+  );
+  const certCount = uniqueCerts.length;
 
   return (
     <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
@@ -80,7 +86,7 @@ function ProfileContent() {
                 </h1>
                 {profile?.isComplete ? (
                   <Badge variant="verified" size="md">
-                    Verified Profile
+                    Completed Profile
                   </Badge>
                 ) : (
                   <Badge variant="amber" size="md">
@@ -115,7 +121,7 @@ function ProfileContent() {
             <Link href="/profile/preview">
               <Button
                 variant="outline"
-                size="md"
+                size="sm"
                 leftIcon={<Eye className="h-4 w-4" />}
               >
                 Public Preview
@@ -124,7 +130,7 @@ function ProfileContent() {
             <Link href="/profile/edit">
               <Button
                 variant="primary"
-                size="md"
+                size="sm"
                 leftIcon={<Edit3 className="h-4 w-4" />}
               >
                 Edit Profile
@@ -145,21 +151,21 @@ function ProfileContent() {
           </div>
         )}
 
-        {/* Calibrated Operational Skills */}
+        {/* Verified Skill Competencies */}
         {profile?.skills && profile.skills.length > 0 && (
-          <div className="space-y-4 pt-2">
+          <div className="space-y-3 pt-2">
             <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
               Verified Skill Competencies
             </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-2.5">
               {profile.skills.map((skill: string) => (
-                <SkillBar
+                <span
                   key={skill}
-                  name={skill}
-                  score={92}
-                  status="Verified"
-                  variant="primary"
-                />
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#EEF3FF] border border-[#1E5BFF]/25 text-[#1E5BFF] text-xs font-mono font-semibold shadow-xs"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#1E5BFF]" />
+                  {skill}
+                </span>
               ))}
             </div>
           </div>

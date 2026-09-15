@@ -19,6 +19,9 @@ import { ArrowLeft } from "lucide-react";
 import { ProfileCompletionCard } from "@/components/profile/ProfileCompletionCard";
 import { PhotoUpload } from "@/components/profile/PhotoUpload";
 import { CvUpload } from "@/components/profile/CvUpload";
+import { SkillsInput } from "@/components/profile/SkillsInput";
+import { ExperienceForm } from "@/components/profile/ExperienceForm";
+import { EducationForm } from "@/components/profile/EducationForm";
 import {
   uploadTalentPhoto,
   deleteTalentPhoto,
@@ -50,23 +53,29 @@ function ProfileContent() {
   const [country, setCountry] = useState("");
   const [city, setCity] = useState("");
   const [englishLevel, setEnglishLevel] = useState("");
+  const [skills, setSkills] = useState<string[]>([]);
+
+  const fetchProfile = async () => {
+    try {
+      const data = await apiFetch<TalentProfile>("/talents/profile");
+      setProfile(data);
+      setFullName(data.fullName || "");
+      setTitle(data.title || "");
+      setPhone(data.phone || "");
+      setBio(data.bio || "");
+      setCountry(data.country || "");
+      setCity(data.city || "");
+      setEnglishLevel(data.englishLevel || "");
+      setSkills(data.skills || []);
+    } catch (err: any) {
+      setError(err.message || "Failed to load profile");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    apiFetch<TalentProfile>("/talents/profile")
-      .then((data) => {
-        setProfile(data);
-        setFullName(data.fullName || "");
-        setTitle(data.title || "");
-        setPhone(data.phone || "");
-        setBio(data.bio || "");
-        setCountry(data.country || "");
-        setCity(data.city || "");
-        setEnglishLevel(data.englishLevel || "");
-      })
-      .catch((err) => {
-        setError(err.message || "Failed to load profile");
-      })
-      .finally(() => setLoading(false));
+    fetchProfile();
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -86,6 +95,7 @@ function ProfileContent() {
           country,
           city,
           englishLevel,
+          skills,
         }),
       });
 
@@ -242,6 +252,12 @@ function ProfileContent() {
                   </div>
                 </div>
 
+                <SkillsInput
+                  value={skills}
+                  onChange={setSkills}
+                  disabled={saving}
+                />
+
                 <div className="space-y-2">
                   <label className="text-xs font-mono font-bold text-[#6E6678] uppercase">
                     Biography / Summary
@@ -263,7 +279,7 @@ function ProfileContent() {
             )}
           </Card>
 
-          {/* Profile Photo & Resume Upload Card on Left */}
+          {/* Profile Photo & Resume Upload Card */}
           <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs space-y-6">
             <div>
               <CardTitle className="text-xl font-bold font-display">
@@ -288,6 +304,18 @@ function ProfileContent() {
               />
             </div>
           </Card>
+
+          {/* Work Experience Section */}
+          <ExperienceForm
+            entries={profile?.experience || []}
+            onRefresh={fetchProfile}
+          />
+
+          {/* Education & Qualifications Section */}
+          <EducationForm
+            entries={profile?.education || []}
+            onRefresh={fetchProfile}
+          />
         </div>
 
         <div className="lg:col-span-4 space-y-6">

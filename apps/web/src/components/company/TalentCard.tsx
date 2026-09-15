@@ -17,13 +17,13 @@ export function TalentCard({ talent }: TalentCardProps) {
       <div className="p-6 space-y-4">
         {/* Header: Avatar, Name, Title, and Verified Credentials Badge */}
         <div className="flex items-start gap-3.5">
-          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#BFD0FF] shrink-0 bg-[#EEF3FF] relative flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full overflow-hidden border border-[#BFD0FF] shrink-0 bg-[#EEF3FF] relative flex items-center justify-center aspect-square">
             {talent.photoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={talent.photoUrl}
                 alt={talent.fullName}
-                className="w-full h-full object-cover rounded-full"
+                className="w-full h-full object-cover rounded-full aspect-square"
               />
             ) : (
               <div className="w-full h-full bg-[#1E5BFF] text-white flex items-center justify-center font-display font-bold text-lg shadow-xs rounded-full">

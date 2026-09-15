@@ -25,15 +25,38 @@ export function JobPreviewDetail({
     );
   }
 
+  const isClosed = job.status === "CLOSED";
+  const isExpired =
+    !isClosed &&
+    Boolean(
+      job.applicationDeadline &&
+        new Date(job.applicationDeadline) < new Date()
+    );
+
   return (
     <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
         <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
           Opportunity Details
         </span>
-        <Badge variant="primary" size="md">
-          {job.experienceLevel} Level
-        </Badge>
+        <div className="flex items-center gap-2">
+          {isClosed ? (
+            <Badge variant="outline" size="md">
+              Closed
+            </Badge>
+          ) : isExpired ? (
+            <Badge variant="amber" size="md">
+              Expired
+            </Badge>
+          ) : (
+            <Badge variant="verified" size="md">
+              Active
+            </Badge>
+          )}
+          <Badge variant="primary" size="md">
+            {job.experienceLevel} Level
+          </Badge>
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -79,8 +102,8 @@ export function JobPreviewDetail({
       )}
 
       <div className="pt-2 space-y-3">
-        <Link href={`/jobs/${job.id}`} className="block">
-          {job.hasApplied ? (
+        {job.hasApplied ? (
+          <Link href={`/jobs/${job.id}`} className="block">
             <Button
               size="lg"
               fullWidth
@@ -91,7 +114,31 @@ export function JobPreviewDetail({
             >
               Applied · View Details
             </Button>
-          ) : (
+          </Link>
+        ) : isClosed || isExpired ? (
+          <div className="space-y-3">
+            <Button
+              size="lg"
+              fullWidth
+              variant="outline"
+              disabled
+              className="opacity-75 cursor-not-allowed bg-gray-50 text-gray-500 border-gray-300 font-semibold"
+            >
+              {isClosed ? "Position Closed" : "Deadline Passed"}
+            </Button>
+            <Link href={`/jobs/${job.id}`} className="block">
+              <Button
+                size="md"
+                fullWidth
+                variant="outline"
+                rightIcon={<ArrowUpRight className="w-4 h-4" />}
+              >
+                View Full Position Details
+              </Button>
+            </Link>
+          </div>
+        ) : (
+          <Link href={`/jobs/${job.id}`} className="block">
             <Button
               size="lg"
               fullWidth
@@ -99,11 +146,13 @@ export function JobPreviewDetail({
             >
               View Role & Apply
             </Button>
-          )}
-        </Link>
+          </Link>
+        )}
         <p className="text-center font-mono text-[11px] text-[#6E6678]">
           {job.hasApplied
             ? "Your application is submitted. Click to view full listing details."
+            : isClosed || isExpired
+            ? "This position is no longer accepting applications, but full details remain accessible."
             : "Review full requirements and submit your application with verified credentials."}
         </p>
       </div>

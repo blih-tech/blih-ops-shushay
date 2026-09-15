@@ -8,11 +8,12 @@ export interface VerifiedCredentialsCardProps {
   completedCourses?: any[];
 }
 
-export const VerifiedCredentialsCard: React.FC<
-  VerifiedCredentialsCardProps
-> = ({ certificates, completedCourses }) => {
-  const rawItems = certificates || completedCourses || [];
-  const items = rawItems.reduce((acc: any[], item: any) => {
+export function getUniqueCertificates(
+  certificates?: any[],
+  completedCourses?: any[],
+): any[] {
+  const rawItems = certificates?.length ? certificates : completedCourses || [];
+  return rawItems.reduce((acc: any[], item: any) => {
     const titleKey =
       item.course?.title?.trim() || item.title?.trim() || item.id;
     if (
@@ -25,6 +26,12 @@ export const VerifiedCredentialsCard: React.FC<
     }
     return acc;
   }, []);
+}
+
+export const VerifiedCredentialsCard: React.FC<
+  VerifiedCredentialsCardProps
+> = ({ certificates, completedCourses }) => {
+  const items = getUniqueCertificates(certificates, completedCourses);
   if (items.length === 0) return null;
 
   return (

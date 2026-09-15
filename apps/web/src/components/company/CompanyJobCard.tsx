@@ -10,6 +10,8 @@ import {
   Edit3,
   Calendar,
   XCircle,
+  Sparkles,
+  Briefcase,
 } from "lucide-react";
 import { Button } from "@blih/ui";
 import { Job } from "@/types/job";
@@ -35,6 +37,12 @@ export function CompanyJobCard({
   onCloseJob,
 }: CompanyJobCardProps) {
   const isClosed = job.status === "CLOSED";
+  const isExpired =
+    !isClosed &&
+    Boolean(
+      job.applicationDeadline &&
+      new Date(job.applicationDeadline) < new Date()
+    );
   const applicantsCount = job._count?.applications || 0;
   const isClosing = closingId === job.id;
   const initial = job.title ? job.title.charAt(0).toUpperCase() : "J";
@@ -42,59 +50,45 @@ export function CompanyJobCard({
   return (
     <div className="relative overflow-hidden rounded-3xl border border-[#D9CEDF] bg-white shadow-xs">
       <div className="p-6 sm:p-7 space-y-5">
-        {/* Header: Role Identity & Top Action Hub */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-          <div className="flex items-start gap-4 flex-1 min-w-0">
+        {/* Header: Role Title, Status Badge & Top Action Hub */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
             {/* Vibrant Monogram Badge */}
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-bold text-xl shrink-0 shadow-sm ${
-                isClosed
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-bold text-xl shrink-0 shadow-sm ${isClosed
                   ? "bg-[#F4F1F7] text-[#6E6678] border border-[#D9CEDF]"
                   : "bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white shadow-[0_4px_12px_rgba(30,91,255,0.25)] ring-4 ring-[#EEF3FF]"
-              }`}
+                }`}
             >
               {initial}
             </div>
 
-            <div className="space-y-2 flex-1 min-w-0">
-              {/* Title ABOVE the badges */}
+            <div className="flex items-center gap-3 flex-wrap flex-1 min-w-0">
               <Link href={`/company/jobs/${job.id}`} className="inline-block">
                 <h3 className="font-display text-xl sm:text-2xl font-bold text-[#17131F] hover:text-[#1E5BFF] transition-colors leading-tight line-clamp-1">
                   {job.title}
                 </h3>
               </Link>
 
-              {/* Badges Row BELOW the title */}
-              <div className="flex items-center gap-2 flex-wrap">
-                {isClosed ? (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#F4F1F7] text-[#6E6678] border border-[#D9CEDF]/70">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#6E6678]" />
-                    Closed
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#E6F5F0] text-[#2E8F79] border border-[#2E8F79]/30">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2E8F79] opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2E8F79]" />
-                    </span>
-                    Active Role
-                  </span>
-                )}
-
-                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/20 text-xs font-mono font-semibold">
-                  {formatEmploymentType(job.employmentType)}
+              {isClosed ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#F4F1F7] text-[#6E6678] border border-[#D9CEDF]/70">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#6E6678]" />
+                  Closed
                 </span>
-
-                <span className="px-2.5 py-0.5 rounded-full bg-[#FFF4EE] text-[#FF8A5B] border border-[#FF8A5B]/25 text-xs font-mono font-semibold">
-                  {job.experienceLevel} Level
+              ) : isExpired ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#FFF9EB] text-[#DDAA3C] border border-[#DDAA3C]/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#DDAA3C]" />
+                  Expired
                 </span>
-
-                {job.englishLevel && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#F8FAFF] text-[#6E6678] border border-[#D9CEDF]/70 text-xs font-mono">
-                    {job.englishLevel} English
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold bg-[#E6F5F0] text-[#2E8F79] border border-[#2E8F79]/30">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2E8F79] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2E8F79]" />
                   </span>
-                )}
-              </div>
+                  Active Role
+                </span>
+              )}
             </div>
           </div>
 
@@ -108,19 +102,19 @@ export function CompanyJobCard({
                     size="sm"
                     aria-label="Edit role"
                     leftIcon={<Edit3 className="w-3.5 h-3.5" />}
-                    className="h-9 text-xs font-medium border-[#D9CEDF]"
+                    className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#F8FAFD] hover:border-[#1E5BFF]/40 transition-all"
                   >
                     Edit
                   </Button>
                 </Link>
 
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   disabled={isClosing}
                   onClick={() => onCloseJob(job.id)}
-                  className="h-9 text-xs text-[#6E6678] hover:text-red-600 hover:bg-red-50 font-medium"
-                  leftIcon={<XCircle className="w-3.5 h-3.5" />}
+                  className="h-9 px-3.5 text-xs font-semibold rounded-xl border-red-200/80 bg-red-50/50 text-red-600 hover:bg-red-100/80 hover:border-red-300 transition-all"
+                  leftIcon={<XCircle className="w-3.5 h-3.5 text-red-500" />}
                 >
                   {isClosing ? "Closing..." : "Close"}
                 </Button>
@@ -131,7 +125,7 @@ export function CompanyJobCard({
               <Button
                 variant="primary"
                 size="sm"
-                className="h-9 px-4 text-xs font-semibold shadow-sm"
+                className="h-9 px-4 text-xs font-semibold rounded-xl shadow-xs"
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
               >
                 Manage Role
@@ -141,40 +135,53 @@ export function CompanyJobCard({
         </div>
 
         {/* Bento Micro-Metrics Strip */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#F8FAFD] via-white to-[#F8FAFD] border border-[#E6EAF3]">
-          {/* Compensation */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-[#F8FAFD] via-white to-[#F8FAFD] border border-[#E6EAF3]">
+          {/* Role Type & Level */}
           <div className="space-y-0.5 px-2">
+            <span className="text-[10px] font-mono text-[#6E6678] uppercase tracking-wider block">
+              Role Profile
+            </span>
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#17131F] truncate">
+              <Briefcase className="w-4 h-4 text-[#1E5BFF] shrink-0" />
+              <span className="truncate">
+                {formatEmploymentType(job.employmentType)} · {job.experienceLevel} Level
+              </span>
+            </div>
+          </div>
+
+          {/* Compensation */}
+          <div className="space-y-0.5 px-2 lg:border-l lg:border-[#E6EAF3]">
             <span className="text-[10px] font-mono text-[#6E6678] uppercase tracking-wider block">
               Compensation
             </span>
-            <div className="flex items-center gap-1.5 text-sm font-semibold text-[#17131F]">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#17131F] truncate">
               <DollarSign className="w-4 h-4 text-[#2E8F79] shrink-0" />
-              <span>{formatSalary(job)}</span>
+              <span className="truncate">{formatSalary(job)}</span>
             </div>
           </div>
 
           {/* Location & Schedule */}
-          <div className="space-y-0.5 px-2 sm:border-x sm:border-[#E6EAF3]">
+          <div className="space-y-0.5 px-2 lg:border-l lg:border-[#E6EAF3]">
             <span className="text-[10px] font-mono text-[#6E6678] uppercase tracking-wider block">
               Location & Schedule
             </span>
-            <div className="flex items-center gap-1.5 text-sm font-medium text-[#17131F] truncate">
+            <div className="flex items-center gap-1.5 text-xs font-medium text-[#17131F] truncate">
               <MapPin className="w-4 h-4 text-[#1E5BFF] shrink-0" />
               <span className="truncate">
-                {job.timezone || "Remote"}{" "}
-                {job.workingHours ? `· ${job.workingHours}` : ""}
+                {job.timezone || "Remote"}
+                {job.workingHours ? ` · ${job.workingHours}` : ""}
               </span>
             </div>
           </div>
 
           {/* Applicant Spotlight */}
-          <div className="space-y-0.5 px-2">
+          <div className="space-y-0.5 px-2 lg:border-l lg:border-[#E6EAF3]">
             <span className="text-[10px] font-mono text-[#6E6678] uppercase tracking-wider block">
               Applicant Pool
             </span>
             <Link
               href={`/company/jobs/${job.id}`}
-              className="flex items-center gap-1.5 text-sm font-bold text-[#1E5BFF] hover:underline"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#1E5BFF] hover:underline truncate"
             >
               <Users className="w-4 h-4 text-[#1E5BFF] shrink-0" />
               <span>
@@ -187,29 +194,24 @@ export function CompanyJobCard({
 
         {/* Footer: Skills on left, Post Date on right */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-[#E6EAF3]">
-          {/* Skills */}
-          <div className="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
-            {job.requiredSkills && job.requiredSkills.length > 0 ? (
-              <>
-                {job.requiredSkills.slice(0, 5).map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2.5 py-1 rounded-xl bg-[#EEF3FF]/70 text-[#1E5BFF] text-xs font-mono font-medium border border-[#1E5BFF]/15 hover:bg-[#EEF3FF] transition-colors"
-                  >
-                    {skill}
-                  </span>
-                ))}
-                {job.requiredSkills.length > 5 && (
-                  <span className="px-2 py-1 text-xs font-mono text-[#6E6678]">
-                    +{job.requiredSkills.length - 5} more
-                  </span>
-                )}
-              </>
-            ) : (
-              <span className="text-xs font-mono text-[#6E6678]/70">
-                General role requirements
-              </span>
-            )}
+          {/* Skills as clean dot-separated text */}
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <Sparkles className="w-3.5 h-3.5 text-[#1E5BFF] shrink-0" />
+            <span className="text-xs font-mono text-[#6E6678] truncate">
+              <span className="text-[#17131F] font-semibold">Required: </span>
+              {job.requiredSkills && job.requiredSkills.length > 0 ? (
+                <>
+                  {job.requiredSkills.slice(0, 4).join(" · ")}
+                  {job.requiredSkills.length > 4 && (
+                    <span className="text-[#1E5BFF] font-medium ml-1">
+                      (+{job.requiredSkills.length - 4} more)
+                    </span>
+                  )}
+                </>
+              ) : (
+                "General role requirements"
+              )}
+            </span>
           </div>
 
           {/* Post Date at the BOTTOM */}

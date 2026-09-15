@@ -194,13 +194,17 @@ function AdminUsersContent() {
           },
           {
             key: "emailVerified",
-            header: "Verified",
-            width: "80px",
+            header: "Email Verified",
+            width: "120px",
             render: (u) =>
               u.emailVerified ? (
-                <CheckCircle className="h-4 w-4 text-[#2E8F79]" />
+                <span className="inline-flex items-center gap-1 font-mono text-xs text-[#2E8F79] font-medium">
+                  <CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" /> Verified
+                </span>
               ) : (
-                <XCircle className="h-4 w-4 text-[#6E6678]" />
+                <span className="inline-flex items-center gap-1 font-mono text-xs text-[#6E6678]">
+                  <XCircle className="h-3.5 w-3.5 text-[#6E6678]" /> Pending
+                </span>
               ),
           },
           {

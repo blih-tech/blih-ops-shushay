@@ -148,6 +148,16 @@ export async function updateJobStatus(req: Request, res: Response, next: NextFun
   }
 }
 
+export async function deleteJob(req: Request, res: Response, next: NextFunction) {
+  try {
+    const jobId = String(req.params.jobId);
+    const result = await adminService.adminDeleteJob(jobId);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 // ─── Applications ─────────────────────────────────────────────────────────────
 
 export async function getApplications(req: Request, res: Response, next: NextFunction) {
@@ -216,6 +226,16 @@ export async function getCertificates(req: Request, res: Response, next: NextFun
       courseId: qs(req, "courseId"),
     });
     res.json(data);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function deleteCertificate(req: Request, res: Response, next: NextFunction) {
+  try {
+    const certId = String(req.params.certId);
+    const result = await adminService.adminDeleteCertificate(certId);
+    res.json(result);
   } catch (err) {
     next(err);
   }

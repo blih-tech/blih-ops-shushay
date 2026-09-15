@@ -1,36 +1,84 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { Building2, Calendar, MapPin, Users, Globe, Clock } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { Building2, Calendar, MapPin, Users, Globe, Clock, XCircle, RefreshCw, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { Alert, Badge, MetricCard } from "@blih/ui";
+import { Alert, Badge, MetricCard, Button, ConfirmDialog } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminJobById } from "@/lib/adminApi";
+import { fetchAdminJobById, updateAdminJobStatus, deleteAdminJob } from "@/lib/adminApi";
 import type { AdminJobDetail } from "@/types/admin";
 
 function AdminJobDetailContent() {
   const params = useParams();
+  const router = useRouter();
   const jobId = params.jobId as string;
   const [job, setJob] = useState<AdminJobDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [showCloseDialog, setShowCloseDialog] = useState(false);
+  const [showReopenDialog, setShowReopenDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const loadJob = async () => {
+    try {
+      const data = await fetchAdminJobById(jobId);
+      setJob(data);
+    } catch (err: any) {
+      setError(err.message || "Failed to load job");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    async function load() {
-      try {
-        const data = await fetchAdminJobById(jobId);
-        setJob(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load job");
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+    loadJob();
   }, [jobId]);
+
+  async function handleCloseJob() {
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await updateAdminJobStatus(jobId, "CLOSED");
+      setShowCloseDialog(false);
+      await loadJob();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to close job");
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleReopenJob() {
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await updateAdminJobStatus(jobId, "ACTIVE");
+      setShowReopenDialog(false);
+      await loadJob();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to reopen job");
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  async function handleDeleteJob() {
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await deleteAdminJob(jobId);
+      setShowDeleteDialog(false);
+      router.push("/admin/jobs");
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete job");
+      setActionLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -76,6 +124,12 @@ function AdminJobDetailContent() {
       <AdminBreadcrumb
         items={[{ label: "Jobs", href: "/admin/jobs" }, { label: job.title }]}
       />
+
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
+        </Alert>
+      )}
 
       {/* Stat Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -138,6 +192,39 @@ function AdminJobDetailContent() {
                     Posted {new Date(job.createdAt).toLocaleDateString()}
                   </span>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {job.status === "ACTIVE" ? (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
+                    leftIcon={<XCircle className="h-3.5 w-3.5" />}
+                    onClick={() => setShowCloseDialog(true)}
+                    isLoading={actionLoading}
+                  >
+                    Close Job
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<RefreshCw className="h-3.5 w-3.5" />}
+                    onClick={() => setShowReopenDialog(true)}
+                    isLoading={actionLoading}
+                  >
+                    Reopen Job
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setShowDeleteDialog(true)}
+                  isLoading={actionLoading}
+                >
+                  Delete Job
+                </Button>
               </div>
             </div>
           </div>
@@ -314,6 +401,39 @@ function AdminJobDetailContent() {
           </div>
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showCloseDialog}
+        title="Force Close Job"
+        message={`Are you sure you want to close "${job.title}"? It will no longer accept new applications.`}
+        confirmText="Close Job"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleCloseJob}
+        onClose={() => setShowCloseDialog(false)}
+      />
+
+      <ConfirmDialog
+        isOpen={showReopenDialog}
+        title="Reopen Job"
+        message={`Reopen "${job.title}"? It will become active with a new 30-day application deadline and accept new candidates.`}
+        confirmText="Reopen Job"
+        cancelText="Cancel"
+        variant="primary"
+        onConfirm={handleReopenJob}
+        onClose={() => setShowReopenDialog(false)}
+      />
+
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="Delete Job"
+        message={`Are you sure you want to permanently delete "${job.title}"? This action cannot be undone and will delete all associated job applications.`}
+        confirmText="Delete Job"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleDeleteJob}
+        onClose={() => setShowDeleteDialog(false)}
+      />
     </main>
   );
 }

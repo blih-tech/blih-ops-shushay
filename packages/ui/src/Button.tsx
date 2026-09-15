@@ -39,22 +39,22 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const isSpinning = isLoading || !!loading;
 
     const baseStyles =
-      "inline-flex items-center justify-center whitespace-nowrap font-sans font-semibold transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E5BFF]/20 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none rounded-xl cursor-pointer select-none active:scale-[0.98]";
+      "inline-flex items-center justify-center whitespace-nowrap font-sans font-semibold transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1E5BFF]/20 focus-visible:ring-offset-1 disabled:opacity-50 disabled:pointer-events-none rounded-lg cursor-pointer select-none motion-safe:active:scale-[0.98]";
 
     const variants = {
       primary:
-        "bg-[#1E5BFF] text-white hover:bg-[#1546CC] hover:-translate-y-0.5 active:translate-y-0 active:bg-[#0F35A0] border border-transparent shadow-[0_4px_14px_rgba(30,91,255,0.25)] hover:shadow-[0_8px_24px_rgba(30,91,255,0.38)]",
+        "bg-[#1E5BFF] text-white hover:bg-[#1546CC] motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 active:bg-[#0F35A0] border border-transparent shadow-[0_4px_14px_rgba(30,91,255,0.2)] hover:shadow-[0_8px_24px_rgba(30,91,255,0.28)]",
       secondary:
-        "bg-[#EEF3FF] text-[#1E5BFF] hover:bg-[#DDE7FF] hover:-translate-y-0.5 active:translate-y-0 border border-[#1E5BFF]/20 shadow-xs hover:shadow-sm",
+        "bg-[#EEF3FF] text-[#1E5BFF] hover:bg-[#DDE7FF] motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 border border-[#1E5BFF]/20 shadow-xs hover:shadow-sm",
       outline:
-        "border border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF]/40 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-sm",
+        "border border-[#D9CEDF] bg-white text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF]/40 motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 shadow-xs hover:shadow-sm",
       ghost:
         "text-[#17131F] hover:bg-[#EEF3FF] hover:text-[#1E5BFF] border border-transparent",
       coral:
-        "bg-[#FF8A5B] text-white hover:bg-[#E57648] hover:-translate-y-0.5 active:translate-y-0 active:bg-[#CC6338] border border-transparent shadow-[0_4px_14px_rgba(255,138,91,0.25)] hover:shadow-[0_8px_24px_rgba(255,138,91,0.38)]",
+        "bg-[#FF8A5B] text-white hover:bg-[#E57648] motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 active:bg-[#CC6338] border border-transparent shadow-[0_4px_14px_rgba(255,138,91,0.2)] hover:shadow-[0_8px_24px_rgba(255,138,91,0.3)]",
       destructive:
-        "bg-[#EF4444] text-white hover:bg-[#DC2626] hover:-translate-y-0.5 active:translate-y-0 border border-transparent shadow-[0_4px_14px_rgba(239,68,68,0.25)] hover:shadow-[0_8px_24px_rgba(239,68,68,0.38)]",
-      dark: "bg-[#17131F] text-white hover:bg-[#252030] hover:-translate-y-0.5 active:translate-y-0 border border-transparent shadow-md",
+        "bg-[#EF4444] text-white hover:bg-[#DC2626] motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 border border-transparent shadow-[0_4px_14px_rgba(239,68,68,0.2)] hover:shadow-[0_8px_24px_rgba(239,68,68,0.3)]",
+      dark: "bg-[#17131F] text-white hover:bg-[#252030] motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-0 border border-transparent shadow-md",
     };
 
     const sizes = {

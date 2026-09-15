@@ -33,7 +33,6 @@ interface CompanyData {
   contactEmail: string | null;
   contactPhone: string | null;
   logoUrl: string | null;
-  createdAt: string;
   jobs: Array<{
     id: string;
     title: string;
@@ -45,6 +44,8 @@ interface CompanyData {
     salaryCurrency: string;
     salaryDisplay: string | null;
     countryRestrictions: string[];
+    applicationDeadline?: string | null;
+    status?: string;
     createdAt: string;
   }>;
 }
@@ -100,6 +101,7 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
 
   const companyName = company.companyName || "Hiring Organization";
   const location = [company.city, company.country].filter(Boolean).join(", ");
+  const companyJobs = company.jobs || [];
 
   return (
     <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -215,61 +217,98 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
         </div>
       </div>
 
-      {/* Open Positions Section */}
+      {/* Positions Section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="font-display text-xl font-bold text-[#17131F] flex items-center gap-2">
             <Briefcase className="h-5 w-5 text-[#1E5BFF]" />
-            <span>Open Positions ({company.jobs.length})</span>
+            <span>Positions ({companyJobs.length})</span>
           </h2>
         </div>
 
-        {company.jobs.length === 0 ? (
+        {companyJobs.length === 0 ? (
           <Card className="p-8 text-center text-sm text-[#6E6678] border-[#D9CEDF]">
-            This organization does not have any open positions listed at the
+            This organization does not have any positions listed at the
             moment.
           </Card>
         ) : (
           <div className="grid grid-cols-1 gap-4">
-            {company.jobs.map((job) => (
-              <Card
-                key={job.id}
-                className="p-6 bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 transition-all rounded-2xl space-y-3"
-              >
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                  <div>
-                    <Link
-                      href={`/jobs/${job.id}`}
-                      className="font-display text-lg font-bold text-[#17131F] hover:text-[#1E5BFF] transition-colors"
-                    >
-                      {job.title}
-                    </Link>
-                    <div className="flex items-center gap-2 flex-wrap text-xs text-[#6E6678] mt-1">
-                      <Badge variant="default">
-                        {job.employmentType.replace(/_/g, " ")}
-                      </Badge>
-                      <Badge variant="primary">
-                        {job.experienceLevel} LEVEL
-                      </Badge>
-                      {job.salaryDisplay && (
-                        <span className="font-mono text-[#2E8F79] font-semibold">
-                          {job.salaryDisplay}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+            {companyJobs.map((job) => {
+              const isClosed = job.status === "CLOSED";
+              const isExpired =
+                !isClosed &&
+                Boolean(
+                  job.applicationDeadline &&
+                    new Date(job.applicationDeadline) < new Date()
+                );
 
-                  <Link href={`/jobs/${job.id}`}>
-                    <Button size="sm" variant="outline">
-                      View Job & Apply →
-                    </Button>
-                  </Link>
-                </div>
-                <p className="text-xs text-[#6E6678] line-clamp-2 leading-relaxed">
-                  {job.description}
-                </p>
-              </Card>
-            ))}
+              return (
+                <Card
+                  key={job.id}
+                  className="p-6 bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 transition-all rounded-2xl space-y-3"
+                >
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div>
+                      <Link
+                        href={`/jobs/${job.id}`}
+                        className="font-display text-lg font-bold text-[#17131F] hover:text-[#1E5BFF] transition-colors"
+                      >
+                        {job.title}
+                      </Link>
+                      <div className="flex items-center gap-2 flex-wrap text-xs text-[#6E6678] mt-1">
+                        {isClosed ? (
+                          <Badge variant="outline">Closed</Badge>
+                        ) : isExpired ? (
+                          <Badge variant="amber">Expired</Badge>
+                        ) : (
+                          <Badge variant="verified">Active</Badge>
+                        )}
+                        <Badge variant="default">
+                          {job.employmentType.replace(/_/g, " ")}
+                        </Badge>
+                        <Badge variant="primary">
+                          {job.experienceLevel} LEVEL
+                        </Badge>
+                        {job.salaryDisplay && (
+                          <span className="font-mono text-[#2E8F79] font-semibold">
+                            {job.salaryDisplay}
+                          </span>
+                        )}
+                        {job.applicationDeadline && (
+                          <span className="font-mono text-xs text-[#6E6678]">
+                            · Deadline:{" "}
+                            {new Date(job.applicationDeadline).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <Link href={`/jobs/${job.id}`}>
+                      <Button
+                        size="sm"
+                        variant={isClosed || isExpired ? "outline" : "primary"}
+                      >
+                        {isClosed
+                          ? "View Closed Position →"
+                          : isExpired
+                          ? "View Expired Position →"
+                          : "View Job & Apply →"}
+                      </Button>
+                    </Link>
+                  </div>
+                  <p className="text-xs text-[#6E6678] line-clamp-2 leading-relaxed">
+                    {job.description}
+                  </p>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>

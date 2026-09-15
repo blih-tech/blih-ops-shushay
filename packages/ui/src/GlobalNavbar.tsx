@@ -90,15 +90,15 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   });
 
   return (
-    <header className="sticky top-4 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-      <nav className="bg-white/70 backdrop-blur-2xl border border-white/50 ring-1 ring-[#D9CEDF]/50 rounded-2xl sm:rounded-3xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_16px_40px_-12px_rgba(30,91,255,0.1)] transition-all duration-300">
+    <header className="sticky top-3 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+      <nav className="bg-white/95 backdrop-blur-xl border border-[#D9CEDF]/80 rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_10px_30px_-14px_rgba(23,19,31,0.22)] transition-shadow duration-300">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
           <Link
             href={toRelativeUrl(talentUrl || "/")}
             className="flex items-baseline gap-2.5 group cursor-pointer"
           >
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1E5BFF] to-[#0A3DCC] group-hover:drop-shadow-[0_2px_8px_rgba(30,91,255,0.25)] transition-all duration-300 whitespace-nowrap shrink-0">
+            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:text-[#1546CC] transition-colors duration-200 whitespace-nowrap shrink-0">
               BLIH OPS
             </span>
             <span className="hidden sm:inline-block font-mono text-[11px] text-[#6E6678] uppercase tracking-wider group-hover:text-[#1E5BFF] transition-colors duration-300">

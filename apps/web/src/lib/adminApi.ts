@@ -114,6 +114,12 @@ export async function updateAdminJobStatus(
   });
 }
 
+export async function deleteAdminJob(jobId: string): Promise<{ message: string }> {
+  return apiFetch<{ message: string }>(`/admin/jobs/${jobId}`, {
+    method: "DELETE",
+  });
+}
+
 // ─── Applications ─────────────────────────────────────────────────────────────
 
 export async function fetchAdminApplications(params?: {
@@ -157,6 +163,12 @@ export async function fetchAdminCertificates(params?: {
   courseId?: string;
 }): Promise<AdminCertificateListResponse> {
   return apiFetch<AdminCertificateListResponse>(`/admin/certificates${qs(params ?? {})}`);
+}
+
+export async function deleteAdminCertificate(certId: string): Promise<{ message: string }> {
+  return apiFetch<{ message: string }>(`/admin/certificates/${certId}`, {
+    method: "DELETE",
+  });
 }
 
 // ─── Notifications ────────────────────────────────────────────────────────────

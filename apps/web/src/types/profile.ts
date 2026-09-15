@@ -40,6 +40,11 @@ export interface TalentProfile {
   photoUrl?: string | null;
   cvUrl?: string | null;
   isComplete: boolean;
+  profileCompletion?: {
+    percentage: number;
+    missingFields: string[];
+    isComplete: boolean;
+  };
   experience?: Experience[];
   education?: Education[];
   certificates?: any[];

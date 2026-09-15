@@ -116,6 +116,12 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
     : job.timezone || "Remote";
   const isTalent = user?.role === "TALENT";
   const isClosed = job.status === "CLOSED";
+  const isExpired =
+    !isClosed &&
+    Boolean(
+      job.applicationDeadline &&
+        new Date(job.applicationDeadline) < new Date()
+    );
 
   return (
     <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -134,8 +140,12 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
               <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F]">
                 {job.title}
               </h1>
-              <Badge variant={isClosed ? "outline" : "verified"}>
-                {job.status}
+              <Badge
+                variant={
+                  isClosed ? "outline" : isExpired ? "amber" : "verified"
+                }
+              >
+                {isClosed ? "Closed" : isExpired ? "Expired" : "Active"}
               </Badge>
               <Badge variant="primary">
                 {job.employmentType.replace("_", " ")}
@@ -192,10 +202,14 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
                 <Button
                   size="lg"
                   variant="primary"
-                  disabled={isClosed}
+                  disabled={isClosed || isExpired}
                   onClick={() => setIsApplyModalOpen(true)}
                 >
-                  {isClosed ? "Job Closed" : "Apply with Evidence Profile"}
+                  {isClosed
+                    ? "Job Closed"
+                    : isExpired
+                    ? "Deadline Passed"
+                    : "Apply with Evidence Profile"}
                 </Button>
               ))}
           </div>

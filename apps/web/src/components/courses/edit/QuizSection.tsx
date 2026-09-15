@@ -143,64 +143,99 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
                 </button>
               )}
             </div>
-            <div className="space-y-2 pl-4 sm:pl-8">
-              {q.options.map((opt, oi) => (
-                <div key={oi} className="flex items-center gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const u = [...questions];
-                      u[qi] = { ...u[qi], correctOptionIndex: oi };
-                      setQuestions(u);
-                    }}
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
-                      q.correctOptionIndex === oi
-                        ? "border-[#1E5BFF] bg-[#1E5BFF]"
-                        : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/50"
+            <div className="space-y-2.5 pl-4 sm:pl-8">
+              <div className="flex items-center justify-between text-xs font-medium text-[#6E6678]">
+                <span>Answer Options</span>
+                <span className="text-[11px] text-[#2E8F79] font-mono">
+                  ● Select an option to set the Correct Answer
+                </span>
+              </div>
+              {q.options.map((opt, oi) => {
+                const isCorrect = q.correctOptionIndex === oi;
+                return (
+                  <div
+                    key={oi}
+                    className={`flex items-center gap-2.5 px-3 py-1.5 rounded-xl border transition-all ${
+                      isCorrect
+                        ? "bg-[#F0FDF4] border-[#2E8F79]/40 shadow-xs"
+                        : "bg-white border-[#D9CEDF]"
                     }`}
-                    title="Mark as correct answer"
                   >
-                    {q.correctOptionIndex === oi && (
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    )}
-                  </button>
-                  <input
-                    value={opt}
-                    onChange={(e) => {
-                      const u = [...questions];
-                      u[qi] = {
-                        ...u[qi],
-                        options: u[qi].options.map((o, i) =>
-                          i === oi ? e.target.value : o,
-                        ),
-                      };
-                      setQuestions(u);
-                    }}
-                    placeholder={`Option ${oi + 1}`}
-                    className="flex-1 px-3.5 py-2 text-xs border border-[#D9CEDF] rounded-xl bg-white focus:outline-none focus:border-[#1E5BFF] font-sans"
-                  />
-                  {q.options.length > 2 && (
                     <button
+                      type="button"
                       onClick={() => {
                         const u = [...questions];
-                        const opts = u[qi].options.filter((_, i) => i !== oi);
+                        u[qi] = { ...u[qi], correctOptionIndex: oi };
+                        setQuestions(u);
+                      }}
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 cursor-pointer transition-all ${
+                        isCorrect
+                          ? "border-[#2E8F79] bg-[#2E8F79]"
+                          : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]"
+                      }`}
+                      title="Mark as correct answer"
+                    >
+                      {isCorrect && (
+                        <div className="w-2 h-2 rounded-full bg-white" />
+                      )}
+                    </button>
+                    <input
+                      value={opt}
+                      onChange={(e) => {
+                        const u = [...questions];
                         u[qi] = {
                           ...u[qi],
-                          options: opts,
-                          correctOptionIndex: Math.min(
-                            u[qi].correctOptionIndex,
-                            opts.length - 1,
+                          options: u[qi].options.map((o, i) =>
+                            i === oi ? e.target.value : o,
                           ),
                         };
                         setQuestions(u);
                       }}
-                      className="text-[#6E6678] hover:text-[#EF4444] p-1 cursor-pointer"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
-                  )}
-                </div>
-              ))}
+                      placeholder={`Option ${oi + 1} answer text...`}
+                      className="flex-1 py-1 text-xs bg-transparent focus:outline-none font-sans"
+                    />
+                    {isCorrect ? (
+                      <span className="text-[10px] font-mono font-bold text-[#2E8F79] bg-[#DCFCE7] px-2.5 py-1 rounded-lg shrink-0">
+                        Correct Answer
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const u = [...questions];
+                          u[qi] = { ...u[qi], correctOptionIndex: oi };
+                          setQuestions(u);
+                        }}
+                        className="text-[10px] font-mono text-[#6E6678] hover:text-[#1E5BFF] px-2 py-0.5 rounded-lg border border-[#EBE5F0] hover:border-[#1E5BFF] shrink-0 transition-colors"
+                      >
+                        Set Correct
+                      </button>
+                    )}
+                    {q.options.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const u = [...questions];
+                          const opts = u[qi].options.filter((_, i) => i !== oi);
+                          u[qi] = {
+                            ...u[qi],
+                            options: opts,
+                            correctOptionIndex: Math.min(
+                              u[qi].correctOptionIndex,
+                              opts.length - 1,
+                            ),
+                          };
+                          setQuestions(u);
+                        }}
+                        className="text-[#6E6678] hover:text-[#EF4444] p-1 cursor-pointer"
+                        title="Remove option"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
               {q.options.length < 6 && (
                 <button
                   type="button"

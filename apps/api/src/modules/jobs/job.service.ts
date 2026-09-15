@@ -198,13 +198,7 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
   } = query;
   const skip = (page - 1) * limit;
 
-  const where: any = { status: JobStatus.ACTIVE };
-
-  // Filter out jobs past their application deadline
-  where.OR = [
-    { applicationDeadline: null },
-    { applicationDeadline: { gte: new Date() } },
-  ];
+  const where: any = {};
 
   if (employmentType) where.employmentType = employmentType;
   if (experienceLevel) where.experienceLevel = experienceLevel;
@@ -228,12 +222,9 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
     ];
   }
 
-  const [jobs, total] = await Promise.all([
+  const [allMatchingJobs, total] = await Promise.all([
     prisma.job.findMany({
       where,
-      skip,
-      take: limit,
-      orderBy: { createdAt: "desc" },
       include: {
         companyProfile: {
           select: {
@@ -248,6 +239,21 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
     }),
     prisma.job.count({ where }),
   ]);
+
+  const now = new Date();
+  const isJobActive = (j: any) =>
+    j.status === JobStatus.ACTIVE &&
+    (!j.applicationDeadline || new Date(j.applicationDeadline) >= now);
+
+  const sortedJobs = allMatchingJobs.sort((a, b) => {
+    const aActive = isJobActive(a);
+    const bActive = isJobActive(b);
+    if (aActive && !bActive) return -1;
+    if (!aActive && bActive) return 1;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
+  const jobs = sortedJobs.slice(skip, skip + limit);
 
   let appliedJobIds = new Set<string>();
   if (userId) {

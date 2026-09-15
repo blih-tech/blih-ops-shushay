@@ -28,7 +28,15 @@ export async function getAdminStats() {
     prisma.course.count({ where: { status: "PUBLISHED" } }),
     prisma.lesson.count(),
     prisma.job.count(),
-    prisma.job.count({ where: { status: "ACTIVE" } }),
+    prisma.job.count({
+      where: {
+        status: "ACTIVE",
+        OR: [
+          { applicationDeadline: null },
+          { applicationDeadline: { gte: new Date() } },
+        ],
+      },
+    }),
     prisma.jobApplication.count(),
     prisma.certificate.count(),
     prisma.companySubscription.count({
@@ -142,7 +150,7 @@ export async function getAdminUsers(params: {
     ];
   }
 
-  const [users, total] = await Promise.all([
+  const [rawUsers, total] = await Promise.all([
     prisma.user.findMany({
       where,
       skip,
@@ -182,16 +190,34 @@ export async function getAdminUsers(params: {
             grantedAt: true,
           },
         },
+        certificates: {
+          select: {
+            courseId: true,
+            course: { select: { title: true } },
+          },
+        },
         _count: {
           select: {
             paymentTransactions: true,
-            certificates: true,
           },
         },
       },
     }),
     prisma.user.count({ where }),
   ]);
+
+  const users = rawUsers.map(({ certificates, _count, ...u }) => {
+    const uniqueTitles = new Set(
+      certificates.map((c) => c.course?.title?.trim() || c.courseId),
+    );
+    return {
+      ...u,
+      _count: {
+        ..._count,
+        certificates: uniqueTitles.size,
+      },
+    };
+  });
 
   return { users, total, page, limit, totalPages: Math.ceil(total / limit) };
 }
@@ -216,6 +242,11 @@ export async function getAdminUserById(userId: string) {
           city: true,
           bio: true,
           englishLevel: true,
+          _count: {
+            select: {
+              jobApplications: true,
+            },
+          },
         },
       },
       companyProfile: {
@@ -229,6 +260,18 @@ export async function getAdminUserById(userId: string) {
           subscriptionExpiresAt: true,
           website: true,
           description: true,
+          companySubscription: {
+            select: {
+              status: true,
+              plan: true,
+              expiresAt: true,
+            },
+          },
+          _count: {
+            select: {
+              jobs: true,
+            },
+          },
         },
       },
       skillsEntitlement: {
@@ -237,16 +280,33 @@ export async function getAdminUserById(userId: string) {
           grantedAt: true,
         },
       },
+      certificates: {
+        select: {
+          courseId: true,
+          course: { select: { title: true } },
+        },
+      },
       _count: {
         select: {
           paymentTransactions: true,
-          certificates: true,
         },
       },
     },
   });
   if (!user) throw new AppError(404, "User not found.");
-  return user;
+
+  const { certificates, _count, ...userData } = user;
+  const uniqueTitles = new Set(
+    certificates.map((c) => c.course?.title?.trim() || c.courseId),
+  );
+
+  return {
+    ...userData,
+    _count: {
+      ..._count,
+      certificates: uniqueTitles.size,
+    },
+  };
 }
 
 export async function deleteUser(userId: string) {
@@ -309,7 +369,7 @@ export async function getAdminJobs(params: {
     ];
   }
 
-  const [jobs, total] = await Promise.all([
+  const [rawJobs, total] = await Promise.all([
     prisma.job.findMany({
       where,
       skip,
@@ -330,6 +390,18 @@ export async function getAdminJobs(params: {
     }),
     prisma.job.count({ where }),
   ]);
+
+  const now = new Date();
+  const jobs = rawJobs.map((j) => {
+    const isExpired =
+      j.status === "ACTIVE" &&
+      j.applicationDeadline &&
+      new Date(j.applicationDeadline) < now;
+    return {
+      ...j,
+      status: isExpired ? "EXPIRED" : j.status,
+    };
+  });
 
   return { jobs, total, page, limit, totalPages: Math.ceil(total / limit) };
 }
@@ -360,16 +432,46 @@ export async function getAdminJobById(jobId: string) {
     },
   });
   if (!job) throw new AppError(404, "Job not found.");
-  return job;
+
+  const now = new Date();
+  const isExpired =
+    job.status === "ACTIVE" &&
+    job.applicationDeadline &&
+    new Date(job.applicationDeadline) < now;
+
+  return {
+    ...job,
+    status: isExpired ? "EXPIRED" : job.status,
+  };
 }
 
 export async function adminUpdateJobStatus(jobId: string, status: JobStatus) {
   const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) throw new AppError(404, "Job not found.");
+
+  const updateData: any = { status };
+
+  if (status === "ACTIVE") {
+    const now = new Date();
+    if (!job.applicationDeadline || new Date(job.applicationDeadline) < now) {
+      // Reopening sets a fresh 30-day application deadline
+      updateData.applicationDeadline = new Date(
+        Date.now() + 30 * 24 * 60 * 60 * 1000,
+      );
+    }
+  }
+
   return prisma.job.update({
     where: { id: jobId },
-    data: { status },
+    data: updateData,
   });
+}
+
+export async function adminDeleteJob(jobId: string) {
+  const job = await prisma.job.findUnique({ where: { id: jobId } });
+  if (!job) throw new AppError(404, "Job not found.");
+  await prisma.job.delete({ where: { id: jobId } });
+  return { success: true };
 }
 
 // ─── Applications Management ──────────────────────────────────────────────────
@@ -573,7 +675,6 @@ export async function getAdminCertificates(params: {
   courseId?: string;
 }) {
   const { page = 1, limit = 20, search, courseId } = params;
-  const skip = (page - 1) * limit;
 
   const where: any = {};
   if (courseId) where.courseId = courseId;
@@ -591,26 +692,42 @@ export async function getAdminCertificates(params: {
     ];
   }
 
-  const [certificates, total] = await Promise.all([
-    prisma.certificate.findMany({
-      where,
-      skip,
-      take: limit,
-      orderBy: { createdAt: "desc" },
-      include: {
-        user: {
-          select: {
-            email: true,
-            talentProfile: { select: { fullName: true, photoUrl: true } },
-          },
+  const rawCertificates = await prisma.certificate.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    include: {
+      user: {
+        select: {
+          email: true,
+          talentProfile: { select: { fullName: true, photoUrl: true } },
         },
-        course: { select: { id: true, title: true } },
       },
-    }),
-    prisma.certificate.count({ where }),
-  ]);
+      course: { select: { id: true, title: true } },
+    },
+  });
 
-  return { certificates, total, page, limit, totalPages: Math.ceil(total / limit) };
+  // Deduplicate by userId + course title/id (keep newest certificate per user & course)
+  const uniqueMap = new Map<string, (typeof rawCertificates)[0]>();
+  for (const cert of rawCertificates) {
+    const key = `${cert.userId}_${cert.course?.title?.trim() || cert.courseId}`;
+    if (!uniqueMap.has(key)) {
+      uniqueMap.set(key, cert);
+    }
+  }
+
+  const uniqueCertificates = Array.from(uniqueMap.values());
+  const total = uniqueCertificates.length;
+  const skip = (page - 1) * limit;
+  const certificates = uniqueCertificates.slice(skip, skip + limit);
+
+  return { certificates, total, page, limit, totalPages: Math.ceil(total / limit) || 1 };
+}
+
+export async function adminDeleteCertificate(certId: string) {
+  const cert = await prisma.certificate.findUnique({ where: { id: certId } });
+  if (!cert) throw new AppError(404, "Certificate not found");
+  await prisma.certificate.delete({ where: { id: certId } });
+  return { message: "Certificate deleted successfully" };
 }
 
 // ─── Notifications Management ─────────────────────────────────────────────────
@@ -909,12 +1026,36 @@ export async function getAdminCompanyById(companyId: string) {
       },
       companySubscription: true,
       jobs: {
-        select: { id: true, title: true, status: true, employmentType: true, createdAt: true },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          employmentType: true,
+          applicationDeadline: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: "desc" },
       },
       _count: { select: { jobs: true } },
     },
   });
   if (!company) throw new AppError(404, "Company profile not found.");
-  return company;
+
+  const now = new Date();
+  const jobs = company.jobs.map((j) => {
+    const isExpired =
+      j.status === "ACTIVE" &&
+      j.applicationDeadline &&
+      new Date(j.applicationDeadline) < now;
+    return {
+      ...j,
+      status: isExpired ? "EXPIRED" : j.status,
+    };
+  });
+
+  return {
+    ...company,
+    jobs,
+  };
 }
+

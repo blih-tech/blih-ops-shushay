@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowLeft, Eye, EyeOff, Plus, BookOpen, Layers } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, CheckCircle, Plus, BookOpen, Layers } from "lucide-react";
 import { Button, Badge, Alert, ConfirmDialog } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { LessonPanel } from "./LessonPanel";
@@ -101,19 +101,20 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
 
           <div className="flex items-center gap-3 w-full sm:w-auto self-start lg:self-center">
             <Button
-              variant={isPublished ? "outline" : "primary"}
+              size="sm"
+              variant={isPublished ? "outline" : "secondary"}
               className="w-full sm:w-auto"
               leftIcon={
                 isPublished ? (
-                  <EyeOff className="h-4 w-4" />
+                  <EyeOff className="h-3.5 w-3.5 text-[#D97706]" />
                 ) : (
-                  <Eye className="h-4 w-4" />
+                  <CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" />
                 )
               }
               isLoading={publishLoading}
               onClick={handlePublish}
             >
-              {isPublished ? "Unpublish Catalog" : "Publish Course"}
+              {isPublished ? "Unpublish Course" : "Publish Course"}
             </Button>
           </div>
         </div>

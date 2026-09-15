@@ -26,6 +26,8 @@ import {
 } from "lucide-react";
 import { fetchPublicCourses } from "@/lib/courses";
 import { getCourseProgress } from "@blih/api-client";
+import { useTalentProfile } from "@/hooks/useTalentProfile";
+import { getUniqueCertificates } from "@/components/profile/VerifiedCredentialsCard";
 import type { PublicCourseListItem } from "@/types/course";
 
 interface ProgressItem {
@@ -37,6 +39,7 @@ interface ProgressItem {
 
 function DashboardContent() {
   const { user, logout } = useAuth();
+  const { profile } = useTalentProfile();
   const router = useRouter();
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
@@ -88,9 +91,17 @@ function DashboardContent() {
     );
   }
 
-  const totalCompleted = Object.values(progressMap).filter(
+  const completedFromProgress = Object.values(progressMap).filter(
     (p) => p.isCompleted,
   ).length;
+  const uniqueCerts = getUniqueCertificates(
+    profile?.certificates,
+    profile?.completedCourses,
+  );
+  const certCount = profile?.certificates
+    ? uniqueCerts.length
+    : completedFromProgress;
+
   const totalInProgress = Object.values(progressMap).filter(
     (p) => p.progressPercentage > 0 && !p.isCompleted,
   ).length;
@@ -114,13 +125,13 @@ function DashboardContent() {
         </div>
 
         {/* Clean, Single-Row Header Action Group */}
-        <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto shrink-0 pb-1 sm:pb-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto shrink-0 py-1.5 -my-1.5">
           <Link href="/courses" className="shrink-0">
             <Button
               variant="primary"
               size="sm"
               leftIcon={<BookOpen className="w-3.5 h-3.5" />}
-              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4"
+              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4 shadow-none hover:shadow-none"
             >
               Explore Catalog
             </Button>
@@ -130,7 +141,7 @@ function DashboardContent() {
               variant="outline"
               size="sm"
               leftIcon={<Briefcase className="w-3.5 h-3.5 text-[#1E5BFF]" />}
-              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4"
+              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4 shadow-none hover:shadow-none"
             >
               Job Openings
             </Button>
@@ -140,11 +151,11 @@ function DashboardContent() {
               variant="outline"
               size="sm"
               leftIcon={<Award className="w-3.5 h-3.5 text-[#2E8F79]" />}
-              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4"
+              className="h-10 text-xs sm:text-sm px-3.5 sm:px-4 shadow-none hover:shadow-none"
             >
               <span>Credentials</span>
               <span className="ml-1 px-1.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-[#E6F6ED] text-[#2E8F79] border border-[#BDE8D0]">
-                {totalCompleted}
+                {certCount}
               </span>
             </Button>
           </Link>
@@ -197,29 +208,33 @@ function DashboardContent() {
           </div>
         </Card>
 
-        <VerifiedSkillsCard totalCompleted={totalCompleted} />
+        <VerifiedSkillsCard
+          totalCompleted={certCount}
+          skills={profile?.skills}
+          isComplete={!!profile?.isComplete}
+        />
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <MetricCard
-          value={String(totalInProgress || (courses.length > 0 ? 1 : 0))}
+          value={String(totalInProgress)}
           label="Active Courses"
           variant="surface"
         />
         <MetricCard
-          value={String(totalCompleted)}
+          value={String(certCount)}
           label="Earned Credentials"
           variant="surface"
         />
         <MetricCard
-          value={totalCompleted > 0 ? "100" : "—"}
-          label="Top Capability Score"
-          variant="primary"
+          value={String(profile?.skills?.length || 0)}
+          label="Verified Skills"
+          variant="surface"
         />
         <MetricCard
-          value={totalCompleted > 0 ? "Verified" : "In Progress"}
-          label="Verification Status"
-          variant="surface"
+          value={`${profile?.profileCompletion?.percentage ?? (certCount > 0 ? 100 : 0)}%`}
+          label="Profile Completion"
+          variant="primary"
         />
       </div>
 

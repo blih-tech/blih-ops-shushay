@@ -170,6 +170,14 @@ function JobsFeedContent() {
                 const location = formatLocation(job);
                 const salary = formatSalary(job);
 
+                const isClosed = job.status === "CLOSED";
+                const isExpired =
+                  !isClosed &&
+                  Boolean(
+                    job.applicationDeadline &&
+                      new Date(job.applicationDeadline) < new Date()
+                  );
+
                 return (
                   <button
                     type="button"
@@ -199,7 +207,20 @@ function JobsFeedContent() {
                         </h3>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap justify-end">
+                        {isClosed ? (
+                          <Badge variant="outline" size="sm">
+                            Closed
+                          </Badge>
+                        ) : isExpired ? (
+                          <Badge variant="amber" size="sm">
+                            Expired
+                          </Badge>
+                        ) : (
+                          <Badge variant="verified" size="sm">
+                            Active
+                          </Badge>
+                        )}
                         {job.hasApplied && (
                           <Badge variant="verified" size="sm">
                             Applied

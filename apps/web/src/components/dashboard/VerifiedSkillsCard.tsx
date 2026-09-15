@@ -1,16 +1,21 @@
 "use client";
 
 import React, { useRef } from "react";
-import { SkillBar } from "@blih/ui";
+import { Badge } from "@blih/ui";
+import { ShieldCheck, Award } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
 interface VerifiedSkillsCardProps {
   totalCompleted: number;
+  skills?: string[];
+  isComplete?: boolean;
 }
 
 export function VerifiedSkillsCard({
   totalCompleted,
+  skills = [],
+  isComplete = false,
 }: VerifiedSkillsCardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -37,29 +42,47 @@ export function VerifiedSkillsCard({
       className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm flex flex-col justify-between font-sans"
     >
       <div className="space-y-2">
-        <h3 className="font-display font-bold text-lg text-[#17131F]">
-          Verified Skills Signal
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="font-display font-bold text-lg text-[#17131F] flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-[#2E8F79]" /> Verified Signal
+          </h3>
+          <Badge variant={isComplete ? "verified" : "amber"} size="sm">
+            {isComplete ? "Completed Profile" : "In Progress"}
+          </Badge>
+        </div>
         <p className="font-sans text-xs text-[#6E6678]">
-          Real-time assessment scores and completed track badges.
+          Real-time course tracks and profile capability status.
         </p>
       </div>
 
       <div className="space-y-4">
-        <div className="flex items-baseline justify-between">
-          <span className="verified-score-stat font-display text-4xl font-bold text-[#1E5BFF]">
-            +{totalCompleted * 10 || 14}%
+        <div className="flex items-baseline justify-between border-t border-[#D9CEDF]/50 pt-4">
+          <span className="verified-score-stat font-display text-3xl font-bold text-[#1E5BFF]">
+            {totalCompleted} Track{totalCompleted === 1 ? "" : "s"} Earned
           </span>
-          <span className="font-sans text-xs text-[#2E8F79] font-medium">
-            Boost in Opportunity Match
+          <span className="font-sans text-xs text-[#2E8F79] font-medium flex items-center gap-1">
+            <Award className="w-4 h-4" /> Credentials
           </span>
         </div>
-        <SkillBar
-          name="React & Python Systems"
-          score={totalCompleted > 0 ? 100 : 65}
-          status={totalCompleted > 0 ? "Verified Track" : "In Progress"}
-          variant="primary"
-        />
+
+        {skills && skills.length > 0 ? (
+          <div className="space-y-2">
+            <p className="text-xs font-mono text-[#6E6678] uppercase font-semibold">
+              Top Profile Skills
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {skills.slice(0, 5).map((skill) => (
+                <Badge key={skill} variant="primary" size="sm">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <p className="text-xs text-[#6E6678] italic">
+            Complete your profile or learning courses to show verified skill tags.
+          </p>
+        )}
       </div>
     </div>
   );

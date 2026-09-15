@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Mail,
@@ -12,18 +12,21 @@ import {
   Globe,
   CheckCircle,
   XCircle,
+  Trash2,
 } from "lucide-react";
-import { Alert, Badge, Button, MetricCard } from "@blih/ui";
+import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import {
   fetchAdminTalentById,
+  deleteAdminUser,
   grantAdminSkillsAccess,
   revokeAdminSkillsAccess,
 } from "@/lib/adminApi";
 
 function AdminTalentDetailContent() {
   const params = useParams();
+  const router = useRouter();
   const talentId = params.talentId as string;
 
   const [talent, setTalent] = useState<any>(null);
@@ -31,6 +34,7 @@ function AdminTalentDetailContent() {
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -45,6 +49,21 @@ function AdminTalentDetailContent() {
     }
     load();
   }, [talentId]);
+
+  async function handleDelete() {
+    if (!talent?.user?.id) return;
+    setActionLoading(true);
+    setActionError(null);
+    try {
+      await deleteAdminUser(talent.user.id);
+      router.push("/admin/talents");
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete talent account");
+    } finally {
+      setActionLoading(false);
+      setShowDeleteConfirm(false);
+    }
+  }
 
   async function handleGrantAccess() {
     if (!talent?.user?.id) return;
@@ -157,7 +176,7 @@ function AdminTalentDetailContent() {
                   <img
                     src={talent.photoUrl}
                     alt=""
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-2xl aspect-square"
                   />
                 ) : (
                   talent.fullName?.charAt(0).toUpperCase() || "T"
@@ -232,11 +251,25 @@ function AdminTalentDetailContent() {
                 </Button>
               )}
               {talent.user?.id && (
-                <Link href={`/admin/users/${talent.user.id}`}>
-                  <Button size="sm" variant="outline">
-                    User Account
+                <>
+                  <Link href={`/admin/users/${talent.user.id}`}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      leftIcon={<Mail className="h-3.5 w-3.5" />}
+                    >
+                      View User Account
+                    </Button>
+                  </Link>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  >
+                    Delete Account
                   </Button>
-                </Link>
+                </>
               )}
             </div>
           </div>
@@ -402,6 +435,16 @@ function AdminTalentDetailContent() {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Talent Account"
+        message={`Are you sure you want to delete talent "${talent.fullName}" (${talent.user?.email || "N/A"})? This action is permanent.`}
+        confirmText="Delete Account"
+        onConfirm={handleDelete}
+        onClose={() => setShowDeleteConfirm(false)}
+        variant="destructive"
+      />
     </main>
   );
 }

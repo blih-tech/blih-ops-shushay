@@ -230,7 +230,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
 
             <FormField label="Key Contributions / Description">
               <Textarea
-                rows={3}
+                rows={5}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe impact, tech stack, and achievements..."

@@ -15,6 +15,7 @@ import {
   getJobs,
   getJobById,
   updateJobStatus,
+  deleteJob,
   getApplications,
   getApplicationById,
   getPayments,
@@ -23,6 +24,7 @@ import {
   getSubscriptionById,
   getCertificates,
   getCertificateById,
+  deleteCertificate,
   getNotifications,
   getNotificationById,
 } from "./admin.controller";
@@ -54,6 +56,7 @@ router.get("/companies/:companyId", getCompanyById);
 router.get("/jobs", getJobs);
 router.get("/jobs/:jobId", getJobById);
 router.patch("/jobs/:jobId/status", updateJobStatus);
+router.delete("/jobs/:jobId", deleteJob);
 
 // ─── Applications ─────────────────────────────────────────────────────────────
 router.get("/applications", getApplications);
@@ -70,6 +73,7 @@ router.get("/subscriptions/:subId", getSubscriptionById);
 // ─── Certificates ─────────────────────────────────────────────────────────────
 router.get("/certificates", getCertificates);
 router.get("/certificates/:certId", getCertificateById);
+router.delete("/certificates/:certId", deleteCertificate);
 
 // ─── Notifications ────────────────────────────────────────────────────────────
 router.get("/notifications", getNotifications);

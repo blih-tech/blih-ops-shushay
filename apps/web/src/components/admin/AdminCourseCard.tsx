@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { BookOpen, Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
+import { BookOpen, EyeOff, CheckCircle, Pencil, Trash2 } from "lucide-react";
 import { Button, Badge } from "@blih/ui";
 import type { Course } from "@/types/course";
 
@@ -43,17 +43,17 @@ export function AdminCourseCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-2 flex-wrap shrink-0">
         <Button
-          variant={isPublished ? "outline" : "primary"}
           size="sm"
+          variant={isPublished ? "outline" : "secondary"}
           isLoading={isActing}
           onClick={() => onPublishToggle(course)}
           leftIcon={
             isPublished ? (
-              <EyeOff className="h-3.5 w-3.5" />
+              <EyeOff className="h-3.5 w-3.5 text-[#D97706]" />
             ) : (
-              <Eye className="h-3.5 w-3.5" />
+              <CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" />
             )
           }
         >
@@ -61,17 +61,16 @@ export function AdminCourseCard({
         </Button>
         <Link href={`/admin/courses/${course.id}/edit`}>
           <Button
-            variant="ghost"
             size="sm"
+            variant="outline"
             leftIcon={<Pencil className="h-3.5 w-3.5" />}
           >
             Edit
           </Button>
         </Link>
         <Button
-          variant="ghost"
           size="sm"
-          className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828] transition-colors"
+          variant="destructive"
           leftIcon={<Trash2 className="h-3.5 w-3.5" />}
           onClick={() => onDeleteClick(course)}
         >

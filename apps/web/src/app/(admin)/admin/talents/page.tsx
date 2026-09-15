@@ -1,13 +1,20 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { User, FileText, Eye } from "lucide-react";
-import { Button, Badge, Alert, UniversalSearch, Pagination } from "@blih/ui";
+import { User, FileText, Eye, Trash2 } from "lucide-react";
+import {
+  Button,
+  Badge,
+  Alert,
+  ConfirmDialog,
+  UniversalSearch,
+  Pagination,
+} from "@blih/ui";
 import Link from "next/link";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
-import { fetchAdminTalents } from "@/lib/adminApi";
+import { fetchAdminTalents, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminTalentItem } from "@/types/admin";
 
 const PAGE_SIZE = 20;
@@ -19,8 +26,13 @@ function AdminTalentsContent() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [deleteTarget, setDeleteTarget] = useState<AdminTalentItem | null>(
+    null,
+  );
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
@@ -53,6 +65,21 @@ function AdminTalentsContent() {
     setPage(1);
   }, [debouncedSearch]);
 
+  async function handleDelete() {
+    if (!deleteTarget?.user?.id) return;
+    setActionLoading(deleteTarget.id);
+    setActionError(null);
+    try {
+      await deleteAdminUser(deleteTarget.user.id);
+      setDeleteTarget(null);
+      load();
+    } catch (err: any) {
+      setActionError(err.message || "Failed to delete talent account");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
   return (
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <AdminBreadcrumb items={[{ label: "Talents" }]} />
@@ -75,6 +102,11 @@ function AdminTalentsContent() {
       {error && (
         <Alert variant="error" onClose={() => setError(null)}>
           {error}
+        </Alert>
+      )}
+      {actionError && (
+        <Alert variant="error" onClose={() => setActionError(null)}>
+          {actionError}
         </Alert>
       )}
 
@@ -107,7 +139,7 @@ function AdminTalentsContent() {
                     <img
                       src={t.photoUrl}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-xl aspect-square"
                     />
                   ) : (
                     (t.fullName || t.user.email).charAt(0).toUpperCase()
@@ -211,17 +243,29 @@ function AdminTalentsContent() {
           {
             key: "actions",
             header: "Actions",
-            width: "80px",
+            width: "140px",
             render: (t) => (
-              <Link href={`/admin/talents/${t.id}`}>
+              <div className="flex items-center gap-1.5">
+                <Link href={`/admin/talents/${t.id}`}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    leftIcon={<Eye className="h-3.5 w-3.5" />}
+                  >
+                    View
+                  </Button>
+                </Link>
                 <Button
                   size="sm"
                   variant="ghost"
-                  leftIcon={<Eye className="h-3.5 w-3.5" />}
+                  className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setDeleteTarget(t)}
+                  isLoading={actionLoading === t.id}
                 >
-                  View
+                  Delete
                 </Button>
-              </Link>
+              </div>
             ),
           },
         ]}
@@ -236,6 +280,17 @@ function AdminTalentsContent() {
           />
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Talent Account"
+        message={`Are you sure you want to permanently delete talent "${deleteTarget?.fullName || deleteTarget?.user?.email}"? This will remove their user account and profile data. This action cannot be undone.`}
+        confirmText="Delete Account"
+        cancelText="Cancel"
+        variant="destructive"
+        onConfirm={handleDelete}
+        onClose={() => setDeleteTarget(null)}
+      />
     </main>
   );
 }
