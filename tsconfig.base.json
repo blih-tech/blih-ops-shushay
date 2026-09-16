@@ -13,8 +13,8 @@
       "@blih/types": ["./packages/types/src/index.ts"],
       "@blih/api-client": ["./packages/api-client/src/index.ts"],
       "@blih/validation": ["./packages/validation/src/index.ts"],
-      "@blih/ui": ["./packages/ui/src/index.ts"],
-      "@blih/ui/*": ["./packages/ui/src/*"]
+      "@blih/ui": ["./apps/web/src/components/ui/index.ts"],
+      "@blih/ui/*": ["./apps/web/src/components/ui/*"]
     }
   }
 }

@@ -1,159 +1,152 @@
-# Blih Ecosystem
+# Blih Ops — Monorepo Ecosystem
 
-[![Nx](https://img.shields.io/badge/Nx-Monorepo-blue.svg?logo=nx)](https://nx.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?logo=typescript)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-16.0-black.svg?logo=next.js)](https://nextjs.org/)
-[![Express](https://img.shields.io/badge/Express-API-green.svg?logo=express)](https://expressjs.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-ORM-1B222D.svg?logo=prisma)](https://www.prisma.io/)
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-6BA539.svg?logo=swagger)](http://localhost:4000/api/v1/docs)
+[![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![Express.js](https://img.shields.io/badge/Express-5.2-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.9-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![pnpm](https://img.shields.io/badge/pnpm-9.15-F69220?style=for-the-badge&logo=pnpm)](https://pnpm.io/)
 
-Welcome to the **Blih Ecosystem** — a connected professional growth platform designed around a clear value loop: **Learn → Practice → Prove → Build Reputation → Get Hired**.
-
-The platform provides a modern editorial interface connecting ambitious learners, verified talent, and hiring organizations through three distinct web applications powered by a single high-performance backend API.
+Welcome to **Blih Ops** — a unified professional platform integrating interactive learning, verified talent discovery, employer subscriptions, and recruitment operations into a high-performance monorepo architecture.
 
 ---
 
-## 🏗 System Architecture & Applications
+## 🏗️ System Architecture & Services
 
 ```text
-                               ┌─────────────────┐
-                               │     Web App     │
-                               │  (Port 3000)    │
-                               └────────┬────────┘
-                                        │ (JWT / Cookies)
-                               ┌────────▼────────┐
-                               │    Core API     │
-                               │  (Port 4000)    │
-                               └────────┬────────┘
-                                        │ (Prisma ORM)
-                               ┌────────▼────────┐
-                               │   PostgreSQL    │
-                               │  (Port 5432)    │
-                               └─────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                      Blih Ops Monorepo                          │
+├────────────────────────────────┬────────────────────────────────┤
+│           apps/web             │            apps/api            │
+│       Next.js 16 Web App       │       Express 5 REST API       │
+│     (Port 3000 | Turbopack)    │       (Port 4000 | OpenAPI)     │
+└───────────────┬────────────────┴────────────────┬───────────────┘
+                │                                 │
+                │        Shared Packages          │
+                ├─────────────────────────────────┤
+                │  • @blih/types                  │
+                │  • @blih/validation (Zod)       │
+                │  • @blih/api-client             │
+                └────────────────┬────────────────┘
+                                 │
+                        ┌────────▼────────┐
+                        │   PostgreSQL    │
+                        │  (Prisma ORM)   │
+                        └─────────────────┘
 ```
 
-| Application    | URL / Port                          | Role & Key Functionality                                                                                                                |
-| :------------- | :---------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
-| **Web App**    | `http://localhost:3000`             | Single unified frontend containing Auth, Skills learning/courses marketplace, Talent profiles/jobs, and Admin portal with route groups. |
-| **Core API**   | `http://localhost:4000`             | Centralized REST API server, business logic, PostgreSQL database owner, and PDF certificate streaming.                                  |
-| **Swagger UI** | `http://localhost:4000/api/v1/docs` | Interactive OpenAPI 3.0 API documentation and live endpoint testing.                                                                    |
+### Core Services Summary
+
+| Application / Workspace | Location | Description / Target Port |
+| :--- | :--- | :--- |
+| **Unified Web App** | [`apps/web`](./apps/web) | Next.js 16 frontend containing Auth, Skills, Talent, and Admin interfaces (`http://localhost:3000`) |
+| **Backend Core API** | [`apps/api`](./apps/api) | Express.js API handling authentication, payments, courses, jobs, and PDF generation (`http://localhost:4000`) |
+| **Interactive API Docs** | OpenAPI / Swagger | Live Swagger API documentation & testing sandbox (`http://localhost:4000/api/v1/docs`) |
+| **Shared Types** | [`packages/types`](./packages/types) | Centralized TypeScript DTOs and entity definitions shared across frontend & backend |
+| **Shared Validation** | [`packages/validation`](./packages/validation) | Unified Zod validation schemas for forms and API request payloads |
+| **API Client** | [`packages/api-client`](./packages/api-client) | Type-safe HTTP client wrapper for consuming backend endpoints |
 
 ---
 
-## ✨ Core Ecosystem Features
+## 🚀 Quick Start Guide
 
-### 🔐 1. Centralized Identity & Security (Phases 0–1)
+### Prerequisites
+- **Node.js**: `>= 22.0.0`
+- **pnpm**: `>= 9.0.0` (Install globally via `npm i -g pnpm`)
+- **PostgreSQL**: Local running instance or remote connection URL
 
-- **Unified Auth**: Shared authentication flow across all ecosystem frontends using HTTP-only JWT cookies.
-- **Google OAuth 2.0 & Email Auth**: Social sign-in combined with email verification and password recovery.
-- **Global Role-Based Access**: Granular permissions for `TALENT`, `COMPANY`, and `ADMIN` roles.
-
-### 📚 2. Blih Skills & Interactive Learning Engine (Phases 2 & 5)
-
-- **Comprehensive Course Catalog**: Public exploration of curriculum modules, learning outcomes, and course structure.
-- **Interactive Player**: Multi-tab course workspace featuring video streams, reading material, automated quizzes, and file/link assignment submissions.
-- **Permanent Skills Entitlement**: One-time payment granting lifetime access to all Blih Skills tracks.
-- **Real-Time Progress Tracking**: Granular lesson completion tracking with automatic course completion calculation.
-
-### 📜 3. Certificates & Product Integration (Phase 6)
-
-- **Automated Certificate Generation**: Unique certificate numbers (`BLIH-CERT-...`) auto-issued upon 100% course completion.
-- **Vector PDF Generator & Downloads**: Direct A4 vector PDF certificate stream downloads powered by `pdfkit`.
-- **Verified Talent Profile Display**: Talent Web profiles showcase earned Blih credentials, verified badges, and direct PDF download links for employers.
-- **Responsive Certificate Canvas**: Fluid React certificate renderer with Blih logo vectors and verification pills.
-
-### 💼 4. Blih Talent Network & Directory (Phase 3)
-
-- **Verified Candidate Profiles**: Rich talent profiles displaying verified competencies, work history, education, and CV documents.
-- **Profile Completion Engine**: Dynamic completion score meter with an actionable missing fields checklist.
-- **Company Recruitment Access**: Company subscription plan gating for talent search and candidate profile inspection.
-
-### 💳 5. Ethiopian Payment Infrastructure (Phase 4)
-
-- **Chapa Gateway Integration**: Native payment checkout supporting local Ethiopian debit cards and mobile money.
-- **Server-Side Verification**: Idempotent transaction verification, currency validation (`ETB`), and entitlement grants.
-
-### 🏢 6. Company Subscriptions & Candidate Access Gating (Phase 7)
-
-- **Tiered Company Plans**: Monthly (2,000 ETB) and Yearly (10,000 ETB) subscription options for hiring organizations.
-- **Access Control Guards**: Strict server-side route guards enforcing active subscription requirements before companies can search talent profiles or view candidate contact info.
-- **Dynamic Subscription Status**: Automated status resolution (`ACTIVE`, `INACTIVE`, `EXPIRED`, `CANCELLED`) with instant payment return verification.
-
-### 🎯 7. Jobs & Opportunity Search (Phase 8)
-
-- **Job Posting Lifecycle**: Full job creation, editing, and closing pipeline for active company subscribers.
-- **Active Jobs Directory**: Searchable opportunities feed with salary ranges, skills tags, employment types, experience levels, and deadline indicators.
-- **Talent Search Directory**: Gated recruiter directory allowing subscribed companies to filter candidates by skills, country, and experience.
-
-### 📩 8. Applications & Notifications (Phase 9)
-
-- **Application Submission**: One-click application flow with cover statement and auto-attached evidence profile & CV.
-- **Duplicate & Closed Job Controls**: Database and API enforcement preventing duplicate applications and blocking applications to closed positions.
-- **Application Management**: Candidate pipeline view allowing companies to view applicant profiles/CVs and transition status (`Applied` → `Reviewing`).
-- **In-App & Email Notifications**: Real-time notification menu for payment unlocks and application alerts, coupled with resilient email dispatch services.
-
-### 🛡️ 9. System Testing & Hardening (Phase 10)
-
-- **Health Check Monitoring**: Live database health check endpoint (`/api/v1/health`).
-- **Authorization Matrix Hardening**: Automated test suites verifying `TALENT`, `COMPANY`, and `ADMIN` role boundaries and cross-tenant data isolation.
-- **Payment & System Resilience**: Idempotent webhook handling, gateway verification failure protection, and zero-error workspace TypeScript build (`tsc --noEmit`).
-
----
-
-## 🛠 Technology Stack
-
-- **Monorepo Orchestration**: Nx Monorepo with pnpm workspaces
-- **Frontend Framework**: Next.js 16 (App Router), React 19, Vanilla Tailwind CSS, Lucide Icons
-- **Backend API**: Express.js, Node.js, Swagger JSDoc, OpenAPI 3.0, PDFKit
-- **Database & Persistence**: PostgreSQL, Prisma ORM 7, Cloudinary API
-- **Authentication**: JWT (JSON Web Tokens), Google Auth Library, bcrypt
-- **Validation**: Zod schema validation across API and client packages
-
----
-
-## 🚀 Running the Ecosystem Locally
-
-### Monorepo Development (All Apps in Parallel)
+### 1. Clone & Install Dependencies
+Run the installation command from the **workspace root directory**:
 
 ```bash
-# Run API and Web dev servers in parallel (Ports 4000 and 3000)
-pnpm dev
+# Clone the repository
+git clone <repository-url>
+cd blih-ops
+
+# Install dependencies across all monorepo workspaces at once
+pnpm install
 ```
 
-### Production Build & Execution
+### 2. Configure Environment Variables
 
+#### Backend API Config ([`apps/api/.env`](./apps/api/.env.example))
 ```bash
-# 1. Build production bundles
-pnpm build
-
-# 2. Start production servers in parallel
-pnpm start
+cp apps/api/.env.example apps/api/.env
+```
+Edit `apps/api/.env` and configure your database connection string and secret keys:
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/blih_dev?schema=public"
+JWT_SECRET="your-development-jwt-secret-key"
+PORT=4000
+CORS_ORIGINS="http://localhost:3000"
 ```
 
-### Running Individual Services
-
-```bash
-pnpm dev:api      # Start API & Swagger Docs (Port 4000)
-pnpm dev:web      # Start Web App (Port 3000)
+#### Frontend Web Config ([`apps/web/.env.local`](./apps/web/.env.local))
+Create `apps/web/.env.local`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:4000/api/v1
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
----
-
-## 🧪 Database & Migration Commands
+### 3. Initialize & Seed Database
+Ensure PostgreSQL is running, then apply migrations and seed initial data:
 
 ```bash
-# Push Prisma schema to PostgreSQL
+# Generate Prisma client & sync schema with PostgreSQL
 pnpm prisma:migrate
 
-# Generate Prisma Client types
-pnpm prisma:generate
-
-# Seed initial course and user data
+# Seed sample course catalog, admin accounts, and test data
 pnpm seed
 ```
 
+### 4. Start Local Development
+Launch both the Web Frontend (Port 3000 with Turbopack) and API Server (Port 4000) simultaneously:
+
+```bash
+pnpm dev
+```
+
+Visit **`http://localhost:3000`** in your browser.
+
 ---
 
-## 📄 License & Attribution
+## 🛠️ CLI Script Reference
 
-© 2026 Blih Ecosystem. All rights reserved.
+Run these commands from the workspace root:
+
+| Command | Action |
+| :--- | :--- |
+| `pnpm dev` | Starts both Web (`:3000`) and API (`:4000`) dev servers concurrently |
+| `pnpm dev:web` | Starts Next.js Web server only with Turbopack (`:3000`) |
+| `pnpm dev:api` | Starts Express API server with auto-reload (`:4000`) |
+| `pnpm build` | Compiles production bundles for all applications |
+| `pnpm start` | Launches production servers |
+| `pnpm typecheck` | Runs TypeScript compilation verification across all workspaces (`tsc --noEmit`) |
+| `pnpm lint` | Runs ESLint validation across codebases |
+| `pnpm prisma:migrate` | Runs Prisma database migrations (`prisma db push`) |
+| `pnpm prisma:generate` | Regenerates Prisma TypeScript client |
+| `pnpm seed` | Seeds database with initial system & course data |
+
+---
+
+## 📂 Repository Structure
+
+```text
+blih-ops/
+├── apps/
+│   ├── api/                    # Express.js REST API service
+│   └── web/                    # Next.js 16 Web App (App Router)
+├── packages/
+│   ├── api-client/             # Type-safe API fetching client
+│   ├── types/                  # Shared TypeScript interfaces
+│   └── validation/             # Shared Zod validation schemas
+├── pnpm-workspace.yaml         # Workspace root definition
+├── package.json                # Root package configuration
+└── tsconfig.base.json          # Global TypeScript configuration
+```
+
+---
+
+## 📄 License & Ownership
+
+© 2026 Blih Ops. All rights reserved.

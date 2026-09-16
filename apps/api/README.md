@@ -1,49 +1,90 @@
-# blih-api
+# Blih Core API Service (`@blih/api`)
 
-The single backend for Skills Web, Talent Web, and Auth Web. Owns the database — web apps communicate via REST API and never touch Postgres directly.
+Centralized REST API backend service for the **Blih Ops Ecosystem**, built with **Express 5**, **TypeScript**, **Prisma ORM**, and **PostgreSQL**.
 
-## Interactive API Documentation (Swagger)
+---
 
-When running locally, interactive OpenAPI / Swagger UI documentation is available at:
-👉 **[http://localhost:4000/api/v1/docs](http://localhost:4000/api/v1/docs)**
+## 📖 Interactive OpenAPI / Swagger Documentation
 
-## Setup
+Interactive OpenAPI 3.0 documentation is served live at runtime:
+👉 **`http://localhost:4000/api/v1/docs`**
 
+---
+
+## ⚡ Quick Setup
+
+### 1. Configure Environment Variables
+Copy `.env.example` to `.env`:
 ```bash
-pnpm install
-cp .env.example .env       # edit DATABASE_URL, JWT_SECRET, CHAPA_SECRET_KEY
-docker compose up -d       # starts local Postgres on :5432
-npx prisma migrate dev     # applies database migrations
-pnpm dev:api               # http://localhost:4000/api/v1/health
+cp .env.example .env
+```
+Ensure your database connection string and secret keys are configured:
+```env
+DATABASE_URL="postgresql://postgres:password@localhost:5432/blih_dev?schema=public"
+JWT_SECRET="your-development-jwt-secret-key"
+PORT=4000
+CORS_ORIGINS="http://localhost:3000"
 ```
 
-## Modular Domain Architecture (`src/modules/`)
+### 2. Database Migration & Seed
+Run database migrations and seed initial courses and admin data:
+```bash
+# Push schema to PostgreSQL
+pnpm prisma:migrate
 
-- `auth/` — **Phase 1**: Authentication, sessions, tokens, Google OAuth, email verification, password reset.
-- `users/` — User accounts and global roles (`TALENT`, `COMPANY`, `ADMIN`).
-- `talents/` — **Phase 2 & 8**: Talent profile management, skills, experience, CV uploads, profile completion engine, talent search directory.
-- `companies/` — Company profile management, contact details.
-- `company-subscriptions/` — **Phase 7**: Company subscriptions, plan initialization (Monthly/Yearly), Chapa checkout, active status gating.
-- `courses/` — **Phase 3**: Course catalog CRUD, lesson sequences, video resources, document attachments (Cloudinary).
-- `payments/` — **Phase 4**: Blih Skills payment (Chapa payment checkout, server-side verification, idempotent webhook handling, permanent entitlement grants).
-- `learning/` — **Phase 5**: Lesson progress tracking, quiz submissions, assignment uploads.
-- `certificates/` — **Phase 6**: Course completion certificate generation, PDF rendering, verification.
-- `jobs/` — **Phase 8**: Job posting creation, editing, closing, active job search, deadline enforcement.
-- `applications/` — **Phase 9**: Apply-to-job flow, duplicate application prevention, application listing (talent/company), status transition (`Applied -> Reviewing`).
-- `notifications/` — **Phase 9**: In-app internal notifications and resilient email dispatch service.
-- `__tests__/` — **Phase 10**: Testing & Hardening (Health check `/api/v1/health`, role authorization matrix, payment gateway resilience, cross-tenant security).
+# Seed database
+pnpm seed
+```
 
-## Key API Endpoints (Phases 0–10)
+### 3. Run API Development Server
+```bash
+# From workspace root:
+pnpm dev:api
 
-- `GET /api/v1/health` — **Phase 0 & 10**: Health check and database connection status.
-- `POST /api/v1/payments/skills/initialize` — **Phase 4**: Initialize 1,000 ETB Blih Skills payment.
-- `GET /api/v1/payments/verify/:txRef` — **Phase 4 & 7**: Idempotent server-side payment verification for Skills & Subscriptions.
-- `POST /api/v1/company/subscription/initialize` — **Phase 7**: Initialize 2,000 ETB/mo or 10,000 ETB/yr company subscription.
-- `GET /api/v1/jobs` & `POST /api/v1/jobs` — **Phase 8**: Search active jobs and post new company jobs.
-- `POST /api/v1/applications` & `PATCH /api/v1/applications/:id/status` — **Phase 9**: Apply to active jobs and update status `Applied -> Reviewing`.
-- `GET /api/v1/notifications` & `PATCH /api/v1/notifications/:id/read` — **Phase 9**: List in-app notifications and mark as read.
+# Health Check Endpoint:
+# http://localhost:4000/api/v1/health
+```
 
-## Testing Sandbox Credentials (Chapa Test Mode)
+---
+
+## 🧱 Modular Domain Architecture (`src/modules/`)
+
+```text
+src/
+├── config/                     # Environment & runtime configurations
+├── middleware/                 # Auth, role-guards, CORS, error handling
+├── modules/
+│   ├── auth/                   # JWT auth, Google OAuth, password reset
+│   ├── users/                  # User accounts & role permissions (TALENT, COMPANY, ADMIN)
+│   ├── talents/                # Talent profiles, skills, CV uploads, search engine
+│   ├── companies/              # Recruiter profiles & company verification
+│   ├── company-subscriptions/  # Chapa subscription gating & tier management
+│   ├── courses/                # Course catalog CRUD, lesson sequences, attachments
+│   ├── payments/               # Chapa checkout, server verification, webhooks
+│   ├── learning/               # Lesson progress, quiz submissions, assignment scoring
+│   ├── certificates/           # Automated certificate generation & PDFKit rendering
+│   ├── jobs/                   # Job posting lifecycle & deadline enforcement
+│   ├── applications/           # Job application tracking & pipeline transitions
+│   └── notifications/          # In-app notifications & email dispatching
+├── prisma/                     # Prisma schema, migrations, and seed script
+└── server.ts                   # Express server bootstrap & route mounting
+```
+
+---
+
+## 💳 Payment Gateway Testing Sandbox (Chapa Test Mode)
 
 - **Test Mobile Money Numbers**: `0900123456`, `0900112233`, `0900881111`
 - **Test Card Number**: `4111 1111 1111 1111` (Expiry: `12/28`, CVV: `123`)
+
+---
+
+## 🧪 Testing & Verification
+
+```bash
+# Run unit & integration tests with Jest
+pnpm test
+
+# Verify TypeScript compilation
+pnpm typecheck
+```
