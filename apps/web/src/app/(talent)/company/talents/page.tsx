@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sparkles, Users } from "lucide-react";
 import {
@@ -8,7 +8,6 @@ import {
   Badge,
   Card,
   UniversalSearch,
-  Chip,
   Alert,
   EmptyState,
   Select,
@@ -18,6 +17,8 @@ import { useTalentSearch } from "@/hooks/useTalentSearch";
 import { TalentSearchResultItem } from "@/lib/talentApi";
 import { TalentCard } from "@/components/company/TalentCard";
 import { TalentCardSkeleton } from "@/components/company/TalentCardSkeleton";
+import { CompanyTalentsTable } from "@/components/company/CompanyTalentsTable";
+import { ViewModeToggle, type ViewMode } from "@/components/ui/ViewModeToggle";
 
 const englishLevelFilterOptions = [
   { value: "", label: "All English Levels" },
@@ -29,28 +30,25 @@ const englishLevelFilterOptions = [
 
 function CompanyTalentsSearchContent() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeSkillFilter, setActiveSkillFilter] = useState("All");
   const [englishLevelFilter, setEnglishLevelFilter] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>("cards");
   const { talents, loading, error, subscriptionRequired, setFilters } =
     useTalentSearch();
 
-  const skillFilters = [
-    "All",
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "Python",
-    "PostgreSQL",
-  ];
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("blih_company_talents_view_mode") as ViewMode;
+      if (saved === "cards" || saved === "table") {
+        setViewMode(saved);
+      }
+    } catch (e) {}
+  }, []);
 
-  const handleSkillClick = (skill: string) => {
-    setActiveSkillFilter(skill);
-    if (skill === "All") {
-      setFilters((prev) => ({ ...prev, skills: undefined }));
-    } else {
-      setFilters((prev) => ({ ...prev, skills: skill }));
-    }
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem("blih_company_talents_view_mode", mode);
+    } catch (e) {}
   };
 
   const handleEnglishFilter = (level: string) => {
@@ -82,6 +80,10 @@ function CompanyTalentsSearchContent() {
             evidence strength, availability and fit — before opening a full
             profile.
           </p>
+        </div>
+
+        <div className="flex items-center gap-3 self-start sm:self-auto shrink-0">
+          <ViewModeToggle mode={viewMode} onChange={handleViewModeChange} />
         </div>
       </div>
 
@@ -133,21 +135,21 @@ function CompanyTalentsSearchContent() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 pt-1">
-              <span className="text-xs font-mono text-[#6E6678] uppercase mr-1">
-                Filter Skill:
-              </span>
-              {skillFilters.map((skill) => (
-                <Chip
-                  key={skill}
-                  active={activeSkillFilter === skill}
-                  onClick={() => handleSkillClick(skill)}
-                  size="md"
+            {(searchQuery || englishLevelFilter) && (
+              <div className="flex justify-end pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setEnglishLevelFilter("");
+                    setFilters({});
+                  }}
+                  className="text-xs font-mono text-[#1E5BFF] hover:underline cursor-pointer"
                 >
-                  {skill}
-                </Chip>
-              ))}
-            </div>
+                  Clear active filters
+                </button>
+              </div>
+            )}
           </div>
 
           {error && (
@@ -156,19 +158,29 @@ function CompanyTalentsSearchContent() {
             </Alert>
           )}
 
-          {/* Talent Grid */}
+          {/* Talent Grid / Table */}
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <TalentCardSkeleton key={i} themeIndex={i} />
-              ))}
-            </div>
+            viewMode === "table" ? (
+              <div className="pt-2">
+                <CompanyTalentsTable talents={[]} loading={true} />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <TalentCardSkeleton key={i} themeIndex={i} />
+                ))}
+              </div>
+            )
           ) : talents.length === 0 ? (
             <EmptyState
               icon={<Users className="w-8 h-8 text-[#1E5BFF]" />}
               title="No Candidates Found"
               description="Try adjusting your search criteria or clearing active filters."
             />
+          ) : viewMode === "table" ? (
+            <div className="pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <CompanyTalentsTable talents={talents} />
+            </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">
               {talents.map((talent: TalentSearchResultItem) => (

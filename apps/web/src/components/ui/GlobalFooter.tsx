@@ -23,7 +23,7 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
   const getRoleLinks = () => {
     if (role === "COMPANY") {
       return [
-        { label: "Hiring Hub", href: `${talentUrl}/company` },
+        { label: "Dashboard", href: `${talentUrl}/company` },
         { label: "Talent Search", href: `${talentUrl}/company/talents` },
         { label: "Job Posts", href: `${talentUrl}/company/jobs` },
         {

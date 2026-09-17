@@ -91,14 +91,14 @@ export function getNavLinks({
         active: currentPath ? isMatch("/", true) : currentApp === "explore",
       },
       {
-        label: "Hiring Hub",
+        label: "Dashboard",
         href: `${talentUrl}/company`,
         active: currentPath
           ? isMatch("/company") &&
             !isMatch("/company/jobs") &&
             !isMatch("/company/talents") &&
             !isMatch("/company/subscription")
-          : currentApp === "company" || currentApp === "business",
+          : currentApp === "company" || currentApp === "dashboard",
       },
       {
         label: "Job Posts",

@@ -1,28 +1,75 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Building2 } from "lucide-react";
-import {
-  Button,
-  Badge,
-  Card,
-  Skeleton,
-  Alert,
-  EmptyState,
-  ConfirmDialog,
-} from "@blih/ui";
+import { Plus, Briefcase } from "lucide-react";
+import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { useCompanyJobs } from "@/hooks/useCompanyJobs";
 import { CompanyJobCard } from "@/components/company/CompanyJobCard";
+import { CompanyJobsTable } from "@/components/company/CompanyJobsTable";
+import { CompanyJobsFilters } from "@/components/company/CompanyJobsFilters";
+import { CompanyJobsModals } from "@/components/company/CompanyJobsModals";
+import { ViewModeToggle, type ViewMode } from "@/components/ui/ViewModeToggle";
 
 function CompanyJobsContent() {
-  const { jobs, loading, error, closeJob, reopenJob } = useCompanyJobs();
+  const { jobs, loading, error, closeJob, reopenJob, setFilters } =
+    useCompanyJobs();
   const [jobToClose, setJobToClose] = useState<string | null>(null);
   const [jobToReopen, setJobToReopen] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
   const [isReopening, setIsReopening] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("cards");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [employmentTypeFilter, setEmploymentTypeFilter] = useState("");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(
+        "blih_company_jobs_view_mode"
+      ) as ViewMode;
+      if (saved === "cards" || saved === "table") {
+        setViewMode(saved);
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem("blih_company_jobs_view_mode", mode);
+    } catch (e) {}
+  };
+
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    setFilters((prev) => ({ ...prev, search: q || undefined }));
+  };
+
+  const handleStatusFilter = (val: string) => {
+    setStatusFilter(val);
+    setFilters((prev) => ({
+      ...prev,
+      status: (val as any) || undefined,
+    }));
+  };
+
+  const handleEmploymentTypeFilter = (val: string) => {
+    setEmploymentTypeFilter(val);
+    setFilters((prev) => ({
+      ...prev,
+      employmentType: (val as any) || undefined,
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("");
+    setEmploymentTypeFilter("");
+    setFilters({});
+  };
 
   const handleConfirmClose = async () => {
     if (!jobToClose) return;
@@ -52,6 +99,10 @@ function CompanyJobsContent() {
     }
   };
 
+  const hasActiveFilters = Boolean(
+    searchQuery || statusFilter || employmentTypeFilter
+  );
+
   const activeJobsCount = jobs.filter((j) => {
     if (j.status !== "ACTIVE") return false;
     if (
@@ -80,12 +131,12 @@ function CompanyJobsContent() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <Link href="/company/jobs/new" className="w-full sm:w-auto">
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end flex-wrap">
+          <ViewModeToggle mode={viewMode} onChange={handleViewModeChange} />
+          <Link href="/company/jobs/new">
             <Button
               variant="primary"
               size="sm"
-              className="w-full sm:w-auto"
               leftIcon={<Plus className="h-4 w-4" />}
             >
               Create New Job Post
@@ -94,6 +145,17 @@ function CompanyJobsContent() {
         </div>
       </div>
 
+      {/* Search & Filter Controls */}
+      <CompanyJobsFilters
+        searchQuery={searchQuery}
+        onSearchChange={handleSearch}
+        statusFilter={statusFilter}
+        onStatusFilterChange={handleStatusFilter}
+        employmentTypeFilter={employmentTypeFilter}
+        onEmploymentTypeFilterChange={handleEmploymentTypeFilter}
+        onClearFilters={handleClearFilters}
+      />
+
       {error && (
         <Alert variant="error" title="Error Loading Jobs">
           {error}
@@ -101,59 +163,92 @@ function CompanyJobsContent() {
       )}
 
       {actionError && (
-        <Alert variant="error" title="Could Not Close Role">
+        <Alert variant="error" title="Could Not Update Role">
           {actionError}
         </Alert>
       )}
 
-      {/* Jobs List */}
+      {/* Jobs List / Table */}
       {loading ? (
-        <div className="space-y-4">
-          {[0, 1, 2].map((i) => (
-            <Card
-              key={i}
-              className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4"
-            >
-              <Skeleton
-                variant="rectangular"
-                width={220}
-                height={24}
-                className="rounded-md"
-              />
-              <Skeleton variant="text" className="w-3/4" />
-              <div className="flex gap-4">
+        viewMode === "table" ? (
+          <CompanyJobsTable
+            jobs={[]}
+            loading={true}
+            onCloseJob={() => {}}
+            onReopenJob={() => {}}
+          />
+        ) : (
+          <div className="space-y-4">
+            {[0, 1, 2].map((i) => (
+              <Card
+                key={i}
+                className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4"
+              >
                 <Skeleton
                   variant="rectangular"
-                  width={100}
-                  height={16}
+                  width={220}
+                  height={24}
                   className="rounded-md"
                 />
-                <Skeleton
-                  variant="rectangular"
-                  width={80}
-                  height={16}
-                  className="rounded-md"
-                />
-              </div>
-            </Card>
-          ))}
-        </div>
+                <Skeleton variant="text" className="w-3/4" />
+                <div className="flex gap-4">
+                  <Skeleton
+                    variant="rectangular"
+                    width={100}
+                    height={16}
+                    className="rounded-md"
+                  />
+                  <Skeleton
+                    variant="rectangular"
+                    width={80}
+                    height={16}
+                    className="rounded-md"
+                  />
+                </div>
+              </Card>
+            ))}
+          </div>
+        )
       ) : jobs.length === 0 ? (
         <EmptyState
-          icon={<Building2 className="w-8 h-8 text-[#1E5BFF]" />}
-          title="No Job Listings Yet"
-          description="Create your first job listing to start receiving applications from verified candidates."
-          action={
-            <Link href="/company/jobs/new">
-              <Button
-                variant="primary"
-                size="sm"
-                leftIcon={<Plus className="h-4 w-4" />}
-              >
-                Create First Job
-              </Button>
-            </Link>
+          icon={<Briefcase className="w-8 h-8 text-[#1E5BFF]" />}
+          title="No Job Postings Found"
+          description={
+            hasActiveFilters
+              ? "No job postings match your active search or filters. Try adjusting your search query or clearing filters."
+              : "Create your first job listing to start receiving applications from verified candidates."
           }
+          action={
+            hasActiveFilters ? (
+              <Button variant="outline" size="sm" onClick={handleClearFilters}>
+                Clear Active Filters
+              </Button>
+            ) : (
+              <Link href="/company/jobs/new">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  leftIcon={<Plus className="h-4 w-4" />}
+                >
+                  Create First Job
+                </Button>
+              </Link>
+            )
+          }
+        />
+      ) : viewMode === "table" ? (
+        <CompanyJobsTable
+          jobs={jobs}
+          closingId={isClosing ? jobToClose : null}
+          reopeningId={isReopening ? jobToReopen : null}
+          onCloseJob={(id) => {
+            setActionError(null);
+            setJobToClose(id);
+          }}
+          onReopenJob={(id) => {
+            setActionError(null);
+            setJobToReopen(id);
+          }}
         />
       ) : (
         <div className="space-y-4">
@@ -176,38 +271,26 @@ function CompanyJobsContent() {
         </div>
       )}
 
-      {/* Custom Confirmation Modal */}
-      <ConfirmDialog
-        isOpen={Boolean(jobToClose)}
-        onClose={() => {
+      {/* Confirmation Modals */}
+      <CompanyJobsModals
+        jobToClose={jobToClose}
+        isClosing={isClosing}
+        onCloseCancel={() => {
           if (!isClosing) {
             setJobToClose(null);
             setActionError(null);
           }
         }}
-        onConfirm={handleConfirmClose}
-        title="Close Job Post"
-        message="Are you sure you want to close this job post? Once closed, this role will no longer accept new applications or allow edits."
-        confirmText="Yes, Close Role"
-        cancelText="Keep Active"
-        variant="destructive"
-        isLoading={isClosing}
-      />
-
-      <ConfirmDialog
-        isOpen={Boolean(jobToReopen)}
-        onClose={() => {
+        onCloseConfirm={handleConfirmClose}
+        jobToReopen={jobToReopen}
+        isReopening={isReopening}
+        onReopenCancel={() => {
           if (!isReopening) {
             setJobToReopen(null);
             setActionError(null);
           }
         }}
-        onConfirm={handleConfirmReopen}
-        title="Reopen Job Listing"
-        message="Are you sure you want to reopen this job listing? It will become active again with a new 30-day application deadline."
-        confirmText="Yes, Reopen Role"
-        cancelText="Cancel"
-        isLoading={isReopening}
+        onReopenConfirm={handleConfirmReopen}
       />
     </main>
   );
