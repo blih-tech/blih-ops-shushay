@@ -5,6 +5,7 @@ import {
   getDetailedProfileCompletion,
   computeIsComplete,
 } from "./talentProfileCalculator";
+import { isCompanySubscriptionActive } from "../../utils/subscription";
 
 export { getDetailedProfileCompletion, computeIsComplete };
 export {
@@ -52,10 +53,10 @@ export async function getOrCreateProfile(userId: string) {
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { issueDate: "desc" },
   });
 
-  const completedCourses = certificates.map((c: any) => ({
+  const completedCourses = certificates.map((c) => ({
     id: c.course.id,
     title: c.course.title,
     description: c.course.description,
@@ -158,8 +159,6 @@ export async function getTalentProfileById(
     const company = await prisma.companyProfile.findUnique({
       where: { userId: requestUser.id },
       select: {
-        subscriptionActive: true,
-        subscriptionExpiresAt: true,
         companySubscription: {
           select: { status: true, expiresAt: true },
         },
@@ -170,17 +169,7 @@ export async function getTalentProfileById(
       throw new AppError(403, "Access denied. Company profile not found.");
     }
 
-    const now = new Date();
-    const sub = company.companySubscription;
-    const isSubscribed = sub
-      ? sub.expiresAt > now && sub.status === "ACTIVE"
-      : Boolean(
-          company.subscriptionActive &&
-          company.subscriptionExpiresAt &&
-          company.subscriptionExpiresAt > now,
-        );
-
-    if (!isSubscribed) {
+    if (!isCompanySubscriptionActive(company)) {
       throw new AppError(
         402,
         "Payment Required. An active subscription is required to view full talent profiles.",
@@ -216,10 +205,10 @@ export async function getTalentProfileById(
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { issueDate: "desc" },
   });
 
-  const completedCourses = certificates.map((c: any) => ({
+  const completedCourses = certificates.map((c) => ({
     id: c.course.id,
     title: c.course.title,
     description: c.course.description,

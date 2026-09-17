@@ -7,17 +7,17 @@ import {
 
 export const MOCK_EXPLORE_METRICS: MetricItem[] = [
   {
-    value: "2,840+",
-    label: "Verified African Talents",
+    value: "450+",
+    label: "Verified Talents",
     detail: "Skill profiles with real proof",
   },
   {
-    value: "140+",
+    value: "25+",
     label: "Partner Companies",
     detail: "Active hiring opportunities",
   },
   {
-    value: "94.8%",
+    value: "92%",
     label: "Assessment Pass Rate",
     detail: "Rigorous skill evaluation",
   },

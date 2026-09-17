@@ -55,13 +55,15 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState("");
+  const [hasSession, setHasSession] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       setActivePath(window.location.pathname);
+      setHasSession(!!localStorage.getItem("blih_user_session"));
     }
-  }, []);
+  }, [user]);
 
   const currentPath = customPathname || activePath;
 
@@ -109,7 +111,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Desktop navigation links */}
         <div className="hidden md:flex items-center gap-1 lg:gap-2">
-          {loading ? (
+          {loading && (user || hasSession) ? (
             <div className="flex items-center gap-2">
               <Skeleton
                 variant="rectangular"
@@ -155,19 +157,13 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Account actions */}
         <div className="hidden sm:flex items-center gap-3">
-          {loading ? (
+          {loading && (user || hasSession) ? (
             <div className="flex items-center gap-2">
               <Skeleton
-                variant="rectangular"
-                width={80}
+                variant="circular"
+                width={36}
                 height={36}
-                className="rounded-xl bg-[#EEF3FF]"
-              />
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={36}
-                className="rounded-xl bg-[#EEF3FF]"
+                className="rounded-full bg-[#EEF3FF]"
               />
             </div>
           ) : user ? (
@@ -251,6 +247,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
         skillsUrl={skillsUrl}
         talentUrl={talentUrl}
         onSignOut={onSignOut}
+        hasSession={hasSession}
       />
     </header>
   );

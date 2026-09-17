@@ -54,10 +54,8 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
     // Guest / Unauthenticated
     return [
       { label: "Explore Ecosystem", href: `${talentUrl}/` },
-      { label: "Blih Skills Courses", href: `${skillsUrl}/courses` },
-      { label: "Verified Opportunities", href: `${talentUrl}/jobs` },
-      { label: "Companies", href: `${talentUrl}/company` },
       { label: "Sign In", href: `${authUrl}/login` },
+      { label: "Sign Up", href: `${authUrl}/register` },
     ];
   };
 

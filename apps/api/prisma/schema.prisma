@@ -19,8 +19,8 @@ model User {
   role          Role
   googleId      String?  @unique
   emailVerified     Boolean   @default(false)
-  verificationToken String?
-  resetToken        String?
+  verificationToken String?   @unique
+  resetToken        String?   @unique
   resetExpires      DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -429,7 +429,6 @@ model Certificate {
   issueDate         DateTime @default(now())
   pdfUrl            String?
   pdfPublicId       String?
-  createdAt         DateTime @default(now())
 
   @@unique([userId, courseId])
   @@index([userId])
@@ -438,4 +437,13 @@ model Certificate {
   @@map("certificates")
 }
 
+// ─── Settings Domain ──────────────────────────────────────────────────────────
 
+model SystemSetting {
+  key         String   @id
+  value       String   // Stored as JSON or plain string
+  description String?
+  updatedAt   DateTime @updatedAt
+  
+  @@map("system_settings")
+}

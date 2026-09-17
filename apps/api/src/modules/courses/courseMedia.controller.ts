@@ -11,28 +11,13 @@ import {
   deleteFromCloudinary,
   CloudinaryFolders,
 } from "../../services/cloudinary.service";
+import { deleteOldAsset } from "../../utils/media";
 
 function p(req: Request, key: string): string {
   return req.params[key] as string;
 }
 
-export async function deleteOldAsset(
-  fileUrl: string | null | undefined,
-  publicId: string | null | undefined,
-  resourceType: "image" | "video" | "raw",
-) {
-  if (publicId) {
-    await deleteFromCloudinary(publicId, resourceType);
-  } else if (fileUrl && fileUrl.includes("/uploads/")) {
-    try {
-      const parts = fileUrl.split("/uploads/");
-      if (parts.length === 2)
-        await fsPromises.unlink(path.join("uploads", parts[1]));
-    } catch {
-      /* non-fatal */
-    }
-  }
-}
+
 
 export function uploadLessonVideo(
   req: Request,
@@ -61,7 +46,7 @@ export function uploadLessonVideo(
 
       const existing = await courseService.getCourseAdmin(courseId);
       const lesson = (existing?.lessons ?? []).find(
-        (l: any) => l.id === lessonId,
+        (l) => l.id === lessonId,
       );
 
       const updated = await courseService.setLessonVideo(

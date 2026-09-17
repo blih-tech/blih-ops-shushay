@@ -17,10 +17,12 @@ import { useCompanyJobs } from "@/hooks/useCompanyJobs";
 import { CompanyJobCard } from "@/components/company/CompanyJobCard";
 
 function CompanyJobsContent() {
-  const { jobs, loading, error, closeJob } = useCompanyJobs();
+  const { jobs, loading, error, closeJob, reopenJob } = useCompanyJobs();
   const [jobToClose, setJobToClose] = useState<string | null>(null);
+  const [jobToReopen, setJobToReopen] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [isReopening, setIsReopening] = useState(false);
 
   const handleConfirmClose = async () => {
     if (!jobToClose) return;
@@ -33,6 +35,20 @@ function CompanyJobsContent() {
       setActionError(err?.message || "Failed to close job posting.");
     } finally {
       setIsClosing(false);
+    }
+  };
+
+  const handleConfirmReopen = async () => {
+    if (!jobToReopen) return;
+    setIsReopening(true);
+    setActionError(null);
+    try {
+      await reopenJob(jobToReopen);
+      setJobToReopen(null);
+    } catch (err: any) {
+      setActionError(err?.message || "Failed to reopen job posting.");
+    } finally {
+      setIsReopening(false);
     }
   };
 
@@ -146,9 +162,14 @@ function CompanyJobsContent() {
               key={job.id}
               job={job}
               closingId={isClosing ? jobToClose : null}
+              reopeningId={isReopening ? jobToReopen : null}
               onCloseJob={(id) => {
                 setActionError(null);
                 setJobToClose(id);
+              }}
+              onReopenJob={(id) => {
+                setActionError(null);
+                setJobToReopen(id);
               }}
             />
           ))}
@@ -171,6 +192,22 @@ function CompanyJobsContent() {
         cancelText="Keep Active"
         variant="destructive"
         isLoading={isClosing}
+      />
+
+      <ConfirmDialog
+        isOpen={Boolean(jobToReopen)}
+        onClose={() => {
+          if (!isReopening) {
+            setJobToReopen(null);
+            setActionError(null);
+          }
+        }}
+        onConfirm={handleConfirmReopen}
+        title="Reopen Job Listing"
+        message="Are you sure you want to reopen this job listing? It will become active again with a new 30-day application deadline."
+        confirmText="Yes, Reopen Role"
+        cancelText="Cancel"
+        isLoading={isReopening}
       />
     </main>
   );

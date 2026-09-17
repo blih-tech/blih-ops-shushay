@@ -3,13 +3,14 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { Building2, Eye } from "lucide-react";
-import { Alert, Badge, UniversalSearch, Pagination, Select } from "@blih/ui";
+import { Alert, Badge, UniversalSearch, Pagination, Select,Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminSubscriptions } from "@/lib/adminApi";
 import type { AdminSubscription } from "@/types/admin";
-import { Button } from "@blih/ui";
+import { PricingSettings } from "@/components/admin/PricingSettings";
+
 
 const PAGE_SIZE = 20;
 
@@ -83,6 +84,8 @@ function AdminSubscriptionsContent() {
           {error}
         </Alert>
       )}
+
+      <PricingSettings />
 
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
         <div className="flex-1 min-w-0 w-full">

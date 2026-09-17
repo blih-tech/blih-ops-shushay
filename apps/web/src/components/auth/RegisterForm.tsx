@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { Button, Input, PasswordInput, Alert } from "@blih/ui";
 import { Mail, User as UserIcon } from "lucide-react";
 import { Role } from "@blih/types";
@@ -144,6 +145,17 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
       <p className="font-sans text-xs text-[#6E6678] text-center leading-relaxed">
         By creating an account, you agree to BLIH OPS terms. You can upgrade to
         Talent Pro later; Free remains useful.
+      </p>
+
+      {/* Switch to Sign In */}
+      <p className="font-sans text-sm text-center text-[#6E6678]">
+        Already have an account?{" "}
+        <Link
+          href="/login"
+          className="text-[#1E5BFF] font-semibold hover:underline"
+        >
+          Sign in
+        </Link>
       </p>
     </div>
   );

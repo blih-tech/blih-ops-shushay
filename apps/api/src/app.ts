@@ -13,11 +13,37 @@ import routes from "./routes";
 
 const app = express();
 
-app.use(
-  helmet({
-    contentSecurityPolicy: false,
-  }),
-);
+// Strict CSP for all routes; relaxed only for the Swagger UI documentation path
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api/docs")) {
+    // Swagger UI needs inline styles/scripts and its own CDN
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", "data:"],
+        },
+      },
+    })(req, res, next);
+  } else {
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'"],
+          styleSrc: ["'self'"],
+          imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
+          connectSrc: ["'self'"],
+          fontSrc: ["'self'"],
+          objectSrc: ["'none'"],
+          frameSrc: ["'none'"],
+        },
+      },
+    })(req, res, next);
+  }
+});
 app.use(cors({ origin: env.corsOrigins, credentials: true }));
 app.use(cookieParser());
 app.use(
@@ -37,10 +63,8 @@ app.use("/uploads/media", express.static("uploads/media"));
 app.use("/uploads/private", requireAuth, express.static("uploads/private"));
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
-// Swagger Documentation Endpoints
+// Canonical Swagger documentation endpoint
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api/v1/health", async (_req, res) => {
   try {

@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Job, JobFilters } from "@/types/job";
-import { listCompanyJobs, closeJob as apiCloseJob } from "@/lib/jobApi";
+import {
+  listCompanyJobs,
+  closeJob as apiCloseJob,
+  reopenJob as apiReopenJob,
+} from "@/lib/jobApi";
 
 export function useCompanyJobs(initialFilters: JobFilters = {}) {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -40,6 +44,16 @@ export function useCompanyJobs(initialFilters: JobFilters = {}) {
     }
   };
 
+  const reopenJob = async (jobId: string) => {
+    try {
+      await apiReopenJob(jobId);
+      await fetchCompanyJobs();
+    } catch (err: any) {
+      console.error("Error reopening job:", err);
+      throw err;
+    }
+  };
+
   return {
     jobs,
     total,
@@ -50,5 +64,6 @@ export function useCompanyJobs(initialFilters: JobFilters = {}) {
     setFilters,
     refetch: fetchCompanyJobs,
     closeJob,
+    reopenJob,
   };
 }

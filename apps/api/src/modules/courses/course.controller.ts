@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as courseService from "./course.service";
-import { deleteOldAsset } from "./courseMedia.controller";
+import { deleteOldAsset } from "../../utils/media";
 
 export {
   uploadLessonVideo,

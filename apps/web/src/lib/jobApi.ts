@@ -52,6 +52,13 @@ export async function closeJob(jobId: string): Promise<Job> {
   });
 }
 
+export async function reopenJob(jobId: string): Promise<Job> {
+  return apiFetch<Job>(`/jobs/${jobId}/reopen`, {
+    method: "POST",
+  });
+}
+
+
 export async function listCompanyJobs(
   filters?: JobFilters,
 ): Promise<JobsListResponse> {

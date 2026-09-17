@@ -13,6 +13,7 @@ import {
   COMPANY_SUBSCRIPTION_PLANS,
   SubscriptionPlanKey,
 } from "./company-subscription.constants";
+import { getSetting } from "../settings/settings.service";
 
 function generateTxRef(plan: SubscriptionPlanKey): string {
   const timestamp = Date.now();
@@ -49,13 +50,18 @@ export async function initializeCompanySubscription(
   }
 
   const txRef = generateTxRef(plan);
+  
+  const priceKey = plan === "MONTHLY" ? "PRICE_SUBSCRIPTION_MONTHLY" : "PRICE_SUBSCRIPTION_YEARLY";
+  const defaultPrice = plan === "MONTHLY" ? "2000" : "10000";
+  const priceStr = await getSetting(priceKey, defaultPrice);
+  const price = Number(priceStr) || Number(defaultPrice);
 
   // Create PENDING payment transaction record
   const payment = await prisma.paymentTransaction.create({
     data: {
       userId,
       txRef,
-      amount: planConfig.price,
+      amount: price,
       currency: planConfig.currency,
       paymentType: PaymentType.COMPANY_SUBSCRIPTION,
       status: PaymentStatus.PENDING,
@@ -75,7 +81,7 @@ export async function initializeCompanySubscription(
   const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
   const chapaRes = await chapaService.initializePayment({
-    amount: planConfig.price,
+    amount: price,
     currency: planConfig.currency,
     email: user.companyProfile.contactEmail || user.email,
     firstName,

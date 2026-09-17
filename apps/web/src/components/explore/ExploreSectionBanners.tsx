@@ -51,12 +51,12 @@ export function MetricsBar() {
       ref={containerRef}
       className="w-full bg-gradient-to-r from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF]/70 rounded-3xl p-6 sm:p-8 shadow-[0_12px_32px_rgba(30,91,255,0.04)]"
     >
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#D9CEDF]/50">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:divide-x divide-[#D9CEDF]/50">
         {MOCK_EXPLORE_METRICS.map((metric, idx) => (
           <div
             key={idx}
             className={`gsap-metric-card flex flex-col space-y-2 transition-all duration-300 hover:-translate-y-1 ${
-              idx > 0 ? "pt-4 sm:pt-0 sm:pl-6 lg:pl-8" : ""
+              idx > 0 ? "lg:pl-8" : ""
             }`}
           >
             <div className="flex items-center gap-2.5">

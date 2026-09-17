@@ -13,6 +13,7 @@ import {
   getJobById,
   updateJob,
   closeJob,
+  reopenJob,
   listActiveJobs,
 } from "./job.controller";
 
@@ -141,6 +142,32 @@ router.post(
   requireAuth,
   requireRole([Role.COMPANY]),
   closeJob,
+);
+
+/**
+ * @openapi
+ * /jobs/{jobId}/reopen:
+ *   post:
+ *     summary: Reopen a closed job posting (Company with active subscription only)
+ *     tags: [Jobs]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - name: jobId
+ *         in: path
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200: { description: Job reopened successfully with a new 30-day deadline }
+ *       400: { description: Job is not closed }
+ *       403: { description: Not authorized }
+ */
+router.post(
+  "/:jobId/reopen",
+  requireAuth,
+  requireRole([Role.COMPANY]),
+  requireActiveSubscription,
+  reopenJob,
 );
 
 export default router;

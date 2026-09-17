@@ -10,6 +10,7 @@ import {
   Globe,
   Users,
   Sparkles,
+  RefreshCw,
 } from "lucide-react";
 import {
   Button,
@@ -21,7 +22,7 @@ import {
   ConfirmDialog,
 } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { getJobById, closeJob, getJobApplications } from "@/lib/jobApi";
+import { getJobById, closeJob, getJobApplications, reopenJob } from "@/lib/jobApi";
 import { formatSalary } from "@/lib/jobOptions";
 import { CandidateApplicationCard } from "@/components/company/CandidateApplicationCard";
 import { Job } from "@/types/job";
@@ -38,6 +39,8 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [closing, setClosing] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [reopening, setReopening] = useState(false);
+  const [reopenConfirmOpen, setReopenConfirmOpen] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -71,6 +74,20 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       setActionError(err?.message || "Failed to close job posting.");
     } finally {
       setClosing(false);
+    }
+  };
+
+  const handleConfirmReopen = async () => {
+    setReopening(true);
+    setActionError(null);
+    try {
+      const updated = await reopenJob(jobId);
+      setJob(updated);
+      setReopenConfirmOpen(false);
+    } catch (err: any) {
+      setActionError(err?.message || "Failed to reopen job posting.");
+    } finally {
+      setReopening(false);
     }
   };
 
@@ -218,6 +235,21 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
                 </Button>
               </>
             )}
+            {isClosed && (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={reopening}
+                onClick={() => {
+                  setActionError(null);
+                  setReopenConfirmOpen(true);
+                }}
+                className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
+                leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#1E5BFF]" />}
+              >
+                {reopening ? "Reopening..." : "Reopen Role"}
+              </Button>
+            )}
           </div>
         </div>
 
@@ -286,6 +318,23 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
         cancelText="Keep Active"
         variant="destructive"
         isLoading={closing}
+      />
+
+      <ConfirmDialog
+        isOpen={reopenConfirmOpen}
+        onClose={() => {
+          if (!reopening) {
+            setReopenConfirmOpen(false);
+            setActionError(null);
+          }
+        }}
+        onConfirm={handleConfirmReopen}
+        title="Reopen Job Post"
+        message="Reopen this job posting? It will become active again with a new 30-day application deadline and accept new candidates."
+        confirmText="Yes, Reopen Role"
+        cancelText="Cancel"
+        variant="primary"
+        isLoading={reopening}
       />
     </main>
   );

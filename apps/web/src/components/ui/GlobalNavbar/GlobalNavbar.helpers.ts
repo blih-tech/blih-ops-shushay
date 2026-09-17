@@ -157,29 +157,6 @@ export function getNavLinks({
     ];
   }
 
-  // Unauthenticated guest navigation
-  return [
-    {
-      label: "Explore",
-      href: `${talentUrl}/`,
-      active: currentPath ? isMatch("/", true) : currentApp === "explore",
-    },
-    {
-      label: "Courses",
-      href: `${skillsUrl}/courses`,
-      active: currentPath
-        ? isMatch("/courses")
-        : currentApp === "courses" || currentApp === "skills",
-    },
-    {
-      label: "Opportunities",
-      href: `${talentUrl}/jobs`,
-      active: currentPath ? isMatch("/jobs") : currentApp === "opportunities",
-    },
-    {
-      label: "Companies",
-      href: `${talentUrl}/company`,
-      active: currentPath ? isMatch("/company") : currentApp === "business",
-    },
-  ];
+  // Unauthenticated guest navigation — no nav links before login
+  return [];
 }

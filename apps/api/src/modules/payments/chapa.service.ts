@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
 import prisma from "../../config/prisma";
@@ -195,11 +196,11 @@ export class ChapaService {
         typeof rawBody === "string" || Buffer.isBuffer(rawBody)
           ? rawBody
           : JSON.stringify(rawBody);
-      const expectedSignature = require("crypto")
+      const expectedSignature = crypto
         .createHmac("sha256", this.secretKey)
         .update(payload)
         .digest("hex");
-      return require("crypto").timingSafeEqual(
+      return crypto.timingSafeEqual(
         Buffer.from(signature.trim()),
         Buffer.from(expectedSignature.trim()),
       );

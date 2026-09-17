@@ -5,6 +5,26 @@ import { env } from "../config/env";
 import prisma from "../config/prisma";
 import { AppError } from "./errorHandler";
 import { JwtPayload } from "../types/auth.types";
+import { getSetting } from "../modules/settings/settings.service";
+
+// ─── User session cache (60-second TTL) ──────────────────────────────────────
+// Prevents a DB round-trip on every authenticated request. Keyed by userId.
+const userCache = new Map<string, { data: { id: string; email: string; role: Role; emailVerified: boolean }; expiresAt: number }>();
+const USER_CACHE_TTL_MS = 60_000;
+
+function getCachedUser(userId: string) {
+  const entry = userCache.get(userId);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    userCache.delete(userId);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCachedUser(userId: string, data: { id: string; email: string; role: Role; emailVerified: boolean }) {
+  userCache.set(userId, { data, expiresAt: Date.now() + USER_CACHE_TTL_MS });
+}
 
 export async function requireAuth(
   req: Request,
@@ -20,6 +40,13 @@ export async function requireAuth(
 
     const decoded = jwt.verify(token, env.jwtSecret) as JwtPayload;
 
+    // Check cache first to avoid DB hit on every request
+    const cached = getCachedUser(decoded.userId);
+    if (cached) {
+      req.user = cached;
+      return next();
+    }
+
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: {
@@ -34,6 +61,7 @@ export async function requireAuth(
       return next(new AppError(401, "User not found"));
     }
 
+    setCachedUser(user.id, user);
     req.user = user;
     next();
   } catch (err) {
@@ -48,9 +76,6 @@ export function requireRole(allowedRoles: Role[]) {
     }
 
     if (!allowedRoles.includes(req.user.role)) {
-      console.warn(
-        `[requireRole FAILED] User: ${req.user.email}, Role: ${req.user.role}, Allowed: ${allowedRoles}`,
-      );
       return next(
         new AppError(403, "Access denied. Insufficient permissions."),
       );
@@ -82,7 +107,7 @@ export async function requireSkillsAccess(
     return next(
       new AppError(
         403,
-        "Skills payment required. Please purchase permanent access for 1,000 ETB to unlock course content.",
+        "Skills payment required. Please purchase permanent access to unlock course content.",
       ),
     );
   }
@@ -117,8 +142,6 @@ export async function requireActiveSubscription(
     where: { userId: req.user.id },
     select: {
       id: true,
-      subscriptionActive: true,
-      subscriptionExpiresAt: true,
       companySubscription: {
         select: {
           status: true,
@@ -134,22 +157,21 @@ export async function requireActiveSubscription(
 
   const now = new Date();
   const sub = companyProfile.companySubscription;
-  const isSubscribed = sub
-    ? sub.expiresAt > now && sub.status === "ACTIVE"
-    : Boolean(
-        companyProfile.subscriptionActive &&
-        companyProfile.subscriptionExpiresAt &&
-        companyProfile.subscriptionExpiresAt > now,
-      );
+  const isSubscribed =
+    sub != null && sub.expiresAt > now && sub.status === "ACTIVE";
 
   if (!isSubscribed) {
-    return next(
-      new AppError(
-        402,
-        "Payment Required. An active company subscription (2,000 ETB/month or 10,000 ETB/year) is required to perform this action.",
-      ),
-    );
+      const subMonthly = await getSetting("PRICE_SUBSCRIPTION_MONTHLY", "2000");
+      const subYearly = await getSetting("PRICE_SUBSCRIPTION_YEARLY", "10000");
+      return next(
+        new AppError(
+          402,
+          `Payment Required. An active company subscription (${Number(subMonthly).toLocaleString()} ETB/month or ${Number(subYearly).toLocaleString()} ETB/year) is required to perform this action.`,
+        ),
+      );
   }
 
   next();
 }
+
+

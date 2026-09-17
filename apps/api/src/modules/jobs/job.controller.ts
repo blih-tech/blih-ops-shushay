@@ -76,6 +76,22 @@ export async function closeJob(
   }
 }
 
+export async function reopenJob(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    if (!req.user) return next(new AppError(401, "Not authenticated"));
+    const jobId = req.params.jobId as string;
+    const reopened = await jobService.reopenJob(jobId, req.user.id);
+    res.json(reopened);
+  } catch (err) {
+    next(err);
+  }
+}
+
+
 export async function listActiveJobs(
   req: Request,
   res: Response,

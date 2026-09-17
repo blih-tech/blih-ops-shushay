@@ -65,33 +65,27 @@ export function LoginForm() {
           const parsed = new URL(returnTo, TALENT_URL);
           const path = parsed.pathname;
 
+          const isAdminPath = path === "/admin" || path.startsWith("/admin/");
+          const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+          const isTalentOnly =
+            path === "/profile" ||
+            path.startsWith("/profile/") ||
+            path === "/jobs" ||
+            path.startsWith("/jobs/") ||
+            path === "/applications" ||
+            path.startsWith("/applications/");
+
           if (role === "ADMIN") {
-            const isTalentOnly =
-              path === "/profile" ||
-              path.startsWith("/profile/") ||
-              path === "/jobs" ||
-              path.startsWith("/jobs/") ||
-              path === "/applications" ||
-              path.startsWith("/applications/");
-            if (isTalentOnly) {
-              finalUrl = `${TALENT_URL}/`;
+            if (isTalentOnly || isCompanyOnly) {
+              finalUrl = `/admin`;
             }
           } else if (role === "COMPANY") {
-            const isTalentOnly =
-              path === "/profile" ||
-              path.startsWith("/profile/") ||
-              path === "/jobs" ||
-              path.startsWith("/jobs/") ||
-              path === "/applications" ||
-              path.startsWith("/applications/");
-            if (isTalentOnly) {
-              finalUrl = `${TALENT_URL}/`;
+            if (isTalentOnly || isAdminPath) {
+              finalUrl = `/company`;
             }
           } else if (role === "TALENT") {
-            const isCompanyOnly =
-              path === "/company" || path.startsWith("/company/");
-            if (isCompanyOnly) {
-              finalUrl = `${TALENT_URL}/`;
+            if (isCompanyOnly || isAdminPath) {
+              finalUrl = `/dashboard`;
             }
           }
         } catch {
@@ -185,6 +179,17 @@ export function LoginForm() {
       <p className="font-sans text-xs text-[#6E6678] text-center leading-relaxed pt-2">
         Protected sign-in. Employers only see public profile information and
         evidence you choose to share.
+      </p>
+
+      {/* Switch to Sign Up */}
+      <p className="font-sans text-sm text-center text-[#6E6678]">
+        Don&apos;t have an account?{" "}
+        <Link
+          href="/register"
+          className="text-[#1E5BFF] font-semibold hover:underline"
+        >
+          Sign up
+        </Link>
       </p>
     </div>
   );

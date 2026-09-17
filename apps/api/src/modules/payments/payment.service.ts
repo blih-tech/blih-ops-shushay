@@ -14,8 +14,8 @@ import {
   sendPaymentConfirmationEmail,
   sendSubscriptionConfirmationEmail,
 } from "../notifications/notification.service";
+import { getSetting } from "../settings/settings.service";
 
-export const SKILLS_ACCESS_PRICE = 1000;
 export const SKILLS_ACCESS_CURRENCY = "ETB";
 
 /**
@@ -57,13 +57,15 @@ export async function initializeSkillsPayment(userId: string) {
   }
 
   const txRef = generateTxRef();
+  const priceStr = await getSetting("PRICE_SKILLS_ACCESS", "1000");
+  const price = Number(priceStr) || 1000;
 
   // Create PENDING payment record
   const payment = await prisma.paymentTransaction.create({
     data: {
       userId,
       txRef,
-      amount: SKILLS_ACCESS_PRICE,
+      amount: price,
       currency: SKILLS_ACCESS_CURRENCY,
       paymentType: PaymentType.SKILLS_ACCESS,
       status: PaymentStatus.PENDING,
@@ -80,7 +82,7 @@ export async function initializeSkillsPayment(userId: string) {
   const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
   const chapaRes = await chapaService.initializePayment({
-    amount: SKILLS_ACCESS_PRICE,
+    amount: price,
     currency: SKILLS_ACCESS_CURRENCY,
     email: user.email,
     firstName,
@@ -90,7 +92,7 @@ export async function initializeSkillsPayment(userId: string) {
     callbackUrl,
     title: "Blih Skills Permanent Access",
     description:
-      "One-time 1,000 ETB payment for permanent access to all Blih Skills courses.",
+      `One-time ${price.toLocaleString()} ETB payment for permanent access to all Blih Skills courses.`,
   });
 
   if (chapaRes.checkoutUrl) {
@@ -234,10 +236,15 @@ export async function verifyAndCompletePayment(
     const metadataPlan = (transaction.metadata as any)?.plan as
       | string
       | undefined;
-    const plan: SubscriptionPlan =
-      metadataPlan === "YEARLY" || transaction.amount >= 10000
-        ? "YEARLY"
-        : "MONTHLY";
+
+    if (!metadataPlan || (metadataPlan !== "YEARLY" && metadataPlan !== "MONTHLY")) {
+      throw new AppError(
+        400,
+        "Transaction metadata is missing a valid subscription plan. Please contact support.",
+      );
+    }
+
+    const plan: SubscriptionPlan = metadataPlan === "YEARLY" ? "YEARLY" : "MONTHLY";
     const durationMonths = plan === "YEARLY" ? 12 : 1;
 
     const now = new Date();
@@ -412,7 +419,7 @@ export async function verifyAndCompletePayment(
   sendPaymentConfirmationEmail(
     transaction.user.email,
     userName,
-    SKILLS_ACCESS_PRICE,
+    transaction.amount,
     txRef,
   );
 

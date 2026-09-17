@@ -184,6 +184,28 @@ export async function closeJob(jobId: string, userId: string) {
   });
 }
 
+export async function reopenJob(jobId: string, userId: string) {
+  const companyProfile = await getCompanyProfileByUserId(userId);
+  const job = await prisma.job.findUnique({ where: { id: jobId } });
+  if (!job) throw new AppError(404, "Job not found.");
+  if (job.companyProfileId !== companyProfile.id) {
+    throw new AppError(403, "You do not have permission to reopen this job.");
+  }
+  if (job.status !== JobStatus.CLOSED) {
+    throw new AppError(400, "Only closed jobs can be reopened.");
+  }
+  const newDeadline = new Date();
+  newDeadline.setDate(newDeadline.getDate() + 30);
+  return prisma.job.update({
+    where: { id: jobId },
+    data: { status: JobStatus.ACTIVE, applicationDeadline: newDeadline },
+    include: {
+      companyProfile: { select: { companyName: true, logoUrl: true } },
+    },
+  });
+}
+
+
 // ─── Public job listing ───────────────────────────────────────────────────────
 
 export async function listActiveJobs(query: JobQueryInput, userId?: string) {

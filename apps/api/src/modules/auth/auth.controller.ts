@@ -69,16 +69,11 @@ export async function login(
     const { email, password } = req.body;
     const normalizedEmail = email ? email.trim().toLowerCase() : "";
 
-    console.log(`[AUTH LOGIN] Attempt for email: "${normalizedEmail}"`);
-
     const user = await prisma.user.findUnique({
       where: { email: normalizedEmail },
     });
 
     if (!user) {
-      console.warn(
-        `[AUTH LOGIN FAILED] No user found for: "${normalizedEmail}"`,
-      );
       return next(new AppError(401, "Invalid email or password"));
     }
 
@@ -86,16 +81,10 @@ export async function login(
       ? await bcrypt.compare(password, user.passwordHash)
       : false;
     if (!isMatch) {
-      console.warn(
-        `[AUTH LOGIN FAILED] Password mismatch for: "${normalizedEmail}"`,
-      );
       return next(new AppError(401, "Invalid email or password"));
     }
 
     if (!user.emailVerified) {
-      console.warn(
-        `[AUTH LOGIN FAILED] Unverified email for: "${normalizedEmail}"`,
-      );
       return next(
         new AppError(
           401,
@@ -179,9 +168,10 @@ export async function forgotPassword(
 ) {
   try {
     const { email } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { email: normalizedEmail },
     });
 
     if (user) {
@@ -198,7 +188,7 @@ export async function forgotPassword(
 
       // Send password reset email (real in production, console in dev without key)
       const resetLink = `${env.authUrl}/reset-password?token=${resetToken}`;
-      await sendPasswordResetEmail(email, resetLink);
+      await sendPasswordResetEmail(normalizedEmail, resetLink);
     }
 
     // Always return success to prevent user enumeration

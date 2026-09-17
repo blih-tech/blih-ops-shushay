@@ -24,7 +24,7 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 export default function TalentHomePage() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 

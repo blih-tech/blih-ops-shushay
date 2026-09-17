@@ -12,6 +12,7 @@ import certificateRoutes from "../modules/certificates/certificate.routes";
 import companySubscriptionRoutes from "../modules/company-subscriptions/company-subscription.routes";
 import jobRoutes from "../modules/jobs/job.routes";
 import applicationRoutes from "../modules/applications/application.routes";
+import { settingsRoutes } from "../modules/settings/settings.routes";
 
 const router = Router();
 
@@ -23,6 +24,7 @@ router.use("/jobs", jobRoutes);
 router.use("/applications", applicationRoutes);
 router.use("/courses", courseRoutes);
 router.use("/admin", adminRoutes);
+router.use("/admin/settings", settingsRoutes);
 router.use("/payments", paymentRoutes);
 router.use("/notifications", notificationRoutes);
 router.use("/learning", learningRoutes);

@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
-import { Plus, GraduationCap } from "lucide-react";
-import { Button, Alert, ConfirmDialog, UniversalSearch } from "@blih/ui";
+import { Plus, GraduationCap, BookOpen, Pencil, Trash2, CheckCircle, EyeOff } from "lucide-react";
+import { Button, Alert, Badge, ConfirmDialog, UniversalSearch } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import {
   fetchAdminCourses,
@@ -11,8 +11,7 @@ import {
   unpublishCourse,
   deleteCourse,
 } from "@/lib/courses";
-import { AdminCourseCard } from "@/components/admin/AdminCourseCard";
-import { AdminCourseSkeletonList } from "@/components/admin/AdminSkeletonList";
+import { AdminTable } from "@/components/admin/AdminTable";
 import type { Course } from "@/types/course";
 
 function CoursesContent() {
@@ -139,44 +138,91 @@ function CoursesContent() {
         />
       </div>
 
-      {loading && <AdminCourseSkeletonList />}
-
-      {!loading && !error && filteredCourses.length === 0 && (
-        <div className="text-center py-16 border border-dashed border-[#D9CEDF] rounded-3xl p-8 space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
-            <GraduationCap className="w-6 h-6" />
-          </div>
-          <h3 className="font-display font-bold text-xl text-[#17131F]">
-            {searchQuery ? "No matching courses found" : "No courses yet"}
-          </h3>
-          <p className="text-sm text-[#6E6678]">
-            {searchQuery
-              ? "Try a different search term."
-              : "Create your first course to get started."}
-          </p>
-          {!searchQuery && (
-            <Link href="/admin/courses/new">
-              <Button variant="primary" leftIcon={<Plus className="h-4 w-4" />}>
-                Create Course
-              </Button>
-            </Link>
-          )}
-        </div>
-      )}
-
-      {!loading && filteredCourses.length > 0 && (
-        <div className="space-y-4">
-          {filteredCourses.map((course) => (
-            <AdminCourseCard
-              key={course.id}
-              course={course}
-              isActing={actionLoading === course.id}
-              onPublishToggle={handlePublishToggle}
-              onDeleteClick={setDeleteConfirmCourse}
-            />
-          ))}
-        </div>
-      )}
+      <AdminTable<Course>
+        loading={loading}
+        data={filteredCourses}
+        rowKey={(c) => c.id}
+        emptyIcon={<GraduationCap className="h-6 w-6" />}
+        emptyTitle={searchQuery ? "No matching courses found" : "No courses yet"}
+        emptySubtext={
+          searchQuery
+            ? "Try a different search term."
+            : "Create your first course to get started."
+        }
+        columns={[
+          {
+            key: "course",
+            header: "Course",
+            render: (c) => (
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF] shrink-0">
+                  <BookOpen className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <p className="font-semibold text-[#17131F] truncate">{c.title}</p>
+                  <Badge
+                    variant={c.status === "PUBLISHED" ? "verified" : "secondary"}
+                    size="sm"
+                  >
+                    {c.status === "PUBLISHED" ? "Published" : "Draft"}
+                  </Badge>
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: "lessons",
+            header: "Lessons",
+            width: "100px",
+            render: (c) => (
+              <span className="font-mono text-sm text-[#6E6678]">
+                {c._count?.lessons ?? 0}
+              </span>
+            ),
+          },
+          {
+            key: "actions",
+            header: "",
+            width: "240px",
+            render: (c) => (
+              <div className="flex items-center gap-2 justify-end">
+                <Button
+                  size="sm"
+                  variant={c.status === "PUBLISHED" ? "outline" : "secondary"}
+                  isLoading={actionLoading === c.id}
+                  onClick={() => handlePublishToggle(c)}
+                  leftIcon={
+                    c.status === "PUBLISHED" ? (
+                      <EyeOff className="h-3.5 w-3.5 text-[#D97706]" />
+                    ) : (
+                      <CheckCircle className="h-3.5 w-3.5 text-[#2E8F79]" />
+                    )
+                  }
+                >
+                  {c.status === "PUBLISHED" ? "Unpublish" : "Publish"}
+                </Button>
+                <Link href={`/admin/courses/${c.id}/edit`}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    leftIcon={<Pencil className="h-3.5 w-3.5" />}
+                  >
+                    Edit
+                  </Button>
+                </Link>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+                  onClick={() => setDeleteConfirmCourse(c)}
+                >
+                  Delete
+                </Button>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <ConfirmDialog
         isOpen={!!confirmCourse}

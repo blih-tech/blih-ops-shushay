@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import PDFDocument from "pdfkit";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
@@ -44,11 +45,8 @@ export async function checkAndGenerateCertificate(
     return existingCert;
   }
 
-  // Generate unique certificate number
-  const uniqueCode = `${Date.now().toString(36).toUpperCase()}-${Math.random()
-    .toString(36)
-    .substring(2, 6)
-    .toUpperCase()}`;
+  // Generate unique certificate number using cryptographic randomness
+  const uniqueCode = `${Date.now().toString(36).toUpperCase()}-${crypto.randomBytes(6).toString("hex").toUpperCase()}`;
   const certificateNumber = `BLIH-CERT-${uniqueCode}-VERIFIED`;
 
   const newCert = await prisma.certificate.create({
@@ -89,7 +87,7 @@ export async function getUserCertificates(userId: string) {
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { issueDate: "desc" },
   });
 
   // Deduplicate by course title to ensure 1 certificate per course track
@@ -145,7 +143,7 @@ export async function generateCertificatePdfStream(cert: any, res: any) {
     cert.user?.talentProfile?.fullName ||
     (cert.user?.email
       ? cert.user.email.split("@")[0].toUpperCase()
-      : "Shushay Kebedew");
+      : "Certificate Holder");
 
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(

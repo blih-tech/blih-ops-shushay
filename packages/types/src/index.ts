@@ -1,4 +1,4 @@
-export type Role = "TALENT" | "COMPANY" | "ADMIN";
+﻿export type Role = "TALENT" | "COMPANY" | "ADMIN";
 
 export interface User {
   id: string;
@@ -19,7 +19,7 @@ export interface PaymentTransaction {
   paymentType: PaymentType;
   status: PaymentStatus;
   chapaRef?: string | null;
-  metadata?: Record<string, any> | null;
+  metadata?: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -43,10 +43,16 @@ export interface SkillsAccessStatus {
   } | null;
 }
 
+export type NotificationType =
+  | "NEW_JOB_APPLICATION"
+  | "SKILLS_PAYMENT_SUCCESS"
+  | "COMPANY_SUBSCRIPTION_SUCCESS"
+  | "CERTIFICATE_EARNED";
+
 export interface Notification {
   id: string;
   userId: string;
-  type: string;
+  type: NotificationType;
   title: string;
   message: string;
   read: boolean;
@@ -85,6 +91,35 @@ export type ApplicationStatus =
   | "REJECTED"
   | "WITHDRAWN";
 
+export interface Job {
+  id: string;
+  title: string;
+  description: string;
+  requiredSkills: string[];
+  employmentType: string;
+  experienceLevel: string;
+  status: "ACTIVE" | "CLOSED";
+  createdAt: string;
+  updatedAt: string;
+  companyProfileId: string;
+}
+
+export interface TalentProfile {
+  id: string;
+  userId: string;
+  fullName?: string | null;
+  title?: string | null;
+  phone?: string | null;
+  country?: string | null;
+  city?: string | null;
+  skills: string[];
+  bio?: string | null;
+  photoUrl?: string | null;
+  cvUrl?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface JobApplication {
   id: string;
   jobId: string;
@@ -93,6 +128,6 @@ export interface JobApplication {
   coverLetter?: string | null;
   createdAt: string;
   updatedAt: string;
-  job?: any;
-  talentProfile?: any;
+  job?: Job;
+  talentProfile?: TalentProfile;
 }

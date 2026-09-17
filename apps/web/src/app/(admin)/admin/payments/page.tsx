@@ -3,10 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
-  CreditCard,
-  TrendingUp,
   DollarSign,
-  AlertCircle,
   Eye,
 } from "lucide-react";
 import {
@@ -15,12 +12,12 @@ import {
   UniversalSearch,
   Pagination,
   Select,
-  Card,
   Button,
 } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+
 import { fetchAdminPayments } from "@/lib/adminApi";
 import type { AdminPayment } from "@/types/admin";
 
@@ -104,61 +101,7 @@ function AdminPaymentsContent() {
         </Alert>
       )}
 
-      {/* Summary Stats — Compact */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
-          <div>
-            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
-              Total Revenue
-            </p>
-            <div className="flex items-baseline gap-2 mt-0.5">
-              <span className="font-display text-base font-bold text-[#17131F]">
-                {summary.totalRevenue.toLocaleString()} ETB
-              </span>
-              <span className="text-[11px] text-[#2E8F79]">
-                ({summary.successfulCount} successful)
-              </span>
-            </div>
-          </div>
-          <div className="w-7 h-7 rounded-lg bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0">
-            <TrendingUp className="h-3.5 w-3.5" />
-          </div>
-        </div>
 
-        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
-          <div>
-            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
-              All Transactions
-            </p>
-            <div className="flex items-baseline gap-2 mt-0.5">
-              <span className="font-display text-base font-bold text-[#17131F]">
-                {total}
-              </span>
-              <span className="text-[11px] text-[#9B8FA8]">total count</span>
-            </div>
-          </div>
-          <div className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
-            <CreditCard className="h-3.5 w-3.5" />
-          </div>
-        </div>
-
-        <div className="bg-white border border-[#EBE5F0] rounded-xl px-4 py-3 flex items-center justify-between shadow-2xs">
-          <div>
-            <p className="text-[10px] font-mono text-[#9B8FA8] uppercase tracking-wider">
-              Pending
-            </p>
-            <div className="flex items-baseline gap-2 mt-0.5">
-              <span className="font-display text-base font-bold text-[#17131F]">
-                {payments.filter((p) => p.status === "PENDING").length}
-              </span>
-              <span className="text-[11px] text-[#D97706]">on page</span>
-            </div>
-          </div>
-          <div className="w-7 h-7 rounded-lg bg-[#FFF9EE] text-[#D97706] flex items-center justify-center shrink-0">
-            <AlertCircle className="h-3.5 w-3.5" />
-          </div>
-        </div>
-      </div>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row items-center gap-3 w-full">

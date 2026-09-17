@@ -7,9 +7,22 @@ import { useAuth } from "@/providers/AuthProvider";
 import { NotificationMenu } from "./NotificationMenu";
 import { AdminShell } from "./AdminShell";
 
+const AUTH_PATHS = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-email",
+];
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const pathname = usePathname();
+
+  // Auth pages render bare — no navbar or footer
+  if (AUTH_PATHS.some((p) => pathname.startsWith(p))) {
+    return <>{children}</>;
+  }
 
   // Admin routes get the dedicated full-width sidebar layout
   if (pathname.startsWith("/admin")) {

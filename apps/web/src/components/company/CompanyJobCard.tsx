@@ -12,6 +12,7 @@ import {
   XCircle,
   Sparkles,
   Briefcase,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@blih/ui";
 import { Job } from "@/types/job";
@@ -20,7 +21,9 @@ import { formatSalary } from "@/lib/jobOptions";
 interface CompanyJobCardProps {
   job: Job;
   closingId: string | null;
+  reopeningId?: string | null;
   onCloseJob: (jobId: string) => void;
+  onReopenJob?: (jobId: string) => void;
 }
 
 function formatEmploymentType(type: string): string {
@@ -34,7 +37,9 @@ function formatEmploymentType(type: string): string {
 export function CompanyJobCard({
   job,
   closingId,
+  reopeningId,
   onCloseJob,
+  onReopenJob,
 }: CompanyJobCardProps) {
   const isClosed = job.status === "CLOSED";
   const isExpired =
@@ -45,6 +50,7 @@ export function CompanyJobCard({
     );
   const applicantsCount = job._count?.applications || 0;
   const isClosing = closingId === job.id;
+  const isReopening = reopeningId === job.id;
   const initial = job.title ? job.title.charAt(0).toUpperCase() : "J";
 
   return (
@@ -94,7 +100,7 @@ export function CompanyJobCard({
 
           {/* Action Buttons at the TOP */}
           <div className="flex items-center gap-2 shrink-0 flex-wrap self-start sm:self-auto">
-            {!isClosed && (
+            {!isClosed ? (
               <>
                 <Link href={`/company/jobs/${job.id}/edit`}>
                   <Button
@@ -119,6 +125,19 @@ export function CompanyJobCard({
                   {isClosing ? "Closing..." : "Close"}
                 </Button>
               </>
+            ) : (
+              onReopenJob && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={isReopening}
+                  onClick={() => onReopenJob(job.id)}
+                  className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
+                  leftIcon={<RefreshCw className="w-3.5 h-3.5 text-[#1E5BFF]" />}
+                >
+                  {isReopening ? "Reopening..." : "Reopen Role"}
+                </Button>
+              )
             )}
 
             <Link href={`/company/jobs/${job.id}`}>

@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import fs from "fs/promises";
 import path from "path";
 import { AppError } from "../../middleware/errorHandler";
 import * as talentService from "./talent.service";
@@ -9,27 +8,8 @@ import {
   deleteFromCloudinary,
   CloudinaryFolders,
 } from "../../services/cloudinary.service";
+import { deleteOldAsset } from "../../utils/media";
 
-export async function deleteOldAsset(
-  fileUrl: string | null | undefined,
-  publicId: string | null | undefined,
-  resourceType: "image" | "video" | "raw",
-) {
-  if (publicId) {
-    await deleteFromCloudinary(publicId, resourceType);
-  } else if (fileUrl && fileUrl.includes("/uploads/")) {
-    try {
-      const urlParts = fileUrl.split("/uploads/");
-      if (urlParts.length === 2) {
-        const relativePath = urlParts[1];
-        const localPath = path.join("uploads", relativePath);
-        await fs.unlink(localPath);
-      }
-    } catch (err) {
-      console.warn("Could not delete old local file:", err);
-    }
-  }
-}
 
 export async function uploadPhoto(
   req: Request,

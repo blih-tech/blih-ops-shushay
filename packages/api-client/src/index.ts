@@ -1,3 +1,5 @@
+import type { ApplicationStatus, SubscriptionPlan, SubscriptionStatus } from "@blih/types";
+
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
 
@@ -106,7 +108,7 @@ export async function getSkillsAccessStatus() {
 // ─── Company Subscription API Client Helpers ─────────────────────────────────
 
 export async function initializeCompanySubscription(
-  plan: "MONTHLY" | "YEARLY",
+  plan: SubscriptionPlan,
 ) {
   return apiFetch<{
     checkoutUrl: string | null;
@@ -124,8 +126,8 @@ export async function getCompanySubscriptionStatus() {
     hasActiveSubscription: boolean;
     subscription: {
       id: string;
-      plan: "MONTHLY" | "YEARLY";
-      status: "ACTIVE" | "EXPIRED";
+      plan: SubscriptionPlan;
+      status: SubscriptionStatus;
       amount: number;
       currency: string;
       startDate: string;
@@ -179,8 +181,6 @@ export async function getUserCertificates() {
 }
 
 export function getCertificateDownloadUrl(certificateId: string): string {
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
   return `${API_URL}/certificates/${certificateId}/download`;
 }
 
@@ -249,7 +249,7 @@ export async function getJobApplications(jobId: string) {
 
 export async function updateApplicationStatus(
   applicationId: string,
-  status: "IN_REVIEW",
+  status: ApplicationStatus,
 ) {
   return apiFetch<any>(`/applications/${applicationId}/status`, {
     method: "PATCH",
