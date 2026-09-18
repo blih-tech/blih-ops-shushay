@@ -17,6 +17,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { TalentCredentialSections } from "@/components/profile/TalentCredentialSections";
+import { getErrorMessage } from "@blih/api-client";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -39,7 +40,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
       try {
         const data = await getTalentProfileById(talentId);
         setTalent(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading talent profile:", err);
         if (err instanceof ApiError && err.status === 402) {
           setSubscriptionRequired(true);
@@ -47,7 +48,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
             "An active company subscription is required to view full talent profiles.",
           );
         } else {
-          setError(err?.message || "Failed to load candidate profile.");
+          setError(getErrorMessage(err) || "Failed to load candidate profile.");
         }
       } finally {
         setLoading(false);

@@ -8,6 +8,8 @@ import { Alert, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminPaymentById } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminPaymentDetailContent() {
   const params = useParams();
@@ -22,8 +24,8 @@ function AdminPaymentDetailContent() {
       try {
         const data = await fetchAdminPaymentById(paymentId);
         setPayment(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load payment transaction details");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load payment transaction details");
       } finally {
         setLoading(false);
       }
@@ -220,6 +222,7 @@ function AdminPaymentDetailContent() {
 }
 
 export default function AdminPaymentDetailPage() {
+  usePageTitle("Payment Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminPaymentDetailContent />

@@ -11,6 +11,19 @@ interface CompanyTalentsTableProps {
   loading?: boolean;
 }
 
+const TableHeader = () => (
+  <thead>
+    <tr className="border-b border-[#D9CEDF]/70 bg-[#FAF9FC] text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6E6678]">
+      <th className="py-3.5 px-6">Candidate</th>
+      <th className="py-3.5 px-6">Skills</th>
+      <th className="py-3.5 px-6">Location</th>
+      <th className="py-3.5 px-6">English</th>
+      <th className="py-3.5 px-6">Evidence / Proof</th>
+      <th className="py-3.5 px-6 text-right">Action</th>
+    </tr>
+  </thead>
+);
+
 export function CompanyTalentsTable({
   talents,
   loading = false,
@@ -20,16 +33,7 @@ export function CompanyTalentsTable({
       <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-[#D9CEDF]/70 bg-[#FAF9FC] text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6E6678]">
-                <th className="py-3.5 px-6">Candidate</th>
-                <th className="py-3.5 px-6">Skills</th>
-                <th className="py-3.5 px-6">Location</th>
-                <th className="py-3.5 px-6">English</th>
-                <th className="py-3.5 px-6">Evidence / Proof</th>
-                <th className="py-3.5 px-6 text-right">Action</th>
-              </tr>
-            </thead>
+            <TableHeader />
             <tbody className="divide-y divide-[#D9CEDF]/40">
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <tr key={i} className="animate-pulse">
@@ -124,16 +128,7 @@ export function CompanyTalentsTable({
     <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="border-b border-[#D9CEDF]/70 bg-[#FAF9FC] text-[11px] font-mono font-semibold uppercase tracking-wider text-[#6E6678]">
-              <th className="py-3.5 px-6">Candidate</th>
-              <th className="py-3.5 px-6">Skills</th>
-              <th className="py-3.5 px-6">Location</th>
-              <th className="py-3.5 px-6">English</th>
-              <th className="py-3.5 px-6">Evidence / Proof</th>
-              <th className="py-3.5 px-6 text-right">Action</th>
-            </tr>
-          </thead>
+          <TableHeader />
           <tbody className="divide-y divide-[#D9CEDF]/40 font-sans text-sm">
             {talents.map((talent) => {
               const location =

@@ -10,6 +10,8 @@ import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminApplications } from "@/lib/adminApi";
 import type { AdminApplication } from "@/types/admin";
 import { Button } from "@blih/ui";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 20;
 
@@ -40,8 +42,8 @@ function AdminApplicationsContent() {
       });
       setApplications(data.applications);
       setTotal(data.total);
-    } catch (err: any) {
-      setError(err.message || "Failed to load applications");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load applications");
     } finally {
       setLoading(false);
     }
@@ -219,6 +221,7 @@ function AdminApplicationsContent() {
 }
 
 export default function AdminApplicationsPage() {
+  usePageTitle("Applications | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminApplicationsContent />

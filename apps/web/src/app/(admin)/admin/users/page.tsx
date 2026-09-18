@@ -17,6 +17,8 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminUsers, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminUser } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 20;
 
@@ -51,8 +53,8 @@ function AdminUsersContent() {
       });
       setUsers(data.users);
       setTotal(data.total);
-    } catch (err: any) {
-      setError(err.message || "Failed to load users");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -75,8 +77,8 @@ function AdminUsersContent() {
       await deleteAdminUser(deleteTarget.id);
       setDeleteTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete user");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete user");
     } finally {
       setActionLoading(null);
     }
@@ -301,6 +303,7 @@ function AdminUsersContent() {
 }
 
 export default function AdminUsersPage() {
+  usePageTitle("Users | Admin");
   return (
     <AuthGuardComponent allowedRoles={["ADMIN"]}>
       <AdminUsersContent />

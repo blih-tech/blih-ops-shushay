@@ -8,6 +8,8 @@ import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminSubscriptionById } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminSubscriptionDetailContent() {
   const params = useParams();
@@ -22,8 +24,8 @@ function AdminSubscriptionDetailContent() {
       try {
         const data = await fetchAdminSubscriptionById(subId);
         setSubscription(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load subscription details");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load subscription details");
       } finally {
         setLoading(false);
       }
@@ -236,6 +238,7 @@ function AdminSubscriptionDetailContent() {
 }
 
 export default function AdminSubscriptionDetailPage() {
+  usePageTitle("Subscription Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminSubscriptionDetailContent />

@@ -17,6 +17,7 @@ import { useAuth } from "@/providers/AuthProvider";
 import { getJobById } from "@/lib/jobApi";
 import { Job } from "@/types/job";
 import { JobApplyModal } from "@/components/jobs/JobApplyModal";
+import { getErrorMessage } from "@blih/api-client";
 
 interface PageProps {
   params: Promise<{ jobId: string }>;
@@ -47,9 +48,9 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
       try {
         const data = await getJobById(jobId);
         setJob(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading job:", err);
-        setError(err?.message || "Job not found or could not be loaded");
+        setError(getErrorMessage(err) || "Job not found or could not be loaded");
       } finally {
         setLoading(false);
       }

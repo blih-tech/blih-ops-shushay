@@ -8,6 +8,8 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { fetchAdminCertificates, deleteAdminCertificate } from "@/lib/adminApi";
 import type { AdminCertificate } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 25;
 
@@ -41,8 +43,8 @@ function AdminCertificatesContent() {
       setCerts(data.certificates);
       setTotal(data.total);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
-      setError(err.message || "Failed to load certificates");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load certificates");
     } finally {
       setLoading(false);
     }
@@ -63,8 +65,8 @@ function AdminCertificatesContent() {
       await deleteAdminCertificate(deleteTarget.id);
       setDeleteTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete certificate");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete certificate");
     } finally {
       setActionLoading(null);
     }
@@ -245,6 +247,7 @@ function AdminCertificatesContent() {
 }
 
 export default function AdminCertificatesPage() {
+  usePageTitle("Certificates | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminCertificatesContent />

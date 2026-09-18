@@ -1,4 +1,5 @@
 "use client";
+import { getErrorMessage } from "@blih/api-client";
 
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -42,7 +43,7 @@ function ReturnContent() {
         }
       })
       .catch((err) => {
-        setErrorMessage(err.message || "Payment verification failed.");
+        setErrorMessage(getErrorMessage(err) || "Payment verification failed.");
       })
       .finally(() => {
         setLoading(false);
@@ -65,8 +66,8 @@ function ReturnContent() {
       } else {
         setErrorMessage(res.message || "Payment verification failed.");
       }
-    } catch (err: any) {
-      setErrorMessage(err.message || "Payment verification failed.");
+    } catch (err: unknown) {
+      setErrorMessage(getErrorMessage(err) || "Payment verification failed.");
     } finally {
       setLoading(false);
     }

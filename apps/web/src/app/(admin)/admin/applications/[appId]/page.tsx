@@ -8,6 +8,8 @@ import { Alert, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminApplicationById } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminApplicationDetailContent() {
   const params = useParams();
@@ -22,8 +24,8 @@ function AdminApplicationDetailContent() {
       try {
         const data = await fetchAdminApplicationById(appId);
         setApplication(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load application details");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load application details");
       } finally {
         setLoading(false);
       }
@@ -222,6 +224,7 @@ function AdminApplicationDetailContent() {
 }
 
 export default function AdminApplicationDetailPage() {
+  usePageTitle("Application Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminApplicationDetailContent />

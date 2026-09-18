@@ -6,25 +6,91 @@ import prisma from "../config/prisma";
 import { AppError } from "./errorHandler";
 import { JwtPayload } from "../types/auth.types";
 import { getSetting } from "../modules/settings/settings.service";
+import { redisClient } from "../config/redis";
 
-// ─── User session cache (60-second TTL) ──────────────────────────────────────
-// Prevents a DB round-trip on every authenticated request. Keyed by userId.
-const userCache = new Map<string, { data: { id: string; email: string; role: Role; emailVerified: boolean }; expiresAt: number }>();
-const USER_CACHE_TTL_MS = 60_000;
+// ─── Cached user shape ────────────────────────────────────────────────────────
+interface CachedUserData {
+  id: string;
+  email: string;
+  role: Role;
+  emailVerified: boolean;
+}
 
-function getCachedUser(userId: string) {
-  const entry = userCache.get(userId);
-  if (!entry) return null;
-  if (Date.now() > entry.expiresAt) {
-    userCache.delete(userId);
-    return null;
+// ─── In-process LRU (fallback when Redis is unavailable) ─────────────────────
+// Bounded to 1 000 entries; TTL is enforced on read.
+class LRUCache {
+  private max: number;
+  private cache: Map<string, { data: CachedUserData; expiresAt: number }>;
+
+  constructor(max = 1000) {
+    this.max = max;
+    this.cache = new Map();
   }
-  return entry.data;
+
+  get(key: string): CachedUserData | null {
+    const item = this.cache.get(key);
+    if (!item) return null;
+    if (Date.now() > item.expiresAt) { this.cache.delete(key); return null; }
+    // Move to tail (LRU promotion)
+    this.cache.delete(key);
+    this.cache.set(key, item);
+    return item.data;
+  }
+
+  set(key: string, data: CachedUserData, ttlMs: number) {
+    if (this.cache.has(key)) this.cache.delete(key);
+    else if (this.cache.size >= this.max) {
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey) this.cache.delete(firstKey);
+    }
+    this.cache.set(key, { data, expiresAt: Date.now() + ttlMs });
+  }
+
+  delete(key: string) { this.cache.delete(key); }
 }
 
-function setCachedUser(userId: string, data: { id: string; email: string; role: Role; emailVerified: boolean }) {
-  userCache.set(userId, { data, expiresAt: Date.now() + USER_CACHE_TTL_MS });
+const lruFallback = new LRUCache(1000);
+const USER_CACHE_TTL_S = 60; // seconds (used by Redis SETEX)
+const USER_CACHE_TTL_MS = USER_CACHE_TTL_S * 1000;
+const CACHE_KEY = (userId: string) => `auth:user:${userId}`;
+
+// ─── Cache helpers (Redis → LRU fallback) ────────────────────────────────────
+
+async function getCachedUser(userId: string): Promise<CachedUserData | null> {
+  const key = CACHE_KEY(userId);
+  if (redisClient && redisClient.status === "ready") {
+    try {
+      const raw = await redisClient.get(key);
+      return raw ? (JSON.parse(raw) as CachedUserData) : null;
+    } catch {
+      // Redis error — fall through to LRU
+    }
+  }
+  return lruFallback.get(key);
 }
+
+async function setCachedUser(userId: string, data: CachedUserData): Promise<void> {
+  const key = CACHE_KEY(userId);
+  if (redisClient && redisClient.status === "ready") {
+    try {
+      await redisClient.setex(key, USER_CACHE_TTL_S, JSON.stringify(data));
+      return;
+    } catch {
+      // Redis error — fall through to LRU
+    }
+  }
+  lruFallback.set(key, data, USER_CACHE_TTL_MS);
+}
+
+export async function invalidateCachedUser(userId: string): Promise<void> {
+  const key = CACHE_KEY(userId);
+  if (redisClient && redisClient.status === "ready") {
+    try { await redisClient.del(key); } catch { /* ignore */ }
+  }
+  lruFallback.delete(key);
+}
+
+// ─── Middleware ───────────────────────────────────────────────────────────────
 
 export async function requireAuth(
   req: Request,
@@ -41,7 +107,7 @@ export async function requireAuth(
     const decoded = jwt.verify(token, env.jwtSecret) as JwtPayload;
 
     // Check cache first to avoid DB hit on every request
-    const cached = getCachedUser(decoded.userId);
+    const cached = await getCachedUser(decoded.userId);
     if (cached) {
       req.user = cached;
       return next();
@@ -61,13 +127,14 @@ export async function requireAuth(
       return next(new AppError(401, "User not found"));
     }
 
-    setCachedUser(user.id, user);
+    await setCachedUser(user.id, user);
     req.user = user;
     next();
-  } catch (err) {
+  } catch {
     return next(new AppError(401, "Invalid or expired token"));
   }
 }
+
 
 export function requireRole(allowedRoles: Role[]) {
   return (req: Request, _res: Response, next: NextFunction) => {

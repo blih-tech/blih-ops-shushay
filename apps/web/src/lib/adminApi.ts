@@ -1,26 +1,5 @@
-import { apiFetch } from "./api";
-import type {
-  AdminStats,
-  AdminUserListResponse,
-  AdminTalentListResponse,
-  AdminCompanyListResponse,
-  AdminJobListResponse,
-  AdminJobDetail,
-  AdminApplicationListResponse,
-  AdminPaymentListResponse,
-  AdminSubscriptionListResponse,
-  AdminCertificateListResponse,
-  AdminNotificationListResponse,
-} from "@/types/admin";
-
-function qs(params: Record<string, any>): string {
-  const sp = new URLSearchParams();
-  Object.entries(params).forEach(([k, v]) => {
-    if (v !== undefined && v !== null && v !== "") sp.append(k, String(v));
-  });
-  const s = sp.toString();
-  return s ? `?${s}` : "";
-}
+import type { AdminStats, AdminUserListResponse, AdminTalentListResponse, AdminCompanyListResponse, AdminJobListResponse, AdminJobDetail, AdminApplicationListResponse, AdminPaymentListResponse, AdminSubscriptionListResponse, AdminCertificateListResponse, AdminNotificationListResponse } from "../types/admin";
+import { apiFetch, buildQueryString } from "./api";
 
 // ─── Dashboard Stats ──────────────────────────────────────────────────────────
 
@@ -36,7 +15,7 @@ export async function fetchAdminUsers(params?: {
   search?: string;
   role?: string;
 }): Promise<AdminUserListResponse> {
-  return apiFetch<AdminUserListResponse>(`/admin/users${qs(params ?? {})}`);
+  return apiFetch<AdminUserListResponse>(`/admin/users${buildQueryString(params ?? {})}`);
 }
 
 export async function deleteAdminUser(userId: string): Promise<{ success: boolean }> {
@@ -64,7 +43,7 @@ export async function fetchAdminTalents(params?: {
   limit?: number;
   search?: string;
 }): Promise<AdminTalentListResponse> {
-  const result = await apiFetch<AdminTalentListResponse>(`/admin/talents${qs(params ?? {})}`);
+  const result = await apiFetch<AdminTalentListResponse>(`/admin/talents${buildQueryString(params ?? {})}`);
   // Support legacy callers that expect a flat array — handle both shapes
   if (Array.isArray(result)) {
     return { talents: result as any, total: (result as any).length, page: 1, limit: 50, totalPages: 1 };
@@ -80,7 +59,7 @@ export async function fetchAdminCompanies(params?: {
   search?: string;
   subscriptionStatus?: string;
 }): Promise<AdminCompanyListResponse> {
-  const result = await apiFetch<AdminCompanyListResponse>(`/admin/companies${qs(params ?? {})}`);
+  const result = await apiFetch<AdminCompanyListResponse>(`/admin/companies${buildQueryString(params ?? {})}`);
   if (Array.isArray(result)) {
     return { companies: result as any, total: (result as any).length, page: 1, limit: 50, totalPages: 1 };
   }
@@ -97,7 +76,7 @@ export async function fetchAdminJobs(params?: {
   employmentType?: string;
   experienceLevel?: string;
 }): Promise<AdminJobListResponse> {
-  return apiFetch<AdminJobListResponse>(`/admin/jobs${qs(params ?? {})}`);
+  return apiFetch<AdminJobListResponse>(`/admin/jobs${buildQueryString(params ?? {})}`);
 }
 
 export async function fetchAdminJobById(jobId: string): Promise<AdminJobDetail> {
@@ -128,7 +107,7 @@ export async function fetchAdminApplications(params?: {
   search?: string;
   status?: string;
 }): Promise<AdminApplicationListResponse> {
-  return apiFetch<AdminApplicationListResponse>(`/admin/applications${qs(params ?? {})}`);
+  return apiFetch<AdminApplicationListResponse>(`/admin/applications${buildQueryString(params ?? {})}`);
 }
 
 // ─── Payments ─────────────────────────────────────────────────────────────────
@@ -140,7 +119,7 @@ export async function fetchAdminPayments(params?: {
   status?: string;
   paymentType?: string;
 }): Promise<AdminPaymentListResponse> {
-  return apiFetch<AdminPaymentListResponse>(`/admin/payments${qs(params ?? {})}`);
+  return apiFetch<AdminPaymentListResponse>(`/admin/payments${buildQueryString(params ?? {})}`);
 }
 
 // ─── Subscriptions ────────────────────────────────────────────────────────────
@@ -151,7 +130,7 @@ export async function fetchAdminSubscriptions(params?: {
   search?: string;
   status?: string;
 }): Promise<AdminSubscriptionListResponse> {
-  return apiFetch<AdminSubscriptionListResponse>(`/admin/subscriptions${qs(params ?? {})}`);
+  return apiFetch<AdminSubscriptionListResponse>(`/admin/subscriptions${buildQueryString(params ?? {})}`);
 }
 
 // ─── Certificates ─────────────────────────────────────────────────────────────
@@ -162,7 +141,7 @@ export async function fetchAdminCertificates(params?: {
   search?: string;
   courseId?: string;
 }): Promise<AdminCertificateListResponse> {
-  return apiFetch<AdminCertificateListResponse>(`/admin/certificates${qs(params ?? {})}`);
+  return apiFetch<AdminCertificateListResponse>(`/admin/certificates${buildQueryString(params ?? {})}`);
 }
 
 export async function deleteAdminCertificate(certId: string): Promise<{ message: string }> {
@@ -180,7 +159,7 @@ export async function fetchAdminNotifications(params?: {
   type?: string;
   read?: string;
 }): Promise<AdminNotificationListResponse> {
-  return apiFetch<AdminNotificationListResponse>(`/admin/notifications${qs(params ?? {})}`);
+  return apiFetch<AdminNotificationListResponse>(`/admin/notifications${buildQueryString(params ?? {})}`);
 }
 
 // ─── Single Item Fetchers ──────────────────────────────────────────────────────

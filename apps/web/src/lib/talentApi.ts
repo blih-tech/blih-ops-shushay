@@ -1,4 +1,4 @@
-import { apiFetch, apiFetchFormData } from "./api";
+import { apiFetch, apiFetchFormData, buildQueryString } from "./api";
 import { TalentProfile, Experience, Education } from "@/types/profile";
 
 export async function getTalentProfile(): Promise<TalentProfile> {
@@ -120,16 +120,7 @@ export interface TalentSearchResponse {
 export async function searchTalents(
   params?: Record<string, any>,
 ): Promise<TalentSearchResponse> {
-  const searchParams = new URLSearchParams();
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== "") {
-        searchParams.append(key, String(value));
-      }
-    });
-  }
-  const qs = searchParams.toString();
-  return apiFetch<TalentSearchResponse>(`/talents/search${qs ? `?${qs}` : ""}`);
+  return apiFetch<TalentSearchResponse>(`/talents/search${buildQueryString(params)}`);
 }
 
 export async function getTalentProfileById(

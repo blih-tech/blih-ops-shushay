@@ -6,6 +6,7 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import { Button, Input, Alert } from "@blih/ui";
 import { Mail } from "lucide-react";
 import { apiFetch } from "@/lib/api";
+import { getErrorMessage } from "@blih/api-client";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -24,8 +25,8 @@ export default function ForgotPasswordPage() {
         body: JSON.stringify({ email }),
       });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

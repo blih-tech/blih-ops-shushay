@@ -9,6 +9,8 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminJobById, updateAdminJobStatus, deleteAdminJob } from "@/lib/adminApi";
 import type { AdminJobDetail } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminJobDetailContent() {
   const params = useParams();
@@ -27,8 +29,8 @@ function AdminJobDetailContent() {
     try {
       const data = await fetchAdminJobById(jobId);
       setJob(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to load job");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load job");
     } finally {
       setLoading(false);
     }
@@ -45,8 +47,8 @@ function AdminJobDetailContent() {
       await updateAdminJobStatus(jobId, "CLOSED");
       setShowCloseDialog(false);
       await loadJob();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to close job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to close job");
     } finally {
       setActionLoading(false);
     }
@@ -59,8 +61,8 @@ function AdminJobDetailContent() {
       await updateAdminJobStatus(jobId, "ACTIVE");
       setShowReopenDialog(false);
       await loadJob();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to reopen job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to reopen job");
     } finally {
       setActionLoading(false);
     }
@@ -73,8 +75,8 @@ function AdminJobDetailContent() {
       await deleteAdminJob(jobId);
       setShowDeleteDialog(false);
       router.push("/admin/jobs");
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete job");
       setActionLoading(false);
     }
   }
@@ -429,6 +431,7 @@ function AdminJobDetailContent() {
 }
 
 export default function AdminJobDetailPage() {
+  usePageTitle("Job Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminJobDetailContent />

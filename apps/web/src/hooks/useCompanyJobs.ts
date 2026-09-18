@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Job, JobFilters } from "@/types/job";
+import { getErrorMessage } from "@blih/api-client";
 import {
   listCompanyJobs,
   closeJob as apiCloseJob,
@@ -22,9 +23,9 @@ export function useCompanyJobs(initialFilters: JobFilters = {}) {
       setJobs(res.jobs || []);
       setTotal(res.total || 0);
       setTotalPages(res.totalPages || 1);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching company jobs:", err);
-      setError(err?.message || "Failed to load your jobs");
+      setError(getErrorMessage(err) || "Failed to load your jobs");
     } finally {
       setLoading(false);
     }
@@ -38,7 +39,7 @@ export function useCompanyJobs(initialFilters: JobFilters = {}) {
     try {
       await apiCloseJob(jobId);
       await fetchCompanyJobs();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error closing job:", err);
       throw err;
     }
@@ -48,7 +49,7 @@ export function useCompanyJobs(initialFilters: JobFilters = {}) {
     try {
       await apiReopenJob(jobId);
       await fetchCompanyJobs();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error reopening job:", err);
       throw err;
     }

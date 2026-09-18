@@ -1,28 +1,10 @@
-import { apiFetch } from "./api";
-import {
-  Job,
-  JobsListResponse,
-  CreateJobPayload,
-  UpdateJobPayload,
-  JobFilters,
-} from "@/types/job";
-
-function buildQuery(filters?: JobFilters): string {
-  if (!filters) return "";
-  const params = new URLSearchParams();
-  Object.entries(filters).forEach(([key, val]) => {
-    if (val !== undefined && val !== null && val !== "") {
-      params.append(key, String(val));
-    }
-  });
-  const qs = params.toString();
-  return qs ? `?${qs}` : "";
-}
+import type { JobFilters, JobsListResponse, Job, CreateJobPayload, UpdateJobPayload } from "@blih/types";
+import { apiFetch, buildQueryString } from "./api";
 
 export async function listActiveJobs(
   filters?: JobFilters,
 ): Promise<JobsListResponse> {
-  return apiFetch<JobsListResponse>(`/jobs${buildQuery(filters)}`);
+  return apiFetch<JobsListResponse>(`/jobs${buildQueryString(filters)}`);
 }
 
 export async function getJobById(jobId: string): Promise<Job> {
@@ -62,7 +44,7 @@ export async function reopenJob(jobId: string): Promise<Job> {
 export async function listCompanyJobs(
   filters?: JobFilters,
 ): Promise<JobsListResponse> {
-  return apiFetch<JobsListResponse>(`/jobs/company/mine${buildQuery(filters)}`);
+  return apiFetch<JobsListResponse>(`/jobs/company/mine${buildQueryString(filters)}`);
 }
 
 export async function applyToJob(

@@ -9,6 +9,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { getJobById, updateJob } from "@/lib/jobApi";
 import { Job } from "@/types/job";
 import { JobForm, JobFormData } from "@/components/jobs/JobForm";
+import { getErrorMessage } from "@blih/api-client";
 
 interface PageProps {
   params: Promise<{ jobId: string }>;
@@ -28,9 +29,9 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
       try {
         const data = await getJobById(jobId);
         setJob(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading job:", err);
-        setError(err?.message || "Failed to load job details.");
+        setError(getErrorMessage(err) || "Failed to load job details.");
       } finally {
         setInitLoading(false);
       }
@@ -44,9 +45,9 @@ function CompanyEditJobContent({ jobId }: { jobId: string }) {
     try {
       await updateJob(jobId, formData);
       router.push(`/company/jobs/${jobId}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error updating job:", err);
-      setError(err?.message || "Failed to update job post.");
+      setError(getErrorMessage(err) || "Failed to update job post.");
     } finally {
       setLoading(false);
     }

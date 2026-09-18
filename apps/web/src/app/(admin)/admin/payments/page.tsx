@@ -20,6 +20,8 @@ import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 
 import { fetchAdminPayments } from "@/lib/adminApi";
 import type { AdminPayment } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 20;
 
@@ -59,8 +61,8 @@ function AdminPaymentsContent() {
       setTotal(data.total);
       setTotalPages(data.totalPages);
       setSummary(data.summary);
-    } catch (err: any) {
-      setError(err.message || "Failed to load payments");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load payments");
     } finally {
       setLoading(false);
     }
@@ -243,6 +245,7 @@ function AdminPaymentsContent() {
 }
 
 export default function AdminPaymentsPage() {
+  usePageTitle("Payments | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminPaymentsContent />

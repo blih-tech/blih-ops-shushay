@@ -8,6 +8,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { createJob } from "@/lib/jobApi";
 import { ApiError } from "@/lib/api";
 import { JobForm, JobFormData } from "@/components/jobs/JobForm";
+import { getErrorMessage } from "@blih/api-client";
 
 export default function CompanyNewJobPage() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function CompanyNewJobPage() {
     try {
       await createJob(formData);
       router.push("/company/jobs");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error creating job:", err);
       if (err instanceof ApiError && err.status === 402) {
         setSubscriptionRequired(true);
@@ -31,7 +32,7 @@ export default function CompanyNewJobPage() {
           "Creating and publishing active jobs requires an active company subscription.",
         );
       } else {
-        setError(err?.message || "Failed to create job posting.");
+        setError(getErrorMessage(err) || "Failed to create job posting.");
       }
     } finally {
       setLoading(false);

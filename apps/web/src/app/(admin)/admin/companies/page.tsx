@@ -17,6 +17,8 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminCompanies, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminCompanyItem } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 25;
 
@@ -60,8 +62,8 @@ function AdminCompaniesContent() {
       setCompanies(data.companies);
       setTotal(data.total);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
-      setError(err.message || "Failed to load company records");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load company records");
     } finally {
       setLoading(false);
     }
@@ -82,8 +84,8 @@ function AdminCompaniesContent() {
       await deleteAdminUser(deleteTarget.user.id);
       setDeleteTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete company account");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete company account");
     } finally {
       setActionLoading(null);
     }
@@ -314,6 +316,7 @@ function AdminCompaniesContent() {
 }
 
 export default function AdminCompaniesPage() {
+  usePageTitle("Companies | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminCompaniesContent />

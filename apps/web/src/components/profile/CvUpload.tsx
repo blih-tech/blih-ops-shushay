@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Upload, FileText, X, Loader2, Download, RefreshCw, Trash2 } from "lucide-react";
 import { Button, Alert, Badge } from "@blih/ui";
+import { getErrorMessage } from "@blih/api-client";
 
 interface CvUploadProps {
   value?: string | null;
@@ -31,8 +32,8 @@ export const CvUpload: React.FC<CvUploadProps> = ({
     setLoading(true);
     try {
       await onUpload(file);
-    } catch (err: any) {
-      setError(err?.message || "Failed to upload CV.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to upload CV.");
     } finally {
       setLoading(false);
     }
@@ -56,8 +57,8 @@ export const CvUpload: React.FC<CvUploadProps> = ({
     try {
       await onDelete();
       if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete CV.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to delete CV.");
     } finally {
       setLoading(false);
     }

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import {
   fetchAdminUserById,
@@ -454,6 +455,7 @@ function AdminUserDetailContent() {
 }
 
 export default function AdminUserDetailPage() {
+  usePageTitle("User Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminUserDetailContent />

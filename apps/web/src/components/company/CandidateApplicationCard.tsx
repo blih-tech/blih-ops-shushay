@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Button } from "@blih/ui";
 import { updateApplicationStatus } from "@/lib/jobApi";
+import { getErrorMessage } from "@blih/api-client";
 
 interface CandidateApplicationCardProps {
   application: {
@@ -102,9 +103,9 @@ export function CandidateApplicationCard({
       const updated = await updateApplicationStatus(initialApp.id, "IN_REVIEW");
       setAppStatus("IN_REVIEW");
       onStatusUpdated?.(updated);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error updating status:", err);
-      setUpdateError(err?.message || "Failed to update status.");
+      setUpdateError(getErrorMessage(err) || "Failed to update status.");
     } finally {
       setUpdating(false);
     }

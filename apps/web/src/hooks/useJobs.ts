@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Job, JobFilters } from "@/types/job";
 import { listActiveJobs } from "@/lib/jobApi";
+import { getErrorMessage } from "@blih/api-client";
 
 export function useJobs(initialFilters: JobFilters = {}) {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -18,9 +19,9 @@ export function useJobs(initialFilters: JobFilters = {}) {
       setJobs(res.jobs || []);
       setTotal(res.total || 0);
       setTotalPages(res.totalPages || 1);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching jobs:", err);
-      setError(err?.message || "Failed to load jobs");
+      setError(getErrorMessage(err) || "Failed to load jobs");
     } finally {
       setLoading(false);
     }

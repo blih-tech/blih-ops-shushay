@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { Button, PasswordInput, Alert, Spinner } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
+import { getErrorMessage } from "@blih/api-client";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();
@@ -51,8 +52,8 @@ function ResetPasswordForm() {
         body: JSON.stringify({ token, password }),
       });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "An error occurred. The link may have expired.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "An error occurred. The link may have expired.");
     } finally {
       setLoading(false);
     }

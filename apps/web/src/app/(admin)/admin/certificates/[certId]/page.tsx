@@ -7,6 +7,8 @@ import { Award, Download } from "lucide-react";
 import { Alert, Badge, Button, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { fetchAdminCertificateById } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminCertificateDetailContent() {
   const params = useParams();
@@ -21,8 +23,8 @@ function AdminCertificateDetailContent() {
       try {
         const data = await fetchAdminCertificateById(certId);
         setCert(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load certificate details");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load certificate details");
       } finally {
         setLoading(false);
       }
@@ -189,6 +191,7 @@ function AdminCertificateDetailContent() {
 }
 
 export default function AdminCertificateDetailPage() {
+  usePageTitle("Certificate Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminCertificateDetailContent />

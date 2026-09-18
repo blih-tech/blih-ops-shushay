@@ -27,6 +27,7 @@ import { CompanyProfileSkeleton } from "@/components/profile/CompanyProfileSkele
 import { LogoUpload } from "@/components/profile/LogoUpload";
 import { CompanyContactFields } from "@/components/company/CompanyContactFields";
 import { Save, ArrowLeft, Building, Sparkles } from "lucide-react";
+import { getErrorMessage } from "@blih/api-client";
 
 function CompanyProfileContent() {
   const { user, logout } = useAuth();
@@ -105,8 +106,8 @@ function CompanyProfileContent() {
 
       setSuccess("Company profile updated successfully!");
       refetch();
-    } catch (err: any) {
-      setError(err.message || "Failed to update company profile.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to update company profile.");
     } finally {
       setSaving(false);
     }

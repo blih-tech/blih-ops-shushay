@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { TalentProfile } from "@/types/profile";
 import { getTalentProfile } from "@/lib/talentApi";
+import { getErrorMessage } from "@blih/api-client";
 
 export function useTalentProfile() {
   const [profile, setProfile] = useState<TalentProfile | null>(null);
@@ -13,9 +14,9 @@ export function useTalentProfile() {
     try {
       const data = await getTalentProfile();
       setProfile(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching talent profile:", err);
-      setError(err?.message || "Failed to load profile");
+      setError(getErrorMessage(err) || "Failed to load profile");
     } finally {
       setLoading(false);
     }

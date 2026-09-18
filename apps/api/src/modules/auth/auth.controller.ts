@@ -106,6 +106,13 @@ export async function login(
       sameSite: "lax",
     });
 
+    res.cookie("blih_role", user.role, {
+      httpOnly: false, // accessible to client js/middleware
+      secure: env.nodeEnv === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: "lax",
+    });
+
     res.json({
       user: {
         id: user.id,
@@ -122,6 +129,11 @@ export async function logout(_req: Request, res: Response, next: NextFunction) {
   try {
     res.clearCookie("token", {
       httpOnly: true,
+      secure: env.nodeEnv === "production",
+      sameSite: "lax",
+    });
+    res.clearCookie("blih_role", {
+      httpOnly: false,
       secure: env.nodeEnv === "production",
       sameSite: "lax",
     });

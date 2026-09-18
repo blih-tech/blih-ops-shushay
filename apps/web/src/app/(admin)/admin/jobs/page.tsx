@@ -17,6 +17,8 @@ import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminJobs, updateAdminJobStatus, deleteAdminJob } from "@/lib/adminApi";
 import type { AdminJob } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 20;
 
@@ -54,8 +56,8 @@ function AdminJobsContent() {
       });
       setJobs(data.jobs);
       setTotal(data.total);
-    } catch (err: any) {
-      setError(err.message || "Failed to load jobs");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load jobs");
     } finally {
       setLoading(false);
     }
@@ -76,8 +78,8 @@ function AdminJobsContent() {
       await updateAdminJobStatus(closeTarget.id, "CLOSED");
       setCloseTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to close job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to close job");
     } finally {
       setActionLoading(null);
     }
@@ -91,8 +93,8 @@ function AdminJobsContent() {
       await updateAdminJobStatus(reopenTarget.id, "ACTIVE");
       setReopenTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to reopen job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to reopen job");
     } finally {
       setActionLoading(null);
     }
@@ -106,8 +108,8 @@ function AdminJobsContent() {
       await deleteAdminJob(deleteTarget.id);
       setDeleteTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete job");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete job");
     } finally {
       setActionLoading(null);
     }
@@ -368,6 +370,7 @@ function AdminJobsContent() {
 }
 
 export default function AdminJobsPage() {
+  usePageTitle("Jobs | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminJobsContent />

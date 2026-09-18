@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { CompanyProfile } from "@/types/profile";
 import { getCompanyProfile } from "@/lib/companyApi";
+import { getErrorMessage } from "@blih/api-client";
 
 export function useCompanyProfile() {
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
@@ -13,9 +14,9 @@ export function useCompanyProfile() {
     try {
       const data = await getCompanyProfile();
       setProfile(data);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching company profile:", err);
-      setError(err?.message || "Failed to load company profile");
+      setError(getErrorMessage(err) || "Failed to load company profile");
     } finally {
       setLoading(false);
     }

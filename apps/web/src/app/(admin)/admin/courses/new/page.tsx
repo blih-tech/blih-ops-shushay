@@ -18,6 +18,8 @@ import {
 } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { createCourse } from "@/lib/courses";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function NewCourseContent() {
   const router = useRouter();
@@ -53,8 +55,8 @@ function NewCourseContent() {
         description: description.trim(),
       });
       router.push("/admin/courses/" + course.id + "/edit");
-    } catch (err: any) {
-      setApiError(err.message ?? "Failed to create course");
+    } catch (err: unknown) {
+      setApiError(getErrorMessage(err) ?? "Failed to create course");
       setSubmitting(false);
     }
   }
@@ -147,6 +149,7 @@ function NewCourseContent() {
 }
 
 export default function NewCoursePage() {
+  usePageTitle("New Course | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <NewCourseContent />

@@ -14,6 +14,7 @@ import {
   updateExperience,
   deleteExperience,
 } from "@/lib/talentApi";
+import { getErrorMessage } from "@blih/api-client";
 import {
   Button,
   Card,
@@ -109,8 +110,8 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       setEditingId(null);
       setIsAdding(false);
       resetForm();
-    } catch (err: any) {
-      setError(err.message || "Failed to save experience.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to save experience.");
     } finally {
       setLoading(false);
     }
@@ -125,8 +126,8 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
       await deleteExperience(deletingId);
       setDeletingId(null);
       onRefresh();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete experience.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to delete experience.");
     } finally {
       setLoading(false);
     }

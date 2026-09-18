@@ -1,4 +1,5 @@
 "use client";
+import { getErrorMessage } from "@blih/api-client";
 
 import React, { use, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
@@ -69,7 +70,7 @@ function LearnContent({ courseId }: { courseId: string }) {
         refreshProgress(publicCourse.lessons);
       })
       .catch((err) => {
-        if (err.status === 403 || err.message?.includes("payment")) {
+        if (err.status === 403 || getErrorMessage(err)?.includes("payment")) {
           setAccessDenied(true);
         }
       })
@@ -97,8 +98,8 @@ function LearnContent({ courseId }: { courseId: string }) {
       if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
       }
-    } catch (err: any) {
-      setPaymentError(err.message || "Failed to initialize payment");
+    } catch (err: unknown) {
+      setPaymentError(getErrorMessage(err) || "Failed to initialize payment");
     } finally {
       setInitiatingPayment(false);
     }

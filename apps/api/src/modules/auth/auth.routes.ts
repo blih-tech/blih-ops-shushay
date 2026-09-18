@@ -20,13 +20,21 @@ import {
   handleGoogleCallback,
 } from "./auth.controller";
 
+import rateLimit from "express-rate-limit";
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: "Too many login attempts from this IP, please try again after 15 minutes"
+});
+
 const router = Router();
 
-router.post("/register", validate(registerSchema), register);
-router.post("/login", validate(loginSchema), login);
+router.post("/register", authLimiter, validate(registerSchema), register);
+router.post("/login", authLimiter, validate(loginSchema), login);
 router.post("/logout", logout);
 router.post("/verify-email", validate(verifyEmailSchema), verifyEmail);
-router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
+router.post("/forgot-password", authLimiter, validate(forgotPasswordSchema), forgotPassword);
 router.post("/reset-password", validate(resetPasswordSchema), resetPassword);
 router.get("/me", requireAuth, me);
 

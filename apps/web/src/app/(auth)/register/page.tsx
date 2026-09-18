@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button, Alert } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 import { RegisterForm } from "@/components/auth/RegisterForm";
+import { getErrorMessage } from "@blih/api-client";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -21,8 +22,8 @@ export default function RegisterPage() {
         body: JSON.stringify(data),
       });
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during registration");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "An error occurred during registration");
     } finally {
       setLoading(false);
     }

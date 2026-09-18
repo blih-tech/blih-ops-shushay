@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import AuthLayout from "@/components/auth/AuthLayout";
 import { Alert, Button, Spinner } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
+import { getErrorMessage } from "@blih/api-client";
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams();
@@ -27,8 +28,8 @@ function VerifyEmailContent() {
           body: JSON.stringify({ token }),
         });
         setSuccess(true);
-      } catch (err: any) {
-        setError(err.message || "Email verification failed.");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Email verification failed.");
       } finally {
         setLoading(false);
       }

@@ -28,11 +28,13 @@ export const MOCK_EXPLORE_METRICS: MetricItem[] = [
   },
 ];
 
+// NOTE: All data below is illustrative. Company names and figures are fictional
+// and used for demonstration purposes only.
 export const MOCK_FEATURED_JOBS: FeaturedJob[] = [
   {
     id: "job-1",
     title: "Senior Fullstack Engineer (Next.js & Node.js)",
-    company: "Gebeya Inc.",
+    company: "Acme Tech Solutions",
     location: "Addis Ababa · Remote",
     salary: "$40,000 - $60,000 / yr",
     type: "Full-time",
@@ -42,7 +44,7 @@ export const MOCK_FEATURED_JOBS: FeaturedJob[] = [
   {
     id: "job-2",
     title: "Lead UI/UX Product Designer",
-    company: "Kacha Digital Financial",
+    company: "Nova Digital Financial",
     location: "Addis Ababa · Hybrid",
     salary: "$35,000 - $50,000 / yr",
     type: "Full-time",
@@ -52,7 +54,7 @@ export const MOCK_FEATURED_JOBS: FeaturedJob[] = [
   {
     id: "job-3",
     title: "Cloud DevOps & Infrastructure Specialist",
-    company: "Chapa Financial Tech",
+    company: "Apex Fintech Corp.",
     location: "Addis Ababa · Remote",
     salary: "$45,000 - $70,000 / yr",
     type: "Contract",
@@ -61,6 +63,8 @@ export const MOCK_FEATURED_JOBS: FeaturedJob[] = [
   },
 ];
 
+// Skill status is the single source of truth for color. The rendering component
+// maps "Verified" → accent blue and "Developing" → coral. No CSS classes in data.
 export const MOCK_EXPLORE_CANDIDATES: ExploreCandidate[] = [
   {
     id: "mikael",
@@ -69,27 +73,9 @@ export const MOCK_EXPLORE_CANDIDATES: ExploreCandidate[] = [
     availability: "Available in 2 weeks",
     avatarInitials: "MA",
     skills: [
-      {
-        name: "React",
-        score: 94,
-        status: "Verified",
-        width: "92%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "TypeScript",
-        score: 89,
-        status: "Verified",
-        width: "87%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Accessibility",
-        score: 82,
-        status: "Developing",
-        width: "78%",
-        color: "bg-[#FF8A5B]",
-      },
+      { name: "React",         score: 94, status: "Verified",   width: "92%" },
+      { name: "TypeScript",    score: 89, status: "Verified",   width: "87%" },
+      { name: "Accessibility", score: 82, status: "Developing", width: "78%" },
     ],
     evidence: [
       "4 verified assessments",
@@ -105,27 +91,9 @@ export const MOCK_EXPLORE_CANDIDATES: ExploreCandidate[] = [
     availability: "Available immediately",
     avatarInitials: "RB",
     skills: [
-      {
-        name: "React",
-        score: 91,
-        status: "Verified",
-        width: "89%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Node.js",
-        score: 85,
-        status: "Verified",
-        width: "83%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "System Design",
-        score: 76,
-        status: "Developing",
-        width: "72%",
-        color: "bg-[#FF8A5B]",
-      },
+      { name: "React",         score: 91, status: "Verified",   width: "89%" },
+      { name: "Node.js",       score: 85, status: "Verified",   width: "83%" },
+      { name: "System Design", score: 76, status: "Developing", width: "72%" },
     ],
     evidence: [
       "3 verified assessments",
@@ -141,27 +109,9 @@ export const MOCK_EXPLORE_CANDIDATES: ExploreCandidate[] = [
     availability: "Available next month",
     avatarInitials: "HY",
     skills: [
-      {
-        name: "Figma",
-        score: 95,
-        status: "Verified",
-        width: "93%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "React",
-        score: 88,
-        status: "Verified",
-        width: "86%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "CSS/Tailwind",
-        score: 92,
-        status: "Verified",
-        width: "90%",
-        color: "bg-[#1E5BFF]",
-      },
+      { name: "Figma",       score: 95, status: "Verified", width: "93%" },
+      { name: "React",       score: 88, status: "Verified", width: "86%" },
+      { name: "CSS/Tailwind",score: 92, status: "Verified", width: "90%" },
     ],
     evidence: [
       "5 verified assessments",
@@ -177,27 +127,9 @@ export const MOCK_EXPLORE_CANDIDATES: ExploreCandidate[] = [
     availability: "Available in 3 weeks",
     avatarInitials: "SD",
     skills: [
-      {
-        name: "React",
-        score: 80,
-        status: "Verified",
-        width: "78%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "Python/Django",
-        score: 92,
-        status: "Verified",
-        width: "90%",
-        color: "bg-[#1E5BFF]",
-      },
-      {
-        name: "PostgreSQL",
-        score: 87,
-        status: "Verified",
-        width: "85%",
-        color: "bg-[#1E5BFF]",
-      },
+      { name: "React",        score: 80, status: "Verified", width: "78%" },
+      { name: "Python/Django",score: 92, status: "Verified", width: "90%" },
+      { name: "PostgreSQL",   score: 87, status: "Verified", width: "85%" },
     ],
     evidence: [
       "6 verified assessments",

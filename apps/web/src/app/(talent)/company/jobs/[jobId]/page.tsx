@@ -26,6 +26,7 @@ import { getJobById, closeJob, getJobApplications, reopenJob } from "@/lib/jobAp
 import { formatSalary } from "@/lib/jobOptions";
 import { CandidateApplicationCard } from "@/components/company/CandidateApplicationCard";
 import { Job } from "@/types/job";
+import { getErrorMessage } from "@blih/api-client";
 
 interface PageProps {
   params: Promise<{ jobId: string }>;
@@ -53,9 +54,9 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
         ]);
         setJob(jobData);
         setApplications(appsData || []);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading job details:", err);
-        setError(err?.message || "Failed to load job details.");
+        setError(getErrorMessage(err) || "Failed to load job details.");
       } finally {
         setLoading(false);
       }
@@ -70,8 +71,8 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       const updated = await closeJob(jobId);
       setJob(updated);
       setConfirmOpen(false);
-    } catch (err: any) {
-      setActionError(err?.message || "Failed to close job posting.");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to close job posting.");
     } finally {
       setClosing(false);
     }
@@ -84,8 +85,8 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       const updated = await reopenJob(jobId);
       setJob(updated);
       setReopenConfirmOpen(false);
-    } catch (err: any) {
-      setActionError(err?.message || "Failed to reopen job posting.");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to reopen job posting.");
     } finally {
       setReopening(false);
     }

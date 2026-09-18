@@ -25,6 +25,7 @@ import {
   Check,
 } from "lucide-react";
 import { useAuth } from "@/providers/AuthProvider";
+import { getErrorMessage } from "@blih/api-client";
 
 function ProfileSetupContent() {
   const router = useRouter();
@@ -92,9 +93,9 @@ function ProfileSetupContent() {
         await refetch();
         await refresh();
         router.push("/profile");
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(
-          err?.message ||
+          getErrorMessage(err) ||
             "Failed to complete profile onboarding. Please try again.",
         );
       } finally {

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button, Modal, FormField, Textarea, Alert } from "@blih/ui";
 import { applyToJob } from "@/lib/jobApi";
+import { getErrorMessage } from "@blih/api-client";
 
 interface JobApplyModalProps {
   isOpen: boolean;
@@ -36,9 +37,9 @@ export function JobApplyModal({
         setApplySuccess(false);
         setCoverLetter("");
       }, 2000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error applying to job:", err);
-      setApplyError(err?.message || "Failed to submit application");
+      setApplyError(getErrorMessage(err) || "Failed to submit application");
     } finally {
       setApplying(false);
     }

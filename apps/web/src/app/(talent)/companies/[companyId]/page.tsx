@@ -1,4 +1,5 @@
 "use client";
+import { getErrorMessage } from "@blih/api-client";
 
 import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
@@ -65,8 +66,8 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
     try {
       const data = await getCompanyById(companyId);
       setCompany(data);
-    } catch (err: any) {
-      setError(err.message || "Failed to load company profile.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load company profile.");
     } finally {
       setLoading(false);
     }

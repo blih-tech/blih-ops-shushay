@@ -8,6 +8,8 @@ import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminCompanyById, deleteAdminUser } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminCompanyDetailContent() {
   const params = useParams();
@@ -26,8 +28,8 @@ function AdminCompanyDetailContent() {
       try {
         const data = await fetchAdminCompanyById(companyId);
         setCompany(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load company profile");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load company profile");
       } finally {
         setLoading(false);
       }
@@ -42,8 +44,8 @@ function AdminCompanyDetailContent() {
     try {
       await deleteAdminUser(company.user.id);
       router.push("/admin/companies");
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete company account");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete company account");
     } finally {
       setActionLoading(false);
       setShowDeleteConfirm(false);
@@ -349,6 +351,7 @@ function AdminCompanyDetailContent() {
 }
 
 export default function AdminCompanyDetailPage() {
+  usePageTitle("Company Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminCompanyDetailContent />

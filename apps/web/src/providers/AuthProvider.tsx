@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { User } from "@blih/types";
@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
       const data = await apiFetch<{ user: User }>("/auth/me");
       setUser(data.user);
@@ -33,28 +33,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    try {
-      const cached = localStorage.getItem("blih_user_session");
-      if (cached) {
-        setUser(JSON.parse(cached));
-      }
-    } catch (e) {
-      // Ignore parse error
-    }
     fetchUser();
   }, []);
 
   const confirmLogout = async () => {
     try {
       await apiFetch("/auth/logout", { method: "POST" });
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("blih_user_session");
-      }
       setIsLogoutModalOpen(false);
-      window.location.href = "/login";
+      router.push("/login");
     } catch (err) {
       console.error("Logout failed", err);
     }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { searchTalents, TalentSearchResultItem } from "@/lib/talentApi";
 import { ApiError } from "@/lib/api";
+import { getErrorMessage } from "@blih/api-client";
 
 export interface TalentSearchFilters {
   search?: string;
@@ -31,13 +32,13 @@ export function useTalentSearch(initialFilters: TalentSearchFilters = {}) {
       setTalents(res.talents || []);
       setTotal(res.total || 0);
       setTotalPages(res.totalPages || 1);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error searching talents:", err);
       if (err instanceof ApiError && err.status === 402) {
         setSubscriptionRequired(true);
         setError("Active company subscription required to search talents.");
       } else {
-        setError(err?.message || "Failed to load talents");
+        setError(getErrorMessage(err) || "Failed to load talents");
       }
     } finally {
       setLoading(false);

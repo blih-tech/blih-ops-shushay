@@ -45,10 +45,11 @@ export const Alert: React.FC<AlertProps> = ({
   };
 
   const currentVariant = styles[variant] || styles.info;
+  const alertRole = variant === "error" || variant === "warning" ? "alert" : "status";
 
   return (
     <div
-      role="alert"
+      role={alertRole}
       className={`p-4 border rounded-2xl font-sans text-sm flex gap-3 items-start ${currentVariant.container} ${className}`}
     >
       {currentVariant.icon}

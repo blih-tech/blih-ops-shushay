@@ -17,6 +17,7 @@ import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { Alert, Skeleton } from "@blih/ui";
 import { fetchAdminStats } from "@/lib/adminApi";
 import type { AdminStats } from "@/types/admin";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function StatCard({
   label,
@@ -296,6 +297,7 @@ function AdminContent() {
 }
 
 export default function AdminPage() {
+  usePageTitle("Dashboard | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminContent />

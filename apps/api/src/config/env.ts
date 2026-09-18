@@ -15,12 +15,9 @@ export const env = {
   port: process.env.PORT ?? "4000",
   databaseUrl: required("DATABASE_URL"),
   jwtSecret: required("JWT_SECRET"),
-  corsOrigins:
-    (process.env.CORS_ORIGINS ?? "").split(",").filter(Boolean).length > 0
-      ? (process.env.CORS_ORIGINS ?? "").split(",").filter(Boolean)
-      : [
-          "http://localhost:3000",
-        ],
+  corsOrigins: process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(",").map((s) => s.trim()).filter(Boolean)
+    : ["http://localhost:3000"],
   nodeEnv: process.env.NODE_ENV ?? "development",
   uploadsBaseUrl:
     process.env.UPLOADS_BASE_URL ?? "http://localhost:4000/uploads",
@@ -56,4 +53,6 @@ export const env = {
     apiKey: optional("RESEND_API_KEY"),
     emailFrom: process.env.EMAIL_FROM ?? "Blih <onboarding@resend.dev>",
   },
+  /** Redis connection URL. Optional — if absent, auth cache uses in-process LRU. */
+  redisUrl: optional("REDIS_URL"),
 };

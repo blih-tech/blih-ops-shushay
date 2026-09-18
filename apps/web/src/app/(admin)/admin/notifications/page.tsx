@@ -10,6 +10,8 @@ import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminNotifications } from "@/lib/adminApi";
 import type { AdminNotification } from "@/types/admin";
 import { Button } from "@blih/ui";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 25;
 
@@ -44,8 +46,8 @@ function AdminNotificationsContent() {
       setNotifications(data.notifications);
       setTotal(data.total);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
-      setError(err.message || "Failed to load notifications");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load notifications");
     } finally {
       setLoading(false);
     }
@@ -236,6 +238,7 @@ function AdminNotificationsContent() {
 }
 
 export default function AdminNotificationsPage() {
+  usePageTitle("Notifications | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminNotificationsContent />

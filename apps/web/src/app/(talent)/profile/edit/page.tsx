@@ -29,6 +29,7 @@ import {
   deleteTalentCv,
 } from "@/lib/talentApi";
 import type { TalentProfile } from "@/types/talent";
+import { getErrorMessage } from "@blih/api-client";
 
 const ENGLISH_LEVEL_OPTIONS = [
   { value: "BASIC", label: "Basic" },
@@ -67,8 +68,8 @@ function ProfileContent() {
       setCity(data.city || "");
       setEnglishLevel(data.englishLevel || "");
       setSkills(data.skills || []);
-    } catch (err: any) {
-      setError(err.message || "Failed to load profile");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load profile");
     } finally {
       setLoading(false);
     }
@@ -103,8 +104,8 @@ function ProfileContent() {
       await refresh();
       setSuccess("Profile updated successfully!");
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err: any) {
-      setError(err.message || "Failed to update profile");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to update profile");
     } finally {
       setSaving(false);
     }

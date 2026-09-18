@@ -11,6 +11,7 @@ import { CompanyJobsTable } from "@/components/company/CompanyJobsTable";
 import { CompanyJobsFilters } from "@/components/company/CompanyJobsFilters";
 import { CompanyJobsModals } from "@/components/company/CompanyJobsModals";
 import { ViewModeToggle, type ViewMode } from "@/components/ui/ViewModeToggle";
+import { getErrorMessage } from "@blih/api-client";
 
 function CompanyJobsContent() {
   const { jobs, loading, error, closeJob, reopenJob, setFilters } =
@@ -78,8 +79,8 @@ function CompanyJobsContent() {
     try {
       await closeJob(jobToClose);
       setJobToClose(null);
-    } catch (err: any) {
-      setActionError(err?.message || "Failed to close job posting.");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to close job posting.");
     } finally {
       setIsClosing(false);
     }
@@ -92,8 +93,8 @@ function CompanyJobsContent() {
     try {
       await reopenJob(jobToReopen);
       setJobToReopen(null);
-    } catch (err: any) {
-      setActionError(err?.message || "Failed to reopen job posting.");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to reopen job posting.");
     } finally {
       setIsReopening(false);
     }

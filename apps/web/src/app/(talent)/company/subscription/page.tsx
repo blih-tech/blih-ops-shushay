@@ -1,4 +1,5 @@
 "use client";
+import { getErrorMessage } from "@blih/api-client";
 
 import React, { useEffect, useState } from "react";
 import {
@@ -52,8 +53,8 @@ function CompanySubscriptionContent() {
     try {
       const data = await getCompanySubscriptionStatus();
       setStatusData(data);
-    } catch (err: any) {
-      setStatusError(err.message || "Failed to fetch subscription status");
+    } catch (err: unknown) {
+      setStatusError(getErrorMessage(err) || "Failed to fetch subscription status");
     } finally {
       setLoadingStatus(false);
     }
@@ -71,8 +72,8 @@ function CompanySubscriptionContent() {
           "Could not retrieve payment checkout URL. Please try again.",
         );
       }
-    } catch (err: any) {
-      setCheckoutError(err.message || "Failed to initialize payment checkout.");
+    } catch (err: unknown) {
+      setCheckoutError(getErrorMessage(err) || "Failed to initialize payment checkout.");
     } finally {
       setCheckoutLoading(null);
     }

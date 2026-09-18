@@ -26,7 +26,6 @@ interface MobileNavProps {
   skillsUrl: string;
   talentUrl: string;
   onSignOut?: () => void;
-  hasSession?: boolean;
 }
 
 export function MobileNav({
@@ -40,7 +39,6 @@ export function MobileNav({
   skillsUrl,
   talentUrl,
   onSignOut,
-  hasSession = false,
 }: MobileNavProps) {
   const userInitial = user?.email ? user.email.charAt(0).toUpperCase() : "U";
 
@@ -53,9 +51,9 @@ export function MobileNav({
       }`}
     >
       <div className="bg-white/80 backdrop-blur-3xl border border-white/60 ring-1 ring-[#D9CEDF]/50 rounded-2xl sm:rounded-3xl p-4 shadow-[0_30px_60px_-15px_rgba(30,91,255,0.15)] space-y-3 font-sans">
-        {((loading && (user || hasSession)) || navLinks.length > 0) && (
+        {(loading && user || navLinks.length > 0) && (
           <div className="flex flex-col space-y-1">
-            {loading && (user || hasSession) ? (
+            {loading && user ? (
               <div className="space-y-2 p-1">
                 <Skeleton
                   variant="rectangular"
@@ -92,7 +90,7 @@ export function MobileNav({
           </div>
         )}
 
-        <div className={`flex flex-col gap-2 ${navLinks.length > 0 || (loading && (user || hasSession)) ? "pt-3 border-t border-[#D9CEDF]/70" : ""}`}>
+        <div className={`flex flex-col gap-2 ${navLinks.length > 0 || (loading && user) ? "pt-3 border-t border-[#D9CEDF]/70" : ""}`}>
           {user ? (
             <div className="space-y-2.5">
               <div className="p-3 bg-gradient-to-b from-[#EEF3FF]/60 to-transparent rounded-xl border border-[#D9CEDF]/30 flex items-center gap-3 shadow-[inset_0_1px_0_white]">

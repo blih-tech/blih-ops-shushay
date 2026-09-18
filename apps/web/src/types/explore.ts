@@ -1,9 +1,10 @@
 export interface CandidateSkill {
   name: string;
   score: number;
+  /** "Verified" | "Developing" | any other status string */
   status: string;
   width: string;
-  color: string;
+  // color is intentionally omitted — components derive it from `status`
 }
 
 export interface ExploreCandidate {

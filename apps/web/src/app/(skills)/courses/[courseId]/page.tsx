@@ -1,4 +1,5 @@
 "use client";
+import { getErrorMessage } from "@blih/api-client";
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -57,8 +58,8 @@ export default function PublicCourseDetailPage() {
             if (isMounted) setHasAccess(false);
           }
         }
-      } catch (err: any) {
-        if (isMounted) setError(err.message ?? "Course not found");
+      } catch (err: unknown) {
+        if (isMounted) setError(getErrorMessage(err) ?? "Course not found");
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -88,8 +89,8 @@ export default function PublicCourseDetailPage() {
       } else if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
       }
-    } catch (err: any) {
-      setPaymentError(err.message || "Failed to initialize payment checkout");
+    } catch (err: unknown) {
+      setPaymentError(getErrorMessage(err) || "Failed to initialize payment checkout");
     } finally {
       setInitiatingPayment(false);
     }

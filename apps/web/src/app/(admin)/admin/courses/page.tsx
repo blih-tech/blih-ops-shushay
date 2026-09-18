@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, GraduationCap, BookOpen, Pencil, Trash2, CheckCircle, EyeOff } from "lucide-react";
 import { Button, Alert, Badge, ConfirmDialog, UniversalSearch } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   fetchAdminCourses,
   publishCourse,
@@ -13,6 +14,7 @@ import {
 } from "@/lib/courses";
 import { AdminTable } from "@/components/admin/AdminTable";
 import type { Course } from "@/types/course";
+import { getErrorMessage } from "@blih/api-client";
 
 function CoursesContent() {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -31,7 +33,7 @@ function CoursesContent() {
     setError(null);
     fetchAdminCourses()
       .then(setCourses)
-      .catch((err) => setError(err.message ?? "Failed to load courses"))
+      .catch((err) => setError(getErrorMessage(err) ?? "Failed to load courses"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -60,8 +62,8 @@ function CoursesContent() {
           c.id === course.id ? { ...c, status: updated.status } : c,
         ),
       );
-    } catch (err: any) {
-      setActionError(err.message ?? "Action failed");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) ?? "Action failed");
     } finally {
       setActionLoading(null);
     }
@@ -73,8 +75,8 @@ function CoursesContent() {
     try {
       await deleteCourse(course.id);
       setCourses((prev) => prev.filter((c) => c.id !== course.id));
-    } catch (err: any) {
-      setActionError(err.message ?? "Delete failed");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) ?? "Delete failed");
     } finally {
       setActionLoading(null);
     }
@@ -262,6 +264,7 @@ function CoursesContent() {
 }
 
 export default function AdminCoursesPage() {
+  usePageTitle("Courses | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <CoursesContent />

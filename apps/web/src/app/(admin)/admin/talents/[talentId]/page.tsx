@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import {
   fetchAdminTalentById,
   deleteAdminUser,
@@ -434,6 +435,7 @@ function AdminTalentDetailContent() {
 }
 
 export default function AdminTalentDetailPage() {
+  usePageTitle("Talent Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminTalentDetailContent />

@@ -15,6 +15,8 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { fetchAdminTalents, deleteAdminUser } from "@/lib/adminApi";
 import type { AdminTalentItem } from "@/types/admin";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const PAGE_SIZE = 20;
 
@@ -50,8 +52,8 @@ function AdminTalentsContent() {
       setTalents(data.talents);
       setTotal(data.total);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
-      setError(err.message || "Failed to load talent records");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load talent records");
     } finally {
       setLoading(false);
     }
@@ -72,8 +74,8 @@ function AdminTalentsContent() {
       await deleteAdminUser(deleteTarget.user.id);
       setDeleteTarget(null);
       load();
-    } catch (err: any) {
-      setActionError(err.message || "Failed to delete talent account");
+    } catch (err: unknown) {
+      setActionError(getErrorMessage(err) || "Failed to delete talent account");
     } finally {
       setActionLoading(null);
     }
@@ -294,6 +296,7 @@ function AdminTalentsContent() {
 }
 
 export default function AdminTalentsPage() {
+  usePageTitle("Talents | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminTalentsContent />

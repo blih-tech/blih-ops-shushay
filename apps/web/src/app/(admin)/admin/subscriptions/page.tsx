@@ -10,6 +10,8 @@ import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
 import { fetchAdminSubscriptions } from "@/lib/adminApi";
 import type { AdminSubscription } from "@/types/admin";
 import { PricingSettings } from "@/components/admin/PricingSettings";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 
 const PAGE_SIZE = 20;
@@ -48,8 +50,8 @@ function AdminSubscriptionsContent() {
       setSubs(data.subscriptions);
       setTotal(data.total);
       setTotalPages(data.totalPages);
-    } catch (err: any) {
-      setError(err.message || "Failed to load subscriptions");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load subscriptions");
     } finally {
       setLoading(false);
     }
@@ -235,6 +237,7 @@ function AdminSubscriptionsContent() {
 }
 
 export default function AdminSubscriptionsPage() {
+  usePageTitle("Subscriptions | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminSubscriptionsContent />

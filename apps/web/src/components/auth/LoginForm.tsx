@@ -9,6 +9,7 @@ import { apiFetch } from "@/lib/api";
 import { TALENT_URL, API_URL } from "@/lib/urls";
 import { GoogleIcon } from "@/components/auth/GoogleIcon";
 import { useAuth } from "@/providers/AuthProvider";
+import { getErrorMessage } from "@blih/api-client";
 
 function toPath(url: string): string {
   if (!url) return "/";
@@ -52,9 +53,6 @@ export function LoginForm() {
         body: JSON.stringify({ email, password }),
       });
 
-      if (typeof window !== "undefined") {
-        localStorage.setItem("blih_user_session", JSON.stringify(data.user));
-      }
       await refresh();
 
       // Successful login - determine redirect location
@@ -96,8 +94,8 @@ export function LoginForm() {
         // Redirect all roles (TALENT, ADMIN, COMPANY) to the Explore landing page by default
         router.push("/");
       }
-    } catch (err: any) {
-      setError(err.message || "Invalid email or password");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Invalid email or password");
     } finally {
       setLoading(false);
     }

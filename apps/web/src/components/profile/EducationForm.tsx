@@ -13,6 +13,7 @@ import {
   updateEducation,
   deleteEducation,
 } from "@/lib/talentApi";
+import { getErrorMessage } from "@blih/api-client";
 import {
   Button,
   Card,
@@ -93,8 +94,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({
       setEditingId(null);
       setIsAdding(false);
       resetForm();
-    } catch (err: any) {
-      setError(err.message || "Failed to save education record.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to save education record.");
     } finally {
       setLoading(false);
     }
@@ -109,8 +110,8 @@ export const EducationForm: React.FC<EducationFormProps> = ({
       await deleteEducation(deletingId);
       setDeletingId(null);
       onRefresh();
-    } catch (err: any) {
-      setError(err.message || "Failed to delete education record.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to delete education record.");
     } finally {
       setLoading(false);
     }

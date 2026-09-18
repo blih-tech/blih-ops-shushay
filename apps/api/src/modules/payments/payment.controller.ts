@@ -91,9 +91,16 @@ export async function chapaWebhook(
 
     const result = await paymentService.verifyAndCompletePayment(txRef);
     res.json({ status: "success", result });
-  } catch (err) {
-    // Return 400 JSON so Chapa webhook receiver gets a clear response (not a 5xx that triggers retries)
-    res.status(400).json({ status: "error", message: (err as Error).message });
+  } catch (err: unknown) {
+    // Log for centralized observability — webhook errors must never be silent.
+    console.error("[chapaWebhook] Error processing webhook:", err);
+    // Return 200 to Chapa to prevent retries on validation-type errors.
+    // The error is also forwarded to the centralized error handler for monitoring.
+    const appErr = err as { statusCode?: number; message?: string };
+    res.status(appErr.statusCode || 500).json({
+      status: "error",
+      message: appErr.message ?? "Internal server error",
+    });
   }
 }
 

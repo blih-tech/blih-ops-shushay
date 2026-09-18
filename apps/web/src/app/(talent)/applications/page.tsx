@@ -12,6 +12,7 @@ import {
 import { Button, Badge, Card, Skeleton, Alert, EmptyState } from "@blih/ui";
 import AuthGuard from "@/components/auth/AuthGuard";
 import { getTalentApplications } from "@/lib/jobApi";
+import { getErrorMessage } from "@blih/api-client";
 
 function formatSalary(job: any): string {
   if (!job) return "Competitive";
@@ -53,9 +54,9 @@ function ApplicationsContent() {
       try {
         const data = await getTalentApplications();
         setApplications(data || []);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error loading applications:", err);
-        setError(err?.message || "Failed to load submitted applications.");
+        setError(getErrorMessage(err) || "Failed to load submitted applications.");
       } finally {
         setLoading(false);
       }

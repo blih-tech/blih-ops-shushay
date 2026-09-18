@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Upload, X, User, Loader2, Camera, RefreshCw, Trash2 } from "lucide-react";
 import { Button, Alert } from "@blih/ui";
+import { getErrorMessage } from "@blih/api-client";
 
 interface PhotoUploadProps {
   value?: string | null;
@@ -31,8 +32,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
     setLoading(true);
     try {
       await onUpload(file);
-    } catch (err: any) {
-      setError(err?.message || "Failed to upload photo.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to upload photo.");
     } finally {
       setLoading(false);
     }
@@ -56,8 +57,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
     try {
       await onDelete();
       if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete photo.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to delete photo.");
     } finally {
       setLoading(false);
     }

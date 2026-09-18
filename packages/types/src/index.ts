@@ -1,4 +1,4 @@
-﻿export type Role = "TALENT" | "COMPANY" | "ADMIN";
+export type Role = "TALENT" | "COMPANY" | "ADMIN";
 
 export interface User {
   id: string;
@@ -91,43 +91,98 @@ export type ApplicationStatus =
   | "REJECTED"
   | "WITHDRAWN";
 
+export type EmploymentType =
+  | "FULL_TIME"
+  | "PART_TIME"
+  | "CONTRACT"
+  | "FREELANCE"
+  | "INTERNSHIP";
+
+export type ExperienceLevel = "ENTRY" | "MID" | "SENIOR" | "LEAD" | "EXECUTIVE";
+
+export type JobStatus = "ACTIVE" | "CLOSED";
+
+export type EnglishLevel =
+  | "BASIC"
+  | "CONVERSATIONAL"
+  | "PROFESSIONAL"
+  | "FLUENT"
+  | "NATIVE";
+
+export interface CompanyInfo {
+  companyName: string;
+  logoUrl?: string | null;
+  description?: string | null;
+  website?: string | null;
+  country?: string | null;
+  city?: string | null;
+}
+
 export interface Job {
   id: string;
+  companyProfileId: string;
   title: string;
   description: string;
   requiredSkills: string[];
-  employmentType: string;
-  experienceLevel: string;
-  status: "ACTIVE" | "CLOSED";
+  englishLevel?: EnglishLevel | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryCurrency: string;
+  salaryDisplay?: string | null;
+  employmentType: EmploymentType;
+  workingHours?: string | null;
+  timezone?: string | null;
+  countryRestrictions: string[];
+  experienceLevel: ExperienceLevel;
+  applicationDeadline?: string | null;
+  status: JobStatus;
   createdAt: string;
   updatedAt: string;
-  companyProfileId: string;
+  companyProfile?: CompanyInfo;
+  _count?: {
+    applications: number;
+  };
+  hasApplied?: boolean;
 }
 
-export interface TalentProfile {
-  id: string;
-  userId: string;
-  fullName?: string | null;
-  title?: string | null;
-  phone?: string | null;
-  country?: string | null;
-  city?: string | null;
-  skills: string[];
-  bio?: string | null;
-  photoUrl?: string | null;
-  cvUrl?: string | null;
-  createdAt: string;
-  updatedAt: string;
+export interface CreateJobPayload {
+  title: string;
+  description: string;
+  requiredSkills: string[];
+  englishLevel?: EnglishLevel | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
+  salaryCurrency?: string;
+  salaryDisplay?: string | null;
+  employmentType: EmploymentType;
+  workingHours?: string | null;
+  timezone?: string | null;
+  countryRestrictions?: string[];
+  experienceLevel: ExperienceLevel;
+  applicationDeadline?: string | null;
 }
 
-export interface JobApplication {
-  id: string;
-  jobId: string;
-  talentProfileId: string;
-  status: ApplicationStatus;
-  coverLetter?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  job?: Job;
-  talentProfile?: TalentProfile;
+export type UpdateJobPayload = Partial<CreateJobPayload>;
+
+
+
+
+export interface JobFilters {
+  search?: string;
+  skills?: string;
+  englishLevel?: EnglishLevel;
+  employmentType?: EmploymentType;
+  experienceLevel?: ExperienceLevel;
+  status?: JobStatus;
+  page?: number;
+  limit?: number;
 }
+
+export interface JobsListResponse {
+  jobs: Job[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+

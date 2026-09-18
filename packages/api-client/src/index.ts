@@ -1,4 +1,13 @@
-import type { ApplicationStatus, SubscriptionPlan, SubscriptionStatus } from "@blih/types";
+import type {
+  ApplicationStatus,
+  SubscriptionPlan,
+  SubscriptionStatus,
+  Job,
+  CreateJobPayload,
+  UpdateJobPayload,
+  JobsListResponse,
+  JobFilters
+} from "@blih/types";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
@@ -13,15 +22,33 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
+/**
+ * Safely extracts a human-readable error message from any thrown value.
+ * Use this instead of `(err as any).message` in catch blocks.
+ *
+ * @example
+ * try { ... } catch (err: unknown) { setError(getErrorMessage(err)); }
+ */
+export function getErrorMessage(err: unknown): string {
+  if (err instanceof ApiError) return err.message;
+  if (err instanceof Error) return err.message;
+  if (typeof err === "string") return err;
+  return "An unexpected error occurred";
+}
+
+export function buildUrl(path: string): string {
   const baseUrl = API_URL ? API_URL.replace(/\/+$/, "") : "";
   const normalizedPath = path.startsWith("/api/v1")
     ? path.replace(/^\/api\/v1/, "")
     : path;
-  const url = `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+  return `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+}
+
+export async function apiFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const url = buildUrl(path);
 
   const res = await fetch(url, {
     ...options,
@@ -50,11 +77,7 @@ export async function apiFetchFormData<T>(
   formData: FormData,
   method = "POST",
 ): Promise<T> {
-  const baseUrl = API_URL ? API_URL.replace(/\/+$/, "") : "";
-  const normalizedPath = path.startsWith("/api/v1")
-    ? path.replace(/^\/api\/v1/, "")
-    : path;
-  const url = `${baseUrl}${normalizedPath.startsWith("/") ? "" : "/"}${normalizedPath}`;
+  const url = buildUrl(path);
 
   const res = await fetch(url, {
     method,
@@ -186,7 +209,7 @@ export function getCertificateDownloadUrl(certificateId: string): string {
 
 // ─── Jobs API Client Helpers ──────────────────────────────────────────────────
 
-function buildQueryString(params?: Record<string, any>): string {
+export function buildQueryString(params?: Record<string, any>): string {
   if (!params) return "";
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -198,36 +221,36 @@ function buildQueryString(params?: Record<string, any>): string {
   return qs ? `?${qs}` : "";
 }
 
-export async function listActiveJobs(params?: Record<string, any>) {
-  return apiFetch<any>(`/jobs${buildQueryString(params)}`);
+export async function listActiveJobs(params?: JobFilters) {
+  return apiFetch<JobsListResponse>(`/jobs${buildQueryString(params)}`);
 }
 
 export async function getJobById(jobId: string) {
-  return apiFetch<any>(`/jobs/${jobId}`);
+  return apiFetch<Job>(`/jobs/${jobId}`);
 }
 
-export async function createJob(data: any) {
-  return apiFetch<any>("/jobs", {
+export async function createJob(data: CreateJobPayload) {
+  return apiFetch<Job>("/jobs", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export async function updateJob(jobId: string, data: any) {
-  return apiFetch<any>(`/jobs/${jobId}`, {
+export async function updateJob(jobId: string, data: UpdateJobPayload) {
+  return apiFetch<Job>(`/jobs/${jobId}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
 }
 
 export async function closeJob(jobId: string) {
-  return apiFetch<any>(`/jobs/${jobId}/close`, {
+  return apiFetch<Job>(`/jobs/${jobId}/close`, {
     method: "POST",
   });
 }
 
-export async function listCompanyJobs(params?: Record<string, any>) {
-  return apiFetch<any>(`/jobs/company/mine${buildQueryString(params)}`);
+export async function listCompanyJobs(params?: JobFilters) {
+  return apiFetch<JobsListResponse>(`/jobs/company/mine${buildQueryString(params)}`);
 }
 
 // ─── Job Applications API Client Helpers ─────────────────────────────────────

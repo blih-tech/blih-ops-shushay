@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Input, Alert } from "@blih/ui";
 import { apiFetch } from "@/lib/api";
 import { Settings } from "lucide-react";
+import { getErrorMessage } from "@blih/api-client";
 
 export function PricingSettings() {
   const [loading, setLoading] = useState(true);
@@ -28,8 +29,8 @@ export function PricingSettings() {
         PRICE_SUBSCRIPTION_MONTHLY: data.PRICE_SUBSCRIPTION_MONTHLY,
         PRICE_SUBSCRIPTION_YEARLY: data.PRICE_SUBSCRIPTION_YEARLY,
       });
-    } catch (err: any) {
-      setError(err.message || "Failed to load pricing settings");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to load pricing settings");
     } finally {
       setLoading(false);
     }
@@ -46,8 +47,8 @@ export function PricingSettings() {
       });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err: any) {
-      setError(err.message || "Failed to save pricing settings");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to save pricing settings");
     } finally {
       setSaving(false);
     }

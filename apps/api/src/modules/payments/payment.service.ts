@@ -16,6 +16,33 @@ import {
 } from "../notifications/notification.service";
 import { getSetting } from "../settings/settings.service";
 
+async function lockAndCompletePayment(
+  tx: any,
+  transactionId: string,
+  chapaRefFallback: string | null,
+  verification: any
+) {
+  await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transactionId} FOR UPDATE`;
+  const lockedPayment = await tx.paymentTransaction.findUnique({
+    where: { id: transactionId },
+  });
+  
+  if (lockedPayment?.status === PaymentStatus.SUCCESSFUL) {
+    return { alreadyCompleted: true, updatedPayment: lockedPayment };
+  }
+
+  const updatedPayment = await tx.paymentTransaction.update({
+    where: { id: transactionId },
+    data: {
+      status: PaymentStatus.SUCCESSFUL,
+      chapaRef: verification.chapaRef || chapaRefFallback,
+      metadata: verification.rawResponse ?? undefined,
+    },
+  });
+
+  return { alreadyCompleted: false, updatedPayment };
+}
+
 export const SKILLS_ACCESS_CURRENCY = "ETB";
 
 /**
@@ -193,7 +220,7 @@ export async function verifyAndCompletePayment(
   // In test-mode the Chapa sandbox can return an empty currency string; allow it.
   const isCurrencyValid =
     (isTestMode && !verification.currency) ||
-    verification.currency?.toUpperCase() === SKILLS_ACCESS_CURRENCY;
+    verification.currency?.toUpperCase() === transaction.currency.toUpperCase();
 
   if (verification.status === "pending") {
     throw new AppError(
@@ -220,7 +247,7 @@ export async function verifyAndCompletePayment(
     } else if (!isAmountValid) {
       failureReason = `Paid amount (${verification.amount} ETB) is less than required (${expectedPrice} ETB).`;
     } else if (!isCurrencyValid) {
-      failureReason = `Invalid currency (${verification.currency}), expected ${SKILLS_ACCESS_CURRENCY}.`;
+      failureReason = `Invalid currency (${verification.currency}), expected ${transaction.currency.toUpperCase()}.`;
     }
 
     throw new AppError(400, failureReason);
@@ -266,28 +293,22 @@ export async function verifyAndCompletePayment(
     );
 
     const result = await prisma.$transaction(async (tx) => {
-      await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transaction.id} FOR UPDATE`;
-      const lockedPayment = await tx.paymentTransaction.findUnique({
-        where: { id: transaction.id },
-      });
-      if (lockedPayment?.status === PaymentStatus.SUCCESSFUL) {
+      const { alreadyCompleted, updatedPayment } = await lockAndCompletePayment(
+        tx,
+        transaction.id,
+        transaction.chapaRef,
+        verification
+      );
+      
+      if (alreadyCompleted) {
         return {
           alreadyCompleted: true,
-          updatedPayment: lockedPayment,
+          updatedPayment,
           subscription: await tx.companySubscription.findUnique({
             where: { companyProfileId: companyProfile.id },
           }),
         };
       }
-
-      const updatedPayment = await tx.paymentTransaction.update({
-        where: { id: transaction.id },
-        data: {
-          status: PaymentStatus.SUCCESSFUL,
-          chapaRef: verification.chapaRef || transaction.chapaRef,
-          metadata: verification.rawResponse ?? undefined,
-        },
-      });
 
       const subscription = await tx.companySubscription.upsert({
         where: { companyProfileId: companyProfile.id },
@@ -358,28 +379,22 @@ export async function verifyAndCompletePayment(
 
   // Verification succeeded for SKILLS_ACCESS! Execute atomic DB transaction
   const result = await prisma.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transaction.id} FOR UPDATE`;
-    const lockedPayment = await tx.paymentTransaction.findUnique({
-      where: { id: transaction.id },
-    });
-    if (lockedPayment?.status === PaymentStatus.SUCCESSFUL) {
-      return {
-        alreadyCompleted: true,
-        updatedPayment: lockedPayment,
-        entitlement: await tx.skillsEntitlement.findUnique({
-          where: { userId: transaction.userId },
-        }),
-      };
-    }
+      const { alreadyCompleted, updatedPayment } = await lockAndCompletePayment(
+        tx,
+        transaction.id,
+        transaction.chapaRef,
+        verification
+      );
 
-    const updatedPayment = await tx.paymentTransaction.update({
-      where: { id: transaction.id },
-      data: {
-        status: PaymentStatus.SUCCESSFUL,
-        chapaRef: verification.chapaRef || transaction.chapaRef,
-        metadata: verification.rawResponse ?? undefined,
-      },
-    });
+      if (alreadyCompleted) {
+        return {
+          alreadyCompleted: true,
+          updatedPayment,
+          entitlement: await tx.skillsEntitlement.findUnique({
+            where: { userId: transaction.userId },
+          }),
+        };
+      }
 
     const entitlement = await tx.skillsEntitlement.upsert({
       where: { userId: transaction.userId },
@@ -410,7 +425,7 @@ export async function verifyAndCompletePayment(
     type: "SKILLS_PAYMENT_SUCCESS",
     title: "Blih Skills Access Unlocked!",
     message:
-      "Your payment of 1,000 ETB has been confirmed. You now have permanent access to all current and future Blih Skills courses.",
+      `Your payment of ${transaction.amount.toLocaleString()} ETB has been confirmed. You now have permanent access to all current and future Blih Skills courses.`,
   });
 
   // Send confirmation email (resilient / non-blocking)

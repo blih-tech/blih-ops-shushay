@@ -8,6 +8,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button, Alert } from "@blih/ui";
+import { getErrorMessage } from "@blih/api-client";
 
 interface LogoUploadProps {
   value?: string | null;
@@ -44,8 +45,8 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
     setLoading(true);
     try {
       await onUpload(file);
-    } catch (err: any) {
-      setError(err?.message || "Failed to upload company logo.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to upload company logo.");
     } finally {
       setLoading(false);
     }
@@ -70,8 +71,8 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
     try {
       await onDelete();
       if (fileInputRef.current) fileInputRef.current.value = "";
-    } catch (err: any) {
-      setError(err?.message || "Failed to delete company logo.");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err) || "Failed to delete company logo.");
     } finally {
       setLoading(false);
     }

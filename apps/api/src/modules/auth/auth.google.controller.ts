@@ -138,147 +138,136 @@ export async function handleGoogleCallback(
     const normalizedEmail = email.trim().toLowerCase();
 
     // ── 5. Find or create the user ────────────────────────────────────────────
-    let user = await prisma.user.findUnique({ where: { googleId } });
+    const user = await findOrCreateGoogleUser(googleProfile, oauthState.role);
 
-    if (!user) {
-      // Check if there's an existing email/password account with this email
-      user = await prisma.user.findUnique({
-        where: { email: normalizedEmail },
-      });
-
-      if (user) {
-        // Link Google account to existing email/password account
-        user = await prisma.user.update({
-          where: { id: user.id },
-          data: { googleId },
-        });
-        console.log(
-          `[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`,
-        );
-      } else {
-        // Brand-new Google user — create account + profile
-        const role = oauthState.role;
-
-        user = await prisma.user.create({
-          data: {
-            email: normalizedEmail,
-            passwordHash: null,
-            role,
-            googleId,
-            emailVerified: true, // Google emails are pre-verified
-          },
-        });
-
-        // Create matching empty profile
-        if (role === "TALENT") {
-          await prisma.talentProfile.create({
-            data: {
-              userId: user.id,
-              fullName: name,
-              photoUrl: googleProfile.picture ?? null,
-            },
-          });
-        } else {
-          await prisma.companyProfile.create({
-            data: {
-              userId: user.id,
-              contactName: name,
-            },
-          });
-        }
-
-        console.log(
-          `[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`,
-        );
-      }
-    }
-
-    // ── 6. Issue JWT cookie (same mechanism as email/password login) ──────────
-    const token = jwt.sign(
-      { userId: user.id, email: user.email, role: user.role },
-      env.jwtSecret,
-      { expiresIn: "7d" },
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: env.nodeEnv === "production",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      sameSite: "lax",
-    });
+    // ── 6. Issue JWT cookie ───────────────────────────────────────────────────
+    issueAuthCookies(res, user);
 
     // ── 7. Redirect to the correct frontend destination ───────────────────────
-    let destination = oauthState.returnTo;
-
-    // Enforce role-aware destination routing
-    if (destination) {
-      try {
-        const destUrl = new URL(destination, TALENT_URL);
-        const path = destUrl.pathname;
-        if (user.role === "COMPANY") {
-          const isTalentOnly =
-            path === "/profile" ||
-            path.startsWith("/profile/") ||
-            path === "/jobs" ||
-            path.startsWith("/jobs/") ||
-            path === "/applications" ||
-            path.startsWith("/applications/");
-          if (isTalentOnly) {
-            destination = `${TALENT_URL}/company`;
-          }
-        } else if (user.role === "TALENT") {
-          const isCompanyOnly =
-            path === "/company" || path.startsWith("/company/");
-          if (isCompanyOnly) {
-            destination = `${TALENT_URL}/profile`;
-          }
-        }
-      } catch {
-        destination =
-          user.role === "COMPANY"
-            ? `${TALENT_URL}/company`
-            : `${TALENT_URL}/profile`;
-      }
-    }
-
-    if (!destination) {
-      if (user.role === "ADMIN") {
-        destination = `${APP_URL}/admin`;
-      } else if (user.role === "COMPANY") {
-        destination = `${APP_URL}/company`;
-      } else {
-        destination = `${APP_URL}/profile`;
-      }
-    }
-
-    // Prevent cross-origin returnTo redirects (only allow same origin or known hosts)
-    const allowedHosts = env.corsOrigins;
-    try {
-      const destUrl = new URL(destination, TALENT_URL);
-      const isAllowed = allowedHosts.some((origin) => {
-        try {
-          return new URL(origin).host === destUrl.host;
-        } catch {
-          return false;
-        }
-      });
-      if (!isAllowed) {
-        destination =
-          user.role === "COMPANY"
-            ? `${TALENT_URL}/company`
-            : `${TALENT_URL}/profile`;
-      } else {
-        destination = destUrl.toString();
-      }
-    } catch {
-      destination =
-        user.role === "COMPANY"
-          ? `${TALENT_URL}/company`
-          : `${TALENT_URL}/profile`;
-    }
+    const destination = getRedirectDestination(user, oauthState.returnTo, TALENT_URL, APP_URL);
 
     res.redirect(destination);
   } catch (err) {
     next(err);
   }
+}
+
+async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMPANY") {
+  const { sub: googleId, email, name } = googleProfile;
+  const normalizedEmail = email.trim().toLowerCase();
+
+  let user = await prisma.user.findUnique({ where: { googleId } });
+
+  if (!user) {
+    user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (user) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { googleId },
+      });
+      console.log(`[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`);
+    } else {
+      user = await prisma.user.create({
+        data: {
+          email: normalizedEmail,
+          passwordHash: null,
+          role,
+          googleId,
+          emailVerified: true,
+        },
+      });
+
+      if (role === "TALENT") {
+        await prisma.talentProfile.create({
+          data: {
+            userId: user.id,
+            fullName: name,
+            photoUrl: googleProfile.picture ?? null,
+          },
+        });
+      } else {
+        await prisma.companyProfile.create({
+          data: {
+            userId: user.id,
+            contactName: name,
+          },
+        });
+      }
+
+      console.log(`[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`);
+    }
+  }
+  return user;
+}
+
+function issueAuthCookies(res: Response, user: any) {
+  const token = jwt.sign(
+    { userId: user.id, email: user.email, role: user.role },
+    env.jwtSecret,
+    { expiresIn: "7d" },
+  );
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: env.nodeEnv === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: "lax",
+  });
+
+  res.cookie("blih_role", user.role, {
+    httpOnly: false,
+    secure: env.nodeEnv === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    sameSite: "lax",
+  });
+}
+
+function getRedirectDestination(user: any, returnTo: string | undefined, talentUrl: string, appUrl: string) {
+  let destination = returnTo;
+
+  if (destination) {
+    try {
+      const destUrl = new URL(destination, talentUrl);
+      const path = destUrl.pathname;
+      if (user.role === "COMPANY") {
+        const isTalentOnly = path === "/profile" || path.startsWith("/profile/") || path === "/jobs" || path.startsWith("/jobs/") || path === "/applications" || path.startsWith("/applications/");
+        if (isTalentOnly) destination = `${talentUrl}/company`;
+      } else if (user.role === "TALENT") {
+        const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+        if (isCompanyOnly) destination = `${talentUrl}/profile`;
+      }
+    } catch {
+      destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
+    }
+  }
+
+  if (!destination) {
+    if (user.role === "ADMIN") destination = `${appUrl}/admin`;
+    else if (user.role === "COMPANY") destination = `${appUrl}/company`;
+    else destination = `${appUrl}/profile`;
+  }
+
+  const allowedHosts = env.corsOrigins;
+  try {
+    const destUrl = new URL(destination, talentUrl);
+    const isAllowed = allowedHosts.some((origin) => {
+      try {
+        return new URL(origin).host === destUrl.host;
+      } catch {
+        return false;
+      }
+    });
+    if (!isAllowed) {
+      destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
+    } else {
+      destination = destUrl.toString();
+    }
+  } catch {
+    destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
+  }
+
+  return destination;
 }

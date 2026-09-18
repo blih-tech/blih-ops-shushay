@@ -53,7 +53,7 @@ function CompanyDashboardContent() {
           const allJobs = jobsRes.value.jobs;
           setRecentJobs(allJobs.slice(0, 4));
 
-          activeJobsCount = allJobs.filter((j) => {
+          activeJobsCount = allJobs.filter((j: any) => {
             if (j.status !== "ACTIVE") return false;
             if (
               j.applicationDeadline &&
@@ -64,7 +64,7 @@ function CompanyDashboardContent() {
             return true;
           }).length;
           totalApplications = allJobs.reduce(
-            (sum, j) => sum + (j._count?.applications || 0),
+            (sum: number, j: any) => sum + (j._count?.applications || 0),
             0
           );
         }

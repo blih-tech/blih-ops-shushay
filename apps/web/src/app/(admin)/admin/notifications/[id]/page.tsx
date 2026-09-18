@@ -7,6 +7,8 @@ import { Bell, Clock } from "lucide-react";
 import { Alert, Badge, Button } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { fetchAdminNotificationById } from "@/lib/adminApi";
+import { getErrorMessage } from "@blih/api-client";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function AdminNotificationDetailContent() {
   const params = useParams();
@@ -21,8 +23,8 @@ function AdminNotificationDetailContent() {
       try {
         const data = await fetchAdminNotificationById(notifId);
         setNotification(data);
-      } catch (err: any) {
-        setError(err.message || "Failed to load notification");
+      } catch (err: unknown) {
+        setError(getErrorMessage(err) || "Failed to load notification");
       } finally {
         setLoading(false);
       }
@@ -141,6 +143,7 @@ function AdminNotificationDetailContent() {
 }
 
 export default function AdminNotificationDetailPage() {
+  usePageTitle("Notification Detail | Admin");
   return (
     <AuthGuard allowedRoles={["ADMIN"]}>
       <AdminNotificationDetailContent />

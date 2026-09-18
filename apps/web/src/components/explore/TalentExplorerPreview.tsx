@@ -188,27 +188,32 @@ export function TalentExplorerPreview() {
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start my-8">
               <div className="md:col-span-7 space-y-5">
-                {selectedCandidate.skills.map((s) => (
-                  <div
-                    key={s.name}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-sm font-medium text-[#17131F] w-[90px] shrink-0">
-                      {s.name}
-                    </span>
-                    <div className="flex-1 bg-[#E8E0EF] h-2 rounded-full overflow-hidden relative mx-4">
-                      <div
-                        className={`${s.color} h-full rounded-full detail-progress-fill`}
-                        data-width={s.width}
-                      />
-                    </div>
-                    <div className="w-[60px] text-right font-mono text-[10px] text-[#1E5BFF]">
-                      <span className="font-display text-lg font-bold block">
-                        {s.score}
+                {selectedCandidate.skills.map((s) => {
+                  // Derive color from semantic status — no CSS classes in data layer
+                  const barColor =
+                    s.status === "Verified" ? "bg-[#1E5BFF]" : "bg-[#FF8A5B]";
+                  return (
+                    <div
+                      key={s.name}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-sm font-medium text-[#17131F] w-[90px] shrink-0">
+                        {s.name}
                       </span>
+                      <div className="flex-1 bg-[#E8E0EF] h-2 rounded-full overflow-hidden relative mx-4">
+                        <div
+                          className={`${barColor} h-full rounded-full detail-progress-fill`}
+                          data-width={s.width}
+                        />
+                      </div>
+                      <div className="w-[60px] text-right font-mono text-[10px] text-[#1E5BFF]">
+                        <span className="font-display text-lg font-bold block">
+                          {s.score}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="md:col-span-5 bg-[#F7F9FF] border border-[#D9CEDF]/60 rounded-2xl p-5 space-y-3">

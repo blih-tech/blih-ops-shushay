@@ -55,13 +55,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState("");
-  const [hasSession, setHasSession] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       setActivePath(window.location.pathname);
-      setHasSession(!!localStorage.getItem("blih_user_session"));
     }
   }, [user]);
 
@@ -111,7 +108,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Desktop navigation links */}
         <div className="hidden md:flex items-center gap-1 lg:gap-2">
-          {loading && (user || hasSession) ? (
+          {loading && user ? (
             <div className="flex items-center gap-2">
               <Skeleton
                 variant="rectangular"
@@ -157,7 +154,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Account actions */}
         <div className="hidden sm:flex items-center gap-3">
-          {loading && (user || hasSession) ? (
+          {loading && user ? (
             <div className="flex items-center gap-2">
               <Skeleton
                 variant="circular"
@@ -247,7 +244,6 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
         skillsUrl={skillsUrl}
         talentUrl={talentUrl}
         onSignOut={onSignOut}
-        hasSession={hasSession}
       />
     </header>
   );
