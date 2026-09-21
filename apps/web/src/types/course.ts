@@ -83,3 +83,89 @@ export interface PublicCourseListItem {
   updatedAt: string;
   _count: { lessons: number };
 }
+
+export type StepType = "video" | "reading" | "quiz" | "exercise";
+
+export interface CourseStep {
+  id: string;
+  lessonId: string;
+  lessonIndex: number;
+  lessonTitle: string;
+  type: StepType;
+  title: string;
+  lesson: PublicLesson;
+}
+
+export function buildCourseSteps(lessons: PublicLesson[]): CourseStep[] {
+  const steps: CourseStep[] = [];
+
+  lessons.forEach((lesson, lessonIndex) => {
+    let lessonHasSteps = false;
+
+    if (lesson.videoUrl) {
+      steps.push({
+        id: `${lesson.id}-video`,
+        lessonId: lesson.id,
+        lessonIndex,
+        lessonTitle: lesson.title,
+        type: "video",
+        title: lesson.title,
+        lesson,
+      });
+      lessonHasSteps = true;
+    }
+
+    if (lesson.content) {
+      steps.push({
+        id: `${lesson.id}-reading`,
+        lessonId: lesson.id,
+        lessonIndex,
+        lessonTitle: lesson.title,
+        type: "reading",
+        title: `Reading: ${lesson.title}`,
+        lesson,
+      });
+      lessonHasSteps = true;
+    }
+
+    if (lesson.quiz) {
+      steps.push({
+        id: `${lesson.id}-quiz`,
+        lessonId: lesson.id,
+        lessonIndex,
+        lessonTitle: lesson.title,
+        type: "quiz",
+        title: lesson.quiz.title || `Quiz: ${lesson.title}`,
+        lesson,
+      });
+      lessonHasSteps = true;
+    }
+
+    if (lesson.assignment) {
+      steps.push({
+        id: `${lesson.id}-exercise`,
+        lessonId: lesson.id,
+        lessonIndex,
+        lessonTitle: lesson.title,
+        type: "exercise",
+        title: lesson.assignment.title || `Practical Task: ${lesson.title}`,
+        lesson,
+      });
+      lessonHasSteps = true;
+    }
+
+    if (!lessonHasSteps) {
+      steps.push({
+        id: `${lesson.id}-reading`,
+        lessonId: lesson.id,
+        lessonIndex,
+        lessonTitle: lesson.title,
+        type: "reading",
+        title: lesson.title,
+        lesson,
+      });
+    }
+  });
+
+  return steps;
+}

@@ -1,7 +1,7 @@
 "use client";
-import { getErrorMessage } from "@blih/api-client";
 
-import React, { use, useState, useEffect, useCallback } from "react";
+import { getErrorMessage } from "@blih/api-client";
+import React, { use, useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import { ChevronRight, Sparkles, Loader2, Trophy } from "lucide-react";
 import AuthGuard from "@/components/auth/AuthGuard";
@@ -17,7 +17,12 @@ import {
 import { LearnHeader } from "@/components/learn/LearnHeader";
 import { LearnCurriculumSidebar } from "@/components/learn/LearnCurriculumSidebar";
 import { LearnPlayerSurface } from "@/components/learn/LearnPlayerSurface";
-import type { PublicCourse, PublicLesson } from "@/types/course";
+import {
+  type PublicCourse,
+  type PublicLesson,
+  type CourseStep,
+  buildCourseSteps,
+} from "@/types/course";
 
 interface PageProps {
   params: Promise<{ courseId: string }>;
@@ -29,10 +34,7 @@ function LearnContent({ courseId }: { courseId: string }) {
   const [accessDenied, setAccessDenied] = useState(false);
   const [initiatingPayment, setInitiatingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
-  const [activeLessonIndex, setActiveLessonIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<
-    "video" | "reading" | "quiz" | "exercise"
-  >("video");
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [quizPassed, setQuizPassed] = useState<boolean | null>(null);
@@ -45,6 +47,13 @@ function LearnContent({ courseId }: { courseId: string }) {
   const [isSubmittingAssignment, setIsSubmittingAssignment] = useState(false);
   const [assignmentSubmitted, setAssignmentSubmitted] = useState(false);
   const [assignmentError, setAssignmentError] = useState<string | null>(null);
+
+  const lessonsList: PublicLesson[] = course?.lessons || [];
+  const steps: CourseStep[] = useMemo(
+    () => buildCourseSteps(lessonsList),
+    [lessonsList],
+  );
+  const activeStep = steps[activeStepIndex];
 
   const refreshProgress = useCallback(
     (lessons: PublicLesson[]) => {
@@ -77,7 +86,7 @@ function LearnContent({ courseId }: { courseId: string }) {
       .finally(() => setLoading(false));
   }, [courseId, refreshProgress]);
 
-  // Reset quiz/assignment state when lesson changes
+  // Reset quiz/assignment state when step changes
   useEffect(() => {
     setQuizAnswers({});
     setQuizSubmitted(false);
@@ -88,7 +97,7 @@ function LearnContent({ courseId }: { courseId: string }) {
     setAssignmentSubmitted(false);
     setAssignmentError(null);
     setCompletionError(null);
-  }, [activeLessonIndex]);
+  }, [activeStepIndex]);
 
   const handleUnlockClick = async () => {
     try {
@@ -164,47 +173,64 @@ function LearnContent({ courseId }: { courseId: string }) {
     );
   }
 
-  const lessonsList: PublicLesson[] = course?.lessons || [];
-  const activeLesson = lessonsList[activeLessonIndex];
   const totalLessons = lessonsList.length || 1;
+  const totalSteps = steps.length || 1;
   const progressPercent = Math.round(
     (completedLessons.length / totalLessons) * 100,
   );
   const isCourseComplete =
     totalLessons > 0 && completedLessons.length === totalLessons;
 
-  const handleCompleteCurrent = async () => {
-    if (!activeLesson) return;
+  const handlePrevStep = () => {
+    if (activeStepIndex > 0) {
+      setActiveStepIndex(activeStepIndex - 1);
+    }
+  };
+
+  const handleNextStep = () => {
+    if (activeStepIndex + 1 < steps.length) {
+      setActiveStepIndex(activeStepIndex + 1);
+    }
+  };
+
+  const handleCompleteCurrentStep = async () => {
+    if (!activeStep) return;
     setIsMarkingComplete(true);
     setCompletionError(null);
     try {
-      await markLessonComplete(activeLesson.id);
-      if (!completedLessons.includes(activeLessonIndex)) {
-        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      const hasQuizOrAssignment =
+        !!activeStep.lesson.quiz || !!activeStep.lesson.assignment;
+
+      if (!hasQuizOrAssignment) {
+        await markLessonComplete(activeStep.lessonId);
+        if (!completedLessons.includes(activeStep.lessonIndex)) {
+          setCompletedLessons((prev) => [...prev, activeStep.lessonIndex]);
+        }
       }
-      if (activeLessonIndex + 1 < totalLessons) {
-        setActiveLessonIndex(activeLessonIndex + 1);
+      if (activeStepIndex + 1 < steps.length) {
+        setActiveStepIndex(activeStepIndex + 1);
       }
     } catch (e: any) {
-      // If lesson requires quiz/assignment, show the appropriate error
-      setCompletionError(e.message || "Could not mark lesson complete");
+      setCompletionError(e.message || "Could not mark step complete");
     } finally {
       setIsMarkingComplete(false);
     }
   };
 
   const handleQuizSubmit = async () => {
-    if (!activeLesson?.quiz) return;
-    const questions = ((activeLesson.quiz as any).questions as any[]) ?? [];
+    if (!activeStep?.lesson?.quiz) return;
+    const questions = ((activeStep.lesson.quiz as any).questions as any[]) ?? [];
     if (Object.keys(quizAnswers).length !== questions.length) return;
     const answers = questions.map((_: any, i: number) => quizAnswers[i] ?? 0);
     try {
-      const result = await submitQuiz(activeLesson.quiz.id, answers);
+      const result = await submitQuiz(activeStep.lesson.quiz.id, answers);
       setQuizSubmitted(true);
       setQuizPassed(result.passed);
       setQuizScore(result.score);
-      if (result.passed && !completedLessons.includes(activeLessonIndex)) {
-        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      if (result.passed) {
+        if (!completedLessons.includes(activeStep.lessonIndex)) {
+          setCompletedLessons((prev) => [...prev, activeStep.lessonIndex]);
+        }
       }
     } catch (e: any) {
       setCompletionError(e.message || "Failed to submit quiz");
@@ -212,7 +238,7 @@ function LearnContent({ courseId }: { courseId: string }) {
   };
 
   const handleAssignmentSubmit = async () => {
-    if (!activeLesson?.assignment) return;
+    if (!activeStep?.lesson?.assignment) return;
     if (!assignmentContent && !assignmentFile) {
       setAssignmentError("Please provide a text response or upload a file.");
       return;
@@ -221,13 +247,13 @@ function LearnContent({ courseId }: { courseId: string }) {
     setAssignmentError(null);
     try {
       await submitAssignment(
-        activeLesson.assignment.id,
+        activeStep.lesson.assignment.id,
         assignmentContent || undefined,
         assignmentFile || undefined,
       );
       setAssignmentSubmitted(true);
-      if (!completedLessons.includes(activeLessonIndex)) {
-        setCompletedLessons((prev) => [...prev, activeLessonIndex]);
+      if (!completedLessons.includes(activeStep.lessonIndex)) {
+        setCompletedLessons((prev) => [...prev, activeStep.lessonIndex]);
       }
     } catch (e: any) {
       setAssignmentError(e.message || "Failed to submit assignment");
@@ -236,13 +262,17 @@ function LearnContent({ courseId }: { courseId: string }) {
     }
   };
 
+  const isCurrentLessonComplete = activeStep
+    ? completedLessons.includes(activeStep.lessonIndex)
+    : false;
+
   return (
     <div className="min-h-screen bg-white text-[#17131F] flex flex-col antialiased">
       <LearnHeader
         courseId={courseId}
         courseTitle={course?.title}
-        activeLessonTitle={activeLesson?.title}
-        activeLessonIndex={activeLessonIndex}
+        activeLessonTitle={activeStep?.lessonTitle || activeStep?.title}
+        activeLessonIndex={activeStep?.lessonIndex ?? 0}
         totalLessons={totalLessons}
         progressPercent={progressPercent}
       />
@@ -257,7 +287,7 @@ function LearnContent({ courseId }: { courseId: string }) {
                 🎉 Course Complete!
               </p>
               <p className="text-sm text-white/80">
-                You&apos;ve completed all {totalLessons} lessons in{" "}
+                You&apos;ve completed all {totalLessons} modules in{" "}
                 {course?.title}.
               </p>
             </div>
@@ -273,15 +303,11 @@ function LearnContent({ courseId }: { courseId: string }) {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 max-w-[1600px] w-full mx-auto">
         <LearnPlayerSurface
           courseTitle={course?.title}
-          activeLesson={activeLesson}
-          activeLessonIndex={activeLessonIndex}
-          onNextLesson={() => {
-            if (activeLessonIndex + 1 < totalLessons) {
-              setActiveLessonIndex(activeLessonIndex + 1);
-            }
-          }}
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          activeStep={activeStep}
+          activeStepIndex={activeStepIndex}
+          totalSteps={totalSteps}
+          onPrevStep={handlePrevStep}
+          onNextStep={handleNextStep}
           selectedQuizOption={quizAnswers}
           setSelectedQuizOption={(qIdx: number, optIdx: number) =>
             setQuizAnswers((prev) => ({ ...prev, [qIdx]: optIdx }))
@@ -298,18 +324,19 @@ function LearnContent({ courseId }: { courseId: string }) {
           assignmentError={assignmentError}
           onSubmitAssignment={handleAssignmentSubmit}
           isSubmittingAssignment={isSubmittingAssignment}
-          onCompleteLesson={handleCompleteCurrent}
+          onCompleteStep={handleCompleteCurrentStep}
           isMarkingComplete={isMarkingComplete}
           completionError={completionError}
-          isCurrentLessonComplete={completedLessons.includes(activeLessonIndex)}
+          isCurrentLessonComplete={isCurrentLessonComplete}
         />
 
         <LearnCurriculumSidebar
           lessons={lessonsList}
-          activeLessonIndex={activeLessonIndex}
+          steps={steps}
+          activeStepIndex={activeStepIndex}
           completedLessons={completedLessons}
-          onSelectLesson={(idx) => {
-            setActiveLessonIndex(idx);
+          onSelectStep={(idx) => {
+            setActiveStepIndex(idx);
           }}
         />
       </div>
