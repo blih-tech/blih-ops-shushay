@@ -62,7 +62,7 @@ export interface PublicLesson {
   content?: string | null;
   videoUrl: string | null;
   documents: Pick<LessonDocument, "id" | "name">[];
-  quiz: Pick<Quiz, "id" | "title"> | null;
+  quiz: (Pick<Quiz, "id" | "title"> & { questions: QuizQuestion[] }) | null;
   assignment: Pick<Assignment, "id" | "title"> | null;
 }
 

@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { env } from "../config/env";
+import { logger } from "../utils/logger";
 
 let _resend: Resend | null = null;
 function getResend(): Resend | null {
@@ -54,11 +55,9 @@ export async function sendVerificationEmail(
 ): Promise<{ success: boolean; error?: string }> {
   const resend = getResend();
   if (!resend) {
-    console.log(`\n==================================================`);
-    console.log(`[EMAIL DEV] Verification Email`);
-    console.log(`To:   ${email}`);
-    console.log(`Link: ${verificationLink}`);
-    console.log(`==================================================\n`);
+    logger.debug(
+      `[EMAIL DEV] Verification Email → ${email} | Link: ${verificationLink}`,
+    );
     return { success: true };
   }
 
@@ -100,11 +99,9 @@ export async function sendPasswordResetEmail(
 ): Promise<{ success: boolean; error?: string }> {
   const resend = getResend();
   if (!resend) {
-    console.log(`\n==================================================`);
-    console.log(`[EMAIL DEV] Password Reset Email`);
-    console.log(`To:   ${email}`);
-    console.log(`Link: ${resetLink}`);
-    console.log(`==================================================\n`);
+    logger.debug(
+      `[EMAIL DEV] Password Reset Email → ${email} | Link: ${resetLink}`,
+    );
     return { success: true };
   }
 

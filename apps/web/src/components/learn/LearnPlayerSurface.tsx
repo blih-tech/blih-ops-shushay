@@ -4,9 +4,9 @@ import React from "react";
 import { Play, FileText, HelpCircle, Code, ChevronRight } from "lucide-react";
 import type { CourseStep } from "@/types/course";
 import { LearnVideoPlayer } from "./LearnVideoPlayer";
-import { LearnReadingTab } from "./LearnReadingTab";
-import { LearnQuizTab } from "./LearnQuizTab";
-import { LearnAssignmentTab } from "./LearnAssignmentTab";
+import { LearnReadingStep } from "./LearnReadingStep";
+import { LearnQuizStep } from "./LearnQuizStep";
+import { LearnAssignmentStep } from "./LearnAssignmentStep";
 import { LearnFooterBar } from "./LearnFooterBar";
 
 interface LearnPlayerSurfaceProps {
@@ -34,6 +34,7 @@ interface LearnPlayerSurfaceProps {
   isMarkingComplete: boolean;
   completionError: string | null;
   isCurrentLessonComplete: boolean;
+  onRetryQuiz: () => void;
 }
 
 export function LearnPlayerSurface({
@@ -60,6 +61,7 @@ export function LearnPlayerSurface({
   isMarkingComplete,
   completionError,
   isCurrentLessonComplete,
+  onRetryQuiz,
 }: LearnPlayerSurfaceProps) {
   if (!activeStep) {
     return (
@@ -151,11 +153,11 @@ export function LearnPlayerSurface({
         )}
 
         {activeStep.type === "reading" && (
-          <LearnReadingTab activeLesson={activeLesson} />
+          <LearnReadingStep activeLesson={activeLesson} />
         )}
 
         {activeStep.type === "quiz" && (
-          <LearnQuizTab
+          <LearnQuizStep
             activeLesson={activeLesson}
             selectedQuizOption={selectedQuizOption}
             setSelectedQuizOption={setSelectedQuizOption}
@@ -163,11 +165,12 @@ export function LearnPlayerSurface({
             quizPassed={quizPassed}
             quizScore={quizScore}
             onSubmitQuiz={onSubmitQuiz}
+            onRetryQuiz={onRetryQuiz}
           />
         )}
 
         {activeStep.type === "exercise" && (
-          <LearnAssignmentTab
+          <LearnAssignmentStep
             activeLesson={activeLesson}
             assignmentContent={assignmentContent}
             setAssignmentContent={setAssignmentContent}

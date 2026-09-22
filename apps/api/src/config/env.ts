@@ -55,4 +55,12 @@ export const env = {
   },
   /** Redis connection URL. Optional — if absent, auth cache uses in-process LRU. */
   redisUrl: optional("REDIS_URL"),
+  /**
+   * When set to "true" in development, newly registered users are automatically
+   * marked as email-verified (skips email confirmation flow).
+   * Never active in production regardless of this flag.
+   */
+  skipEmailVerification:
+    process.env.NODE_ENV !== "production" &&
+    process.env.SKIP_EMAIL_VERIFICATION === "true",
 };

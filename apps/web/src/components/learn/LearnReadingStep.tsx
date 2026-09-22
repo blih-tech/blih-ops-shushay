@@ -4,11 +4,11 @@ import React from "react";
 import { Download, FileText, Paperclip } from "lucide-react";
 import type { PublicLesson } from "@/types/course";
 
-interface LearnReadingTabProps {
+interface LearnReadingStepProps {
   activeLesson: PublicLesson;
 }
 
-export function LearnReadingTab({ activeLesson }: LearnReadingTabProps) {
+export function LearnReadingStep({ activeLesson }: LearnReadingStepProps) {
   const hasContent = !!activeLesson.content;
   const hasDocuments = (activeLesson.documents?.length ?? 0) > 0;
 
@@ -47,22 +47,33 @@ export function LearnReadingTab({ activeLesson }: LearnReadingTabProps) {
             </h4>
           </div>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {activeLesson.documents.map((doc) => (
-              <li key={doc.id}>
-                <a
-                  href={(doc as any).url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download
-                  className="flex items-center gap-3 p-3.5 rounded-2xl border border-[#D9CEDF] hover:border-[#1E5BFF] hover:bg-[#EEF3FF] transition-all group bg-white shadow-2xs"
-                >
-                  <Download className="w-4 h-4 text-[#1E5BFF] flex-shrink-0" />
-                  <span className="text-xs font-medium text-[#17131F] group-hover:text-[#1E5BFF] truncate">
-                    {doc.name}
-                  </span>
-                </a>
-              </li>
-            ))}
+            {activeLesson.documents.map((doc) => {
+              const url = (doc as any).url || "";
+              const extMatch = (doc.name || url).match(/\.([a-z0-9]+)$/i);
+              const ext = extMatch ? extMatch[1].toUpperCase() : "FILE";
+
+              return (
+                <li key={doc.id}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    className="flex items-center justify-between gap-3 p-3.5 rounded-2xl border border-[#D9CEDF] hover:border-[#1E5BFF] hover:bg-[#EEF3FF] transition-all group bg-white shadow-2xs"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Download className="w-4 h-4 text-[#1E5BFF] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                      <span className="text-xs font-bold text-[#17131F] group-hover:text-[#1E5BFF] truncate font-display">
+                        {doc.name}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#F8FAFC] border border-[#E2E8F0] text-[#475569] font-bold shrink-0">
+                      {ext}
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

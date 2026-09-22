@@ -6,6 +6,7 @@ import { Button, Alert, Input } from "@blih/ui";
 import { upsertQuiz } from "@/lib/courses";
 import type { Lesson, QuizQuestion } from "@/types/course";
 import { SectionCard } from "./SectionCard";
+import { getErrorMessage } from "@/lib/errorUtils";
 
 interface QuizSectionProps {
   courseId: string;
@@ -32,8 +33,8 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
       const quiz = await upsertQuiz(courseId, lesson.id, { title, questions });
       onUpdate({ ...lesson, quiz });
       setEditing(false);
-    } catch (e: any) {
-      setError(e.message ?? "Save failed");
+    } catch (e: unknown) {
+      setError(getErrorMessage(e) ?? "Save failed");
     } finally {
       setSaving(false);
     }

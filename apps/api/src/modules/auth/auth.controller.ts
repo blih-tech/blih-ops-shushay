@@ -43,7 +43,7 @@ export async function register(
         passwordHash,
         role,
         verificationToken,
-        emailVerified: env.nodeEnv === "development",
+        emailVerified: env.skipEmailVerification,
       },
     });
 

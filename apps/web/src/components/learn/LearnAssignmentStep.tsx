@@ -5,7 +5,7 @@ import { CheckCircle2, AlertCircle, Loader2, Code, UploadCloud, FileCheck } from
 import { Button, Badge, Textarea } from "@blih/ui";
 import type { PublicLesson } from "@/types/course";
 
-interface LearnAssignmentTabProps {
+interface LearnAssignmentStepProps {
   activeLesson: PublicLesson;
   assignmentContent: string;
   setAssignmentContent: (content: string) => void;
@@ -17,7 +17,7 @@ interface LearnAssignmentTabProps {
   isSubmittingAssignment: boolean;
 }
 
-export function LearnAssignmentTab({
+export function LearnAssignmentStep({
   activeLesson,
   assignmentContent,
   setAssignmentContent,
@@ -27,7 +27,7 @@ export function LearnAssignmentTab({
   assignmentError,
   onSubmitAssignment,
   isSubmittingAssignment,
-}: LearnAssignmentTabProps) {
+}: LearnAssignmentStepProps) {
   const hasAssignment = !!activeLesson.assignment;
 
   return (

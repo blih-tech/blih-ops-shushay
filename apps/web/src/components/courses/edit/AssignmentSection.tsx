@@ -6,6 +6,7 @@ import { Button, Alert, Input, Textarea } from "@blih/ui";
 import { upsertAssignment } from "@/lib/courses";
 import type { Lesson } from "@/types/course";
 import { SectionCard } from "./SectionCard";
+import { getErrorMessage } from "@/lib/errorUtils";
 
 interface AssignmentSectionProps {
   courseId: string;
@@ -37,8 +38,8 @@ export function AssignmentSection({
       });
       onUpdate({ ...lesson, assignment });
       setEditing(false);
-    } catch (e: any) {
-      setError(e.message ?? "Save failed");
+    } catch (e: unknown) {
+      setError(getErrorMessage(e) ?? "Save failed");
     } finally {
       setSaving(false);
     }

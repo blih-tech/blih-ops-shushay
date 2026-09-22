@@ -5,7 +5,7 @@ export async function searchTalents(query: TalentSearchQueryInput) {
   const { page, limit, search, skills, englishLevel, country, city } = query;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: Record<string, unknown> = {};
 
   if (englishLevel) {
     where.englishLevel = englishLevel;
@@ -34,6 +34,7 @@ export async function searchTalents(query: TalentSearchQueryInput) {
     ];
   }
 
+  // Single query pair — certificates counted via user relation _count
   const [talents, total] = await Promise.all([
     prisma.talentProfile.findMany({
       where,
@@ -44,6 +45,11 @@ export async function searchTalents(query: TalentSearchQueryInput) {
         user: {
           select: {
             email: true,
+            _count: {
+              select: {
+                certificates: true,
+              },
+            },
           },
         },
         _count: {
@@ -56,14 +62,6 @@ export async function searchTalents(query: TalentSearchQueryInput) {
     }),
     prisma.talentProfile.count({ where }),
   ]);
-
-  const userIds = talents.map((t) => t.userId);
-  const certCounts = await prisma.certificate.groupBy({
-    by: ["userId"],
-    where: { userId: { in: userIds } },
-    _count: { id: true },
-  });
-  const certCountMap = new Map(certCounts.map((c) => [c.userId, c._count.id]));
 
   const talentList = talents.map((t) => ({
     id: t.id,
@@ -78,7 +76,7 @@ export async function searchTalents(query: TalentSearchQueryInput) {
     skills: t.skills,
     experienceCount: t._count.experience,
     educationCount: t._count.education,
-    certificatesCount: certCountMap.get(t.userId) || 0,
+    certificatesCount: t.user._count.certificates,
     isComplete: Boolean(t.fullName && t.title && t.skills.length > 0),
   }));
 

@@ -23,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
 
   const fetchUser = useCallback(async () => {
     try {
@@ -40,17 +41,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const confirmLogout = async () => {
+    setLogoutError(null);
     try {
       await apiFetch("/auth/logout", { method: "POST" });
+      setUser(null);
       setIsLogoutModalOpen(false);
       router.push("/login");
-    } catch (err) {
-      console.error("Logout failed", err);
+    } catch {
+      setLogoutError("Sign out failed. Please try again.");
     }
   };
 
   const logout = async () => {
     setIsLogoutModalOpen(true);
+    setLogoutError(null);
   };
 
   return (
@@ -64,6 +68,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         size="sm"
         footer={
           <>
+            {logoutError && (
+              <p className="text-xs text-red-500 mr-auto">{logoutError}</p>
+            )}
             <Button variant="outline" size="sm" className="w-24" onClick={() => setIsLogoutModalOpen(false)}>
               Cancel
             </Button>

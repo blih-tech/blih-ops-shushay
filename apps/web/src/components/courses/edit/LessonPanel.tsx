@@ -21,6 +21,7 @@ import { VideoSection } from "./VideoSection";
 import { DocumentsSection } from "./DocumentsSection";
 import { QuizSection } from "./QuizSection";
 import { AssignmentSection } from "./AssignmentSection";
+import { getErrorMessage } from "@/lib/errorUtils";
 
 interface LessonPanelProps {
   courseId: string;
@@ -66,8 +67,8 @@ export function LessonPanel({
       });
       onUpdate(updated);
       setEditingTitle(false);
-    } catch (e: any) {
-      setSaveError(e.message ?? "Failed");
+    } catch (e: unknown) {
+      setSaveError(getErrorMessage(e) ?? "Failed");
     } finally {
       setSaving(false);
     }
@@ -82,8 +83,8 @@ export function LessonPanel({
       });
       onUpdate(updated);
       setEditingContent(false);
-    } catch (e: any) {
-      setSaveError(e.message ?? "Failed");
+    } catch (e: unknown) {
+      setSaveError(getErrorMessage(e) ?? "Failed");
     } finally {
       setSaving(false);
     }

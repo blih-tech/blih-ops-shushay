@@ -210,8 +210,8 @@ function LearnContent({ courseId }: { courseId: string }) {
       if (activeStepIndex + 1 < steps.length) {
         setActiveStepIndex(activeStepIndex + 1);
       }
-    } catch (e: any) {
-      setCompletionError(e.message || "Could not mark step complete");
+    } catch (e: unknown) {
+      setCompletionError(getErrorMessage(e) || "Could not mark step complete");
     } finally {
       setIsMarkingComplete(false);
     }
@@ -219,9 +219,10 @@ function LearnContent({ courseId }: { courseId: string }) {
 
   const handleQuizSubmit = async () => {
     if (!activeStep?.lesson?.quiz) return;
-    const questions = ((activeStep.lesson.quiz as any).questions as any[]) ?? [];
+    const questions = activeStep.lesson.quiz.questions ?? [];
     if (Object.keys(quizAnswers).length !== questions.length) return;
-    const answers = questions.map((_: any, i: number) => quizAnswers[i] ?? 0);
+    const answers = questions.map((_, i: number) => quizAnswers[i] ?? 0);
+
     try {
       const result = await submitQuiz(activeStep.lesson.quiz.id, answers);
       setQuizSubmitted(true);
@@ -232,8 +233,8 @@ function LearnContent({ courseId }: { courseId: string }) {
           setCompletedLessons((prev) => [...prev, activeStep.lessonIndex]);
         }
       }
-    } catch (e: any) {
-      setCompletionError(e.message || "Failed to submit quiz");
+    } catch (e: unknown) {
+      setCompletionError(getErrorMessage(e) || "Failed to submit quiz");
     }
   };
 
@@ -255,11 +256,19 @@ function LearnContent({ courseId }: { courseId: string }) {
       if (!completedLessons.includes(activeStep.lessonIndex)) {
         setCompletedLessons((prev) => [...prev, activeStep.lessonIndex]);
       }
-    } catch (e: any) {
-      setAssignmentError(e.message || "Failed to submit assignment");
+    } catch (e: unknown) {
+      setAssignmentError(getErrorMessage(e) || "Failed to submit assignment");
     } finally {
       setIsSubmittingAssignment(false);
     }
+  };
+
+  const handleQuizRetry = () => {
+    setQuizSubmitted(false);
+    setQuizPassed(null);
+    setQuizScore(null);
+    setQuizAnswers({});
+    setCompletionError(null);
   };
 
   const isCurrentLessonComplete = activeStep
@@ -316,6 +325,7 @@ function LearnContent({ courseId }: { courseId: string }) {
           quizPassed={quizPassed}
           quizScore={quizScore}
           onSubmitQuiz={handleQuizSubmit}
+          onRetryQuiz={handleQuizRetry}
           assignmentContent={assignmentContent}
           setAssignmentContent={setAssignmentContent}
           assignmentFile={assignmentFile}

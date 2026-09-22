@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import { env } from "./env";
+import { logger } from "../utils/logger";
 
 // ─── Redis Client (graceful fallback) ────────────────────────────────────────
 // If REDIS_URL is not set, the module exports null and auth.ts falls back
@@ -20,11 +21,11 @@ if (env.redisUrl) {
   });
 
   redisClient.on("connect", () => {
-    console.log("[Redis] Connected");
+    logger.info("[Redis] Connected");
   });
 
   redisClient.on("error", (err) => {
-    console.error("[Redis] Connection error — falling back to in-process LRU cache:", err.message);
+    logger.error("[Redis] Connection error — falling back to in-process LRU cache", { message: err.message });
     // Don't crash; the auth middleware checks `redisClient` before using it.
   });
 }

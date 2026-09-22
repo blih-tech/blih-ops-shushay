@@ -8,6 +8,7 @@ import {
   SubscriptionPlan,
   SubscriptionStatus,
 } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { chapaService } from "./chapa.service";
 import {
   createNotification,
@@ -15,6 +16,12 @@ import {
   sendSubscriptionConfirmationEmail,
 } from "../notifications/notification.service";
 import { getSetting } from "../settings/settings.service";
+
+/** Typed shape of the JSON metadata stored on a PaymentTransaction. */
+interface PaymentMetadata {
+  plan?: "MONTHLY" | "YEARLY";
+  [key: string]: unknown;
+}
 
 async function lockAndCompletePayment(
   tx: any,
@@ -260,7 +267,7 @@ export async function verifyAndCompletePayment(
       throw new AppError(404, "Company profile not found for this transaction");
     }
 
-    const metadataPlan = (transaction.metadata as any)?.plan as
+    const metadataPlan = (transaction.metadata as PaymentMetadata | null)?.plan as
       | string
       | undefined;
 

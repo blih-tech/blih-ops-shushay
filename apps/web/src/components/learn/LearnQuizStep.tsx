@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, AlertCircle, HelpCircle, Trophy } from "lucide-react";
+import { CheckCircle2, AlertCircle, HelpCircle, Trophy, RotateCcw } from "lucide-react";
 import { Button, Badge } from "@blih/ui";
 import type { PublicLesson } from "@/types/course";
 
-interface LearnQuizTabProps {
+interface LearnQuizStepProps {
   activeLesson: PublicLesson;
   selectedQuizOption: Record<number, number>;
   setSelectedQuizOption: (qIdx: number, optIdx: number) => void;
@@ -13,9 +13,10 @@ interface LearnQuizTabProps {
   quizPassed: boolean | null;
   quizScore: number | null;
   onSubmitQuiz: () => void;
+  onRetryQuiz: () => void;
 }
 
-export function LearnQuizTab({
+export function LearnQuizStep({
   activeLesson,
   selectedQuizOption,
   setSelectedQuizOption,
@@ -23,14 +24,10 @@ export function LearnQuizTab({
   quizPassed,
   quizScore,
   onSubmitQuiz,
-}: LearnQuizTabProps) {
+  onRetryQuiz,
+}: LearnQuizStepProps) {
   const hasQuiz = !!activeLesson.quiz;
-  const questions =
-    ((activeLesson.quiz as any)?.questions as Array<{
-      text: string;
-      options: string[];
-      correctOptionIndex: number;
-    }>) ?? [];
+  const questions = activeLesson.quiz?.questions ?? [];
 
   const answeredCount = Object.keys(selectedQuizOption).length;
   const isAllAnswered = answeredCount === questions.length && questions.length > 0;
@@ -101,9 +98,20 @@ export function LearnQuizTab({
           </div>
 
           {!quizPassed && (
-            <p className="text-xs text-[#6E6678] bg-white border border-[#D9CEDF] rounded-xl p-3 max-w-md mx-auto">
-              Review the material and re-select your options above to re-submit your answers.
-            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <p className="text-xs text-[#6E6678] bg-white border border-[#D9CEDF] rounded-xl p-3 max-w-md">
+                You need 80% or above to pass. Review the material and try again.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRetryQuiz}
+                leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
+                className="shrink-0"
+              >
+                Try Again
+              </Button>
+            </div>
           )}
         </div>
       ) : (

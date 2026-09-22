@@ -3,6 +3,13 @@ import { AppError } from "../../middleware/errorHandler";
 import { SubmitQuizInput, SubmitAssignmentInput } from "./learning.schemas";
 import { checkAndGenerateCertificate } from "../certificates/certificate.service";
 
+/** Typed shape of a single quiz question stored in the Prisma JSON field. */
+interface QuizQuestion {
+  question: string;
+  options: string[];
+  correctOptionIndex: number;
+}
+
 export async function markLessonComplete(userId: string, lessonId: string) {
   // Verify lesson exists
   const lesson = await prisma.lesson.findUnique({
@@ -54,7 +61,8 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
   }
 
   // Calculate score
-  const questions = quiz.questions as any[];
+  const questions = quiz.questions as unknown as QuizQuestion[];
+
   let correctCount = 0;
 
   if (!Array.isArray(questions) || questions.length !== data.answers.length) {
@@ -206,10 +214,16 @@ export async function getCourseProgress(userId: string, courseId: string) {
   const completedCount = completed.length;
   const isCompleted = completedCount === totalLessons;
 
-  // If completed, trigger certificate generation automatically
+  // If completed, trigger certificate generation only when no certificate exists yet
   if (isCompleted) {
     try {
-      await checkAndGenerateCertificate(userId, courseId);
+      const existingCert = await prisma.certificate.findFirst({
+        where: { userId, courseId },
+        select: { id: true },
+      });
+      if (!existingCert) {
+        await checkAndGenerateCertificate(userId, courseId);
+      }
     } catch {}
   }
 

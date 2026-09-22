@@ -11,7 +11,7 @@ export async function getMyCertificates(
   next: NextFunction,
 ) {
   try {
-    const userId = (req as any).user.id;
+    const userId = req.user!.id;
     const certificates = await getUserCertificates(userId);
     res.json({ certificates });
   } catch (err) {
@@ -26,7 +26,7 @@ export async function downloadCertificate(
 ) {
   try {
     const certificateId = req.params.id as string;
-    const user = (req as any).user;
+    const user = req.user!;
 
     const cert = await getCertificateById(certificateId, user);
     await generateCertificatePdfStream(cert, res);

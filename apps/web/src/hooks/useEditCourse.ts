@@ -9,6 +9,7 @@ import {
   reorderLessons,
 } from "@/lib/courses";
 import type { Course, Lesson } from "@/types/course";
+import { getErrorMessage } from "@/lib/errorUtils";
 
 export function useEditCourse(courseId: string) {
   const [course, setCourse] = useState<Course | null>(null);
@@ -38,8 +39,8 @@ export function useEditCourse(courseId: string) {
       setMetaTitle(data.title);
       setMetaDesc(data.description);
       setLessons((data.lessons ?? []) as Lesson[]);
-    } catch (e: any) {
-      setLoadError(e.message ?? "Failed to load");
+    } catch (e: unknown) {
+      setLoadError(getErrorMessage(e) ?? "Failed to load");
     } finally {
       setLoading(false);
     }

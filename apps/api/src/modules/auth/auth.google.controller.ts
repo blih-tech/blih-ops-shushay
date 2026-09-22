@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma";
 import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
+import { logger } from "../../utils/logger";
 import {
   buildGoogleAuthUrl,
   decodeState,
@@ -168,7 +169,7 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
         where: { id: user.id },
         data: { googleId },
       });
-      console.log(`[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`);
+      logger.debug(`[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`);
     } else {
       user = await prisma.user.create({
         data: {
@@ -197,7 +198,7 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
         });
       }
 
-      console.log(`[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`);
+      logger.debug(`[GOOGLE OAUTH] Created new ${role} account for: ${normalizedEmail}`);
     }
   }
   return user;

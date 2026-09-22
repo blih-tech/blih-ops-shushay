@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
+import { logger } from "../../utils/logger";
 
 // Resend client — instantiated lazily so missing key never crashes boot
 let _resend: Resend | null = null;
@@ -115,7 +116,7 @@ export async function sendPaymentConfirmationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(
+    logger.debug(
       `[EMAIL DEV] Skills payment confirmation → ${email} | txRef: ${txRef} | amount: ${amount} ETB`,
     );
     return { success: true };
@@ -166,7 +167,7 @@ export async function sendSubscriptionConfirmationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(
+    logger.debug(
       `[EMAIL DEV] Subscription confirmation → ${email} | company: ${companyName} | plan: ${plan}`,
     );
     return { success: true };
@@ -216,7 +217,7 @@ export async function sendJobApplicationEmail(
 ) {
   const resend = getResend();
   if (!resend) {
-    console.log(
+    logger.debug(
       `[EMAIL DEV] Job application → ${companyEmail} | job: "${jobTitle}" | applicant: ${applicantName}`,
     );
     return { success: true };

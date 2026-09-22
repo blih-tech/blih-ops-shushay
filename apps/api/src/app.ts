@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
 import swaggerUi from "swagger-ui-express";
 import { env } from "./config/env";
 import prisma from "./config/prisma";
@@ -45,6 +46,27 @@ app.use((req, res, next) => {
   }
 });
 app.use(cors({ origin: env.corsOrigins, credentials: true }));
+
+// ─── Rate Limiting ────────────────────────────────────────────────────────────
+// Global: 200 requests per minute per IP
+const globalLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests. Please slow down." },
+});
+// Strict: 20 requests per 15 minutes for auth endpoints (prevents brute force)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many authentication attempts. Please wait and try again." },
+});
+
+app.use("/api/v1", globalLimiter);
+app.use("/api/v1/auth", authLimiter);
 app.use(cookieParser());
 app.use(
   express.json({
