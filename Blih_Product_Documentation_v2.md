@@ -213,18 +213,41 @@ The authentication implementation should be shared across both products even tho
 
 ## 8. Payment flow
 
-### Blih Skills
+### Blih Skills — Per-course access
+
+Talents pay per course. Each course has an individual price (default: 1,000 ETB, configurable by admins per course or via the `PRICE_SKILLS_ACCESS` system setting as a global fallback). Payment grants access to that specific course only.
 
 ```text
-Learner selects access
-→ Skills Web requests payment from API
-→ API creates Chapa payment
-→ Learner completes payment
-→ Chapa notifies API
-→ API verifies payment
-→ API grants permanent Skills access
-→ Skills Web displays unlocked courses
+Learner browses course catalog
+→ Learner clicks "Unlock This Course" on a course detail page
+→ Skills Web sends courseId to API
+→ API checks for existing enrollment (idempotency)
+→ API creates a PENDING PaymentTransaction (paymentType: COURSE_ACCESS)
+  with metadata: { courseId, courseTitle }
+→ API creates a Chapa payment
+→ Learner completes payment on Chapa
+→ Chapa sends webhook to API
+→ API verifies payment server-side
+→ API creates CourseEnrollment record for userId + courseId
+→ API sends in-app notification and enrollment confirmation email
+→ Learner is redirected to /checkout/return
+→ Skills Web shows enrollment success with course name and "Start Learning" link
+→ Enrolled course is highlighted on the course catalog page
 ```
+
+Access is scoped to a single course. Paying for one course does not grant access to other courses.
+
+#### Admin access management
+
+Admins can grant or revoke enrollment for any user on any course without payment:
+
+- `POST /admin/users/:userId/skills-access` — body: `{ courseId }` → creates a `CourseEnrollment` for the user
+- `DELETE /admin/users/:userId/skills-access` — body: `{ courseId }` → deletes the `CourseEnrollment`
+
+#### Price configuration
+
+- Each course has a `price` field (default: 1,000 ETB). Set at course creation or via the admin update course endpoint.
+- Admins can also set a global fallback via the `PRICE_SKILLS_ACCESS` system setting.
 
 ### Blih Talent company subscription
 
@@ -245,7 +268,7 @@ Renewal is manual. The API must block talent search and job posting when the sub
 
 The first version supports notifications for:
 
-- Successful Skills payment
+- Successful course enrollment payment (`COURSE_ENROLLMENT_SUCCESS`)
 - Successful company subscription payment
 - New job application
 

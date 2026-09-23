@@ -12,7 +12,7 @@ import { Prisma } from "@prisma/client";
 import { chapaService } from "./chapa.service";
 import {
   createNotification,
-  sendPaymentConfirmationEmail,
+  sendCoursePaymentConfirmationEmail,
   sendSubscriptionConfirmationEmail,
 } from "../notifications/notification.service";
 import { getSetting } from "../settings/settings.service";
@@ -20,6 +20,8 @@ import { getSetting } from "../settings/settings.service";
 /** Typed shape of the JSON metadata stored on a PaymentTransaction. */
 interface PaymentMetadata {
   plan?: "MONTHLY" | "YEARLY";
+  courseId?: string;
+  courseTitle?: string;
   [key: string]: unknown;
 }
 
@@ -50,29 +52,27 @@ async function lockAndCompletePayment(
   return { alreadyCompleted: false, updatedPayment };
 }
 
-export const SKILLS_ACCESS_CURRENCY = "ETB";
+export const COURSE_ACCESS_CURRENCY = "ETB";
 
 /**
- * Generate a cryptographically unique transaction reference for Blih Skills payment.
- * Uses crypto.randomBytes to prevent collisions even under concurrent load.
+ * Generate a cryptographically unique transaction reference for a course payment.
  */
 function generateTxRef(): string {
   const timestamp = Date.now();
   const random = randomBytes(8).toString("hex");
-  return `blih_skills_${timestamp}_${random}`;
+  return `blih_course_${timestamp}_${random}`;
 }
 
 /**
- * Initiates a Blih Skills payment checkout session.
+ * Initiates a per-course payment checkout session.
  * returnUrl and callbackUrl are always derived from server env vars —
  * clients cannot override them to prevent open-redirect attacks.
  */
-export async function initializeSkillsPayment(userId: string) {
+export async function initializeCoursePayment(userId: string, courseId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
       talentProfile: true,
-      skillsEntitlement: true,
     },
   });
 
@@ -80,29 +80,44 @@ export async function initializeSkillsPayment(userId: string) {
     throw new AppError(404, "User not found");
   }
 
-  // Check if user already has access
-  if (user.skillsEntitlement) {
+  // Verify course exists and is published
+  const course = await prisma.course.findFirst({
+    where: { id: courseId, status: "PUBLISHED" },
+    select: { id: true, title: true, price: true },
+  });
+
+  if (!course) {
+    throw new AppError(404, "Course not found or not published");
+  }
+
+  // Check if user is already enrolled in this course
+  const existingEnrollment = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
+  });
+
+  if (existingEnrollment) {
     return {
-      alreadyHasAccess: true,
+      alreadyEnrolled: true,
       checkoutUrl: null,
       txRef: null,
-      entitlement: user.skillsEntitlement,
+      enrollment: existingEnrollment,
     };
   }
 
   const txRef = generateTxRef();
   const priceStr = await getSetting("PRICE_SKILLS_ACCESS", "1000");
-  const price = Number(priceStr) || 1000;
+  const price = course.price || Number(priceStr) || 1000;
 
-  // Create PENDING payment record
+  // Create PENDING payment record, store courseId + title in metadata
   const payment = await prisma.paymentTransaction.create({
     data: {
       userId,
       txRef,
       amount: price,
-      currency: SKILLS_ACCESS_CURRENCY,
-      paymentType: PaymentType.SKILLS_ACCESS,
+      currency: COURSE_ACCESS_CURRENCY,
+      paymentType: PaymentType.COURSE_ACCESS,
       status: PaymentStatus.PENDING,
+      metadata: { courseId: course.id, courseTitle: course.title } as Prisma.JsonObject,
     },
   });
 
@@ -117,16 +132,16 @@ export async function initializeSkillsPayment(userId: string) {
 
   const chapaRes = await chapaService.initializePayment({
     amount: price,
-    currency: SKILLS_ACCESS_CURRENCY,
+    currency: COURSE_ACCESS_CURRENCY,
     email: user.email,
     firstName,
     lastName,
     txRef,
     returnUrl,
     callbackUrl,
-    title: "Blih Skills Permanent Access",
+    title: `Blih Skills — ${course.title}`,
     description:
-      `One-time ${price.toLocaleString()} ETB payment for permanent access to all Blih Skills courses.`,
+      `${price.toLocaleString()} ETB for full access to "${course.title}" on Blih Skills.`,
   });
 
   if (chapaRes.checkoutUrl) {
@@ -137,7 +152,7 @@ export async function initializeSkillsPayment(userId: string) {
   }
 
   return {
-    alreadyHasAccess: false,
+    alreadyEnrolled: false,
     checkoutUrl: chapaRes.checkoutUrl,
     txRef,
     paymentId: payment.id,
@@ -145,8 +160,8 @@ export async function initializeSkillsPayment(userId: string) {
 }
 
 /**
- * Server-side payment verification and entitlement granting.
- * Strictly idempotent: multiple invocations return the same successful entitlement state.
+ * Server-side payment verification and enrollment granting.
+ * Strictly idempotent: multiple invocations return the same successful enrollment state.
  *
  * @param txRef - Transaction reference to verify
  * @param callerUserId - The authenticated user making the request; when provided, the txRef must
@@ -195,14 +210,20 @@ export async function verifyAndCompletePayment(
       };
     }
 
-    const existingEntitlement = await prisma.skillsEntitlement.findUnique({
-      where: { userId: transaction.userId },
-    });
+    // COURSE_ACCESS
+    const metadata = transaction.metadata as PaymentMetadata | null;
+    const courseId = metadata?.courseId;
+    const existingEnrollment = courseId
+      ? await prisma.courseEnrollment.findUnique({
+          where: { userId_courseId: { userId: transaction.userId, courseId } },
+          include: { course: { select: { id: true, title: true } } },
+        })
+      : null;
 
     return {
       verified: true,
       payment: transaction,
-      entitlement: existingEntitlement,
+      enrollment: existingEnrollment,
       message: "Payment already successfully verified",
     };
   }
@@ -384,44 +405,69 @@ export async function verifyAndCompletePayment(
     };
   }
 
-  // Verification succeeded for SKILLS_ACCESS! Execute atomic DB transaction
+  // ── COURSE_ACCESS verification ─────────────────────────────────────────────
+
+  const metadata = transaction.metadata as PaymentMetadata | null;
+  const courseId = metadata?.courseId;
+  const courseTitle = metadata?.courseTitle || "the course";
+
+  if (!courseId) {
+    throw new AppError(
+      400,
+      "Transaction metadata is missing course information. Please contact support.",
+    );
+  }
+
+  // Verify the course still exists
+  const course = await prisma.course.findUnique({
+    where: { id: courseId },
+    select: { id: true, title: true },
+  });
+
+  if (!course) {
+    throw new AppError(404, "The course associated with this payment no longer exists.");
+  }
+
   const result = await prisma.$transaction(async (tx) => {
-      const { alreadyCompleted, updatedPayment } = await lockAndCompletePayment(
-        tx,
-        transaction.id,
-        transaction.chapaRef,
-        verification
-      );
+    const { alreadyCompleted, updatedPayment } = await lockAndCompletePayment(
+      tx,
+      transaction.id,
+      transaction.chapaRef,
+      verification
+    );
 
-      if (alreadyCompleted) {
-        return {
-          alreadyCompleted: true,
-          updatedPayment,
-          entitlement: await tx.skillsEntitlement.findUnique({
-            where: { userId: transaction.userId },
-          }),
-        };
-      }
+    if (alreadyCompleted) {
+      return {
+        alreadyCompleted: true,
+        updatedPayment,
+        enrollment: await tx.courseEnrollment.findUnique({
+          where: { userId_courseId: { userId: transaction.userId, courseId } },
+          include: { course: { select: { id: true, title: true } } },
+        }),
+      };
+    }
 
-    const entitlement = await tx.skillsEntitlement.upsert({
-      where: { userId: transaction.userId },
+    const enrollment = await tx.courseEnrollment.upsert({
+      where: { userId_courseId: { userId: transaction.userId, courseId } },
       create: {
         userId: transaction.userId,
+        courseId,
         paymentId: transaction.id,
       },
       update: {
         paymentId: transaction.id,
       },
+      include: { course: { select: { id: true, title: true } } },
     });
 
-    return { updatedPayment, entitlement };
+    return { updatedPayment, enrollment };
   });
 
   if (result.alreadyCompleted) {
     return {
       verified: true,
       payment: result.updatedPayment,
-      entitlement: result.entitlement,
+      enrollment: result.enrollment,
       message: "Payment already successfully verified",
     };
   }
@@ -429,52 +475,38 @@ export async function verifyAndCompletePayment(
   // Create in-app notification
   await createNotification({
     userId: transaction.userId,
-    type: "SKILLS_PAYMENT_SUCCESS",
-    title: "Blih Skills Access Unlocked!",
+    type: "COURSE_ENROLLMENT_SUCCESS",
+    title: `You're enrolled in "${course.title}"!`,
     message:
-      `Your payment of ${transaction.amount.toLocaleString()} ETB has been confirmed. You now have permanent access to all current and future Blih Skills courses.`,
+      `Your payment of ${transaction.amount.toLocaleString()} ETB has been confirmed. You now have full access to "${course.title}".`,
   });
 
   // Send confirmation email (resilient / non-blocking)
   const userName =
     transaction.user.talentProfile?.fullName || transaction.user.email;
-  sendPaymentConfirmationEmail(
+  sendCoursePaymentConfirmationEmail(
     transaction.user.email,
     userName,
     transaction.amount,
     txRef,
+    course.title,
   );
 
   return {
     verified: true,
     payment: result.updatedPayment,
-    entitlement: result.entitlement,
-    message: "Payment successfully verified and Skills access granted",
+    enrollment: result.enrollment,
+    message: `Payment successfully verified and enrollment in "${course.title}" granted`,
   };
 }
 
 /**
- * Returns authoritative Skills access status for a user.
+ * Returns whether a user is enrolled in a specific course.
  */
-export async function getSkillsAccessStatus(userId: string) {
+export async function getCourseAccessStatus(userId: string, courseId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: {
-      id: true,
-      role: true,
-      skillsEntitlement: {
-        include: {
-          payment: {
-            select: {
-              txRef: true,
-              amount: true,
-              currency: true,
-              createdAt: true,
-            },
-          },
-        },
-      },
-    },
+    select: { id: true, role: true },
   });
 
   if (!user) {
@@ -486,23 +518,56 @@ export async function getSkillsAccessStatus(userId: string) {
       hasAccess: true,
       isAdmin: true,
       grantedAt: new Date().toISOString(),
-      payment: null,
+      enrollment: null,
     };
   }
 
-  if (user.skillsEntitlement) {
+  const enrollment = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
+    select: {
+      id: true,
+      grantedAt: true,
+      payment: {
+        select: {
+          txRef: true,
+          amount: true,
+          currency: true,
+          createdAt: true,
+        },
+      },
+    },
+  });
+
+  if (enrollment) {
     return {
       hasAccess: true,
-      grantedAt: user.skillsEntitlement.grantedAt,
-      payment: user.skillsEntitlement.payment,
+      grantedAt: enrollment.grantedAt,
+      enrollment,
     };
   }
 
   return {
     hasAccess: false,
     grantedAt: null,
-    payment: null,
+    enrollment: null,
   };
+}
+
+/**
+ * Returns all course IDs (and basic course info) a user is enrolled in.
+ */
+export async function getUserEnrollments(userId: string) {
+  const enrollments = await prisma.courseEnrollment.findMany({
+    where: { userId },
+    select: {
+      courseId: true,
+      grantedAt: true,
+      course: { select: { id: true, title: true, status: true } },
+    },
+    orderBy: { grantedAt: "desc" },
+  });
+
+  return enrollments;
 }
 
 /**
@@ -519,6 +584,7 @@ export async function listUserPayments(userId: string) {
       currency: true,
       paymentType: true,
       status: true,
+      metadata: true,
       createdAt: true,
       updatedAt: true,
     },

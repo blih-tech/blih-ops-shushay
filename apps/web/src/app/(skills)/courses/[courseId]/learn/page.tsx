@@ -8,7 +8,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import { Button, Alert } from "@blih/ui";
 import { fetchProtectedCourse } from "@/lib/courses";
 import {
-  initializeSkillsPayment,
+  initializeCoursePayment,
   getCourseProgress,
   markLessonComplete,
   submitQuiz,
@@ -103,7 +103,7 @@ function LearnContent({ courseId }: { courseId: string }) {
     try {
       setInitiatingPayment(true);
       setPaymentError(null);
-      const res = await initializeSkillsPayment();
+      const res = await initializeCoursePayment(courseId);
       if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
       }

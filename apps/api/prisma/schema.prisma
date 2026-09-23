@@ -28,7 +28,7 @@ model User {
   talentProfile TalentProfile?
   companyProfile CompanyProfile?
   paymentTransactions PaymentTransaction[]
-  skillsEntitlement   SkillsEntitlement?
+  courseEnrollments    CourseEnrollment[]
   notifications        Notification[]
   lessonProgress       LessonProgress[]
   quizAttempts         QuizAttempt[]
@@ -213,11 +213,13 @@ model Course {
   id          String       @id @default(cuid())
   title       String
   description String
+  price       Float        @default(1000)  // Per-course price in ETB
   status      CourseStatus @default(DRAFT)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   lessons      Lesson[]
   certificates Certificate[]
+  enrollments  CourseEnrollment[]
 
   @@map("courses")
 }
@@ -291,7 +293,7 @@ enum PaymentStatus {
 }
 
 enum PaymentType {
-  SKILLS_ACCESS
+  COURSE_ACCESS        // Per-course payment (replaces the old SKILLS_ACCESS)
   COMPANY_SUBSCRIPTION
 }
 
@@ -305,11 +307,11 @@ model PaymentTransaction {
   paymentType PaymentType
   status      PaymentStatus @default(PENDING)
   chapaRef    String?
-  metadata    Json?
+  metadata    Json?         // For COURSE_ACCESS: stores { courseId, courseTitle }
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  skillsEntitlement   SkillsEntitlement?
+  courseEnrollment    CourseEnrollment?
   companySubscription CompanySubscription?
 
   @@index([userId])
@@ -346,16 +348,25 @@ model CompanySubscription {
   @@map("company_subscriptions")
 }
 
-model SkillsEntitlement {
+// ─── Course Enrollment ────────────────────────────────────────────────────────
+// Replaces the old global SkillsEntitlement. Each record represents a talent's
+// paid (or admin-granted) access to one specific course.
+
+model CourseEnrollment {
   id        String              @id @default(cuid())
-  userId    String              @unique
+  userId    String
   user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
   paymentId String?             @unique
   payment   PaymentTransaction? @relation(fields: [paymentId], references: [id], onDelete: SetNull)
   grantedAt DateTime            @default(now())
   updatedAt DateTime            @updatedAt
 
-  @@map("skills_entitlements")
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("course_enrollments")
 }
 
 model Notification {

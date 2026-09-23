@@ -10,7 +10,24 @@ interface QuizQuestion {
   correctOptionIndex: number;
 }
 
-export async function markLessonComplete(userId: string, lessonId: string) {
+/**
+ * Verifies that a user (non-admin) is enrolled in the given course.
+ * Admins are always allowed through.
+ */
+async function assertEnrolled(userId: string, courseId: string, userRole?: string) {
+  if (userRole === "ADMIN") return;
+  const enrollment = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
+  });
+  if (!enrollment) {
+    throw new AppError(
+      403,
+      "Course enrollment required. Please purchase access to this course.",
+    );
+  }
+}
+
+export async function markLessonComplete(userId: string, lessonId: string, userRole?: string) {
   // Verify lesson exists
   const lesson = await prisma.lesson.findUnique({
     where: { id: lessonId },
@@ -20,6 +37,9 @@ export async function markLessonComplete(userId: string, lessonId: string) {
   if (!lesson) {
     throw new AppError(404, "Lesson not found");
   }
+
+  // Verify user is enrolled in this course
+  await assertEnrolled(userId, lesson.courseId, userRole);
 
   if (lesson.quiz || lesson.assignment) {
     throw new AppError(
@@ -50,7 +70,7 @@ export async function markLessonComplete(userId: string, lessonId: string) {
   return progress;
 }
 
-export async function submitQuiz(userId: string, data: SubmitQuizInput) {
+export async function submitQuiz(userId: string, data: SubmitQuizInput, userRole?: string) {
   const quiz = await prisma.quiz.findUnique({
     where: { id: data.quizId },
     include: { lesson: true },
@@ -59,6 +79,9 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput) {
   if (!quiz) {
     throw new AppError(404, "Quiz not found");
   }
+
+  // Verify user is enrolled in this course
+  await assertEnrolled(userId, quiz.lesson.courseId, userRole);
 
   // Calculate score
   const questions = quiz.questions as unknown as QuizQuestion[];
@@ -117,6 +140,7 @@ export async function submitAssignment(
   userId: string,
   data: SubmitAssignmentInput,
   fileInfo?: { fileUrl: string; filePublicId?: string },
+  userRole?: string,
 ) {
   const assignment = await prisma.assignment.findUnique({
     where: { id: data.assignmentId },
@@ -126,6 +150,9 @@ export async function submitAssignment(
   if (!assignment) {
     throw new AppError(404, "Assignment not found");
   }
+
+  // Verify user is enrolled in this course
+  await assertEnrolled(userId, assignment.lesson.courseId, userRole);
 
   if (!data.content && !fileInfo) {
     throw new AppError(400, "Must provide content or a file");

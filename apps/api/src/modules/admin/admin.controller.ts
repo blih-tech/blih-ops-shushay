@@ -51,7 +51,12 @@ export async function deleteUser(req: Request, res: Response, next: NextFunction
 export async function grantSkillsAccess(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = String(req.params.userId);
-    const result = await adminService.grantSkillsAccess(userId);
+    const { courseId } = req.body as { courseId?: string };
+    if (!courseId) {
+      res.status(400).json({ error: { message: "courseId is required in the request body" } });
+      return;
+    }
+    const result = await adminService.grantSkillsAccess(userId, courseId);
     res.json(result);
   } catch (err) {
     next(err);
@@ -61,7 +66,12 @@ export async function grantSkillsAccess(req: Request, res: Response, next: NextF
 export async function revokeSkillsAccess(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = String(req.params.userId);
-    const result = await adminService.revokeSkillsAccess(userId);
+    const { courseId } = req.body as { courseId?: string };
+    if (!courseId) {
+      res.status(400).json({ error: { message: "courseId is required in the request body" } });
+      return;
+    }
+    const result = await adminService.revokeSkillsAccess(userId, courseId);
     res.json(result);
   } catch (err) {
     next(err);

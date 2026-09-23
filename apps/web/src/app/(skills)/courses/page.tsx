@@ -8,13 +8,17 @@ import { fetchPublicCourses } from "@/lib/courses";
 import type { PublicCourseListItem } from "@/types/course";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { CourseCardSkeleton } from "@/components/courses/CourseCardSkeleton";
+import { useAuth } from "@/providers/AuthProvider";
+import { getUserEnrollments } from "@blih/api-client";
 
 export default function CourseCatalogPage() {
+  const { user } = useAuth();
   const [courses, setCourses] = useState<PublicCourseListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [enrolledCourseIds, setEnrolledCourseIds] = useState<Set<string>>(new Set());
 
   const categories = [
     "All",
@@ -33,6 +37,18 @@ export default function CourseCatalogPage() {
       .catch((err) => setError(err.message ?? "Failed to load courses"))
       .finally(() => setLoading(false));
   }, []);
+
+  // Load enrollments when user is logged in
+  useEffect(() => {
+    if (!user) return;
+    getUserEnrollments()
+      .then((enrollments) => {
+        setEnrolledCourseIds(new Set(enrollments.map((e) => e.courseId)));
+      })
+      .catch(() => {
+        // Non-fatal: enrollments are UI-only decorators here
+      });
+  }, [user]);
 
   const filteredCourses = courses.filter((course, index, self) => {
     // Deduplicate by course ID or title
@@ -139,7 +155,11 @@ export default function CourseCatalogPage() {
       {!loading && filteredCourses.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
           {filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} />
+            <CourseCard
+              key={course.id}
+              course={course}
+              isEnrolled={enrolledCourseIds.has(course.id)}
+            />
           ))}
         </div>
       )}

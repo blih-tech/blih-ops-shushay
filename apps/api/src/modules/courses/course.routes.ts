@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   requireAuth,
   requireRole,
-  requireSkillsAccess,
+  requireCourseEnrollment,
 } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import { Role } from "@prisma/client";
@@ -45,12 +45,12 @@ const router = Router();
 router.get("/", listCoursesPublic);
 router.get("/public/:courseId", getCoursePublic);
 
-// ─── Entitled Learner route (requires auth + Skills entitlement) ───────────────
+// ─── Enrolled Learner route (requires auth + enrollment in this course) ─────────
 
 router.get(
   "/:courseId/learn",
   requireAuth,
-  requireSkillsAccess,
+  requireCourseEnrollment,
   getCourseProtected,
 );
 

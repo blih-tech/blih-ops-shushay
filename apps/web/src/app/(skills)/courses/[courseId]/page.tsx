@@ -9,8 +9,8 @@ import { Button, Skeleton, Alert } from "@blih/ui";
 import { useAuth } from "@/providers/AuthProvider";
 import { fetchPublicCourse } from "@/lib/courses";
 import {
-  getSkillsAccessStatus,
-  initializeSkillsPayment,
+  getCourseAccessStatus,
+  initializeCoursePayment,
   getCourseProgress,
 } from "@blih/api-client";
 import { CourseDetailHero } from "@/components/courses/CourseDetailHero";
@@ -41,7 +41,8 @@ export default function PublicCourseDetailPage() {
 
         if (user) {
           try {
-            const accessRes = await getSkillsAccessStatus();
+            // Check access for this specific course
+            const accessRes = await getCourseAccessStatus(courseId);
             if (isMounted) setHasAccess(accessRes.hasAccess);
             if (accessRes.hasAccess) {
               try {
@@ -83,8 +84,8 @@ export default function PublicCourseDetailPage() {
     try {
       setInitiatingPayment(true);
       setPaymentError(null);
-      const res = await initializeSkillsPayment();
-      if (res.alreadyHasAccess) {
+      const res = await initializeCoursePayment(courseId);
+      if (res.alreadyEnrolled) {
         setHasAccess(true);
       } else if (res.checkoutUrl) {
         window.location.href = res.checkoutUrl;
@@ -148,6 +149,7 @@ export default function PublicCourseDetailPage() {
         <CourseDetailHero course={course} />
         <CourseDetailSidebar
           courseId={courseId}
+          courseTitle={course.title}
           hasAccess={hasAccess}
           isAuthenticated={!!user}
           isCompleted={isCompleted}

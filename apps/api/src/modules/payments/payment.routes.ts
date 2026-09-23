@@ -2,14 +2,15 @@ import { Router } from "express";
 import { requireAuth } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
 import {
-  initializeSkillsPaymentSchema,
+  initializeCoursePaymentSchema,
   verifyPaymentSchema,
 } from "./payment.schemas";
 import {
-  initializeSkillsPayment,
+  initializeCoursePayment,
   verifyPayment,
   chapaWebhook,
-  getSkillsAccessStatus,
+  getCourseAccessStatus,
+  getUserEnrollments,
   listUserPayments,
 } from "./payment.controller";
 
@@ -20,13 +21,46 @@ router.post("/webhook", chapaWebhook);
 
 // Protected payment endpoints
 router.post(
-  "/skills/initialize",
+  "/courses/enroll",
   requireAuth,
-  validate(initializeSkillsPaymentSchema),
-  initializeSkillsPayment,
+  validate(initializeCoursePaymentSchema),
+  initializeCoursePayment,
 );
 
-router.get("/skills/access-status", requireAuth, getSkillsAccessStatus);
+/**
+ * @openapi
+ * /payments/courses/{courseId}/access-status:
+ *   get:
+ *     summary: Check if the authenticated user is enrolled in a specific course
+ *     tags: [Payments]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courseId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Access status for the course
+ */
+router.get("/courses/:courseId/access-status", requireAuth, getCourseAccessStatus);
+
+/**
+ * @openapi
+ * /payments/enrollments:
+ *   get:
+ *     summary: List all courses the authenticated user is enrolled in
+ *     tags: [Payments]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Array of enrollments with course info
+ */
+router.get("/enrollments", requireAuth, getUserEnrollments);
+
 router.get("/history", requireAuth, listUserPayments);
 
 router.get("/verify/:txRef", requireAuth, verifyPayment);

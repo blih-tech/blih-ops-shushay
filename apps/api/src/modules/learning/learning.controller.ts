@@ -20,6 +20,7 @@ export async function markLessonComplete(
     const result = await learningService.markLessonComplete(
       req.user!.id,
       req.body.lessonId,
+      req.user!.role,
     );
     res.json(result);
   } catch (err) {
@@ -33,7 +34,7 @@ export async function submitQuiz(
   next: NextFunction,
 ) {
   try {
-    const result = await learningService.submitQuiz(req.user!.id, req.body);
+    const result = await learningService.submitQuiz(req.user!.id, req.body, req.user!.role);
     res.json(result);
   } catch (err) {
     next(err);
@@ -67,6 +68,7 @@ export async function submitAssignment(
       req.user!.id,
       req.body,
       fileInfo,
+      req.user!.role,
     );
     res.json(result);
   } catch (err) {

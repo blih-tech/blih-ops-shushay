@@ -57,12 +57,14 @@ export async function createCourse(data: CreateCourseInput) {
     data: {
       title: data.title.trim(),
       description: data.description.trim(),
+      price: data.price ?? 1000,
       status: "DRAFT",
     },
     select: {
       id: true,
       title: true,
       description: true,
+      price: true,
       status: true,
       createdAt: true,
       updatedAt: true,
@@ -72,10 +74,11 @@ export async function createCourse(data: CreateCourseInput) {
 
 export async function updateCourse(id: string, data: UpdateCourseInput) {
   await assertCourseExists(id);
-  const updateData: { title?: string; description?: string } = {};
+  const updateData: { title?: string; description?: string; price?: number } = {};
   if (data.title !== undefined) updateData.title = data.title.trim();
   if (data.description !== undefined)
     updateData.description = data.description.trim();
+  if (data.price !== undefined) updateData.price = data.price;
 
   return prisma.course.update({
     where: { id },
@@ -84,6 +87,7 @@ export async function updateCourse(id: string, data: UpdateCourseInput) {
       id: true,
       title: true,
       description: true,
+      price: true,
       status: true,
       createdAt: true,
       updatedAt: true,

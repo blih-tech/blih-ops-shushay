@@ -22,6 +22,8 @@ function ReturnContent() {
 
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
+  const [courseName, setCourseName] = useState<string | null>(null);
+  const [courseId, setCourseId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,6 +39,10 @@ function ReturnContent() {
       .then((res) => {
         if (res.verified) {
           setSuccess(true);
+          const name = res.enrollment?.course?.title || null;
+          const id = res.enrollment?.courseId || res.enrollment?.course?.id || null;
+          setCourseName(name);
+          setCourseId(id);
         } else {
           setErrorMessage(res.message || "Payment verification failed.");
         }
@@ -61,6 +67,10 @@ function ReturnContent() {
       const res = await verifyPayment(txRef);
       if (res.verified) {
         setSuccess(true);
+        const name = res.enrollment?.course?.title || null;
+        const id = res.enrollment?.courseId || res.enrollment?.course?.id || null;
+        setCourseName(name);
+        setCourseId(id);
       } else {
         setErrorMessage(res.message || "Payment verification failed.");
       }
@@ -103,20 +113,27 @@ function ReturnContent() {
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-[#EEF3FF] border border-[#C5D7FF] rounded-full text-xs font-semibold text-[#1E5BFF]">
                 <ShieldCheck className="w-4 h-4 shrink-0 text-[#1E5BFF]" />
-                <span>Permanent Skills Entitlement Granted</span>
+                <span>Course Enrollment Confirmed</span>
               </div>
 
               <h1 className="font-display text-3xl font-bold tracking-tight text-[#17131F]">
-                Payment Successful!
+                You&apos;re Enrolled!
               </h1>
               <p className="text-[#6E6678] text-sm leading-relaxed max-w-md mx-auto">
-                Your payment has been verified. You now have permanent access to
-                all current and future Blih Skills courses.
+                {courseName
+                  ? <>Your payment has been verified. You now have full access to <strong className="text-[#17131F]">{courseName}</strong>.</>  
+                  : "Your payment has been verified. You now have full access to this course."}
               </p>
             </div>
 
-            {/* Receipt & Unlocked Checklist Box */}
+            {/* Receipt Box */}
             <div className="bg-[#F8F6FA] border border-[#E8E1EE] rounded-2xl p-5 text-left space-y-3.5">
+              {courseName && (
+                <div className="flex justify-between items-center text-xs text-[#6E6678]">
+                  <span>Course</span>
+                  <span className="font-semibold text-[#17131F] text-right max-w-[200px] truncate">{courseName}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center text-xs text-[#6E6678]">
                 <span>Amount Paid</span>
                 <span className="font-bold text-[#17131F]">1,000 ETB</span>
@@ -143,7 +160,7 @@ function ReturnContent() {
                 <div className="grid grid-cols-2 gap-2 text-xs text-[#4E4656]">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#00A859] shrink-0" />
-                    <span>Full Course Access</span>
+                    <span>This Course Access</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-[#00A859] shrink-0" />
@@ -163,17 +180,31 @@ function ReturnContent() {
 
             {/* Action Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-              <Link href="/courses" className="w-full">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
-                  rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
-                >
-                  Start Learning Now
-                </Button>
-              </Link>
+              {courseId ? (
+                <Link href={`/courses/${courseId}/learn`} className="w-full">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
+                    rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
+                  >
+                    Start Learning Now
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/courses" className="w-full">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
+                    rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
+                  >
+                    Go to Courses
+                  </Button>
+                </Link>
+              )}
             </div>
           </Card>
         ) : isPending ? (

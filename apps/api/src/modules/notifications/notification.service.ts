@@ -105,54 +105,68 @@ export async function markNotificationAsRead(
 // ─── Email delivery helpers ───────────────────────────────────────────────────
 
 /**
- * Sends a Skills payment confirmation email to the learner.
+ * Sends a course enrollment payment confirmation email to the learner.
  * Non-fatal — returns { success: false } on any failure.
  */
-export async function sendPaymentConfirmationEmail(
+export async function sendCoursePaymentConfirmationEmail(
   email: string,
   userName: string,
   amount: number,
   txRef: string,
+  courseName: string,
 ) {
   const resend = getResend();
   if (!resend) {
     logger.debug(
-      `[EMAIL DEV] Skills payment confirmation → ${email} | txRef: ${txRef} | amount: ${amount} ETB`,
+      `[EMAIL DEV] Course payment confirmation → ${email} | course: "${courseName}" | txRef: ${txRef} | amount: ${amount} ETB`,
     );
     return { success: true };
   }
 
   try {
     const body = `
-      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">Payment Confirmed 🎉</h2>
+      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">You're Enrolled! 🎉</h2>
       <p style="margin:0 0 12px;font-size:15px;color:#4A4154;line-height:1.6;">
-        Hi <strong>${userName}</strong>, your payment has been received and your Blih Skills access is now active.
+        Hi <strong>${userName}</strong>, your payment has been received and you're now enrolled in <strong>${courseName}</strong>.
       </p>
       <table width="100%" cellpadding="0" cellspacing="0" style="background:#EEF3FF;border-radius:10px;padding:16px;margin-bottom:20px;">
-        <tr><td style="font-size:13px;color:#6E6678;">Amount paid</td><td align="right" style="font-size:15px;font-weight:700;color:#1E5BFF;">${amount.toLocaleString()} ETB</td></tr>
+        <tr><td style="font-size:13px;color:#6E6678;">Course</td><td align="right" style="font-size:15px;font-weight:700;color:#1E5BFF;">${courseName}</td></tr>
+        <tr><td style="font-size:13px;color:#6E6678;padding-top:8px;">Amount paid</td><td align="right" style="font-size:15px;font-weight:700;color:#17131F;padding-top:8px;">${amount.toLocaleString()} ETB</td></tr>
         <tr><td style="font-size:13px;color:#6E6678;padding-top:8px;">Reference</td><td align="right" style="font-size:12px;font-family:monospace;color:#17131F;padding-top:8px;">${txRef}</td></tr>
       </table>
       <p style="margin:0 0 24px;font-size:14px;color:#4A4154;line-height:1.6;">
-        You now have <strong>permanent access</strong> to all published courses on Blih Skills.
-        Start learning at your own pace and earn verified certificates.
+        Start learning at your own pace and earn a verified certificate upon completion.
       </p>
-      <a href="${env.skillsWebUrl}/courses" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;">Browse Courses →</a>
+      <a href="${env.skillsWebUrl}/courses" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;">Start Learning →</a>
     `;
 
     await resend.emails.send({
       from: env.resend.emailFrom,
       to: email,
-      subject: "✅ Blih Skills Access Confirmed",
-      html: wrapHtml("Skills Payment Confirmed", body),
+      subject: `✅ You're enrolled in "${courseName}" — Blih Skills`,
+      html: wrapHtml("Course Enrollment Confirmed", body),
     });
 
     return { success: true };
   } catch (err: any) {
     console.error(
-      `[EMAIL ERROR] Skills payment email to ${email}: ${err.message}`,
+      `[EMAIL ERROR] Course payment email to ${email}: ${err.message}`,
     );
     return { success: false, error: err.message };
   }
+}
+
+/**
+ * @deprecated Use sendCoursePaymentConfirmationEmail instead.
+ */
+export async function sendPaymentConfirmationEmail(
+  email: string,
+  userName: string,
+  amount: number,
+  txRef: string,
+  courseName = "your course",
+) {
+  return sendCoursePaymentConfirmationEmail(email, userName, amount, txRef, courseName);
 }
 
 /**

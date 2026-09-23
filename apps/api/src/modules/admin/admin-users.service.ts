@@ -1,6 +1,6 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import { Role, JobStatus } from "@prisma/client";
+
 
 
 export async function getAdminUsers(params: {
@@ -66,16 +66,18 @@ export async function getAdminUsers(params: {
             subscriptionExpiresAt: true,
           },
         },
-        skillsEntitlement: {
-          select: {
-            id: true,
-            grantedAt: true,
-          },
-        },
+
         certificates: {
           select: {
             courseId: true,
             course: { select: { title: true } },
+          },
+        },
+        courseEnrollments: {
+          select: {
+            courseId: true,
+            grantedAt: true,
+            course: { select: { id: true, title: true } },
           },
         },
         _count: {
@@ -156,17 +158,20 @@ export async function getAdminUserById(userId: string) {
           },
         },
       },
-      skillsEntitlement: {
-        select: {
-          id: true,
-          grantedAt: true,
-        },
-      },
+
       certificates: {
         select: {
           courseId: true,
           course: { select: { title: true } },
         },
+      },
+      courseEnrollments: {
+        select: {
+          courseId: true,
+          grantedAt: true,
+          course: { select: { id: true, title: true } },
+        },
+        orderBy: { grantedAt: "desc" },
       },
       _count: {
         select: {
@@ -198,26 +203,44 @@ export async function deleteUser(userId: string) {
   return { success: true };
 }
 
-export async function grantSkillsAccess(userId: string) {
+/**
+ * Admin grants a user enrollment in a specific course (no payment required).
+ */
+export async function grantSkillsAccess(userId: string, courseId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    include: { skillsEntitlement: true },
   });
   if (!user) throw new AppError(404, "User not found.");
-  if (user.skillsEntitlement) {
-    return { alreadyGranted: true, entitlement: user.skillsEntitlement };
-  }
-  const entitlement = await prisma.skillsEntitlement.create({
-    data: { userId },
+
+  const course = await prisma.course.findUnique({ where: { id: courseId } });
+  if (!course) throw new AppError(404, "Course not found.");
+
+  const existing = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
   });
-  return { alreadyGranted: false, entitlement };
+  if (existing) {
+    return { alreadyGranted: true, enrollment: existing };
+  }
+
+  const enrollment = await prisma.courseEnrollment.create({
+    data: { userId, courseId },
+    include: { course: { select: { id: true, title: true } } },
+  });
+  return { alreadyGranted: false, enrollment };
 }
 
-export async function revokeSkillsAccess(userId: string) {
-  const entitlement = await prisma.skillsEntitlement.findUnique({
-    where: { userId },
+/**
+ * Admin revokes a user's enrollment in a specific course.
+ */
+export async function revokeSkillsAccess(userId: string, courseId: string) {
+  const enrollment = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId, courseId } },
   });
-  if (!entitlement) throw new AppError(404, "No skills entitlement found for this user.");
-  await prisma.skillsEntitlement.delete({ where: { userId } });
+  if (!enrollment) {
+    throw new AppError(404, "No enrollment found for this user and course.");
+  }
+  await prisma.courseEnrollment.delete({
+    where: { userId_courseId: { userId, courseId } },
+  });
   return { success: true };
 }

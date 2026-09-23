@@ -23,7 +23,7 @@ async function _getAdminStatsRaw() {
     activeSubscriptions,
     totalPayments,
     successfulPayments,
-    totalEntitlements,
+    totalEnrollments,
   ] = await Promise.all([
     prisma.user.count(),
     prisma.talentProfile.count(),
@@ -51,7 +51,7 @@ async function _getAdminStatsRaw() {
       _sum: { amount: true },
       where: { status: "SUCCESSFUL" },
     }),
-    prisma.skillsEntitlement.count(),
+    prisma.courseEnrollment.count(),
   ]);
 
   // Recent registrations (last 7 days)
@@ -112,7 +112,8 @@ async function _getAdminStatsRaw() {
     activeSubscriptions,
     totalPayments,
     totalRevenue: successfulPayments._sum.amount ?? 0,
-    totalEntitlements,
+    totalEnrollments,
+    totalEntitlements: totalEnrollments,
     // 7-day deltas
     recentUsersCount,
     recentJobsCount,

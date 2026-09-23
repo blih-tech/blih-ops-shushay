@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import * as paymentService from "./payment.service";
 
-export async function initializeSkillsPayment(
+export async function initializeCoursePayment(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const userId = req.user!.id;
-    const result = await paymentService.initializeSkillsPayment(userId);
+    const { courseId } = req.body as { courseId: string };
+    const result = await paymentService.initializeCoursePayment(userId, courseId);
     res.json(result);
   } catch (err) {
     next(err);
@@ -104,15 +105,34 @@ export async function chapaWebhook(
   }
 }
 
-export async function getSkillsAccessStatus(
+export async function getCourseAccessStatus(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const userId = req.user!.id;
-    const result = await paymentService.getSkillsAccessStatus(userId);
+    const courseId = req.params.courseId as string;
+    if (!courseId) {
+      res.status(400).json({ error: "courseId is required" });
+      return;
+    }
+    const result = await paymentService.getCourseAccessStatus(userId, courseId);
     res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function getUserEnrollments(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user!.id;
+    const enrollments = await paymentService.getUserEnrollments(userId);
+    res.json(enrollments);
   } catch (err) {
     next(err);
   }

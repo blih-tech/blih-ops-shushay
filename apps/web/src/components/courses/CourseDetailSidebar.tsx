@@ -2,11 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Play, CheckCircle2, RotateCcw } from "lucide-react";
+import { ShieldCheck, Play, CheckCircle2, RotateCcw, Lock } from "lucide-react";
 import { Button, Badge, Alert } from "@blih/ui";
 
 interface CourseDetailSidebarProps {
   courseId: string;
+  courseTitle: string;
   hasAccess: boolean;
   isAuthenticated?: boolean;
   isCompleted?: boolean;
@@ -18,6 +19,7 @@ interface CourseDetailSidebarProps {
 
 export function CourseDetailSidebar({
   courseId,
+  courseTitle,
   hasAccess,
   isAuthenticated = false,
   isCompleted = false,
@@ -52,26 +54,26 @@ export function CourseDetailSidebar({
                   ? "Track Completed (100%)"
                   : isInProgress
                     ? `In Progress (${progressPercentage}%)`
-                    : "Full Access Granted"}
+                    : "Enrolled — Full Access"}
               </Badge>
             </div>
           </div>
         ) : (
           <div className="space-y-1">
             <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678]">
-              Blih Skills Access
+              Course Access
             </span>
             <div className="flex items-baseline gap-2">
               <span className="font-display text-3xl font-bold text-[#17131F]">
                 1,000 ETB
               </span>
               <span className="font-mono text-xs text-[#6E6678]">
-                One-time payment
+                · This course only
               </span>
             </div>
             <p className="text-xs text-[#6E6678] pt-1">
-              Unlocks permanent access to all current and future Blih Skills
-              courses.
+              One-time payment for full access to{" "}
+              <strong className="text-[#17131F]">{courseTitle}</strong>.
             </p>
           </div>
         )}
@@ -111,10 +113,16 @@ export function CourseDetailSidebar({
               variant="primary"
               onClick={onUnlockClick}
               isLoading={initiatingPayment}
-              leftIcon={<ShieldCheck className="w-5 h-5" />}
+              leftIcon={
+                isAuthenticated ? (
+                  <ShieldCheck className="w-5 h-5" />
+                ) : (
+                  <Lock className="w-5 h-5" />
+                )
+              }
             >
               {isAuthenticated
-                ? "Unlock All Courses (1,000 ETB)"
+                ? "Unlock This Course (1,000 ETB)"
                 : "Sign In to Unlock (1,000 ETB)"}
             </Button>
           )}
@@ -132,7 +140,7 @@ export function CourseDetailSidebar({
           </span>
           <ul className="space-y-2.5 text-xs text-[#4E4656]">
             {[
-              "Permanent access to all Blih Skills tracks",
+              "Full access to this course",
               "Interactive quizzes and test suites",
               "Digital verified credential on completion",
               "Self-paced with progress tracking",

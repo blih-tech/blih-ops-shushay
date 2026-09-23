@@ -1,10 +1,15 @@
 import React from "react";
 import Link from "next/link";
-import { BookOpen, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, CheckCircle2 } from "lucide-react";
 import { Card, CardTitle, CardDescription, Button, Badge } from "@blih/ui";
 import type { PublicCourseListItem } from "@/types/course";
 
-export function CourseCard({ course }: { course: PublicCourseListItem }) {
+interface CourseCardProps {
+  course: PublicCourseListItem;
+  isEnrolled?: boolean;
+}
+
+export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
   const lessonCount = course._count?.lessons || 0;
 
   return (
@@ -17,9 +22,17 @@ export function CourseCard({ course }: { course: PublicCourseListItem }) {
           <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#1E5BFF]/15 flex items-center justify-center text-[#1E5BFF] group-hover:bg-[#1E5BFF] group-hover:text-white transition-all duration-300 shrink-0">
             <BookOpen className="h-6 w-6" />
           </div>
-          <Badge variant="primary" size="sm">
-            {lessonCount} {lessonCount === 1 ? "Lesson" : "Lessons"}
-          </Badge>
+          <div className="flex items-center gap-2">
+            {isEnrolled && (
+              <Badge variant="verified" size="sm" className="gap-1">
+                <CheckCircle2 className="w-3 h-3" />
+                Enrolled
+              </Badge>
+            )}
+            <Badge variant="primary" size="sm">
+              {lessonCount} {lessonCount === 1 ? "Lesson" : "Lessons"}
+            </Badge>
+          </div>
         </div>
 
         <CardTitle className="text-xl font-bold mb-2 group-hover:text-[#1E5BFF] transition-colors leading-snug text-[#17131F]">
@@ -43,13 +56,13 @@ export function CourseCard({ course }: { course: PublicCourseListItem }) {
       <div className="pt-4 border-t border-[#D9CEDF]/50 mt-auto">
         <Link href={`/courses/${course.id}`} className="w-full block">
           <Button
-            variant="outline"
+            variant={isEnrolled ? "primary" : "outline"}
             fullWidth
             rightIcon={
               <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             }
           >
-            Explore Curriculum
+            {isEnrolled ? "Continue Learning" : "Explore Curriculum"}
           </Button>
         </Link>
       </div>

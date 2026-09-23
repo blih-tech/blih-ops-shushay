@@ -1,5 +1,5 @@
 /**
- * Integration tests for Phase 4: Payments and Course Access.
+ * Integration tests for Per-Course Payments and Access System.
  */
 import request from "supertest";
 import app from "../app";
@@ -25,7 +25,7 @@ function userCookie(id = "test-payment-user-id", role = Role.TALENT) {
 
 jest.setTimeout(30000);
 
-describe("Phase 4 Payments & Access System", () => {
+describe("Per-Course Payments & Access System", () => {
   jest.setTimeout(30000);
 
   const testUserId = "test-payment-user-id";
@@ -34,7 +34,7 @@ describe("Phase 4 Payments & Access System", () => {
 
   beforeAll(async () => {
     // Clean up test data
-    await prisma.skillsEntitlement.deleteMany({
+    await prisma.courseEnrollment.deleteMany({
       where: { userId: { in: [testUserId, secondUserId] } },
     });
     await prisma.paymentTransaction.deleteMany({
@@ -71,6 +71,7 @@ describe("Phase 4 Payments & Access System", () => {
       data: {
         title: "Test Payment Course",
         description: "Course for testing payment protection",
+        price: 1000,
         status: "PUBLISHED",
         lessons: {
           create: {
@@ -85,7 +86,7 @@ describe("Phase 4 Payments & Access System", () => {
   });
 
   afterAll(async () => {
-    await prisma.skillsEntitlement.deleteMany({
+    await prisma.courseEnrollment.deleteMany({
       where: { userId: { in: [testUserId, secondUserId] } },
     });
     await prisma.paymentTransaction.deleteMany({
@@ -110,29 +111,29 @@ describe("Phase 4 Payments & Access System", () => {
       expect(res.body.lessons[0].content).toBeUndefined(); // Sensitive content hidden
     });
 
-    it("should reject access to protected course content for non-paying users (403 Forbidden)", async () => {
+    it("should reject access to protected course content for non-enrolled users (403 Forbidden)", async () => {
       const res = await request(app)
         .get(`/api/v1/courses/${createdCourseId}/learn`)
         .set("Cookie", userCookie(testUserId));
 
       expect(res.status).toBe(403);
-      expect(res.body.error.message).toMatch(/Skills payment required/i);
+      expect(res.body.error.message).toMatch(/Course enrollment required/i);
     });
   });
 
   describe("2. Payment Initialization & Verification Flow", () => {
     let activeTxRef: string;
 
-    it("should initialize 1,000 ETB Skills payment successfully", async () => {
+    it("should initialize 1,000 ETB course payment successfully", async () => {
       const res = await request(app)
-        .post("/api/v1/payments/skills/initialize")
+        .post("/api/v1/payments/courses/enroll")
         .set("Cookie", userCookie(testUserId))
-        .send({});
+        .send({ courseId: createdCourseId });
 
       expect(res.status).toBe(200);
-      expect(res.body.alreadyHasAccess).toBe(false);
+      expect(res.body.alreadyEnrolled).toBe(false);
       expect(res.body.checkoutUrl).toBeDefined();
-      expect(res.body.txRef).toMatch(/^blih_skills_/);
+      expect(res.body.txRef).toMatch(/^blih_course_/);
 
       activeTxRef = res.body.txRef;
 
@@ -143,6 +144,7 @@ describe("Phase 4 Payments & Access System", () => {
       expect(dbTx?.status).toBe("PENDING");
       expect(dbTx?.amount).toBe(1000);
       expect(dbTx?.currency).toBe("ETB");
+      expect((dbTx?.metadata as any)?.courseId).toBe(createdCourseId);
     });
 
     it("should reject verification for fake or non-existent tx_ref", async () => {
@@ -174,7 +176,7 @@ describe("Phase 4 Payments & Access System", () => {
       spy.mockRestore();
     });
 
-    it("should reject payment verification if amount is less than 1,000 ETB", async () => {
+    it("should reject payment verification if amount is less than course price", async () => {
       const spy = jest
         .spyOn(chapaService, "verifyPayment")
         .mockResolvedValueOnce({
@@ -222,19 +224,19 @@ describe("Phase 4 Payments & Access System", () => {
 
       // User should be able to retry initializing a new payment
       const retryRes = await request(app)
-        .post("/api/v1/payments/skills/initialize")
+        .post("/api/v1/payments/courses/enroll")
         .set("Cookie", userCookie(testUserId))
-        .send({});
+        .send({ courseId: createdCourseId });
 
       expect(retryRes.status).toBe(200);
-      expect(retryRes.body.alreadyHasAccess).toBe(false);
+      expect(retryRes.body.alreadyEnrolled).toBe(false);
       expect(retryRes.body.txRef).toBeDefined();
 
       // Set activeTxRef to new transaction for successful verification
       activeTxRef = retryRes.body.txRef;
     });
 
-    it("should verify payment successfully, grant entitlement, and create notification", async () => {
+    it("should verify payment successfully, grant enrollment, and create notification", async () => {
       const spy = jest
         .spyOn(chapaService, "verifyPayment")
         .mockResolvedValueOnce({
@@ -252,8 +254,9 @@ describe("Phase 4 Payments & Access System", () => {
       expect(res.status).toBe(200);
       expect(res.body.verified).toBe(true);
       expect(res.body.payment.status).toBe("SUCCESSFUL");
-      expect(res.body.entitlement).toBeDefined();
-      expect(res.body.entitlement.userId).toBe(testUserId);
+      expect(res.body.enrollment).toBeDefined();
+      expect(res.body.enrollment.userId).toBe(testUserId);
+      expect(res.body.enrollment.courseId).toBe(createdCourseId);
 
       spy.mockRestore();
 
@@ -262,7 +265,7 @@ describe("Phase 4 Payments & Access System", () => {
         where: { userId: testUserId },
       });
       expect(notifs.length).toBeGreaterThan(0);
-      expect(notifs[0].type).toBe("SKILLS_PAYMENT_SUCCESS");
+      expect(notifs[0].type).toBe("COURSE_ENROLLMENT_SUCCESS");
     });
 
     it("should handle duplicate verification/webhooks idempotently", async () => {
@@ -275,18 +278,18 @@ describe("Phase 4 Payments & Access System", () => {
       expect(res.body.verified).toBe(true);
       expect(res.body.message).toMatch(/already successfully verified/i);
 
-      // Verify only 1 entitlement exists
-      const entitlements = await prisma.skillsEntitlement.findMany({
-        where: { userId: testUserId },
+      // Verify only 1 enrollment exists
+      const enrollments = await prisma.courseEnrollment.findMany({
+        where: { userId: testUserId, courseId: createdCourseId },
       });
-      expect(entitlements.length).toBe(1);
+      expect(enrollments.length).toBe(1);
     });
   });
 
-  describe("3. Post-Payment Entitlement & Protected Content Access", () => {
-    it("should report hasAccess = true on access status endpoint", async () => {
+  describe("3. Post-Payment Enrollment & Protected Content Access", () => {
+    it("should report hasAccess = true on course access status endpoint", async () => {
       const res = await request(app)
-        .get("/api/v1/payments/skills/access-status")
+        .get(`/api/v1/payments/courses/${createdCourseId}/access-status`)
         .set("Cookie", userCookie(testUserId));
 
       expect(res.status).toBe(200);
@@ -294,7 +297,7 @@ describe("Phase 4 Payments & Access System", () => {
       expect(res.body.grantedAt).toBeDefined();
     });
 
-    it("should allow paid user to access protected course content", async () => {
+    it("should allow enrolled user to access protected course content", async () => {
       const res = await request(app)
         .get(`/api/v1/courses/${createdCourseId}/learn`)
         .set("Cookie", userCookie(testUserId));
@@ -306,14 +309,14 @@ describe("Phase 4 Payments & Access System", () => {
       );
     });
 
-    it("should return alreadyHasAccess = true if an entitled user tries to initiate payment again", async () => {
+    it("should return alreadyEnrolled = true if an enrolled user tries to initiate payment again", async () => {
       const res = await request(app)
-        .post("/api/v1/payments/skills/initialize")
+        .post("/api/v1/payments/courses/enroll")
         .set("Cookie", userCookie(testUserId))
-        .send({});
+        .send({ courseId: createdCourseId });
 
       expect(res.status).toBe(200);
-      expect(res.body.alreadyHasAccess).toBe(true);
+      expect(res.body.alreadyEnrolled).toBe(true);
       expect(res.body.checkoutUrl).toBeNull();
     });
   });

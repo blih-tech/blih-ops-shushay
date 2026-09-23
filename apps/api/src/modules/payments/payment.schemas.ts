@@ -5,13 +5,16 @@ export const verifyPaymentSchema = z.object({
 });
 
 /**
- * Payment initialization schema.
+ * Course payment initialization schema.
+ * courseId is the course to enroll in.
  * callbackUrl and returnUrl are intentionally not accepted from clients —
  * all URLs are derived from server env vars to prevent open-redirect attacks.
  */
-export const initializeSkillsPaymentSchema = z.object({});
+export const initializeCoursePaymentSchema = z.object({
+  courseId: z.string().trim().min(1, "Course ID is required"),
+});
 
 export type VerifyPaymentInput = z.infer<typeof verifyPaymentSchema>;
-export type InitializeSkillsPaymentInput = z.infer<
-  typeof initializeSkillsPaymentSchema
+export type InitializeCoursePaymentInput = z.infer<
+  typeof initializeCoursePaymentSchema
 >;

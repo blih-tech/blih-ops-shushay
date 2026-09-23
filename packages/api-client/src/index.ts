@@ -97,16 +97,20 @@ export async function apiFetchFormData<T>(
   return res.json();
 }
 
-// ─── Payment & Entitlement API Client Helpers ────────────────────────────────
+// ─── Payment & Enrollment API Client Helpers ──────────────────────────────────
 
-export async function initializeSkillsPayment(returnUrl?: string) {
+/**
+ * Initiates a payment checkout session for a specific course.
+ * Returns a Chapa checkout URL, or alreadyEnrolled=true if already enrolled.
+ */
+export async function initializeCoursePayment(courseId: string) {
   return apiFetch<{
-    alreadyHasAccess: boolean;
+    alreadyEnrolled: boolean;
     checkoutUrl: string | null;
     txRef: string | null;
-  }>("/payments/skills/initialize", {
+  }>("/payments/courses/enroll", {
     method: "POST",
-    body: JSON.stringify({ returnUrl }),
+    body: JSON.stringify({ courseId }),
   });
 }
 
@@ -114,18 +118,34 @@ export async function verifyPayment(txRef: string) {
   return apiFetch<{
     verified: boolean;
     payment: any;
-    entitlement?: any;
+    enrollment?: any;
     subscription?: any;
     message: string;
   }>(`/payments/verify/${txRef}`);
 }
 
-export async function getSkillsAccessStatus() {
+/**
+ * Returns whether the authenticated user is enrolled in a specific course.
+ */
+export async function getCourseAccessStatus(courseId: string) {
   return apiFetch<{
     hasAccess: boolean;
     grantedAt?: string | null;
-    payment?: any;
-  }>(`/payments/skills/access-status`);
+    enrollment?: any;
+  }>(`/payments/courses/${courseId}/access-status`);
+}
+
+/**
+ * Returns all courses the authenticated user is enrolled in.
+ */
+export async function getUserEnrollments() {
+  return apiFetch<
+    Array<{
+      courseId: string;
+      grantedAt: string;
+      course: { id: string; title: string; status: string };
+    }>
+  >("/payments/enrollments");
 }
 
 // ─── Company Subscription API Client Helpers ─────────────────────────────────

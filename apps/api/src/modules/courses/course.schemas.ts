@@ -13,9 +13,15 @@ export const createCourseSchema = z.object({
     .trim()
     .min(1, "Description is required")
     .max(2000, "Description must be at most 2000 characters"),
+  price: z
+    .number()
+    .positive("Price must be a positive number")
+    .optional()
+    .default(1000), // Per-course price in ETB; defaults to 1,000 ETB
 });
 
 export const updateCourseSchema = createCourseSchema.partial();
+
 
 // --- Lesson -------------------------------------------------------------------
 

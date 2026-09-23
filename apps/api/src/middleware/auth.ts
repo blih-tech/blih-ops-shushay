@@ -152,7 +152,12 @@ export function requireRole(allowedRoles: Role[]) {
   };
 }
 
-export async function requireSkillsAccess(
+/**
+ * Per-course enrollment check.
+ * Reads courseId from req.params.courseId.
+ * Administrators bypass the check automatically.
+ */
+export async function requireCourseEnrollment(
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -161,26 +166,39 @@ export async function requireSkillsAccess(
     return next(new AppError(401, "Authentication required"));
   }
 
-  // Administrators automatically have access
+  // Administrators automatically have access to all courses
   if (req.user.role === Role.ADMIN) {
     return next();
   }
 
-  const entitlement = await prisma.skillsEntitlement.findUnique({
-    where: { userId: req.user.id },
+  const courseId = req.params.courseId as string | undefined;
+  if (!courseId) {
+    return next(
+      new AppError(400, "Course ID is required to verify enrollment."),
+    );
+  }
+
+  const enrollment = await prisma.courseEnrollment.findUnique({
+    where: { userId_courseId: { userId: req.user.id, courseId } },
   });
 
-  if (!entitlement) {
+  if (!enrollment) {
     return next(
       new AppError(
         403,
-        "Skills payment required. Please purchase permanent access to unlock course content.",
+        "Course enrollment required. Please purchase access to this course.",
       ),
     );
   }
 
   next();
 }
+
+/**
+ * @deprecated Use requireCourseEnrollment instead.
+ * Kept as an alias so existing imports compile during the migration.
+ */
+export const requireSkillsAccess = requireCourseEnrollment;
 
 export async function requireActiveSubscription(
   req: Request,
