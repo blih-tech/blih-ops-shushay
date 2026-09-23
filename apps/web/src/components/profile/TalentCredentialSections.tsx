@@ -3,6 +3,7 @@
 import React from "react";
 import { Briefcase, GraduationCap, Award, Download, ExternalLink } from "lucide-react";
 import { Badge, Card } from "@blih/ui";
+import { LinkedInCertificateButton } from "@/components/certificates/LinkedInCertificateButton";
 import { getCertificateDownloadUrl } from "@blih/api-client";
 
 interface TalentCredentialSectionsProps {
@@ -128,17 +129,26 @@ export function TalentCredentialSections({
                     </p>
                   </div>
 
-                  {certId && (
-                    <a
-                      href={getCertificateDownloadUrl(certId)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="pt-2.5 border-t border-[#E6EAF3] flex items-center justify-between font-mono text-xs text-[#1E5BFF] hover:underline font-semibold"
-                    >
-                      <span>Download Verified Certificate</span>
-                      <Download className="w-3.5 h-3.5" />
-                    </a>
-                  )}
+                  <div className="pt-2.5 border-t border-[#E6EAF3] flex items-center justify-between gap-2 flex-wrap">
+                    <LinkedInCertificateButton
+                      courseTitle={cert.course?.title || "Specialized Certification"}
+                      certificateNumber={certNumber}
+                      issueDate={cert.createdAt || cert.issueDate}
+                      courseId={cert.courseId || cert.course?.id}
+                      size="sm"
+                    />
+                    {certId && (
+                      <a
+                        href={getCertificateDownloadUrl(certId)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-xs text-[#1E5BFF] hover:underline font-semibold flex items-center gap-1"
+                      >
+                        <span>Download PDF</span>
+                        <Download className="w-3.5 h-3.5" />
+                      </a>
+                    )}
+                  </div>
                 </Card>
               );
             })}

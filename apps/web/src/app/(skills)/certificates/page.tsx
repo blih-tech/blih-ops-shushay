@@ -15,6 +15,7 @@ import {
 import AuthGuard from "@/components/auth/AuthGuard";
 import { Button, Badge } from "@blih/ui";
 import { CertificateCanvas } from "@/components/certificates/CertificateCanvas";
+import { LinkedInCertificateButton } from "@/components/certificates/LinkedInCertificateButton";
 import { useAuth } from "@/providers/AuthProvider";
 import {
   getUserCertificates,
@@ -220,19 +221,28 @@ function CertificatesContent() {
 
           {displayedCertificates.map((cert) => (
             <div key={cert.id} className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#D9CEDF]">
                 <span className="font-mono text-xs text-[#6E6678]">
-                  Certificate ID: {cert.certificateNumber}
+                  Certificate ID: <strong className="text-[#17131F] font-bold">{cert.certificateNumber}</strong>
                 </span>
-                <a
-                  href={getCertificateDownloadUrl(cert.id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-mono text-[#1E5BFF] hover:underline font-semibold"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download PDF Certificate</span>
-                </a>
+                <div className="flex items-center gap-3">
+                  <LinkedInCertificateButton
+                    courseTitle={cert.course.title}
+                    certificateNumber={cert.certificateNumber}
+                    issueDate={cert.issueDate}
+                    courseId={cert.course.id || cert.courseId}
+                    size="sm"
+                  />
+                  <a
+                    href={getCertificateDownloadUrl(cert.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#1E5BFF]/30 text-xs font-mono text-[#1E5BFF] hover:bg-[#1E5BFF]/10 font-semibold transition-all"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download PDF</span>
+                  </a>
+                </div>
               </div>
               <CertificateCanvas
                 recipientName={recipientName}
