@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge } from "@blih/ui";
 import { ShieldCheck, Award, Download } from "lucide-react";
+import { LinkedInCertificateButton } from "@/components/certificates/LinkedInCertificateButton";
 import { getCertificateDownloadUrl } from "@blih/api-client";
 
 export interface VerifiedCredentialsCardProps {
@@ -89,17 +90,26 @@ export const VerifiedCredentialsCard: React.FC<
                 )}
               </div>
 
-              {certId && (
-                <a
-                  href={getCertificateDownloadUrl(certId)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pt-2 border-t border-[#D9CEDF]/50 flex items-center justify-between font-mono text-xs text-[#1E5BFF] hover:underline font-medium"
-                >
-                  <span>Download Verified Certificate</span>
-                  <Download className="w-3.5 h-3.5" />
-                </a>
-              )}
+              <div className="pt-2.5 border-t border-[#D9CEDF]/50 flex items-center justify-between gap-2 flex-wrap">
+                <LinkedInCertificateButton
+                  courseTitle={title}
+                  certificateNumber={certNumber}
+                  issueDate={issueDate}
+                  courseId={cert.courseId || cert.course?.id}
+                  size="sm"
+                />
+                {certId && (
+                  <a
+                    href={getCertificateDownloadUrl(certId)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs text-[#1E5BFF] hover:underline font-medium flex items-center gap-1"
+                  >
+                    <span>Download PDF</span>
+                    <Download className="w-3.5 h-3.5" />
+                  </a>
+                )}
+              </div>
             </div>
           );
         })}
