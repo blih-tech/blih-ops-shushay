@@ -33,16 +33,16 @@ function StatCard({
   subtext: string;
   loading: boolean;
   icon: React.ElementType;
-  color: string;
+  color?: string;
   delta?: number;
 }) {
   return (
-    <div className="bg-white border border-[#EBE5F0] rounded-2xl p-5 flex items-start gap-4 shadow-sm">
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${color}`}>
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-5 flex items-start gap-4 shadow-xs">
+      <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
         <Icon className="h-5 w-5" />
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-xs font-mono text-[#9B8FA8] uppercase tracking-wider mb-1">
+      <div className="min-w-0 flex-1 font-sans">
+        <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider mb-1">
           {label}
         </p>
         {loading ? (
@@ -53,7 +53,7 @@ function StatCard({
           </p>
         )}
         <div className="flex items-center gap-2 mt-1">
-          <p className="text-xs text-[#9B8FA8]">{subtext}</p>
+          <p className="text-xs text-[#6E6678]">{subtext}</p>
           {delta !== undefined && delta > 0 && (
             <span className="text-xs font-mono text-[#2E8F79] font-medium bg-[#E6F5F0] px-1.5 py-0.5 rounded-md">
               +{delta} this week
@@ -78,14 +78,14 @@ function AdminContent() {
   }, []);
 
   return (
-    <div className="w-full px-6 py-6 space-y-8 max-w-screen-2xl">
+    <div className="w-full px-6 py-6 space-y-8 max-w-screen-2xl font-sans">
 
       {/* Page header */}
-      <div className="pb-5 border-b border-[#EBE5F0]">
+      <div className="pb-5 border-b border-[#D9CEDF]">
         <h1 className="font-display text-2xl font-bold text-[#17131F] tracking-tight">
           Platform Overview
         </h1>
-        <p className="text-xs sm:text-sm text-[#6E6678] mt-1">
+        <p className="text-xs sm:text-sm text-[#6E6678] mt-1 font-sans">
           Real-time platform health and activity metrics.
         </p>
       </div>
@@ -101,7 +101,6 @@ function AdminContent() {
           loading={loading}
           delta={stats?.recentUsersCount}
           icon={Users}
-          color="bg-[#EEF3FF] text-[#1E5BFF]"
         />
         <StatCard
           label="Talents"
@@ -109,7 +108,6 @@ function AdminContent() {
           subtext="Candidate profiles"
           loading={loading}
           icon={UserCheck}
-          color="bg-[#E6F5F0] text-[#2E8F79]"
         />
         <StatCard
           label="Companies"
@@ -117,7 +115,6 @@ function AdminContent() {
           subtext="Hiring organisations"
           loading={loading}
           icon={Building2}
-          color="bg-[#FFF4EE] text-[#FF8A5B]"
         />
         <StatCard
           label="Active Subscriptions"
@@ -125,7 +122,6 @@ function AdminContent() {
           subtext="Live company plans"
           loading={loading}
           icon={TrendingUp}
-          color="bg-[#F3F0FF] text-[#7C3AED]"
         />
         <StatCard
           label="Active Jobs"
@@ -134,7 +130,6 @@ function AdminContent() {
           loading={loading}
           delta={stats?.recentJobsCount}
           icon={Briefcase}
-          color="bg-[#FFF9EE] text-[#D97706]"
         />
         <StatCard
           label="Applications"
@@ -143,7 +138,6 @@ function AdminContent() {
           loading={loading}
           delta={stats?.recentApplicationsCount}
           icon={FileText}
-          color="bg-[#EEF3FF] text-[#1E5BFF]"
         />
         <StatCard
           label="Certificates"
@@ -151,7 +145,6 @@ function AdminContent() {
           subtext="Verified & issued"
           loading={loading}
           icon={Award}
-          color="bg-[#E6F5F0] text-[#2E8F79]"
         />
         <StatCard
           label="Revenue"
@@ -159,7 +152,6 @@ function AdminContent() {
           subtext={`from ${stats?.totalPayments ?? 0} transactions`}
           loading={loading}
           icon={CreditCard}
-          color="bg-[#F3F0FF] text-[#7C3AED]"
         />
       </div>
 
@@ -168,8 +160,8 @@ function AdminContent() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {/* Recent Registrations */}
           {!!stats?.recentUsers?.length && (
-            <div className="bg-white border border-[#EBE5F0] rounded-2xl overflow-hidden shadow-sm">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-[#EBE5F0]">
+            <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-xs">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#D9CEDF]">
                 <h2 className="font-display font-bold text-base text-[#17131F]">
                   Recent Registrations
                 </h2>
@@ -182,24 +174,24 @@ function AdminContent() {
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#F9F8FC]">
-                    <th className="text-left px-6 py-3 text-xs font-mono text-[#9B8FA8] uppercase tracking-wider font-medium">
+                  <tr className="bg-[#F8F5FB]">
+                    <th className="text-left px-6 py-3 text-xs font-mono text-[#6E6678] uppercase tracking-wider font-medium">
                       User
                     </th>
-                    <th className="text-left px-4 py-3 text-xs font-mono text-[#9B8FA8] uppercase tracking-wider font-medium">
+                    <th className="text-left px-4 py-3 text-xs font-mono text-[#6E6678] uppercase tracking-wider font-medium">
                       Role
                     </th>
-                    <th className="text-left px-4 py-3 text-xs font-mono text-[#9B8FA8] uppercase tracking-wider font-medium">
+                    <th className="text-left px-4 py-3 text-xs font-mono text-[#6E6678] uppercase tracking-wider font-medium">
                       Joined
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F4F1F8]">
+                <tbody className="divide-y divide-[#D9CEDF]/50">
                   {stats.recentUsers.map((u) => (
-                    <tr key={u.id} className="hover:bg-[#F9F8FC] transition-colors">
+                    <tr key={u.id} className="hover:bg-[#F8F5FB] transition-colors">
                       <td className="px-6 py-3">
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-xs font-bold shrink-0">
+                          <div className="w-7 h-7 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center text-xs font-bold shrink-0 shadow-2xs">
                             {(
                               u.talentProfile?.fullName ||
                               u.companyProfile?.companyName ||
@@ -238,8 +230,8 @@ function AdminContent() {
 
           {/* Recent Job Postings */}
           {!!stats?.recentJobs?.length && (
-            <div className="bg-white border border-[#EBE5F0] rounded-2xl overflow-hidden shadow-sm">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-[#EBE5F0]">
+            <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-xs">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#D9CEDF]">
                 <h2 className="font-display font-bold text-base text-[#17131F]">
                   Recent Job Postings
                 </h2>
@@ -252,8 +244,8 @@ function AdminContent() {
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#F9F8FC]">
-                    <th className="text-left px-6 py-3 text-xs font-mono text-[#9B8FA8] uppercase tracking-wider font-medium">
+                  <tr className="bg-[#F8F5FB]">
+                    <th className="text-left px-6 py-3 text-xs font-mono text-[#6E6678] uppercase tracking-wider font-medium">
                       Job
                     </th>
                     <th className="text-left px-4 py-3 text-xs font-mono text-[#9B8FA8] uppercase tracking-wider font-medium">

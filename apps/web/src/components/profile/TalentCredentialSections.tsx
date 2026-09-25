@@ -104,7 +104,7 @@ export function TalentCredentialSections({
               return (
                 <Card
                   key={cert.id || certNumber}
-                  className="p-5 border border-[#D9CEDF] rounded-2xl bg-white space-y-3 flex flex-col justify-between hover:border-[#1E5BFF]/40 transition-all shadow-xs"
+                  className="p-5 border border-[#D9CEDF] rounded-xl bg-white space-y-3 flex flex-col justify-between hover:border-[#1E5BFF]/40 transition-all shadow-xs"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">

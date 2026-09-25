@@ -134,7 +134,7 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
       </Link>
 
       {/* Job Header Card */}
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-10 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-3 flex-wrap">
@@ -241,7 +241,7 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
       {/* Job Content Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
         <div className="md:col-span-8 space-y-6">
-          <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-4 bg-white">
+          <Card className="border border-[#D9CEDF] rounded-xl p-6 sm:p-8 space-y-4 bg-white">
             <h2 className="font-display text-xl font-bold text-[#17131F]">
               Role Overview
             </h2>
@@ -252,7 +252,7 @@ function JobDetailsContent({ jobId }: { jobId: string }) {
         </div>
 
         <div className="md:col-span-4 space-y-6">
-          <Card className="border border-[#D9CEDF] rounded-3xl p-6 space-y-4 bg-white">
+          <Card className="border border-[#D9CEDF] rounded-xl p-6 space-y-4 bg-white">
             <h3 className="font-display text-lg font-bold text-[#17131F]">
               Required Competencies
             </h3>

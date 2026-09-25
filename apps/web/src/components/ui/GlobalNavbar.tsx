@@ -12,6 +12,7 @@ import type { NavLinkItem } from "./GlobalNavbar/GlobalNavbar.helpers";
 import { UserMenu } from "./GlobalNavbar/UserMenu";
 import { MobileNav } from "./GlobalNavbar/MobileNav";
 
+import { Logo } from "./Logo";
 import { Skeleton } from "./Skeleton";
 
 export type { NavLinkItem };
@@ -89,50 +90,40 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   });
 
   return (
-    <header className="sticky top-3 z-50 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
-      <nav className="bg-white/95 backdrop-blur-xl border border-[#D9CEDF]/80 rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between shadow-[0_10px_30px_-14px_rgba(23,19,31,0.22)] transition-shadow duration-300">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#D9CEDF]">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
-          <Link
-            href={toRelativeUrl(talentUrl || "/")}
-            className="flex items-baseline gap-2.5 group cursor-pointer"
-          >
-            <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF] group-hover:text-[#1546CC] transition-colors duration-200 whitespace-nowrap shrink-0">
-              BLIH OPS
-            </span>
-            <span className="hidden sm:inline-block font-mono text-[11px] text-[#6E6678] uppercase tracking-wider group-hover:text-[#1E5BFF] transition-colors duration-300">
-              Skill & Talent
-            </span>
-          </Link>
+          <Logo href={toRelativeUrl(talentUrl || "/")} priority className="h-5 w-auto" />
         </div>
 
         {/* Desktop navigation links */}
-        <div className="hidden md:flex items-center gap-1 lg:gap-2">
+        <div className="hidden md:flex items-center gap-0.5 rounded-md border border-[#D9CEDF] bg-white p-1 shadow-2xs">
           {loading && user ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 px-1">
               <Skeleton
                 variant="rectangular"
                 width={64}
-                height={28}
-                className="rounded-xl bg-[#EEF3FF]"
+                height={26}
+                className="rounded-md bg-[#F4F1F8]"
               />
               <Skeleton
                 variant="rectangular"
                 width={72}
-                height={28}
-                className="rounded-xl bg-[#EEF3FF]"
+                height={26}
+                className="rounded-md bg-[#F4F1F8]"
               />
               <Skeleton
                 variant="rectangular"
                 width={88}
-                height={28}
-                className="rounded-xl bg-[#EEF3FF]"
+                height={26}
+                className="rounded-md bg-[#F4F1F8]"
               />
               <Skeleton
                 variant="rectangular"
                 width={80}
-                height={28}
-                className="rounded-xl bg-[#EEF3FF]"
+                height={26}
+                className="rounded-md bg-[#F4F1F8]"
               />
             </div>
           ) : (
@@ -140,10 +131,10 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               <Link
                 key={link.label}
                 href={toRelativeUrl(link.href)}
-                className={`relative font-sans text-sm px-4 py-1.5 rounded-xl transition-all duration-300 ease-out cursor-pointer flex items-center justify-center ${
+                className={`font-sans text-xs sm:text-sm font-medium px-3 py-1.5 rounded-md transition-all duration-150 cursor-pointer flex items-center justify-center whitespace-nowrap ${
                   link.active
-                    ? "text-[#1E5BFF] font-bold bg-white shadow-sm ring-1 ring-[#D9CEDF]/50"
-                    : "text-[#6E6678] hover:text-[#17131F] hover:bg-white/60 font-medium"
+                    ? "text-[#1E5BFF] font-semibold"
+                    : "text-[#6E6678] hover:text-[#17131F]"
                 }`}
               >
                 {link.label}
@@ -160,7 +151,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
                 variant="circular"
                 width={36}
                 height={36}
-                className="rounded-full bg-[#EEF3FF]"
+                className="rounded-full bg-[#F4F1F8]"
               />
             </div>
           ) : user ? (
@@ -207,7 +198,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="relative w-10 h-10 flex items-center justify-center text-[#17131F] hover:bg-[#EEF3FF] active:scale-95 rounded-xl transition-all cursor-pointer border border-transparent hover:border-[#D9CEDF]/60"
+            className="relative w-9 h-9 flex items-center justify-center text-[#17131F] hover:bg-[#F4F1F8] active:scale-95 rounded-md transition-all cursor-pointer border border-[#D9CEDF]"
             aria-label="Toggle menu"
             aria-expanded={mobileMenuOpen}
           >

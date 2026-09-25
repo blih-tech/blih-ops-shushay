@@ -137,7 +137,7 @@ export function SkillGraphPreview() {
       </div>
 
       <div className="lg:col-span-7 flex justify-center relative">
-        <div className="skill-node-container w-full max-w-[640px] h-[560px] relative border border-[#D9CEDF]/40 rounded-[36px] bg-[#F7F9FF]/30 p-6 overflow-hidden">
+        <div className="skill-node-container w-full max-w-[640px] h-[560px] relative border border-[#D9CEDF]/40 rounded-xl bg-[#F7F9FF]/30 p-6 overflow-hidden">
           <svg
             className="absolute inset-0 w-full h-full pointer-events-none"
             fill="none"
@@ -222,7 +222,7 @@ export function SkillGraphPreview() {
                 onClick={() => setActiveNodeId(n.id)}
                 onMouseMove={(e) => handleMouseMove(e, n.id)}
                 onMouseLeave={handleMouseLeave}
-                className={`skill-node absolute cursor-pointer border rounded-[18px] p-2 flex flex-col justify-center items-center transition-all shadow-sm ${n.bgColor} ${n.borderColor} ${
+                className={`skill-node absolute cursor-pointer border rounded-md p-2 flex flex-col justify-center items-center transition-all shadow-sm ${n.bgColor} ${n.borderColor} ${
                   isActive
                     ? "ring-2 ring-[#1E5BFF] ring-offset-2 scale-105 z-20"
                     : ""
@@ -249,7 +249,7 @@ export function SkillGraphPreview() {
 
           <div
             ref={detailRevealRef}
-            className="absolute left-[70px] top-[430px] w-[380px] h-[118px] bg-[#FFFFFF] border border-[#D9CEDF] rounded-[22px] p-6 shadow-md flex items-center justify-between transition-all duration-300"
+            className="absolute left-[70px] top-[430px] w-[380px] h-[118px] bg-[#FFFFFF] border border-[#D9CEDF] rounded-lg p-6 shadow-md flex items-center justify-between transition-all duration-300"
           >
             <div className="space-y-1">
               <h4 className="font-display text-xl font-bold text-[#17131F]">

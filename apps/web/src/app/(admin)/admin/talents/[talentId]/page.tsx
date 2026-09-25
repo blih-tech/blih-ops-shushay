@@ -99,7 +99,7 @@ function AdminTalentDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -150,18 +150,18 @@ function AdminTalentDetailContent() {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Header */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden">
+              <div className="w-14 h-14 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden shadow-xs">
                 {talent.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={talent.photoUrl}
                     alt=""
-                    className="w-full h-full object-cover rounded-2xl aspect-square"
+                    className="w-full h-full object-cover rounded-xl aspect-square"
                   />
                 ) : (
                   talent.fullName?.charAt(0).toUpperCase() || "T"
@@ -305,22 +305,22 @@ function AdminTalentDetailContent() {
                     key={exp.id}
                     className={`flex gap-4 ${i > 0 ? "pt-4 border-t border-[#F9F8FC]" : ""}`}
                   >
-                    <div className="w-8 h-8 rounded-xl bg-[#F9F8FC] border border-[#EBE5F0] flex items-center justify-center shrink-0 mt-0.5">
-                      <Briefcase className="h-3.5 w-3.5 text-[#6E6678]" />
+                    <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                      <Briefcase className="h-3.5 w-3.5 text-[#17131F]" />
                     </div>
                     <div className="space-y-0.5 flex-1 min-w-0">
-                      <p className="font-medium text-[#17131F] text-sm">
+                      <p className="font-medium text-[#17131F] text-sm font-sans">
                         {exp.title}{" "}
                         <span className="text-[#6E6678] font-normal">
                           at {exp.company}
                         </span>
                       </p>
                       <p className="text-xs font-mono text-[#6E6678]">
-                        {new Date(exp.startDate).toLocaleDateString()} –{" "}
+                        {new Date(exp.startDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })} –{" "}
                         {exp.current
                           ? "Present"
                           : exp.endDate
-                            ? new Date(exp.endDate).toLocaleDateString()
+                            ? new Date(exp.endDate).toLocaleDateString("en-US", { month: "short", year: "numeric" })
                             : ""}
                       </p>
                       {exp.description && (
@@ -339,7 +339,7 @@ function AdminTalentDetailContent() {
           {talent.education && talent.education.length > 0 && (
             <div className="p-6 sm:p-8 space-y-4">
               <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider flex items-center gap-2">
-                <GraduationCap className="h-3.5 w-3.5" /> Education
+                <GraduationCap className="h-3.5 w-3.5 text-[#17131F]" /> Education
               </h2>
               <div className="space-y-3">
                 {talent.education.map((edu: any, i: number) => (
@@ -347,8 +347,8 @@ function AdminTalentDetailContent() {
                     key={edu.id}
                     className={`flex gap-4 ${i > 0 ? "pt-3 border-t border-[#F9F8FC]" : ""}`}
                   >
-                    <div className="w-8 h-8 rounded-xl bg-[#F3F0FF] border border-[#7C3AED]/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <GraduationCap className="h-3.5 w-3.5 text-[#7C3AED]" />
+                    <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                      <GraduationCap className="h-3.5 w-3.5 text-[#17131F]" />
                     </div>
                     <div className="space-y-0.5">
                       <p className="font-medium text-[#17131F] text-sm">

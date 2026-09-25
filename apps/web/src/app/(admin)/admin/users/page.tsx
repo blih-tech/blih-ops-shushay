@@ -162,7 +162,7 @@ function AdminUsersContent() {
             header: "User",
             render: (u) => (
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden shadow-2xs">
                   {u.companyProfile?.logoUrl || u.talentProfile?.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img

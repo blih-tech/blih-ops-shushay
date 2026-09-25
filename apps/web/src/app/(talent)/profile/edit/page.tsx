@@ -153,7 +153,7 @@ function ProfileContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-8 space-y-6">
-          <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs">
+          <Card className="border border-[#D9CEDF] rounded-xl p-6 sm:p-8 bg-white shadow-xs">
             <CardTitle className="text-2xl font-bold font-display">
               Talent Profile Settings
             </CardTitle>
@@ -281,7 +281,7 @@ function ProfileContent() {
           </Card>
 
           {/* Profile Photo & Resume Upload Card */}
-          <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white shadow-xs space-y-6">
+          <Card className="border border-[#D9CEDF] rounded-xl p-6 sm:p-8 bg-white shadow-xs space-y-6">
             <div>
               <CardTitle className="text-xl font-bold font-display">
                 Profile Photo & Resume Document

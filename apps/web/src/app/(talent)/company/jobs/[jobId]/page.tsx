@@ -155,7 +155,7 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       )}
 
       {/* Header Card */}
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-10 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6">
           <div className="space-y-2 flex-1">
             <div className="flex items-center gap-3 flex-wrap">
@@ -216,7 +216,7 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#F8FAFD] hover:border-[#1E5BFF]/40 transition-all"
+                    className="px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#F8FAFD] hover:border-[#1E5BFF]/40 transition-all"
                     leftIcon={<Edit className="h-3.5 w-3.5" />}
                   >
                     Edit Role
@@ -230,7 +230,7 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
                     setActionError(null);
                     setConfirmOpen(true);
                   }}
-                  className="h-9 px-3.5 text-xs font-semibold rounded-xl border-red-200/80 bg-red-50/50 text-red-600 hover:bg-red-100/80 hover:border-red-300 transition-all"
+                  className="px-3.5 text-xs font-semibold rounded-xl border-red-200/80 bg-red-50/50 text-red-600 hover:bg-red-100/80 hover:border-red-300 transition-all"
                 >
                   {closing ? "Closing..." : "Close Role"}
                 </Button>
@@ -245,7 +245,7 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
                   setActionError(null);
                   setReopenConfirmOpen(true);
                 }}
-                className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
+                className="px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
                 leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#1E5BFF]" />}
               >
                 {reopening ? "Reopening..." : "Reopen Role"}
@@ -269,7 +269,7 @@ function CompanyJobDetailContent({ jobId }: { jobId: string }) {
       </div>
 
       {/* Overview & Description */}
-      <Card className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white space-y-4">
+      <Card className="border border-[#D9CEDF] rounded-xl p-6 sm:p-8 bg-white space-y-4">
         <h2 className="font-display text-xl font-bold text-[#17131F]">
           Job Description
         </h2>

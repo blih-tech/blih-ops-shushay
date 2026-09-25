@@ -17,13 +17,11 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
   credentialId = "BLIH-CERT-8F3A92",
 }) => {
   return (
-    <div className="w-full max-w-4xl mx-auto bg-gradient-to-br from-[#FDFBFD] via-[#F4F7FF] to-[#FDFBFD] border-2 border-[#1E5BFF]/30 rounded-3xl p-6 sm:p-12 md:p-14 shadow-[0_20px_60px_rgba(30,91,255,0.07)] relative overflow-hidden text-center space-y-6 sm:space-y-8 select-none antialiased">
-      {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[#1E5BFF]/10 blur-3xl pointer-events-none -z-10" />
+    <div className="w-full max-w-4xl mx-auto bg-white border-2 border-[#D9CEDF] rounded-xl p-6 sm:p-12 md:p-14 shadow-sm relative overflow-hidden text-center space-y-6 sm:space-y-8 select-none antialiased">
 
       {/* 1. Header: Logo & Brand Name Side-by-Side */}
       <div className="flex items-center justify-center gap-3 sm:gap-4 pt-2">
-        <div className="p-2 rounded-2xl bg-white shadow-sm border border-[#D9CEDF]/70 shrink-0">
+        <div className="p-2 rounded-xl bg-white shadow-sm border border-[#D9CEDF]/70 shrink-0">
           <BlihLogoSvg className="w-9 h-9 sm:w-12 sm:h-12" />
         </div>
         <div className="text-left">
@@ -75,7 +73,7 @@ export const CertificateCanvas: React.FC<CertificateCanvasProps> = ({
           {issueDate}
         </p>
 
-        <div className="inline-flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs sm:text-sm bg-white border border-[#D9CEDF] text-[#17131F] px-4 sm:px-6 py-2.5 rounded-2xl shadow-sm ring-1 ring-[#1E5BFF]/10">
+        <div className="inline-flex flex-wrap items-center justify-center gap-2.5 font-mono text-xs sm:text-sm bg-white border border-[#D9CEDF] text-[#17131F] px-4 sm:px-6 py-2.5 rounded-xl shadow-sm">
           <ShieldCheck className="w-4 h-4 text-[#00A859] shrink-0" />
           <span className="text-[#6E6678] font-medium">Certificate No:</span>
           <span className="font-bold text-[#1E5BFF] select-all">

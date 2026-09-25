@@ -157,7 +157,7 @@ function CoursesContent() {
             header: "Course",
             render: (c) => (
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF] shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-2xs">
                   <BookOpen className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">

@@ -30,7 +30,7 @@ export function CompanyContactFields({
   setContactPhone,
 }: CompanyContactFieldsProps) {
   return (
-    <Card className="border border-[#D9CEDF] shadow-sm rounded-3xl overflow-hidden">
+    <Card className="border border-[#D9CEDF] shadow-sm rounded-xl overflow-hidden">
       <CardHeader className="bg-[#EEF3FF]/40 border-b border-[#D9CEDF]/70">
         <CardTitle className="text-xl flex items-center gap-2">
           <User className="h-5 w-5 text-[#1E5BFF]" /> Primary Recruiter Contact

@@ -185,17 +185,17 @@ function CompanyDashboardContent() {
             {[1, 2].map((n) => (
               <div
                 key={n}
-                className="h-28 rounded-2xl bg-slate-100/80 animate-pulse border border-[#D9CEDF]/50"
+                className="h-28 rounded-xl bg-slate-100/80 animate-pulse border border-[#D9CEDF]/50"
               />
             ))}
           </div>
         ) : recentJobs.length === 0 ? (
-          <div className="bg-[#FAF8FC] border border-[#D9CEDF]/70 rounded-2xl p-8 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
-              <Briefcase className="w-6 h-6" />
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 text-center space-y-3 shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center mx-auto shadow-xs">
+              <Briefcase className="w-5 h-5" />
             </div>
             <h3 className="text-base font-semibold text-[#17131F]">No job postings yet</h3>
-            <p className="text-sm text-[#6E6678] max-w-md mx-auto">
+            <p className="text-sm text-[#6E6678] max-w-md mx-auto font-sans">
               Start finding vetted candidates by publishing your first open role.
             </p>
             <div className="pt-2">
@@ -218,11 +218,11 @@ function CompanyDashboardContent() {
               return (
                 <div
                   key={job.id}
-                  className="bg-white border border-[#D9CEDF]/80 rounded-2xl p-5 hover:border-[#1E5BFF]/50 transition-all duration-200 shadow-sm flex flex-col justify-between"
+                  className="bg-white border border-[#D9CEDF] rounded-xl p-5 hover:border-[#1E5BFF]/50 transition-all duration-200 shadow-xs flex flex-col justify-between"
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-3">
-                      <h4 className="font-semibold text-[#17131F] line-clamp-1 text-base">
+                      <h4 className="font-semibold text-[#17131F] line-clamp-1 text-base font-display">
                         {job.title}
                       </h4>
                       <Badge variant={isClosed || isExpired ? "outline" : "primary"}>
@@ -230,14 +230,14 @@ function CompanyDashboardContent() {
                       </Badge>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-[#6E6678]">
+                    <div className="flex flex-wrap items-center gap-2 text-xs text-[#6E6678] font-sans">
                       <span className="capitalize">{job.employmentType.replace("_", " ").toLowerCase()}</span>
                       <span>•</span>
                       <span className="capitalize">{job.experienceLevel.toLowerCase()} Level</span>
                       {job.applicationDeadline && (
                         <>
                           <span>•</span>
-                          <span className="flex items-center gap-1">
+                          <span className="flex items-center gap-1 font-mono">
                             <Clock className="w-3 h-3 text-[#6E6678]" />
                             {new Date(job.applicationDeadline).toLocaleDateString()}
                           </span>
@@ -247,12 +247,12 @@ function CompanyDashboardContent() {
                   </div>
 
                   <div className="flex items-center justify-between pt-4 mt-4 border-t border-[#D9CEDF]/50">
-                    <div className="text-xs text-[#6E6678]">
+                    <div className="text-xs text-[#6E6678] font-sans">
                       <span className="font-bold text-[#17131F] text-sm">{appCount}</span>{" "}
                       {appCount === 1 ? "applicant" : "applicants"}
                     </div>
                     <Link href={`/company/jobs/${job.id}`}>
-                      <Button size="sm" variant="outline" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
+                      <Button size="sm" variant="outline" rightIcon={<ArrowRight className="w-3.5 h-3.5 text-[#17131F]" />}>
                         Review Candidates
                       </Button>
                     </Link>
@@ -270,19 +270,19 @@ function CompanyDashboardContent() {
           <h2 className="text-xl font-bold text-[#17131F] font-display">
             Quick Navigation & Management
           </h2>
-          <p className="text-xs sm:text-sm text-[#6E6678]">
+          <p className="text-xs sm:text-sm text-[#6E6678] font-sans">
             Direct shortcuts to manage candidate pipelines and published roles.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card variant="interactive" className="flex flex-col justify-between">
+          <Card variant="interactive" className="flex flex-col justify-between rounded-xl bg-white border border-[#D9CEDF] shadow-xs">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#1E5BFF]/20 flex items-center justify-center text-[#1E5BFF] mb-4">
-                <Briefcase className="h-6 w-6" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] mb-4 shadow-xs">
+                <Briefcase className="h-5 w-5" />
               </div>
-              <CardTitle className="text-xl mb-1">Job Postings</CardTitle>
-              <CardDescription className="text-sm">
+              <CardTitle className="text-xl mb-1 font-display">Job Postings</CardTitle>
+              <CardDescription className="text-sm font-sans">
                 Post open engineering & product roles, view candidate score thresholds, and reopen listings.
               </CardDescription>
             </div>
@@ -292,7 +292,7 @@ function CompanyDashboardContent() {
                   size="sm"
                   variant="outline"
                   fullWidth
-                  rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5 text-[#17131F]" />}
                 >
                   Manage Jobs
                 </Button>
@@ -300,13 +300,13 @@ function CompanyDashboardContent() {
             </div>
           </Card>
 
-          <Card variant="interactive" className="flex flex-col justify-between">
+          <Card variant="interactive" className="flex flex-col justify-between rounded-xl bg-white border border-[#D9CEDF] shadow-xs">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#1E5BFF]/20 flex items-center justify-center text-[#1E5BFF] mb-4">
-                <Users className="h-6 w-6" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] mb-4 shadow-xs">
+                <Users className="h-5 w-5" />
               </div>
-              <CardTitle className="text-xl mb-1">Talent Discovery</CardTitle>
-              <CardDescription className="text-sm">
+              <CardTitle className="text-xl mb-1 font-display">Talent Discovery</CardTitle>
+              <CardDescription className="text-sm font-sans">
                 Search verified graduate portfolios, code challenge benchmarks, and assess skills.
               </CardDescription>
             </div>
@@ -316,7 +316,7 @@ function CompanyDashboardContent() {
                   size="sm"
                   variant="outline"
                   fullWidth
-                  rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5 text-[#17131F]" />}
                 >
                   Search Talents
                 </Button>
@@ -324,13 +324,13 @@ function CompanyDashboardContent() {
             </div>
           </Card>
 
-          <Card variant="interactive" className="flex flex-col justify-between">
+          <Card variant="interactive" className="flex flex-col justify-between rounded-xl bg-white border border-[#D9CEDF] shadow-xs">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#1E5BFF]/20 flex items-center justify-center text-[#1E5BFF] mb-4">
-                <CreditCard className="h-6 w-6" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] mb-4 shadow-xs">
+                <CreditCard className="h-5 w-5" />
               </div>
-              <CardTitle className="text-xl mb-1">Billing & Access</CardTitle>
-              <CardDescription className="text-sm">
+              <CardTitle className="text-xl mb-1 font-display">Billing & Access</CardTitle>
+              <CardDescription className="text-sm font-sans">
                 Manage hiring seat licenses, payment methods, renewal terms, and receipt records.
               </CardDescription>
             </div>
@@ -340,7 +340,7 @@ function CompanyDashboardContent() {
                   size="sm"
                   variant="outline"
                   fullWidth
-                  rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                  rightIcon={<ArrowRight className="w-3.5 h-3.5 text-[#17131F]" />}
                 >
                   Manage Subscription
                 </Button>

@@ -116,7 +116,7 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
         {questions.map((q, qi) => (
           <div
             key={qi}
-            className="border border-[#D9CEDF] bg-[#EEF3FF]/20 rounded-2xl p-4 space-y-3"
+            className="border border-[#D9CEDF] bg-white rounded-xl p-4 space-y-3 shadow-2xs"
           >
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono font-bold text-[#1E5BFF] bg-white border border-[#D9CEDF] px-2 py-1 rounded-lg shrink-0">

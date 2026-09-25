@@ -151,7 +151,7 @@ function CertificatesContent() {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-[#D9CEDF] space-y-3">
+        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-[#D9CEDF] space-y-3">
           <Loader2 className="w-8 h-8 animate-spin text-[#1E5BFF]" />
           <p className="text-sm font-mono text-[#6E6678]">
             Checking earned credential records...
@@ -159,7 +159,7 @@ function CertificatesContent() {
         </div>
       ) : certificates.length === 0 ? (
         /* Empty / Locked State when no course is completed */
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-6 shadow-sm">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-12 text-center max-w-2xl mx-auto space-y-6 shadow-sm">
           <div className="w-16 h-16 rounded-full bg-[#EEF3FF] border border-[#C5D7FF] flex items-center justify-center mx-auto text-[#1E5BFF]">
             <Lock className="w-8 h-8" />
           </div>
@@ -190,7 +190,7 @@ function CertificatesContent() {
         </div>
       ) : displayedCertificates.length === 0 ? (
         /* No certificates matched filter */
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 text-center space-y-4">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 text-center space-y-4">
           <p className="text-sm font-mono text-[#6E6678]">
             No certificate record found matching this filter.
           </p>
@@ -271,7 +271,7 @@ export default function CertificatesPage() {
     <AuthGuard allowedRoles={["TALENT", "ADMIN"]}>
       <Suspense
         fallback={
-          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-[#D9CEDF] space-y-3 max-w-5xl mx-auto my-8">
+          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-[#D9CEDF] space-y-3 max-w-5xl mx-auto my-8">
             <Loader2 className="w-8 h-8 animate-spin text-[#1E5BFF]" />
             <p className="text-sm font-mono text-[#6E6678]">
               Loading credential record...

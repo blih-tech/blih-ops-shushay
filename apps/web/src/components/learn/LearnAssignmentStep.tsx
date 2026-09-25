@@ -31,10 +31,10 @@ export function LearnAssignmentStep({
   const hasAssignment = !!activeLesson.assignment;
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 space-y-6 shadow-sm">
       <div className="flex items-center justify-between border-b border-[#D9CEDF] pb-4 flex-wrap gap-2">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-200 shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
             <Code className="w-5 h-5" />
           </div>
           <div>
@@ -55,7 +55,7 @@ export function LearnAssignmentStep({
       {!hasAssignment ? (
         <p className="text-sm text-[#6E6678]">No assignment configured for this step.</p>
       ) : assignmentSubmitted ? (
-        <div className="bg-gradient-to-br from-[#E6F5F0] to-white border border-[#B0E8CA] rounded-3xl p-6 sm:p-8 text-center space-y-4 shadow-2xs">
+        <div className="bg-gradient-to-br from-[#E6F5F0] to-white border border-[#B0E8CA] rounded-xl p-6 sm:p-8 text-center space-y-4 shadow-2xs">
           <div className="w-16 h-16 rounded-full bg-[#00A859] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#00A859]/20">
             <FileCheck className="w-8 h-8" />
           </div>

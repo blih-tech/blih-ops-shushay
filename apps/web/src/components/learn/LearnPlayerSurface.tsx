@@ -65,9 +65,9 @@ export function LearnPlayerSurface({
 }: LearnPlayerSurfaceProps) {
   if (!activeStep) {
     return (
-      <div className="lg:col-span-8 p-6 sm:p-10 flex flex-col items-center justify-center py-24 text-center bg-white rounded-3xl border border-[#D9CEDF] my-4 mx-4">
-        <div className="w-16 h-16 rounded-full bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF] mb-4">
-          <Play className="w-8 h-8 ml-0.5" />
+      <div className="lg:col-span-8 p-6 sm:p-10 flex flex-col items-center justify-center py-24 text-center bg-white rounded-xl border border-[#D9CEDF] my-4 mx-4">
+        <div className="w-14 h-14 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center mb-4">
+          <Play className="w-7 h-7 ml-0.5" />
         </div>
         <p className="font-display text-xl font-bold text-[#17131F]">
           Select a step to begin

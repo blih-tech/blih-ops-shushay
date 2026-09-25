@@ -133,7 +133,7 @@ function AdminTalentsContent() {
             header: "Talent",
             render: (t) => (
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-[#1E5BFF] text-white flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden shadow-2xs">
                   {t.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img

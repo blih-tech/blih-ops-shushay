@@ -102,10 +102,8 @@ export function EcosystemCanvas() {
   return (
     <div
       ref={containerRef}
-      className="bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 space-y-12 relative overflow-hidden select-none font-sans"
+      className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-12 space-y-12 relative overflow-hidden select-none font-sans"
     >
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-[40%] h-full bg-gradient-to-l from-[#DDE7FF]/20 to-transparent pointer-events-none -z-10" />
 
       {/* Header and intro */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
@@ -131,7 +129,7 @@ export function EcosystemCanvas() {
               key={idx}
               onMouseEnter={onCardEnter}
               onMouseLeave={onCardLeave}
-              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
+              className={`evidence-float rounded-xl px-6 py-4 shadow-xs ${
                 item.highlight
                   ? "bg-[#DDE7FF] border-2 border-[#1E5BFF]"
                   : "bg-white border border-[#D9CEDF]"
@@ -154,7 +152,7 @@ export function EcosystemCanvas() {
 
         {/* Center: Mikael evolving Skill Profile Card */}
         <div className="lg:col-span-6 flex justify-center">
-          <div className="w-full max-w-[470px] bg-white border border-[#D9CEDF] rounded-[34px] p-8 shadow-[0_28px_58px_rgba(23,19,31,0.08)] space-y-8 relative">
+          <div className="w-full max-w-[470px] bg-white border border-[#D9CEDF] rounded-xl p-8 shadow-xs space-y-8 relative">
             {/* User Profile Header */}
             <div className="flex items-center gap-4">
               <div className="w-[76px] h-[76px] rounded-full bg-[#DDE7FF] border border-[#1E5BFF]/20 flex items-center justify-center text-[#1E5BFF] font-display font-bold text-2xl">
@@ -239,7 +237,7 @@ export function EcosystemCanvas() {
               key={idx}
               onMouseEnter={onCardEnter}
               onMouseLeave={onCardLeave}
-              className={`evidence-float rounded-[22px] px-6 py-4 shadow-sm ${
+              className={`evidence-float rounded-lg px-6 py-4 shadow-sm ${
                 item.highlight
                   ? "bg-[#1E5BFF] border-2 border-[#1E5BFF] text-white"
                   : "bg-white border border-[#D9CEDF]"

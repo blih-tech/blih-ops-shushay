@@ -86,10 +86,10 @@ function NewCourseContent() {
         </Alert>
       )}
 
-      <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden">
-        <CardHeader className="p-6 sm:p-8 bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF]">
+      <Card className="border border-[#D9CEDF] rounded-xl shadow-sm bg-white overflow-hidden">
+        <CardHeader className="p-6 sm:p-8 bg-white border-b border-[#D9CEDF]">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shadow-xs">
               <BookOpen className="h-5 w-5" />
             </div>
             <div>

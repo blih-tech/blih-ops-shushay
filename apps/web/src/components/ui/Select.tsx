@@ -11,13 +11,14 @@ export interface SelectOption {
 
 export interface SelectProps extends Omit<
   React.SelectHTMLAttributes<HTMLSelectElement>,
-  "onChange"
+  "onChange" | "size"
 > {
   label?: string;
   error?: string;
   helperText?: string;
   options: SelectOption[];
   fullWidth?: boolean;
+  size?: "sm" | "md" | "lg";
   placeholder?: string;
   onChange?: (e: { target: { value: string; name?: string } }) => void;
 }
@@ -30,6 +31,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       helperText,
       options,
       fullWidth = true,
+      size = "md",
       placeholder,
       disabled,
       className = "",
@@ -44,6 +46,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const containerRef = useRef<HTMLDivElement>(null);
     const generatedId = React.useId();
     const selectId = id || generatedId;
+
+    const sizes = {
+      sm: "h-8 min-h-[32px] text-xs px-2.5 py-1",
+      md: "h-10 min-h-[40px] text-sm px-3 py-2",
+      lg: "h-11 min-h-[44px] text-sm px-3.5 py-2.5",
+    };
 
     // Find the currently selected option label
     const selectedOption = options.find((opt) => opt.value === value);
@@ -80,12 +88,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       setIsOpen(false);
     };
 
-    const triggerStyles = `w-full h-12 flex items-center justify-between px-4 py-3 bg-white border rounded-xl text-sm sm:text-base font-sans outline-none focus:outline-none focus:ring-0 transition-all duration-200 ${
+    const triggerStyles = `w-full ${sizes[size]} flex items-center justify-between bg-white border rounded-md text-sm font-sans outline-none focus:outline-none transition-colors duration-150 ${
       error
-        ? "border-[#EF4444] bg-[#FFF8F8] text-[#EF4444] focus:border-[#EF4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
-        : "border-[#D9CEDF] text-[#17131F] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:shadow-[0_0_0_3px_rgba(30,91,255,0.15)]"
-    } ${disabled ? "bg-[#EEF3FF]/70 text-[#6E6678] cursor-not-allowed" : "cursor-pointer"} ${
-      isOpen ? "border-[#1E5BFF] shadow-[0_0_0_3px_rgba(30,91,255,0.15)]" : ""
+        ? "border-[#EF4444] bg-[#FFF8F8] text-[#EF4444] focus:border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
+        : "border-[#D9CEDF] text-[#17131F] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:ring-2 focus:ring-[#1E5BFF]/20"
+    } ${disabled ? "bg-[#F4F1F8] text-[#6E6678] cursor-not-allowed" : "cursor-pointer"} ${
+      isOpen ? "border-[#1E5BFF] ring-2 ring-[#1E5BFF]/20" : ""
     }`;
 
     return (
@@ -96,7 +104,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className={`block text-xs sm:text-sm font-medium transition-colors duration-200 ${
+            className={`block text-xs font-mono uppercase tracking-wider transition-colors duration-200 ${
               error
                 ? "text-[#EF4444]"
                 : isOpen
@@ -122,7 +130,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             <span
               className={
                 isPlaceholderActive
-                  ? "text-[#6E6678]/60 font-normal"
+                  ? "text-[#6E6678]/70 font-normal"
                   : "text-[#17131F] font-medium"
               }
             >
@@ -140,12 +148,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 
         {/* Floating Custom Dropdown Options Menu */}
         {isOpen && (
-          <div className="absolute left-0 mt-2 w-full rounded-xl border border-[#D9CEDF] bg-white shadow-[0_20px_50px_rgba(23,19,31,0.22)] z-[999] overflow-hidden p-1.5 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute left-0 mt-1.5 w-full rounded-md border border-[#D9CEDF] bg-white shadow-md z-[999] overflow-hidden p-1 max-h-60 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
             {placeholder && (
               <button
                 type="button"
                 onClick={() => handleSelectOption("")}
-                className="w-full text-left px-3.5 py-2.5 text-xs font-mono text-[#6E6678] hover:bg-[#EEF3FF] rounded-lg transition-colors cursor-pointer"
+                className="w-full text-left px-3 py-2 text-xs font-mono text-[#6E6678] hover:bg-[#F4F1F8] rounded-md transition-colors cursor-pointer"
               >
                 {placeholder}
               </button>
@@ -158,12 +166,12 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                   type="button"
                   disabled={opt.disabled}
                   onClick={() => !opt.disabled && handleSelectOption(opt.value)}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-sm text-left rounded-lg transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2 text-sm text-left rounded-md transition-colors cursor-pointer ${
                     isSelected
-                      ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold shadow-xs"
+                      ? "bg-[#EEF3FF] text-[#1E5BFF] font-semibold"
                       : opt.disabled
                         ? "opacity-40 cursor-not-allowed"
-                        : "text-[#17131F] hover:bg-[#EEF3FF]/70"
+                        : "text-[#17131F] hover:bg-[#F4F1F8]"
                   }`}
                 >
                   <span>{opt.label}</span>

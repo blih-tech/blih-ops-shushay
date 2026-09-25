@@ -13,7 +13,7 @@ export function TalentCard({ talent }: TalentCardProps) {
     [talent.city, talent.country].filter(Boolean).join(", ") || "Remote";
 
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 hover:shadow-md transition-all duration-300">
+    <Card className="border border-[#D9CEDF] rounded-xl shadow-sm bg-white overflow-hidden flex flex-col justify-between hover:border-[#1E5BFF]/50 hover:shadow-md transition-all duration-300">
       <div className="p-6 space-y-4">
         {/* Header: Avatar, Name, Title, and Verified Credentials Badge */}
         <div className="flex items-start gap-3.5">

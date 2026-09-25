@@ -37,7 +37,7 @@ function AdminSubscriptionDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -83,13 +83,13 @@ function AdminSubscriptionDetailContent() {
       </div>
 
       {/* Main Single Seamless Container */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Banner Header */}
-        <div className="p-6 sm:p-8 border-b border-[#EBE5F0] bg-gradient-to-r from-[#F9F8FC] to-white">
+        <div className="p-6 sm:p-8 border-b border-[#D9CEDF] bg-white">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
-                <CreditCard className="h-6 w-6" />
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
+                <CreditCard className="h-5 w-5" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2.5 flex-wrap">

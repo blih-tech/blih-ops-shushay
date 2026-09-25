@@ -45,7 +45,7 @@ export function CourseCardSkeleton({
   themeIndex?: number;
 }) {
   return (
-    <Card className="flex flex-col bg-white border border-[#D9CEDF] rounded-3xl p-5 space-y-4 shadow-xs">
+    <Card className="flex flex-col bg-white border border-[#D9CEDF] rounded-xl p-5 space-y-4 shadow-xs">
       <CourseVisualCover themeIndex={themeIndex} />
       <div className="space-y-2">
         <div className="h-5 bg-[#EEF3FF] border border-[#D9CEDF]/40 animate-pulse w-3/4 rounded-xl" />

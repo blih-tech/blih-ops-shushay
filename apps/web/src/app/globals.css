@@ -1,13 +1,13 @@
 @import "tailwindcss";
 @source "../../../../packages/ui";
 
-/* ─── blih_ops_ui_ux Design Tokens ───────────────────────────────────────── */
+/* ─── blihops-web Design Tokens ─────────────────────────────────────────── */
 :root {
   /* Surfaces */
   --bg: 255 255 255;
   --paper: 255 255 255;
-  --surface: 238 243 255; /* #EEF3FF */
-  --lav: 221 231 255; /* #DDE7FF */
+  --surface: 249 248 252; /* #F9F8FC */
+  --lav: 238 243 255; /* #EEF3FF */
 
   /* Text */
   --ink: 23 19 31; /* #17131F */
@@ -18,44 +18,62 @@
 
   /* Brand / Action */
   --accent: 30 91 255; /* #1E5BFF */
-  --accent2: 255 138 91; /* #FF8A5B */
-  --amber: 221 170 60; /* #DDAA3C */
-  --ok: 46 143 121; /* #2E8F79 */
+  --accent2: 249 115 22; /* #F97316 */
+  --amber: 217 119 6; /* #D97706 */
+  --ok: 16 185 129; /* #10B981 */
 
-  /* Tailwind compatibility */
+  /* Tailwind semantic colors */
   --background: 255 255 255;
   --foreground: 23 19 31;
   --card: 255 255 255;
   --card-foreground: 23 19 31;
-  --primary: 30 91 255;
+  --primary: 30 91 255; /* #1E5BFF */
   --primary-foreground: 255 255 255;
-  --secondary: 238 243 255;
-  --muted-foreground: 110 102 120;
-  --border: 217 206 223;
+  --secondary: 244 241 248; /* #F4F1F8 */
+  --secondary-foreground: 23 19 31; /* #17131F */
+  --muted-foreground: 110 102 120; /* #6E6678 */
+  --border: 217 206 223; /* #D9CEDF */
+  --input: 217 206 223; /* #D9CEDF */
+  --ring: 30 91 255; /* #1E5BFF */
   --destructive: 239 68 68;
 
-  /* Radius */
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
-  --radius-3xl: 20px;
+  /* Compact Radii matching blihops-web specification */
+  --radius-sm: 3.6px;
+  --radius-md: 4.8px;
+  --radius-lg: 6px;
+  --radius-xl: 8.4px;
+  --radius-2xl: 10.8px;
+  --radius-3xl: 13.2px;
   --radius-full: 9999px;
+  --radius: 0.375rem;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+  --font-heading: var(--font-serif);
+  --font-display: var(--font-serif);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
 }
 
 @theme {
   --color-bg: #ffffff;
   --color-paper: #ffffff;
-  --color-surface: #eef3ff;
-  --color-lav: #dde7ff;
+  --color-surface: #f9f8fc;
+  --color-lav: #eef3ff;
   --color-ink: #17131f;
   --color-muted: #6e6678;
   --color-line: #d9cedf;
   --color-accent: #1e5bff;
-  --color-accent2: #ff8a5b;
-  --color-amber: #ddaa3c;
-  --color-ok: #2e8f79;
+  --color-accent2: #f97316;
+  --color-amber: #d97706;
+  --color-ok: #10b981;
 
   --color-background: rgb(var(--background));
   --color-foreground: rgb(var(--foreground));
@@ -66,15 +84,16 @@
   --color-secondary: rgb(var(--secondary));
   --color-muted-foreground: rgb(var(--muted-foreground));
   --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: rgb(var(--ring));
   --color-destructive: rgb(var(--destructive));
 
-  /* Fonts */
-  --font-display:
-    var(--font-space-grotesk), "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-sans:
-    var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono:
-    var(--font-ibm-plex-mono), "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Fonts matching blihops-web: Source Serif 4 for headings, Inter for body, JetBrains Mono for tech */
+  --font-heading: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-display: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
 }
 
 /* ─── Thin Scrollbar ───────────────────────────────────────────────────────── */
@@ -213,18 +232,34 @@ html {
   }
 }
 
-/* ─── Body ─────────────────────────────────────────────────────────────────── */
+/* ─── Body & Headings ──────────────────────────────────────────────────────── */
 body {
   background-color: #ffffff;
-  color: #17131f;
-  font-family:
-    "Inter",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
+  color: #17131F;
+  font-family: var(--font-sans);
   min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif,
+.font-heading,
+.font-display {
+  font-family: var(--font-heading);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono,
+code,
+pre {
+  font-family: var(--font-mono);
 }
 
 /* ─── Responsive Media ─────────────────────────────────────────────────────── */

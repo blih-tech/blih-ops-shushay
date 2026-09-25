@@ -114,7 +114,7 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
       </Link>
 
       {/* Company Profile Hero Card */}
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl shadow-sm overflow-hidden space-y-0">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl shadow-sm overflow-hidden space-y-0">
         {/* Cover Banner */}
         <div className="h-32 sm:h-44 bg-gradient-to-r from-[#17131F] via-[#1E5BFF]/90 to-[#2E8F79]/85 relative overflow-hidden flex items-end justify-end p-4">
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />

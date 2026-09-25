@@ -12,7 +12,7 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
 
   return (
     <div className="lg:col-span-8 space-y-8">
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(23,19,31,0.04)] space-y-6">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(23,19,31,0.04)] space-y-6">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="primary" size="md">
             {lessonCount} {lessonCount === 1 ? "Lesson" : "Lessons"}
@@ -50,10 +50,10 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
             course.lessons.map((lesson: PublicLesson, idx: number) => (
               <div
                 key={lesson.id || idx}
-                className="bg-white border border-[#D9CEDF] rounded-2xl p-5 flex items-center justify-between gap-4 shadow-sm"
+                className="bg-white border border-[#D9CEDF] rounded-xl p-5 flex items-center justify-between gap-4 shadow-sm"
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center font-mono font-bold text-[#1E5BFF] shrink-0 text-sm">
+                  <div className="w-10 h-10 rounded-lg bg-white border border-[#D9CEDF] flex items-center justify-center font-mono font-bold text-[#17131F] shrink-0 text-sm shadow-xs">
                     {idx + 1}
                   </div>
                   <div className="truncate">
@@ -73,8 +73,8 @@ export function CourseDetailHero({ course }: CourseDetailHeroProps) {
                 </div>
 
                 <div className="shrink-0 flex items-center gap-2">
-                  <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-[#6E6678] bg-[#F8F6FA] px-2.5 py-1 rounded-full border border-[#E8E1EE]">
-                    <Play className="w-3 h-3 text-[#1E5BFF]" />
+                  <div className="hidden sm:flex items-center gap-1 text-xs font-mono text-[#6E6678] bg-white px-2.5 py-1 rounded-md border border-[#D9CEDF] shadow-2xs">
+                    <Play className="w-3 h-3 text-[#17131F]" />
                     <span>Module Video</span>
                   </div>
                 </div>

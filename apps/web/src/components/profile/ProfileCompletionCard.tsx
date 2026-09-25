@@ -32,7 +32,7 @@ export function ProfileCompletionCard({
   };
 
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl p-6 bg-white shadow-xs space-y-6">
+    <Card className="border border-[#D9CEDF] rounded-xl p-6 bg-white shadow-xs space-y-6">
       <div>
         <CardTitle className="text-xl font-bold font-display flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-[#1E5BFF]" />

@@ -121,7 +121,7 @@ export function LearnVideoPlayer({
             if (isPlaying) setShowControls(false);
           }, 3500);
         }}
-        className="relative w-full aspect-video bg-[#0F172A] rounded-3xl overflow-hidden shadow-2xl group border border-[#1E293B] flex flex-col justify-between"
+        className="relative w-full aspect-video bg-[#0F172A] rounded-xl overflow-hidden shadow-2xl group border border-[#1E293B] flex flex-col justify-between"
       >
         {/* Video Surface */}
         {hasVideo ? (
@@ -311,7 +311,7 @@ export function LearnVideoPlayer({
       </div>
 
       {/* Lesson Description & Summary Box */}
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 space-y-4 shadow-xs">
         <div className="flex items-center justify-between">
           <h3 className="font-display text-xl font-bold text-[#17131F]">
             Lesson Overview & Key Takeaways
@@ -335,7 +335,7 @@ export function LearnVideoPlayer({
 
       {/* Downloadable Resources */}
       {hasDocuments && (
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-3 shadow-xs">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-3 shadow-xs">
           <h4 className="font-display text-xs font-bold text-[#17131F] uppercase tracking-wider">
             Downloadable Resources & Files
           </h4>

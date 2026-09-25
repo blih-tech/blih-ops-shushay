@@ -32,7 +32,7 @@ export function CourseDetailSidebar({
 
   return (
     <div className="lg:col-span-4 space-y-6 sticky top-24">
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-[0_12px_40px_rgba(30,91,255,0.06)] space-y-6">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 shadow-[0_12px_40px_rgba(30,91,255,0.06)] space-y-6">
         {hasAccess ? (
           <div className="space-y-1">
             <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678]">

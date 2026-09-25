@@ -88,7 +88,7 @@ function ReturnContent() {
 
       <div className="w-full max-w-lg relative z-10">
         {loading ? (
-          <Card className="p-10 text-center bg-white/90 backdrop-blur-xl border border-[#D9CEDF] shadow-[0_16px_48px_rgba(23,19,31,0.06)] rounded-3xl space-y-4">
+          <Card className="p-10 text-center bg-white/90 backdrop-blur-xl border border-[#D9CEDF] shadow-[0_16px_48px_rgba(23,19,31,0.06)] rounded-xl space-y-4">
             <div className="w-16 h-16 bg-[#EEF3FF] rounded-2xl flex items-center justify-center mx-auto border border-[#C5D7FF]">
               <Loader2 className="w-8 h-8 text-[#1E5BFF] animate-spin" />
             </div>
@@ -101,7 +101,7 @@ function ReturnContent() {
             </p>
           </Card>
         ) : success ? (
-          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#D9CEDF] shadow-[0_20px_50px_rgba(30,91,255,0.08)] rounded-3xl space-y-6">
+          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#D9CEDF] shadow-[0_20px_50px_rgba(30,91,255,0.08)] rounded-xl space-y-6">
             {/* Animated Success Badge */}
             <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
               <div className="absolute inset-0 bg-[#E8F8F0] rounded-full animate-ping opacity-30" />
@@ -208,7 +208,7 @@ function ReturnContent() {
             </div>
           </Card>
         ) : isPending ? (
-          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#FFE8A3] shadow-[0_20px_50px_rgba(245,158,11,0.08)] rounded-3xl space-y-6">
+          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#FFE8A3] shadow-[0_20px_50px_rgba(245,158,11,0.08)] rounded-xl space-y-6">
             <div className="w-20 h-20 bg-[#FFFBEB] rounded-full flex items-center justify-center mx-auto border border-[#FCD34D]">
               <Loader2 className="w-10 h-10 text-[#D97706] animate-spin" />
             </div>
@@ -244,7 +244,7 @@ function ReturnContent() {
             </div>
           </Card>
         ) : (
-          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#D9CEDF] shadow-[0_20px_50px_rgba(239,68,68,0.08)] rounded-3xl space-y-6">
+          <Card className="p-8 sm:p-10 text-center bg-white/95 backdrop-blur-2xl border border-[#D9CEDF] shadow-[0_20px_50px_rgba(239,68,68,0.08)] rounded-xl space-y-6">
             <div className="w-20 h-20 bg-[#FDF2F2] rounded-full flex items-center justify-center mx-auto border border-[#F8C8C8]">
               <XCircle className="w-11 h-11 text-[#EF4444]" />
             </div>

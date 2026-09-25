@@ -127,7 +127,7 @@ function AdminSubscriptionsContent() {
             header: "Company",
             render: (s) => (
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden shadow-2xs">
                   {s.companyProfile.logoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img

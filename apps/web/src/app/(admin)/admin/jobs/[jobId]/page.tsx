@@ -85,7 +85,7 @@ function AdminJobDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -148,7 +148,7 @@ function AdminJobDetailContent() {
       </div>
 
       {/* Main Content Card */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Header */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0] bg-gradient-to-r from-[#F9F8FC] to-white">
           <div className="flex flex-col gap-3">
@@ -275,7 +275,7 @@ function AdminJobDetailContent() {
                         className="py-3 flex items-center justify-between gap-4"
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-8 h-8 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden">
+                          <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center text-sm font-bold shrink-0 overflow-hidden shadow-2xs">
                             {app.talentProfile.photoUrl ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img

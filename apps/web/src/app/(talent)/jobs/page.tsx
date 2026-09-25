@@ -191,9 +191,9 @@ function JobsFeedContent() {
                           ?.scrollIntoView({ behavior: "smooth" });
                       }
                     }}
-                    className={`w-full text-left bg-white border rounded-3xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
+                    className={`w-full text-left bg-white border rounded-xl p-5 sm:p-7 transition-all duration-300 cursor-pointer select-none space-y-4 ${
                       isSelected
-                        ? "border-[#1E5BFF] shadow-[0_12px_40px_rgba(30,91,255,0.08)] bg-gradient-to-r from-white to-[#EEF3FF]/40"
+                        ? "border-[#1E5BFF] shadow-xs bg-white"
                         : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-md"
                     }`}
                   >

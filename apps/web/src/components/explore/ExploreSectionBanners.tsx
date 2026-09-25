@@ -40,16 +40,16 @@ export function MetricsBar() {
   );
 
   const icons = [
-    <Users key="users" className="w-5 h-5 text-[#1E5BFF]" />,
-    <Briefcase key="briefcase" className="w-5 h-5 text-[#FF8A5B]" />,
-    <Award key="award" className="w-5 h-5 text-[#1E5BFF]" />,
-    <ShieldCheck key="shield" className="w-5 h-5 text-[#2E8F79]" />,
+    <Users key="users" className="w-5 h-5 text-[#17131F]" />,
+    <Briefcase key="briefcase" className="w-5 h-5 text-[#17131F]" />,
+    <Award key="award" className="w-5 h-5 text-[#17131F]" />,
+    <ShieldCheck key="shield" className="w-5 h-5 text-[#17131F]" />,
   ];
 
   return (
     <div
       ref={containerRef}
-      className="w-full bg-gradient-to-r from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF]/70 rounded-3xl p-6 sm:p-8 shadow-[0_12px_32px_rgba(30,91,255,0.04)]"
+      className="w-full bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 shadow-xs"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:divide-x divide-[#D9CEDF]/50">
         {MOCK_EXPLORE_METRICS.map((metric, idx) => (
@@ -60,7 +60,7 @@ export function MetricsBar() {
             }`}
           >
             <div className="flex items-center gap-2.5">
-              <div className="p-2 bg-white rounded-xl border border-[#D9CEDF]/50 shadow-2xs">
+              <div className="p-2 bg-white rounded-lg border border-[#D9CEDF] shadow-xs flex items-center justify-center text-[#17131F]">
                 {icons[idx]}
               </div>
               <span className="font-display text-2xl sm:text-3xl font-bold text-[#17131F] tracking-tight">
@@ -126,7 +126,7 @@ export function ActionBanner({ role, skillsUrl = "" }: ActionBannerProps) {
   return (
     <div
       ref={containerRef}
-      className="bg-gradient-to-br from-white via-[#EEF3FF]/40 to-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-[0_12px_40px_rgba(30,91,255,0.06)] relative overflow-hidden"
+      className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-12 flex flex-col lg:flex-row lg:items-center justify-between gap-8 shadow-xs relative overflow-hidden"
     >
       <div className="gsap-ambient-glow absolute -right-20 -bottom-20 w-80 h-80 bg-gradient-to-br from-[#1E5BFF]/15 to-[#FF8A5B]/15 rounded-full blur-3xl pointer-events-none" />
 

@@ -35,10 +35,10 @@ export function LearnCurriculumSidebar({
   ).length;
 
   return (
-    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF]/80 p-4 sm:p-6 lg:p-7 space-y-6 bg-gradient-to-b from-[#F9FBFF] via-[#EEF3FF]/70 to-[#F4F7FF]">
+    <div className="lg:col-span-4 border-t lg:border-t-0 lg:border-l border-[#D9CEDF]/80 p-4 sm:p-6 lg:p-7 space-y-6 bg-white">
       {/* Sidebar Top Header */}
       <div className="space-y-2">
-        <div className="flex items-center gap-2 text-[#1E5BFF]">
+        <div className="flex items-center gap-2 text-[#17131F]">
           <Layers className="w-4 h-4" />
           <span className="font-mono text-xs font-bold uppercase tracking-wider">
             Curriculum Structure
@@ -82,7 +82,7 @@ export function LearnCurriculumSidebar({
                 {/* Module Title Header */}
                 <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#E8E1EE]">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="font-mono text-xs font-bold text-[#1E5BFF] bg-[#EEF3FF] px-2 py-0.5 rounded-md shrink-0 border border-[#C5D7FF]/50">
+                    <span className="font-mono text-xs font-bold text-[#17131F] bg-white border border-[#D9CEDF] px-2 py-0.5 rounded-md shrink-0 shadow-2xs">
                       Module {lessonNum}
                     </span>
                     <h3 className="font-display text-sm font-bold text-[#17131F] truncate">
@@ -131,8 +131,8 @@ export function LearnCurriculumSidebar({
                           return {
                             icon: <Code className="w-3.5 h-3.5 shrink-0" />,
                             badge: "Task",
-                            activeBg: "bg-[#4F46E5] text-white shadow-xs",
-                            inactiveIconColor: "text-[#4F46E5]",
+                            activeBg: "bg-[#1E5BFF] text-white shadow-xs",
+                            inactiveIconColor: "text-[#1E5BFF]",
                           };
                       }
                     };

@@ -187,7 +187,7 @@ export function CandidateApplicationCard({
               size="sm"
               onClick={handleMoveToReviewing}
               disabled={updating}
-              className="h-9 px-3 text-xs font-semibold border-[#FF8A5B]/40 text-[#FF8A5B] hover:bg-[#FFF4EE]"
+              className="px-3 text-xs font-semibold border-[#FF8A5B]/40 text-[#FF8A5B] hover:bg-[#FFF4EE]"
               leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
             >
               {updating ? "Updating..." : "Mark as Reviewing"}
@@ -204,7 +204,7 @@ export function CandidateApplicationCard({
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-3 text-xs font-semibold"
+                className="px-3 text-xs font-semibold"
                 leftIcon={<FileText className="w-3.5 h-3.5" />}
               >
                 CV
@@ -217,7 +217,7 @@ export function CandidateApplicationCard({
               <Button
                 variant="primary"
                 size="sm"
-                className="h-9 px-4 text-xs font-semibold shadow-xs"
+                className="px-4 text-xs font-semibold shadow-xs"
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
               >
                 View Profile

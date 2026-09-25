@@ -15,14 +15,14 @@ export function CompanyProfileSkeleton({}: CompanyProfileSkeletonProps) {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-8 space-y-8">
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-4">
             <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
             <Skeleton variant="rectangular" className="h-32 rounded-2xl" />
             <Skeleton variant="rectangular" className="h-12 rounded-xl" />
           </div>
         </div>
         <div className="lg:col-span-4 space-y-8">
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-4">
             <Skeleton variant="rectangular" className="h-8 w-32 rounded-xl" />
             <Skeleton variant="circular" className="h-24 w-24 mx-auto" />
           </div>

@@ -1,28 +1,22 @@
-﻿import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Inter, Space_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { AppShell } from "@/components/layout/AppShell";
 import "./globals.css";
 
-const inter = Inter({
+const fontSans = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
-  display: "swap",
 });
 
-const spacegrotesk = Space_Grotesk({
+const fontSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-  variable: "--font-space-grotesk",
-  display: "swap",
+  variable: "--font-source-serif",
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
+const fontMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-ibm-plex-mono",
-  display: "swap",
+  variable: "--font-jetbrains",
 });
 
 export const viewport: Viewport = {
@@ -35,7 +29,12 @@ export const metadata: Metadata = {
   description:
     "Connect verified, remote-ready talents with European and global companies through evidence-backed capability profiles.",
   icons: {
-    icon: "/favicon.svg",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
 };
 
@@ -45,11 +44,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spacegrotesk.variable} ${ibmPlexMono.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-      </head>
-      <body className="bg-white text-[#17131F] font-sans antialiased min-h-screen flex flex-col">
+    <html lang="en">
+      <body className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} bg-background text-foreground font-sans antialiased min-h-screen flex flex-col`}>
         <AuthProvider>
           <AppShell>{children}</AppShell>
         </AuthProvider>

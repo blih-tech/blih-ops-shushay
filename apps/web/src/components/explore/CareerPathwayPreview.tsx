@@ -96,7 +96,7 @@ export function CareerPathwayPreview() {
           </div>
 
           {/* Integrated readiness summary */}
-          <div className="bg-[#EEF3FF] border border-[#D9CEDF]/60 rounded-[28px] p-6 space-y-6 shadow-sm mt-12">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-6 shadow-xs mt-12">
             <div className="space-y-2">
               <span className="font-mono text-xs text-[#1E5BFF] uppercase tracking-wider block font-semibold">
                 Frontend Engineer Readiness — 68%
@@ -144,7 +144,7 @@ export function CareerPathwayPreview() {
         </div>
 
         {/* Right Column: Immersive pathway product surface */}
-        <div className="lg:col-span-7 bg-white border border-[#E4E8F2] rounded-[36px] p-6 sm:p-8 shadow-[0_28px_64px_rgba(30,91,255,0.07)] space-y-8 flex flex-col justify-between h-full">
+        <div className="lg:col-span-7 bg-white border border-[#E4E8F2] rounded-xl p-6 sm:p-8 shadow-xs space-y-8 flex flex-col justify-between h-full">
           <div>
             {/* Surface Header */}
             <div className="border-b border-[#E4E8F2] pb-6 mb-8">
@@ -162,14 +162,14 @@ export function CareerPathwayPreview() {
               <div
                 onMouseEnter={onCardEnter}
                 onMouseLeave={onCardLeave}
-                className="pathway-card bg-[#F7F9FF] border border-[#D9CEDF]/40 rounded-[26px] p-5 flex flex-col justify-between h-[210px]"
+                className="pathway-card bg-[#F7F9FF] border border-[#D9CEDF]/40 rounded-xl p-5 flex flex-col justify-between h-[210px]"
                 style={{ opacity: 0 }}
               >
                 <h4 className="font-display text-2xl font-bold text-[#17131F]">
                   Foundation
                 </h4>
                 <div className="space-y-2">
-                  <div className="bg-white rounded-xl px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
+                  <div className="bg-white rounded-md px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
                     <span className="text-xs font-semibold text-[#17131F]">
                       HTML & CSS
                     </span>
@@ -177,7 +177,7 @@ export function CareerPathwayPreview() {
                       ✓
                     </span>
                   </div>
-                  <div className="bg-white rounded-xl px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
+                  <div className="bg-white rounded-md px-4 py-2 border border-[#D9CEDF]/30 flex items-center justify-between">
                     <span className="text-xs font-semibold text-[#17131F]">
                       JavaScript
                     </span>
@@ -192,7 +192,7 @@ export function CareerPathwayPreview() {
               <div
                 onMouseEnter={onCardEnter}
                 onMouseLeave={onCardLeave}
-                className="pathway-card bg-white border-2 border-[#D9CEDF] rounded-[28px] p-5 flex flex-col justify-between h-[300px] md:row-span-2"
+                className="pathway-card bg-white border-2 border-[#D9CEDF] rounded-xl p-5 flex flex-col justify-between h-[300px] md:row-span-2"
                 style={{ opacity: 0 }}
               >
                 <div>
@@ -203,7 +203,7 @@ export function CareerPathwayPreview() {
                     React — Developing
                   </span>
                   {/* Real project editor visual mockup */}
-                  <div className="bg-[#F7F9FF] border border-[#DDE7FF] rounded-xl p-3.5 mt-4 space-y-2.5">
+                  <div className="bg-[#F7F9FF] border border-[#DDE7FF] rounded-md p-3.5 mt-4 space-y-2.5">
                     <div className="h-2 w-28 bg-[#BFD0FF] rounded-full" />
                     <div className="h-3 w-20 bg-[#1E5BFF] rounded-full" />
                     <div className="h-2 w-36 bg-[#DDE7FF] rounded-full" />
@@ -223,7 +223,7 @@ export function CareerPathwayPreview() {
               <div
                 onMouseEnter={onCardEnter}
                 onMouseLeave={onCardLeave}
-                className="pathway-card bg-[#17131F] text-white rounded-[28px] p-[22px] flex flex-col justify-between h-[255px] md:row-span-2 border border-[#17131F]"
+                className="pathway-card bg-[#17131F] text-white rounded-xl p-[22px] flex flex-col justify-between h-[255px] md:row-span-2 border border-[#17131F]"
                 style={{ opacity: 0 }}
               >
                 <div>
@@ -255,7 +255,7 @@ export function CareerPathwayPreview() {
               <div
                 onMouseEnter={onCardEnter}
                 onMouseLeave={onCardLeave}
-                className="pathway-card bg-[#EEF3FF] border border-[#D9CEDF]/40 rounded-[24px] p-5 flex flex-col justify-between h-[120px]"
+                className="pathway-card bg-white border border-[#D9CEDF] rounded-xl p-5 flex flex-col justify-between h-[120px]"
                 style={{ opacity: 0 }}
               >
                 <div>
@@ -275,7 +275,7 @@ export function CareerPathwayPreview() {
               <div
                 onMouseEnter={onCardEnter}
                 onMouseLeave={onCardLeave}
-                className="pathway-card bg-[#DDE7FF]/60 border border-[#D9CEDF]/40 rounded-[30px] p-5 flex flex-col justify-between h-[150px] md:col-span-2"
+                className="pathway-card bg-[#DDE7FF]/60 border border-[#D9CEDF]/40 rounded-xl p-5 flex flex-col justify-between h-[150px] md:col-span-2"
                 style={{ opacity: 0 }}
               >
                 <div>

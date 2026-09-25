@@ -39,12 +39,12 @@ export function VerifiedSkillsCard({
   return (
     <div
       ref={containerRef}
-      className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm flex flex-col justify-between font-sans"
+      className="lg:col-span-4 bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 space-y-6 shadow-sm flex flex-col justify-between font-sans"
     >
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <h3 className="font-display font-bold text-lg text-[#17131F] flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-[#2E8F79]" /> Verified Signal
+            <ShieldCheck className="w-5 h-5 text-[#17131F]" /> Verified Signal
           </h3>
           <Badge variant={isComplete ? "verified" : "amber"} size="sm">
             {isComplete ? "Completed Profile" : "In Progress"}
@@ -60,8 +60,8 @@ export function VerifiedSkillsCard({
           <span className="verified-score-stat font-display text-3xl font-bold text-[#1E5BFF]">
             {totalCompleted} Track{totalCompleted === 1 ? "" : "s"} Earned
           </span>
-          <span className="font-sans text-xs text-[#2E8F79] font-medium flex items-center gap-1">
-            <Award className="w-4 h-4" /> Credentials
+          <span className="font-sans text-xs text-[#17131F] font-medium flex items-center gap-1">
+            <Award className="w-4 h-4 text-[#17131F]" /> Credentials
           </span>
         </div>
 

@@ -80,7 +80,7 @@ export const LogoUpload: React.FC<LogoUploadProps> = ({
 
   return (
     <div className="w-full space-y-4 font-sans">
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6 bg-gradient-to-br from-[#FAFBFF] via-white to-[#F4FAF6]/40 p-6 rounded-3xl border border-[#D9CEDF]/80 shadow-[0_4px_20px_rgba(30,91,255,0.03)]">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-6 bg-white p-6 rounded-xl border border-[#D9CEDF] shadow-xs">
         {/* Left: Avatar Preview Frame */}
         <div
           onClick={() => !loading && fileInputRef.current?.click()}

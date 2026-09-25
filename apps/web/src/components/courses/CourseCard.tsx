@@ -15,12 +15,12 @@ export function CourseCard({ course, isEnrolled = false }: CourseCardProps) {
   return (
     <Card
       variant="interactive"
-      className="flex flex-col justify-between group h-full p-6 bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/40 rounded-3xl transition-all duration-300 shadow-xs hover:shadow-md"
+      className="flex flex-col justify-between group h-full p-6 bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/40 rounded-xl transition-all duration-300 shadow-xs hover:shadow-md"
     >
       <div>
         <div className="flex items-center justify-between gap-3 mb-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] border border-[#1E5BFF]/15 flex items-center justify-center text-[#1E5BFF] group-hover:bg-[#1E5BFF] group-hover:text-white transition-all duration-300 shrink-0">
-            <BookOpen className="h-6 w-6" />
+          <div className="w-11 h-11 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center shrink-0">
+            <BookOpen className="h-5.5 w-5.5" />
           </div>
           <div className="flex items-center gap-2">
             {isEnrolled && (

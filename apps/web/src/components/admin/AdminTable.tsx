@@ -57,7 +57,7 @@ export function AdminTable<T>({
 }: AdminTableProps<T>) {
   if (loading) {
     return (
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-sm">
         <style>{`
           @keyframes adminTableRowFadeIn {
             from {
@@ -115,9 +115,9 @@ export function AdminTable<T>({
 
   if (data.length === 0) {
     return (
-      <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
+      <div className="border-2 border-dashed border-[#D9CEDF] rounded-xl p-12 text-center bg-white space-y-3">
         {emptyIcon && (
-          <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto">
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center mx-auto shadow-xs">
             {emptyIcon}
           </div>
         )}
@@ -128,7 +128,7 @@ export function AdminTable<T>({
   }
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-sm">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-sm">
       <style>{`
         @keyframes adminTableRowFadeIn {
           from {

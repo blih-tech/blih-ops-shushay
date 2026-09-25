@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/providers/AuthProvider";
 import { NotificationMenu } from "./NotificationMenu";
+import { Logo } from "@/components/ui/Logo";
 import {
   LayoutDashboard,
   Users,
@@ -80,17 +81,7 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
       {/* Logo / Brand */}
       <div className="px-4 py-5 border-b border-[#EBE5F0]">
         <Link href="/admin" onClick={onNav} className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#1E5BFF] flex items-center justify-center shrink-0">
-            <span className="text-white font-bold text-sm font-display">B</span>
-          </div>
-          <div>
-            <p className="font-display font-bold text-[#17131F] text-sm leading-none">
-              Blih Admin
-            </p>
-            <p className="text-[10px] font-mono text-[#6E6678] mt-0.5 uppercase tracking-wider">
-              Control Panel
-            </p>
-          </div>
+          <Logo className="h-7 w-auto" priority />
         </Link>
       </div>
 
@@ -104,7 +95,7 @@ function SidebarContent({ onNav }: { onNav?: () => void }) {
       {/* User Footer */}
       <div className="px-3 py-4 border-t border-[#EBE5F0] space-y-1">
         <div className="flex items-center gap-3 px-3 py-2.5">
-          <div className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center text-xs font-bold shrink-0 shadow-2xs">
             {user?.email?.charAt(0).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
@@ -141,12 +132,7 @@ export function AdminSidebar() {
       {/* Mobile top bar */}
       <div className="lg:hidden fixed top-0 inset-x-0 z-40 h-14 bg-white border-b border-[#EBE5F0] flex items-center justify-between px-4">
         <Link href="/admin" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-[#1E5BFF] flex items-center justify-center">
-            <span className="text-white font-bold text-xs font-display">B</span>
-          </div>
-          <span className="font-display font-bold text-[#17131F] text-sm">
-            Blih Admin
-          </span>
+          <Logo className="h-7 w-auto" />
         </Link>
         <div className="flex items-center gap-2">
           <NotificationMenu />

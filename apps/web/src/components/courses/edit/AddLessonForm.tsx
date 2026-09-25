@@ -25,12 +25,12 @@ export function AddLessonForm({
   onAdd,
 }: AddLessonFormProps) {
   return (
-    <div className="border-2 border-[#1E5BFF] bg-[#EEF3FF]/40 rounded-3xl p-6 space-y-4 shadow-sm">
+    <div className="border border-[#D9CEDF] bg-white rounded-xl p-6 space-y-4 shadow-xs">
       <div className="flex items-center justify-between">
         <h4 className="font-display font-bold text-lg text-[#17131F]">
           New Lesson Module
         </h4>
-        <Badge variant="primary" size="sm">
+        <Badge variant="outline" size="sm">
           STEP {stepNumber}
         </Badge>
       </div>

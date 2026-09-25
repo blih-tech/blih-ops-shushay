@@ -44,11 +44,11 @@ export function UserMenu({
       <button
         type="button"
         onClick={() => setUserMenuOpen(!userMenuOpen)}
-        className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-full bg-white/60 backdrop-blur-md border border-[#D9CEDF]/50 shadow-[inset_0_1px_4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_12px_rgba(30,91,255,0.12)] hover:border-[#1E5BFF]/30 transition-all duration-300 ease-out cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#1E5BFF]/20"
+        className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-xl bg-white border border-[#D9CEDF] hover:bg-[#F4F1F8] hover:border-[#1E5BFF]/30 transition-all duration-150 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#1E5BFF]/30"
         aria-expanded={userMenuOpen}
         aria-label="User account menu"
       >
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white flex items-center justify-center font-display font-bold text-sm shadow-sm overflow-hidden ring-2 ring-white group-hover:scale-105 transition-transform duration-300">
+        <div className="w-7 h-7 rounded-lg bg-[#1E5BFF] text-white flex items-center justify-center font-sans font-semibold text-xs shadow-xs overflow-hidden shrink-0">
           {user.photoUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -61,24 +61,24 @@ export function UserMenu({
           )}
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-[#6E6678] transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${userMenuOpen ? "rotate-180 text-[#1E5BFF]" : ""}`}
+          className={`h-4 w-4 text-[#6E6678] transition-transform duration-200 ${userMenuOpen ? "rotate-180 text-[#1E5BFF]" : ""}`}
         />
       </button>
 
       {/* Floating Profile Popover Dropdown */}
       {userMenuOpen && (
-        <div className="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-xl border border-white/60 ring-1 ring-[#D9CEDF]/50 rounded-2xl shadow-[0_24px_50px_-12px_rgba(30,91,255,0.15)] z-50 overflow-hidden p-2 animate-in fade-in slide-in-from-top-2 zoom-in-95 duration-200 ease-out font-sans">
+        <div className="absolute right-0 mt-2 w-64 bg-white border border-[#D9CEDF] rounded-lg shadow-md z-50 overflow-hidden p-1.5 font-sans">
           {/* User info header */}
-          <div className="p-3 bg-gradient-to-b from-[#EEF3FF]/60 to-transparent rounded-xl mb-1 border border-[#D9CEDF]/30 shadow-[inset_0_1px_0_white]">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1E5BFF] to-[#0A3DCC] text-white flex items-center justify-center font-display font-bold text-sm shadow-inner shrink-0 ring-2 ring-white">
+          <div className="p-2.5 bg-[#F9F8FC] rounded-md mb-1 border border-[#D9CEDF]">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-sans font-bold text-xs shrink-0">
                 {userInitial}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-mono text-[#6E6678] uppercase tracking-wider">
+                <p className="text-[10px] font-mono text-[#6E6678] uppercase tracking-wider">
                   Signed in as
                 </p>
-                <p className="text-sm font-bold text-[#17131F] truncate font-display">
+                <p className="text-xs font-semibold text-[#17131F] truncate">
                   {user.email}
                 </p>
                 {user.role && (
@@ -93,13 +93,13 @@ export function UserMenu({
           </div>
 
           {/* Navigation actions */}
-          <div className="space-y-1 py-1">
+          <div className="space-y-0.5 py-0.5">
             {role === "COMPANY" ? (
               <>
                 <Link
                   href={toRelativeUrl(`${talentUrl}/company/profile`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Building className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Company Profile</span>
@@ -107,7 +107,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${talentUrl}/company/jobs`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Manage Jobs</span>
@@ -118,7 +118,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${skillsUrl}/admin`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Shield className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Admin Portal</span>
@@ -126,7 +126,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${skillsUrl}/admin/courses`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <BookOpen className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Course Studio</span>
@@ -137,7 +137,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${talentUrl}/applications`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
                   <span>My Applications</span>
@@ -145,7 +145,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${talentUrl}/profile`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <UserIcon className="h-4 w-4 text-[#1E5BFF]" />
                   <span>View Talent Profile</span>
@@ -153,7 +153,7 @@ export function UserMenu({
                 <Link
                   href={toRelativeUrl(`${talentUrl}/profile/edit`)}
                   onClick={() => setUserMenuOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-sm text-[#17131F] hover:bg-[#EEF3FF] rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Settings className="h-4 w-4 text-[#1E5BFF]" />
                   <span>Edit Profile Details</span>
@@ -164,14 +164,14 @@ export function UserMenu({
 
           {/* Sign out button */}
           {onSignOut && (
-            <div className="pt-1 mt-1 border-t border-[#D9CEDF]/70">
+            <div className="pt-1 mt-1 border-t border-[#D9CEDF]">
               <button
                 type="button"
                 onClick={() => {
                   setUserMenuOpen(false);
                   onSignOut();
                 }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-[#EF4444] hover:bg-[#FFF0F0] rounded-xl transition-colors font-medium cursor-pointer"
+                className="w-full flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#EF4444] hover:bg-red-50 rounded-md transition-colors font-medium cursor-pointer"
               >
                 <LogOut className="h-4 w-4" />
                 <span>Sign Out</span>

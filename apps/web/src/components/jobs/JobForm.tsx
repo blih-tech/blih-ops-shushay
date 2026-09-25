@@ -165,7 +165,7 @@ export function JobForm({
       )}
 
       {subscriptionRequired && (
-        <Card className="border border-[#1E5BFF]/30 bg-gradient-to-br from-white to-[#EEF3FF] rounded-3xl p-8 text-center space-y-4 shadow-sm">
+        <Card className="border border-[#D9CEDF] bg-white rounded-xl p-8 text-center space-y-4 shadow-sm">
           <div className="w-12 h-12 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center mx-auto shadow-xs">
             <Sparkles className="w-6 h-6" />
           </div>
@@ -184,10 +184,10 @@ export function JobForm({
       )}
 
       {/* Basic Role Information Card */}
-      <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] p-0 overflow-visible bg-white">
-        <CardHeader className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8 rounded-t-3xl">
+      <Card className="border border-[#D9CEDF] rounded-xl shadow-[0_4px_20px_rgba(23,19,31,0.03)] p-0 overflow-visible bg-white">
+        <CardHeader className="bg-white border-b border-[#D9CEDF] p-6 sm:p-8 rounded-t-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-white border border-[#D9CEDF] text-[#1E5BFF] flex items-center justify-center shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shadow-xs">
               <Briefcase className="h-5 w-5" />
             </div>
             <div>

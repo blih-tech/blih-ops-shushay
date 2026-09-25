@@ -3,7 +3,7 @@ import { Card, Skeleton } from "@blih/ui";
 
 export function TalentCardSkeleton() {
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl bg-white overflow-hidden p-6 flex flex-col justify-between h-[230px]">
+    <Card className="border border-[#D9CEDF] rounded-xl bg-white overflow-hidden p-6 flex flex-col justify-between h-[230px]">
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3.5">

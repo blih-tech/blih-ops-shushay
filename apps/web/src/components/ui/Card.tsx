@@ -8,17 +8,17 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ children, variant = "default", className = "", ...props }, ref) => {
     const variantStyles = {
       default:
-        "bg-white border border-[#D9CEDF] shadow-[0_4px_20px_rgba(23,19,31,0.04)] hover:shadow-[0_8px_28px_rgba(23,19,31,0.07)] transition-shadow duration-300",
+        "bg-white border border-[#D9CEDF] shadow-xs hover:border-[#D9CEDF]/80 transition-shadow duration-200",
       surface:
-        "bg-gradient-to-br from-[#FDFBFD] via-[#F8FAFF] to-[#EEF3FF]/60 border border-[#D9CEDF]/80 shadow-xs",
+        "bg-[#F9F8FC] border border-[#D9CEDF] shadow-xs",
       interactive:
-        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 motion-safe:hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(30,91,255,0.08)] transition-all duration-300 cursor-pointer group",
+        "bg-white border border-[#D9CEDF] hover:border-[#1E5BFF]/50 hover:shadow-sm transition-all duration-200 cursor-pointer group",
     };
 
     return (
       <div
         ref={ref}
-        className={`rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 text-[#17131F] ${variantStyles[variant]} ${className}`}
+        className={`rounded-xl p-5 sm:p-6 text-[#17131F] ${variantStyles[variant]} ${className}`}
         {...props}
       >
         {children}
@@ -35,7 +35,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
     return (
       <div
         ref={ref}
-        className={`flex flex-col space-y-2 pb-4 ${className}`}
+        className={`flex flex-col space-y-1.5 pb-4 ${className}`}
         {...props}
       >
         {children}
@@ -54,7 +54,7 @@ export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
     return (
       <Tag
         ref={ref}
-        className={`font-display text-xl sm:text-2xl font-bold tracking-tight text-[#17131F] ${className}`}
+        className={`font-serif text-lg sm:text-xl font-semibold tracking-tight text-[#17131F] ${className}`}
         {...props}
       >
         {children}
@@ -73,7 +73,7 @@ export const CardDescription = React.forwardRef<
   return (
     <p
       ref={ref}
-      className={`text-sm sm:text-base text-[#6E6678] font-sans leading-relaxed ${className}`}
+      className={`text-sm text-[#6E6678] font-sans leading-relaxed ${className}`}
       {...props}
     >
       {children}
@@ -102,7 +102,7 @@ export const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
     return (
       <div
         ref={ref}
-        className={`flex items-center pt-4 border-t border-[#D9CEDF]/50 mt-4 ${className}`}
+        className={`flex items-center pt-4 border-t border-[#D9CEDF] mt-4 ${className}`}
         {...props}
       >
         {children}

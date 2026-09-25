@@ -3,7 +3,7 @@ import { Card, Skeleton } from "@blih/ui";
 
 export function JobCardSkeleton({ themeIndex = 0 }: { themeIndex?: number }) {
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl bg-white p-5 sm:p-7 space-y-4 h-[180px] flex flex-col justify-between shadow-xs">
+    <Card className="border border-[#D9CEDF] rounded-xl bg-white p-5 sm:p-7 space-y-4 h-[180px] flex flex-col justify-between shadow-xs">
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2 flex-1">

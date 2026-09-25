@@ -91,7 +91,7 @@ export function LessonPanel({
   }
 
   return (
-    <div className="border border-[#D9CEDF] rounded-2xl overflow-hidden bg-white shadow-xs transition-all">
+    <div className="border border-[#D9CEDF] rounded-xl overflow-hidden bg-white shadow-xs transition-all">
       {/* Header row — click anywhere to expand/collapse */}
       <div
         role="button"
@@ -112,14 +112,14 @@ export function LessonPanel({
         {/* Expand indicator */}
         <span className="shrink-0 text-[#9B8FA8] transition-transform duration-200">
           {expanded ? (
-            <ChevronDown className="h-4 w-4 text-[#1E5BFF]" />
+            <ChevronDown className="h-4 w-4 text-[#17131F]" />
           ) : (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 text-[#17131F]" />
           )}
         </span>
 
         {/* Lesson index badge */}
-        <span className="w-7 h-7 rounded-lg bg-[#EEF3FF] text-[#1E5BFF] text-xs font-mono font-bold flex items-center justify-center shrink-0">
+        <span className="w-7 h-7 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] text-xs font-mono font-bold flex items-center justify-center shrink-0 shadow-2xs">
           {lessonIndex + 1}
         </span>
 

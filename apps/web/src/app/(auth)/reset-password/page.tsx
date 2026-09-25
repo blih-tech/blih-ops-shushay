@@ -84,6 +84,7 @@ function ResetPasswordForm() {
       <PasswordInput
         label="New Password"
         required
+        size="lg"
         minLength={6}
         value={password}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -95,6 +96,7 @@ function ResetPasswordForm() {
       <PasswordInput
         label="Confirm New Password"
         required
+        size="lg"
         minLength={6}
         value={confirmPassword}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

@@ -165,11 +165,11 @@ function DashboardContent() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <Card
           variant="surface"
-          className="lg:col-span-8 p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden bg-gradient-to-br from-white via-[#FDFBFD] to-[#EEF3FF]/40 border-[#D9CEDF]"
+          className="lg:col-span-8 p-6 sm:p-8 flex flex-col justify-between space-y-6 relative overflow-hidden bg-white border border-[#D9CEDF] rounded-xl shadow-sm"
         >
           <div className="space-y-3 max-w-xl">
-            <div className="flex items-center gap-2 text-[#1E5BFF]">
-              <Sparkles className="w-4 h-4" />
+            <div className="flex items-center gap-2 text-[#17131F]">
+              <Sparkles className="w-4 h-4 text-[#17131F]" />
               <span className="font-mono text-xs font-bold uppercase tracking-wider">
                 System Recommendation
               </span>
@@ -200,7 +200,7 @@ function DashboardContent() {
               <Button
                 variant="outline"
                 size="lg"
-                leftIcon={<User className="w-4 h-4 text-[#1E5BFF]" />}
+                leftIcon={<User className="w-4 h-4 text-[#17131F]" />}
               >
                 View Profile & Evidence
               </Button>
@@ -272,7 +272,7 @@ function DashboardContent() {
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF]">
+                      <div className="w-10 h-10 rounded-lg bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] shadow-xs">
                         <BookOpen className="w-5 h-5" />
                       </div>
                       <Badge
@@ -303,7 +303,7 @@ function DashboardContent() {
                       <span>Progress</span>
                       <span>{percent}%</span>
                     </div>
-                    <div className="w-full bg-[#EEF3FF] h-1.5 rounded-full overflow-hidden">
+                    <div className="w-full bg-[#EAE5F0] h-1.5 rounded-full overflow-hidden">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${
                           isCompleted ? "bg-[#2E8F79]" : "bg-[#1E5BFF]"

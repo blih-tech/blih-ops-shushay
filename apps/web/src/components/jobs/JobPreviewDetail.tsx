@@ -19,7 +19,7 @@ export function JobPreviewDetail({
 }: JobPreviewDetailProps) {
   if (!job) {
     return (
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 text-center text-[#6E6678] text-sm">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 text-center text-[#6E6678] text-sm">
         Select a position to view its details.
       </div>
     );
@@ -34,7 +34,7 @@ export function JobPreviewDetail({
     );
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-5 sm:p-8 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-6">
       <div className="flex items-center justify-between pb-4 border-b border-[#D9CEDF]/70">
         <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
           Opportunity Details
@@ -84,7 +84,7 @@ export function JobPreviewDetail({
 
       {/* Skills */}
       {job.requiredSkills.length > 0 && (
-        <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-2xl p-5 space-y-3">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-5 space-y-3 shadow-xs">
           <span className="font-mono text-xs uppercase tracking-wider text-[#17131F] font-bold block">
             Required Competencies
           </span>

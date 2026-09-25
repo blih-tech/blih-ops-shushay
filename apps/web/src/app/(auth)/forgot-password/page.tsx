@@ -72,6 +72,7 @@ export default function ForgotPasswordPage() {
           label="Email Address"
           type="email"
           required
+          size="lg"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)

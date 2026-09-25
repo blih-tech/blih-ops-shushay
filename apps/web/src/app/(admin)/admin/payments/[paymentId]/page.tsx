@@ -37,7 +37,7 @@ function AdminPaymentDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -86,12 +86,12 @@ function AdminPaymentDetailContent() {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Header — hero amount + inline data row */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
           <div className="flex items-start gap-5">
-            <div className="w-14 h-14 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0">
-              <CreditCard className="h-7 w-7" />
+            <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
+              <CreditCard className="h-5 w-5" />
             </div>
             <div className="flex-1 min-w-0 space-y-3">
               <div>

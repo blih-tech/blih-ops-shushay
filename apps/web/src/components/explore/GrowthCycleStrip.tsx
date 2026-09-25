@@ -56,7 +56,7 @@ export function GrowthCycleStrip() {
   return (
     <div
       ref={containerRef}
-      className="bg-[#EEF3FF] border border-[#D9CEDF]/80 rounded-3xl p-8 sm:p-12 select-none font-sans"
+      className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-12 select-none font-sans"
     >
       <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
         <span className="font-mono text-xs text-[#1E5BFF] uppercase tracking-wider font-semibold">
@@ -71,10 +71,10 @@ export function GrowthCycleStrip() {
         <div
           onMouseEnter={onCardEnter}
           onMouseLeave={onCardLeave}
-          className="cycle-card bg-white border border-[#D9CEDF] rounded-2xl p-6 space-y-3 shadow-sm cursor-default"
+          className="cycle-card bg-white border border-[#D9CEDF] rounded-lg p-6 space-y-3 shadow-sm cursor-default"
           style={{ opacity: 0 }}
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DDE7FF] text-[#1E5BFF] flex items-center justify-center font-mono font-bold text-sm">
+          <div className="w-10 h-10 rounded-md bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center font-mono font-bold text-sm">
             01
           </div>
           <h3 className="font-display text-xl font-bold text-[#17131F]">
@@ -89,10 +89,10 @@ export function GrowthCycleStrip() {
         <div
           onMouseEnter={onCardEnter}
           onMouseLeave={onCardLeave}
-          className="cycle-card bg-white border border-[#D9CEDF] rounded-2xl p-6 space-y-3 shadow-sm cursor-default"
+          className="cycle-card bg-white border border-[#D9CEDF] rounded-lg p-6 space-y-3 shadow-sm cursor-default"
           style={{ opacity: 0 }}
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DDE7FF] text-[#1E5BFF] flex items-center justify-center font-mono font-bold text-sm">
+          <div className="w-10 h-10 rounded-md bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center font-mono font-bold text-sm">
             02
           </div>
           <h3 className="font-display text-xl font-bold text-[#17131F]">
@@ -107,10 +107,10 @@ export function GrowthCycleStrip() {
         <div
           onMouseEnter={onCardEnter}
           onMouseLeave={onCardLeave}
-          className="cycle-card bg-white border border-[#D9CEDF] rounded-2xl p-6 space-y-3 shadow-sm cursor-default"
+          className="cycle-card bg-white border border-[#D9CEDF] rounded-lg p-6 space-y-3 shadow-sm cursor-default"
           style={{ opacity: 0 }}
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DDE7FF] text-[#1E5BFF] flex items-center justify-center font-mono font-bold text-sm">
+          <div className="w-10 h-10 rounded-md bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center font-mono font-bold text-sm">
             03
           </div>
           <h3 className="font-display text-xl font-bold text-[#17131F]">
@@ -125,10 +125,10 @@ export function GrowthCycleStrip() {
         <div
           onMouseEnter={onCardEnter}
           onMouseLeave={onCardLeave}
-          className="cycle-card bg-white border border-[#D9CEDF] rounded-2xl p-6 space-y-3 shadow-sm cursor-default"
+          className="cycle-card bg-white border border-[#D9CEDF] rounded-lg p-6 space-y-3 shadow-sm cursor-default"
           style={{ opacity: 0 }}
         >
-          <div className="w-10 h-10 rounded-xl bg-[#DDE7FF] text-[#1E5BFF] flex items-center justify-center font-mono font-bold text-sm">
+          <div className="w-10 h-10 rounded-md bg-white border border-[#D9CEDF] text-[#17131F] shadow-xs flex items-center justify-center font-mono font-bold text-sm">
             04
           </div>
           <h3 className="font-display text-xl font-bold text-[#17131F]">

@@ -21,7 +21,7 @@ export function UploadProgressCard({
   const Icon = type === "video" ? Video : FileText;
 
   return (
-    <div className="bg-[#EEF3FF]/70 border-2 border-[#1E5BFF]/30 rounded-2xl p-5 space-y-4 shadow-sm animate-pulse-subtle">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-5 space-y-4 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-[#1E5BFF] text-white flex items-center justify-center shrink-0 shadow-md">

@@ -43,7 +43,7 @@ export function CompanyJobsTable({
 }: CompanyJobsTableProps) {
   if (loading) {
     return (
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-xs">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -141,7 +141,7 @@ export function CompanyJobsTable({
   }
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl overflow-hidden shadow-xs">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl overflow-hidden shadow-xs">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>

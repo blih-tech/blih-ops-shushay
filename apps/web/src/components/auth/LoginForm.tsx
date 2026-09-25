@@ -118,6 +118,7 @@ export function LoginForm() {
           label="Email"
           type="email"
           required
+          size="lg"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)
@@ -140,6 +141,7 @@ export function LoginForm() {
           </div>
           <PasswordInput
             required
+            size="lg"
             value={password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setPassword(e.target.value)
@@ -167,7 +169,7 @@ export function LoginForm() {
       <button
         type="button"
         onClick={handleGoogleLogin}
-        className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#EEF3FF]/60 hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
+        className="w-full h-11 min-h-[44px] flex items-center justify-center gap-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#F4F1F8] hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
       >
         <GoogleIcon />
         <span>Continue with Google</span>

@@ -16,7 +16,7 @@ export function EditCourseSkeleton({}: EditCourseSkeletonProps) {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-6 space-y-6">
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-4">
             <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
             <Skeleton
               variant="rectangular"
@@ -29,7 +29,7 @@ export function EditCourseSkeleton({}: EditCourseSkeletonProps) {
           </div>
         </div>
         <div className="lg:col-span-6 space-y-6">
-          <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-4">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-4">
             <Skeleton variant="rectangular" className="h-8 w-48 rounded-xl" />
             <div className="space-y-3">
               <Skeleton

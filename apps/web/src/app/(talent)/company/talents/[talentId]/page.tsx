@@ -126,7 +126,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
         >
           <ArrowLeft className="h-4 w-4" /> Back to talent directory
         </Link>
-        <Card className="border border-[#1E5BFF]/30 bg-gradient-to-br from-white to-[#EEF3FF] rounded-3xl p-8 sm:p-12 text-center space-y-5 shadow-md">
+        <Card className="border border-[#D9CEDF] bg-white rounded-xl p-8 sm:p-12 text-center space-y-5 shadow-xs">
           <div className="w-14 h-14 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center mx-auto shadow-sm">
             <Sparkles className="w-7 h-7" />
           </div>
@@ -187,7 +187,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
         {/* Hero Card */}
-        <section className="reveal-profile-block bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+        <section className="reveal-profile-block bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-10 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row items-start gap-6">
             <div
               className="w-[118px] h-[118px] rounded-full overflow-hidden border border-[#BFD0FF] shadow-xs shrink-0 bg-[#EEF3FF] relative flex items-center justify-center"

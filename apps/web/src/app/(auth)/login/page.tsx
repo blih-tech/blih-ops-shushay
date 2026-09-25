@@ -20,7 +20,7 @@ export default function LoginPage() {
           </div>
 
           {/* Next Best Move Preview Card */}
-          <div className="bg-gradient-to-br from-[#EEF3FF] via-white to-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 shadow-sm space-y-3">
+          <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 shadow-xs space-y-3">
             <Badge variant="primary" size="sm">
               NEXT BEST MOVE
             </Badge>
@@ -35,7 +35,7 @@ export default function LoginPage() {
 
         {/* Right Column: Form Panel (first on mobile) */}
         <div className="lg:col-span-6 flex justify-center order-1 lg:order-2">
-          <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
+          <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
             <div className="space-y-1">
               <h2 className="font-display text-3xl font-bold text-[#17131F]">
                 Sign in

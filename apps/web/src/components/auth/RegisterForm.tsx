@@ -41,7 +41,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
   };
 
   return (
-    <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
+    <div className="w-full max-w-md bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-xl shadow-[0_16px_50px_rgba(30,91,255,0.06)] space-y-6">
       <div className="space-y-1">
         <h2 className="font-display text-3xl font-bold text-[#17131F]">
           Create your free account
@@ -58,6 +58,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
         <Input
           label="Full name"
           type="text"
+          size="lg"
           value={fullName}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setFullName(e.target.value)
@@ -70,6 +71,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
           label="Email"
           type="email"
           required
+          size="lg"
           value={email}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)
@@ -81,6 +83,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
         <PasswordInput
           label="Password"
           required
+          size="lg"
           minLength={6}
           value={password}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -97,10 +100,10 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             <button
               type="button"
               onClick={() => setRole("TALENT")}
-              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
+              className={`h-11 min-h-[44px] px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center flex items-center justify-center ${
                 role === "TALENT"
                   ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
-                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#F4F1F8]"
               }`}
             >
               Learning + work
@@ -108,10 +111,10 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             <button
               type="button"
               onClick={() => setRole("COMPANY")}
-              className={`py-3 px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center ${
+              className={`h-11 min-h-[44px] px-3 rounded-xl border text-xs sm:text-sm font-sans font-bold transition-all cursor-pointer text-center flex items-center justify-center ${
                 role === "COMPANY"
                   ? "bg-[#EEF3FF] border-[#1E5BFF] text-[#1E5BFF]"
-                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#EEF3FF]/40"
+                  : "bg-white border-[#D9CEDF] text-[#6E6678] hover:bg-[#F4F1F8]"
               }`}
             >
               Hiring talent
@@ -136,7 +139,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
       <button
         type="button"
         onClick={handleGoogleSignup}
-        className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#EEF3FF]/60 hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
+        className="w-full h-11 min-h-[44px] flex items-center justify-center gap-3 px-4 rounded-xl border border-[#D9CEDF] bg-white hover:bg-[#F4F1F8] hover:border-[#1E5BFF]/30 transition-all text-sm font-sans font-semibold text-[#17131F] cursor-pointer shadow-sm active:scale-[0.99]"
       >
         <GoogleIcon />
         <span>Continue with Google</span>

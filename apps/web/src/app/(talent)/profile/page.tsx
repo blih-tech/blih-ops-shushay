@@ -54,10 +54,10 @@ function ProfileContent() {
       <ProfileCompletionBanner isComplete={!!profile?.isComplete} />
 
       {/* Profile Hero Header */}
-      <div className="bg-white border border-[#D9CEDF] rounded-3xl p-5 sm:p-8 md:p-12 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-8">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-5 sm:p-8 md:p-12 shadow-[0_12px_48px_rgba(30,91,255,0.06)] space-y-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/70">
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div className="h-20 w-20 rounded-full border-2 border-[#1E5BFF]/20 bg-[#EEF3FF] flex items-center justify-center overflow-hidden shrink-0 text-[#1E5BFF] font-display font-bold text-2xl shadow-sm">
+            <div className="h-20 w-20 rounded-full border border-[#D9CEDF] bg-white flex items-center justify-center overflow-hidden shrink-0 text-[#17131F] font-display font-bold text-2xl shadow-xs">
               {profile?.photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -210,7 +210,7 @@ function ProfileContent() {
 
       {/* Attached CV Section */}
       {profile?.cvUrl && (
-        <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#1E5BFF]">
               <FileText className="w-6 h-6" />

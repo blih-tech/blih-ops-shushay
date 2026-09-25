@@ -6,6 +6,20 @@ export interface ExperienceEducationCardProps {
   education?: any[];
 }
 
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    return d.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return dateStr;
+  }
+};
+
 export const ExperienceEducationCard: React.FC<
   ExperienceEducationCardProps
 > = ({ experience, education }) => {
@@ -13,7 +27,7 @@ export const ExperienceEducationCard: React.FC<
     <>
       {/* Work Experience */}
       {experience && experience.length > 0 && (
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-10 shadow-sm space-y-6">
           <div className="space-y-1 pb-4 border-b border-[#D9CEDF]/70">
             <span className="font-mono text-xs uppercase tracking-wider text-[#1E5BFF] font-semibold">
               Professional Background
@@ -29,7 +43,7 @@ export const ExperienceEducationCard: React.FC<
                 key={index}
                 className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
               >
-                <div className="w-10 h-10 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0 border border-[#1E5BFF]/20">
+                <div className="w-10 h-10 rounded-xl bg-white text-[#17131F] flex items-center justify-center shrink-0 border border-[#D9CEDF] shadow-xs">
                   <Briefcase className="w-5 h-5" />
                 </div>
                 <div className="space-y-1 flex-1">
@@ -37,9 +51,9 @@ export const ExperienceEducationCard: React.FC<
                     <h4 className="font-display text-lg font-bold text-[#17131F]">
                       {exp.title}
                     </h4>
-                    <span className="font-mono text-xs text-[#6E6678] bg-[#EEF3FF] px-3 py-1 rounded-full border border-[#D9CEDF]/60 self-start sm:self-auto">
-                      {exp.startDate} –{" "}
-                      {exp.current ? "Present" : exp.endDate || "Ended"}
+                    <span className="font-mono text-xs text-[#6E6678] bg-[#F4F1F8] px-3 py-1 rounded-full border border-[#D9CEDF]/60 self-start sm:self-auto">
+                      {formatDate(exp.startDate)} –{" "}
+                      {exp.current ? "Present" : exp.endDate ? formatDate(exp.endDate) : "Ended"}
                     </span>
                   </div>
                   <p className="font-sans text-sm font-semibold text-[#1E5BFF]">
@@ -59,7 +73,7 @@ export const ExperienceEducationCard: React.FC<
 
       {/* Education */}
       {education && education.length > 0 && (
-        <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
+        <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-10 shadow-sm space-y-6">
           <div className="space-y-1 pb-4 border-b border-[#D9CEDF]/70">
             <span className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
               Academic & Accreditations
@@ -75,7 +89,7 @@ export const ExperienceEducationCard: React.FC<
                 key={index}
                 className="flex items-start gap-4 pb-6 border-b border-[#D9CEDF]/50 last:border-0 last:pb-0"
               >
-                <div className="w-10 h-10 rounded-2xl bg-[#E6F5F0] text-[#2E8F79] flex items-center justify-center shrink-0 border border-[#2E8F79]/20">
+                <div className="w-10 h-10 rounded-xl bg-white text-[#17131F] flex items-center justify-center shrink-0 border border-[#D9CEDF] shadow-xs">
                   <GraduationCap className="w-5 h-5" />
                 </div>
                 <div className="space-y-1 flex-1">

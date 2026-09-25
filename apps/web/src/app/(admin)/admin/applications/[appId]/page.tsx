@@ -37,7 +37,7 @@ function AdminApplicationDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -84,11 +84,11 @@ function AdminApplicationDetailContent() {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
+        <div className="p-6 sm:p-8 border-b border-[#D9CEDF]">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-xl shrink-0 overflow-hidden">
+            <div className="w-12 h-12 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-xl shrink-0 overflow-hidden shadow-xs">
               {application.talentProfile?.photoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -111,8 +111,8 @@ function AdminApplicationDetailContent() {
                 />
               </div>
               {/* Inline data chip */}
-              <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
-                <Briefcase className="h-3 w-3 shrink-0" />
+              <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F8F5FB] border border-[#D9CEDF] rounded-xl px-3 py-1.5 font-sans">
+                <Briefcase className="h-3 w-3 shrink-0 text-[#17131F]" />
                 Applied for{" "}
                 <span className="font-medium text-[#17131F] ml-1">
                   {jobTitle}
@@ -125,14 +125,14 @@ function AdminApplicationDetailContent() {
         </div>
 
         {/* Content Body */}
-        <div className="divide-y divide-[#EBE5F0]">
+        <div className="divide-y divide-[#D9CEDF]">
           {/* Cover Letter */}
           <div className="p-6 sm:p-8 space-y-3">
             <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
               Cover Letter
             </h2>
-            <div className="bg-[#F9F8FC] rounded-2xl p-5 border border-[#EBE5F0]">
-              <p className="text-sm text-[#17131F] leading-relaxed whitespace-pre-line">
+            <div className="bg-white rounded-xl p-5 border border-[#D9CEDF]">
+              <p className="text-sm text-[#17131F] leading-relaxed whitespace-pre-line font-sans">
                 {application.coverLetter || "No cover letter provided."}
               </p>
             </div>
@@ -145,11 +145,11 @@ function AdminApplicationDetailContent() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Applicant */}
-              <div className="flex items-center gap-3 p-4 bg-[#F9F8FC] rounded-2xl border border-[#EBE5F0]">
-                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-sm shrink-0">
+              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#D9CEDF] shadow-2xs">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-sm shrink-0 shadow-2xs">
                   {applicantName.charAt(0).toUpperCase()}
                 </div>
-                <div className="flex-1 min-w-0 space-y-0.5">
+                <div className="flex-1 min-w-0 space-y-0.5 font-sans">
                   <p className="text-xs text-[#6E6678]">Applicant</p>
                   <p className="font-medium text-[#17131F] text-sm truncate">
                     {applicantName}
@@ -172,11 +172,11 @@ function AdminApplicationDetailContent() {
               </div>
 
               {/* Job */}
-              <div className="flex items-center gap-3 p-4 bg-[#F9F8FC] rounded-2xl border border-[#EBE5F0]">
-                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
+              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#D9CEDF] shadow-2xs">
+                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-2xs">
                   <Briefcase className="h-4 w-4" />
                 </div>
-                <div className="flex-1 min-w-0 space-y-0.5">
+                <div className="flex-1 min-w-0 space-y-0.5 font-sans">
                   <p className="text-xs text-[#6E6678]">Job Listing</p>
                   <p className="font-medium text-[#17131F] text-sm truncate">
                     {jobTitle}

@@ -7,7 +7,7 @@ export function TalentCardSkeleton({
   themeIndex?: number;
 }) {
   return (
-    <Card className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4 shadow-xs">
+    <Card className="border border-[#D9CEDF] rounded-xl p-6 bg-white space-y-4 shadow-xs">
       <div className="flex items-center gap-3">
         <Skeleton
           variant="circular"

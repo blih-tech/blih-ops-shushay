@@ -1,12 +1,13 @@
 import React from "react";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
   error?: string;
   helperText?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
+  size?: "sm" | "md" | "lg";
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -18,6 +19,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       leftIcon,
       rightIcon,
       fullWidth = false,
+      size = "md",
       className = "",
       id,
       disabled,
@@ -27,6 +29,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const inputId =
       id || (label ? label.toLowerCase().replace(/\s+/g, "-") : undefined);
+
+    const sizes = {
+      sm: "h-8 min-h-[32px] text-xs px-2.5 py-1",
+      md: "h-10 min-h-[40px] text-sm px-3 py-2",
+      lg: "h-11 min-h-[44px] text-sm px-3.5 py-2.5",
+    };
 
     return (
       <div
@@ -47,7 +55,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div className="relative w-full">
           {leftIcon && (
             <div
-              className={`absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-all duration-200 ${
+              className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-all duration-200 ${
                 error
                   ? "text-[#EF4444]"
                   : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"
@@ -61,16 +69,16 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             disabled={disabled}
             className={`
-              w-full h-12 rounded-xl border bg-white px-4 py-3 text-sm sm:text-base text-[#17131F] placeholder:text-[#6E6678]/50
-              outline-none focus:outline-none focus:ring-0
-              transition-all duration-200
-              disabled:cursor-not-allowed disabled:bg-[#EEF3FF]/70 disabled:text-[#6E6678]
-              ${leftIcon ? "pl-10" : ""}
-              ${rightIcon ? "pr-10" : ""}
+              w-full ${sizes[size]} rounded-md border bg-white text-[#17131F] placeholder:text-[#6E6678]/70
+              outline-none focus:outline-none
+              transition-colors duration-150
+              disabled:cursor-not-allowed disabled:bg-[#F4F1F8] disabled:text-[#6E6678]
+              ${leftIcon ? "pl-9" : ""}
+              ${rightIcon ? "pr-9" : ""}
               ${
                 error
-                  ? "border-[#EF4444] bg-[#FFF8F8] focus:border-[#EF4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
-                  : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:shadow-[0_0_0_3px_rgba(30,91,255,0.15)]"
+                  ? "border-[#EF4444] bg-[#FFF8F8] focus:border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
+                  : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:ring-2 focus:ring-[#1E5BFF]/20"
               }
               ${className}
             `}
@@ -78,7 +86,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           {rightIcon && (
             <div
-              className={`absolute inset-y-0 right-0 pr-3.5 flex items-center transition-colors duration-200 ${
+              className={`absolute inset-y-0 right-0 pr-3 flex items-center transition-colors duration-200 ${
                 error
                   ? "text-[#EF4444]"
                   : "text-[#6E6678] group-focus-within:text-[#1E5BFF]"

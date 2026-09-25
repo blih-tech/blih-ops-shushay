@@ -104,9 +104,9 @@ export function TalentExplorerPreview() {
       </div>
 
       {/* Explorer UI Shell */}
-      <div className="bg-white border border-[#D9CEDF] rounded-[34px] p-6 sm:p-8 shadow-[0_24px_54px_rgba(30,91,255,0.06)] space-y-6">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 shadow-xs space-y-6">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 pb-6 border-b border-[#D9CEDF]/60">
-          <div className="flex-1 max-w-[520px] bg-[#F7F9FF] border border-[#D9CEDF] rounded-2xl px-5 h-14 flex items-center justify-between">
+          <div className="flex-1 max-w-[520px] bg-[#F7F9FF] border border-[#D9CEDF] rounded-md px-5 h-11 flex items-center justify-between">
             <span className="text-sm text-[#17131F] font-medium">
               React TypeScript product engineer
             </span>
@@ -143,14 +143,14 @@ export function TalentExplorerPreview() {
                   onClick={() => setSelectedId(c.id)}
                   onMouseEnter={onItemEnter}
                   onMouseLeave={onItemLeave}
-                  className={`candidate-card-item cursor-pointer rounded-2xl p-4 border flex items-center gap-4 ${
+                  className={`candidate-card-item cursor-pointer rounded-lg p-4 border flex items-center gap-4 ${
                     isSelected
-                      ? "bg-[#DDE7FF] border-[#1E5BFF] shadow-sm scale-[0.98]"
+                      ? "bg-[#DDE7FF] border-[#1E5BFF] shadow-xs scale-[0.98]"
                       : "bg-white border-[#D9CEDF] hover:bg-[#EEF3FF]/40"
                   }`}
                   style={{ opacity: 0 }}
                 >
-                  <div className="w-[42px] h-[42px] rounded-full bg-[#EEF3FF] border border-[#1E5BFF]/10 flex items-center justify-center font-display font-bold text-xs text-[#1E5BFF] shrink-0">
+                  <div className="w-[42px] h-[42px] rounded-full bg-white border border-[#D9CEDF] flex items-center justify-center font-display font-bold text-xs text-[#17131F] shrink-0 shadow-2xs">
                     {c.avatarInitials}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -173,7 +173,7 @@ export function TalentExplorerPreview() {
 
           <div
             ref={detailRef}
-            className="lg:col-span-8 bg-white border border-[#D9CEDF] rounded-[26px] p-6 sm:p-8 flex flex-col justify-between min-h-[350px] shadow-sm"
+            className="lg:col-span-8 bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 flex flex-col justify-between min-h-[350px] shadow-xs"
           >
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
               <div className="space-y-1">
@@ -216,7 +216,7 @@ export function TalentExplorerPreview() {
                 })}
               </div>
 
-              <div className="md:col-span-5 bg-[#F7F9FF] border border-[#D9CEDF]/60 rounded-2xl p-5 space-y-3">
+              <div className="md:col-span-5 bg-[#F7F9FF] border border-[#D9CEDF]/60 rounded-lg p-5 space-y-3">
                 <span className="font-mono text-[10px] uppercase text-[#6E6678] tracking-wider block font-semibold mb-1">
                   Verified Evidence
                 </span>

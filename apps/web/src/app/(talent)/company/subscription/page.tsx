@@ -109,7 +109,7 @@ function CompanySubscriptionContent() {
       {!loadingStatus && statusData && (
         <div className="max-w-4xl mx-auto">
           {statusData.hasActiveSubscription && statusData.subscription ? (
-            <Card className="p-6 sm:p-8 bg-gradient-to-br from-[#F4FAF6] to-white border border-[#BDE8D0] shadow-sm rounded-3xl space-y-4">
+            <Card className="p-6 sm:p-8 bg-gradient-to-br from-[#F4FAF6] to-white border border-[#BDE8D0] shadow-sm rounded-xl space-y-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-[#D5F0E1] pb-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -175,7 +175,7 @@ function CompanySubscriptionContent() {
               </div>
             </Card>
           ) : statusData.subscription ? (
-            <Card className="p-6 sm:p-8 bg-[#FDF2F2] border border-[#F8C8C8] shadow-sm rounded-3xl space-y-4">
+            <Card className="p-6 sm:p-8 bg-[#FDF2F2] border border-[#F8C8C8] shadow-sm rounded-xl space-y-4">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -250,7 +250,7 @@ function CompanySubscriptionContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
         {/* Monthly Plan */}
         <Card
-          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
+          className={`border rounded-xl p-8 bg-white flex flex-col justify-between transition-all ${
             billingCycle === "monthly"
               ? "border-2 border-[#1E5BFF] shadow-lg"
               : "border-[#D9CEDF]"
@@ -313,7 +313,7 @@ function CompanySubscriptionContent() {
 
         {/* Yearly Plan */}
         <Card
-          className={`border rounded-3xl p-8 bg-white flex flex-col justify-between transition-all ${
+          className={`border rounded-xl p-8 bg-white flex flex-col justify-between transition-all ${
             billingCycle === "yearly"
               ? "border-2 border-[#1E5BFF] shadow-xl relative"
               : "border-[#D9CEDF]"

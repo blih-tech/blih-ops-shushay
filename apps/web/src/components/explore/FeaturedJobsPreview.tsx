@@ -91,7 +91,7 @@ export function FeaturedJobsPreview() {
             key={job.id}
             onMouseEnter={onCardEnter}
             onMouseLeave={onCardLeave}
-            className="featured-job-card bg-white border border-[#D9CEDF] rounded-3xl p-6 shadow-[0_4px_20px_rgba(23,19,31,0.04)] flex flex-col justify-between group cursor-default"
+            className="featured-job-card bg-white border border-[#D9CEDF] rounded-xl p-6 shadow-[0_4px_20px_rgba(23,19,31,0.04)] flex flex-col justify-between group cursor-default"
             style={{ opacity: 0 }}
           >
             <div className="space-y-4">

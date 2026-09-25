@@ -124,9 +124,9 @@ export function VideoSection({
         />
       ) : lesson.videoUrl ? (
         <div className="space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-2xl shadow-2xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-white border border-[#D9CEDF] rounded-xl shadow-xs">
             <div className="flex items-center gap-3.5 min-w-0">
-              <div className="w-11 h-11 rounded-xl bg-[#1E5BFF]/10 text-[#1E5BFF] flex items-center justify-center shrink-0 border border-[#1E5BFF]/20">
+              <div className="w-10 h-10 rounded-xl bg-white text-[#17131F] flex items-center justify-center shrink-0 border border-[#D9CEDF] shadow-xs">
                 <Film className="h-5 w-5" />
               </div>
               <div className="min-w-0">
@@ -177,7 +177,7 @@ export function VideoSection({
 
           {/* Collapsible Video Preview Surface */}
           {showPreview && (
-            <div className="p-3 bg-[#0F172A] rounded-2xl overflow-hidden border border-[#334155] animate-in fade-in zoom-in-95 duration-200">
+            <div className="p-3 bg-[#0F172A] rounded-xl overflow-hidden border border-[#334155] animate-in fade-in zoom-in-95 duration-200">
               <div className="flex items-center justify-between px-2 pb-2 border-b border-[#334155] mb-2 text-xs text-slate-400 font-mono">
                 <span>Video Stream Preview</span>
                 <span className="truncate max-w-xs">{fileName}</span>
@@ -186,7 +186,7 @@ export function VideoSection({
                 src={lesson.videoUrl}
                 controls
                 controlsList="nodownload"
-                className="w-full max-h-[320px] rounded-xl bg-black object-contain"
+                className="w-full max-h-[320px] rounded-lg bg-black object-contain"
               >
                 Your browser does not support HTML5 video streaming.
               </video>
@@ -196,9 +196,9 @@ export function VideoSection({
       ) : (
         <div
           onClick={() => fileRef.current?.click()}
-          className="border-2 border-dashed border-[#D9CEDF] hover:border-[#1E5BFF]/50 bg-[#EEF3FF]/30 hover:bg-[#EEF3FF]/60 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group"
+          className="border-2 border-dashed border-[#D9CEDF] hover:border-[#1E5BFF]/50 bg-white hover:bg-[#F8F5FB] rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 group shadow-2xs"
         >
-          <div className="w-12 h-12 rounded-2xl bg-white border border-[#D9CEDF] group-hover:border-[#1E5BFF] flex items-center justify-center text-[#1E5BFF] transition-colors shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] transition-colors shadow-xs">
             <Upload className="h-5 w-5" />
           </div>
           <p className="text-sm font-bold text-[#17131F] font-display">

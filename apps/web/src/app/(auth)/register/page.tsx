@@ -32,7 +32,7 @@ export default function RegisterPage() {
   if (success) {
     return (
       <div className="w-full max-w-md mx-auto py-16 px-4">
-        <div className="bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-3xl text-center space-y-6 shadow-[0_16px_50px_rgba(30,91,255,0.06)]">
+        <div className="bg-white border border-[#D9CEDF] p-8 sm:p-10 rounded-xl text-center space-y-6 shadow-[0_16px_50px_rgba(30,91,255,0.06)]">
           <Alert variant="success" title="Check your email">
             {
               "We've sent you a link to verify your account. For local development, check the **blih-api** server console logs to retrieve the mock verification link."

@@ -36,7 +36,7 @@ export const VerifiedCredentialsCard: React.FC<
   if (items.length === 0) return null;
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 shadow-sm space-y-6">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-10 shadow-sm space-y-6">
       <div className="space-y-1 pb-4 border-b border-[#D9CEDF]/70 flex items-center justify-between">
         <div>
           <span className="font-mono text-xs uppercase tracking-wider text-[#2E8F79] font-semibold flex items-center gap-1.5">
@@ -63,14 +63,14 @@ export const VerifiedCredentialsCard: React.FC<
           return (
             <div
               key={certId || idx}
-              className="p-5 rounded-2xl border border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/40 transition-all flex flex-col justify-between space-y-4"
+              className="p-5 rounded-xl border border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/40 transition-all flex flex-col justify-between space-y-4 shadow-xs"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[11px] text-[#1E5BFF] bg-[#EEF3FF] px-2.5 py-0.5 rounded-md font-semibold border border-[#1E5BFF]/20">
                     Verified Track
                   </span>
-                  <Award className="w-5 h-5 text-[#1E5BFF]" />
+                  <Award className="w-5 h-5 text-[#17131F]" />
                 </div>
                 <h4 className="font-display text-lg font-bold text-[#17131F]">
                   {title}

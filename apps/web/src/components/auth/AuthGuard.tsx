@@ -48,8 +48,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white px-4 relative antialiased">
-        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-[#EEF3FF] via-white/50 to-transparent pointer-events-none -z-10" />
-        <Card className="max-w-md w-full text-center rounded-3xl border border-[#D9CEDF] shadow-lg p-6 bg-white">
+        <Card className="max-w-md w-full text-center rounded-xl border border-[#D9CEDF] shadow-lg p-6 bg-white">
           <CardHeader className="p-4 pb-2">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FFF0F0] text-[#EF4444] border border-[#EF4444]/20 flex items-center justify-center mb-3">
               <ShieldAlert className="h-7 w-7" />

@@ -70,12 +70,12 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
         Profile Headshot
       </label>
 
-      <div className="flex flex-col items-center justify-between gap-4 bg-[#EEF3FF]/40 border border-[#D9CEDF] rounded-3xl p-6 flex-1 min-h-[220px]">
+      <div className="flex flex-col items-center justify-between gap-4 bg-white border border-[#D9CEDF] rounded-xl p-6 flex-1 min-h-[220px]">
         {/* Avatar Preview */}
         <div
           className={`relative h-28 w-28 rounded-full border-2 ${
-            isDragging ? "border-[#1E5BFF] scale-105" : "border-[#1E5BFF]/20"
-          } bg-[#EEF3FF] flex items-center justify-center overflow-hidden cursor-pointer group transition-all shadow-sm`}
+            isDragging ? "border-[#1E5BFF] scale-105" : "border-[#D9CEDF]"
+          } bg-[#F8F5FB] flex items-center justify-center overflow-hidden cursor-pointer group transition-all shadow-xs`}
           onClick={() => !loading && fileInputRef.current?.click()}
           onDragOver={(e) => {
             e.preventDefault();
@@ -92,7 +92,7 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
               className="h-full w-full object-cover"
             />
           ) : (
-            <User className="h-12 w-12 text-[#1E5BFF]/50" />
+            <User className="h-12 w-12 text-[#6E6678]" />
           )}
 
           {/* Hover overlay */}
@@ -119,8 +119,8 @@ export const PhotoUpload: React.FC<PhotoUploadProps> = ({
             size="sm"
             onClick={() => fileInputRef.current?.click()}
             disabled={loading}
-            leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#1E5BFF]" />}
-            className="flex-1 text-xs font-semibold hover:border-[#1E5BFF]/40 hover:bg-[#EEF3FF] transition-all"
+            leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#17131F]" />}
+            className="flex-1 text-xs font-semibold hover:border-[#1E5BFF]/40 hover:bg-[#F4F1F8] transition-all"
           >
             {value ? "Replace Photo" : "Upload Photo"}
           </Button>

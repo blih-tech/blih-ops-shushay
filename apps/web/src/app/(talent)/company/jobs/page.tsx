@@ -183,7 +183,7 @@ function CompanyJobsContent() {
             {[0, 1, 2].map((i) => (
               <Card
                 key={i}
-                className="border border-[#D9CEDF] rounded-3xl p-6 bg-white space-y-4"
+                className="border border-[#D9CEDF] rounded-xl p-6 bg-white space-y-4"
               >
                 <Skeleton
                   variant="rectangular"

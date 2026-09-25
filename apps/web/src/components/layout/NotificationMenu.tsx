@@ -70,10 +70,10 @@ export function NotificationMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white/95 backdrop-blur-xl border border-[#D9CEDF] rounded-2xl shadow-xl z-50 p-3 space-y-2 text-xs font-sans animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white/95 backdrop-blur-xl border border-[#D9CEDF] rounded-xl shadow-xl z-50 p-3 space-y-2 text-xs font-sans animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="flex items-center justify-between pb-2 border-b border-[#E6EAF3]">
             <h4 className="font-display font-bold text-sm text-[#17131F] flex items-center gap-2">
-              <Bell className="w-4 h-4 text-[#1E5BFF]" /> Notifications
+              <Bell className="w-4 h-4 text-[#17131F]" /> Notifications
             </h4>
             {unreadCount > 0 && (
               <span className="px-2 py-0.5 rounded-full bg-[#EEF3FF] text-[#1E5BFF] font-mono text-[10px] font-semibold">

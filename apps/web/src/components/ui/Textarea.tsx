@@ -94,11 +94,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     );
 
     const baseStyles =
-      "appearance-none block w-full px-4 py-3 bg-white text-[#17131F] border rounded-xl text-sm sm:text-base font-sans placeholder:text-[#6E6678]/50 outline-none focus:outline-none focus:ring-0 transition-all duration-200 disabled:bg-[#EEF3FF]/70 disabled:text-[#6E6678] disabled:cursor-not-allowed resize-none";
+      "appearance-none block w-full px-3 py-2 bg-white text-[#17131F] border rounded-md text-sm font-sans placeholder:text-[#6E6678]/70 outline-none focus:outline-none transition-colors duration-150 disabled:bg-[#F4F1F8] disabled:text-[#6E6678] disabled:cursor-not-allowed resize-none";
 
     const stateStyles = error
-      ? "border-[#EF4444] bg-[#FFF8F8] focus:border-[#EF4444] focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)]"
-      : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:shadow-[0_0_0_3px_rgba(30,91,255,0.15)]";
+      ? "border-[#EF4444] bg-[#FFF8F8] focus:border-[#EF4444] focus:ring-2 focus:ring-[#EF4444]/20"
+      : "border-[#D9CEDF] hover:border-[#1E5BFF]/50 focus:border-[#1E5BFF] focus:ring-2 focus:ring-[#1E5BFF]/20";
 
     const isNearLimit = maxLength ? charCount > maxLength * 0.9 : false;
     const isAtLimit = maxLength ? charCount >= maxLength : false;

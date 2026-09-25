@@ -157,7 +157,7 @@ function ProfileSetupContent() {
 
       <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
         {/* Stepper rail */}
-        <aside className="w-full lg:w-80 shrink-0 bg-white border border-[#D9CEDF] rounded-3xl p-6 space-y-6 shadow-sm">
+        <aside className="w-full lg:w-80 shrink-0 bg-white border border-[#D9CEDF] rounded-xl p-6 space-y-6 shadow-sm">
           <div>
             <p className="text-xs font-mono font-bold text-[#6E6678] uppercase tracking-wider">
               Profile Setup Progress
@@ -219,10 +219,10 @@ function ProfileSetupContent() {
 
         {/* Form card */}
         <div className="flex-1 w-full min-w-0">
-          <Card className="border border-[#D9CEDF] rounded-3xl shadow-[0_8px_30px_rgba(23,19,31,0.04)] overflow-hidden bg-white">
+          <Card className="border border-[#D9CEDF] rounded-xl shadow-[0_8px_30px_rgba(23,19,31,0.04)] overflow-hidden bg-white">
             {/* Form header */}
-            <div className="bg-gradient-to-r from-[#EEF3FF] via-[#F7F9FF] to-white border-b border-[#D9CEDF] p-6 sm:p-8">
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#1E5BFF] uppercase tracking-wider mb-2">
+            <div className="bg-white border-b border-[#D9CEDF] p-6 sm:p-8">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#17131F] uppercase tracking-wider mb-2">
                 Step {step} of 3 <ChevronRight className="h-3.5 w-3.5" />
               </div>
               <h3 className="font-display font-bold text-2xl sm:text-3xl text-[#17131F]">

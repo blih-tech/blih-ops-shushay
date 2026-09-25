@@ -166,7 +166,7 @@ function ApplicationsContent() {
             return (
               <Card
                 key={app.id}
-                className="border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 bg-white hover:border-[#1E5BFF]/50 transition-all shadow-xs space-y-4"
+                className="border border-[#D9CEDF] rounded-xl p-6 sm:p-8 bg-white hover:border-[#1E5BFF]/50 transition-all shadow-xs space-y-4"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="space-y-2 flex-1 min-w-0">

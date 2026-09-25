@@ -33,10 +33,10 @@ export function LearnQuizStep({
   const isAllAnswered = answeredCount === questions.length && questions.length > 0;
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 space-y-6 shadow-sm">
       <div className="flex items-center justify-between border-b border-[#D9CEDF] pb-4 flex-wrap gap-2">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200 shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
             <HelpCircle className="w-5 h-5" />
           </div>
           <div>
@@ -58,7 +58,7 @@ export function LearnQuizStep({
         <p className="text-sm text-[#6E6678]">No quiz configured for this step.</p>
       ) : quizSubmitted ? (
         <div
-          className={`rounded-3xl p-6 sm:p-8 text-center space-y-4 shadow-sm border ${
+          className={`rounded-xl p-6 sm:p-8 text-center space-y-4 shadow-sm border ${
             quizPassed
               ? "bg-gradient-to-b from-[#E6F5F0] to-white border-[#B0E8CA]"
               : "bg-gradient-to-b from-[#FFF0F0] to-white border-[#FFC5C5]"

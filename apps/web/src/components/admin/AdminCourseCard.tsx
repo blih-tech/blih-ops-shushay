@@ -23,7 +23,7 @@ export function AdminCourseCard({
   const lessonCount = course._count?.lessons ?? 0;
 
   return (
-    <div className="bg-white border border-[#D9CEDF] rounded-3xl p-6 hover:border-[#1E5BFF]/40 transition-all shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="bg-white border border-[#D9CEDF] rounded-xl p-6 hover:border-[#1E5BFF]/40 transition-all shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-center gap-4 min-w-0">
         <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] flex items-center justify-center text-[#1E5BFF] shrink-0">
           <BookOpen className="h-5 w-5" />

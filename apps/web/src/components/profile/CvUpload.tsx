@@ -81,10 +81,10 @@ export const CvUpload: React.FC<CvUploadProps> = ({
 
       {value ? (
         /* Uploaded state — document card */
-        <div className="border border-[#D9CEDF] rounded-3xl bg-white overflow-hidden shadow-sm flex flex-col justify-between flex-1 min-h-[220px]">
+        <div className="border border-[#D9CEDF] rounded-xl bg-white overflow-hidden shadow-sm flex flex-col justify-between flex-1 min-h-[220px]">
           <div className="flex items-center gap-3 p-5">
-            <div className="h-12 w-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
-              <FileText className="h-6 w-6" />
+            <div className="h-10 w-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
+              <FileText className="h-5 w-5" />
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-bold text-[#17131F] truncate font-display">
@@ -100,20 +100,20 @@ export const CvUpload: React.FC<CvUploadProps> = ({
               href={value}
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 p-2 rounded-xl text-[#1E5BFF] hover:bg-[#EEF3FF] transition-colors"
+              className="shrink-0 p-2 rounded-xl text-[#17131F] hover:bg-[#F4F1F8] transition-colors"
               title="Download CV"
             >
               <Download className="h-5 w-5" />
             </a>
           </div>
-          <div className="border-t border-[#D9CEDF] px-5 py-3.5 bg-[#EEF3FF]/30 flex items-center justify-between gap-3">
+          <div className="border-t border-[#D9CEDF] px-5 py-3.5 bg-[#F8F5FB]/50 flex items-center justify-between gap-3">
             <Button
               variant="outline"
               size="sm"
               onClick={() => fileInputRef.current?.click()}
               disabled={loading}
-              leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#1E5BFF]" />}
-              className="text-xs font-semibold hover:border-[#1E5BFF]/40 hover:bg-[#EEF3FF] transition-all"
+              leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#17131F]" />}
+              className="text-xs font-semibold hover:border-[#1E5BFF]/40 hover:bg-[#F4F1F8] transition-all"
             >
               Replace Document
             </Button>
@@ -145,17 +145,17 @@ export const CvUpload: React.FC<CvUploadProps> = ({
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
-          className={`border-2 border-dashed rounded-3xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all flex-1 min-h-[220px] ${
+          className={`border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all flex-1 min-h-[220px] ${
             isDragging
               ? "border-[#1E5BFF] bg-[#EEF3FF]"
-              : "border-[#D9CEDF] bg-[#EEF3FF]/40 hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/70"
+              : "border-[#D9CEDF] bg-white hover:border-[#1E5BFF]/50 hover:bg-[#F8F5FB]"
           }`}
         >
           {loading ? (
             <Loader2 className="h-8 w-8 animate-spin text-[#1E5BFF] mb-3" />
           ) : (
-            <div className="h-12 w-12 rounded-2xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#1E5BFF] mb-3 shadow-sm">
-              <Upload className="h-6 w-6" />
+            <div className="h-10 w-10 rounded-xl bg-white border border-[#D9CEDF] flex items-center justify-center text-[#17131F] mb-3 shadow-xs">
+              <Upload className="h-5 w-5" />
             </div>
           )}
           <p className="text-sm font-bold text-[#17131F] font-display">

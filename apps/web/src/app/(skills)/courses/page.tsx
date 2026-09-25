@@ -77,8 +77,8 @@ export default function CourseCatalogPage() {
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       {/* Page Title & Premise */}
       <div className="space-y-4 max-w-3xl">
-        <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-          <Layers className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-2 font-mono text-xs text-[#17131F] bg-white border border-[#D9CEDF] shadow-2xs px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+          <Layers className="w-3.5 h-3.5 text-[#17131F]" />
           <span>Learning Discovery</span>
         </div>
 
@@ -98,7 +98,7 @@ export default function CourseCatalogPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onSearch={(q) => setSearchQuery(q)}
-          actionText="Filter"
+          actionText="Search"
         />
 
         <div className="flex flex-wrap items-center gap-2 pt-1">
@@ -134,7 +134,7 @@ export default function CourseCatalogPage() {
       {/* Empty State */}
       {!loading && !error && filteredCourses.length === 0 && (
         <EmptyState
-          icon={<GraduationCap className="w-8 h-8 text-[#1E5BFF]" />}
+          icon={<GraduationCap className="w-8 h-8 text-[#17131F]" />}
           title="No courses matched your query"
           description="Try changing your search terms or explore all available tracks."
           action={
@@ -165,7 +165,7 @@ export default function CourseCatalogPage() {
       )}
 
       {/* Career Pathways Banner */}
-      <div className="bg-[#EEF3FF] border border-[#D9CEDF] rounded-3xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6 mt-12">
+      <div className="bg-white border border-[#D9CEDF] rounded-xl p-8 sm:p-10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6 mt-12">
         <div className="space-y-2 text-center md:text-left">
           <h3 className="font-display text-2xl font-bold text-[#17131F]">
             Looking to fast-track your remote career?

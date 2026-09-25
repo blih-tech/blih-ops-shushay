@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Sparkles, ShieldCheck, ArrowUpRight } from "lucide-react";
 import { toRelativeUrl } from "./GlobalNavbar/GlobalNavbar.helpers";
+import { Logo } from "./Logo";
 
 export interface GlobalFooterProps {
   user?: { email?: string; role?: string } | null;
@@ -62,17 +63,15 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
   const roleLinks = getRoleLinks();
 
   return (
-    <footer className="w-full bg-white text-[#17131F] pt-16 pb-10 mt-20 border-t border-[#D9CEDF]/70 relative z-10 selection:bg-[#DDE7FF] selection:text-[#1E5BFF] font-sans">
+    <footer className="w-full bg-white text-[#17131F] pt-16 pb-10 mt-20 border-t border-[#D9CEDF] relative z-10 selection:bg-[#EEF3FF] selection:text-[#1E5BFF] font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-[#D9CEDF]/50">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-10 border-b border-[#D9CEDF]">
           {/* Brand Column */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#1E5BFF]">
-                BLIH OPS
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-[#EEF3FF] text-[#1E5BFF] border border-[#C5D7FF] uppercase tracking-wider">
+              <Logo className="h-9 w-auto" />
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium bg-[#EEF3FF] text-[#1E5BFF] border border-[#1E5BFF]/20 uppercase tracking-wider">
                 <Sparkles className="w-3 h-3 text-[#1E5BFF]" />
                 Skill & Talent
               </span>
@@ -84,15 +83,15 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
               work.
             </p>
 
-            <div className="pt-1 flex items-center gap-2 text-xs font-mono text-[#2E8F79] bg-[#E6F6ED] border border-[#BDE8D0] px-3.5 py-1.5 rounded-full w-fit">
-              <span className="w-2 h-2 rounded-full bg-[#2E8F79] animate-pulse shrink-0" />
+            <div className="pt-1 flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full w-fit">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <span>All Systems Operational · Chapa Gateway</span>
             </div>
           </div>
 
           {/* Role Navigation Column */}
           <div className="md:col-span-4 space-y-3">
-            <h4 className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-bold">
+            <h4 className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
               {role ? `${role} Navigation` : "Platform Navigation"}
             </h4>
             <ul className="space-y-2.5">
@@ -112,12 +111,12 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
 
           {/* Verified Evidence Column */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-bold">
+            <h4 className="font-mono text-xs uppercase tracking-wider text-[#6E6678] font-semibold">
               Verified Evidence
             </h4>
             <div className="space-y-2 text-xs text-[#6E6678] leading-relaxed">
               <div className="flex items-center gap-2 text-[#17131F] font-semibold">
-                <ShieldCheck className="w-4 h-4 text-[#2E8F79] shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Verified Assessment Certs</span>
               </div>
               <p>

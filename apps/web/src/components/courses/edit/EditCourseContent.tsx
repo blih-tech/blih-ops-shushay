@@ -127,7 +127,7 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
           <div className="lg:col-span-8 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
                   <Layers className="h-5 w-5" />
                 </div>
                 <div>
@@ -169,9 +169,9 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             )}
 
             {lessons.length === 0 && !addingLesson && (
-              <div className="border-2 border-dashed border-[#D9CEDF] rounded-3xl p-12 text-center bg-white space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center mx-auto shadow-xs">
-                  <BookOpen className="h-6 w-6" />
+              <div className="border-2 border-dashed border-[#D9CEDF] rounded-xl p-12 text-center bg-white space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center mx-auto shadow-xs">
+                  <BookOpen className="h-5 w-5" />
                 </div>
                 <h3 className="font-display font-bold text-lg text-[#17131F]">
                   No curriculum modules yet
@@ -215,9 +215,9 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
             {editingMeta && (
               <div
                 ref={metaFormRef}
-                className="border border-[#1E5BFF]/30 rounded-2xl bg-white shadow-sm overflow-hidden"
+                className="border border-[#D9CEDF] rounded-xl bg-white shadow-sm overflow-hidden"
               >
-                <div className="flex items-center justify-between px-5 py-4 bg-[#EEF3FF]/60 border-b border-[#1E5BFF]/20">
+                <div className="flex items-center justify-between px-5 py-4 bg-[#F8F5FB] border-b border-[#D9CEDF]">
                   <h3 className="text-sm font-semibold font-display text-[#17131F]">
                     Edit Course Details
                   </h3>

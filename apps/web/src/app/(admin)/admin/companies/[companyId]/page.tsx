@@ -56,7 +56,7 @@ function AdminCompanyDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-3xl animate-pulse" />
+        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
       </main>
     );
   }
@@ -111,18 +111,18 @@ function AdminCompanyDetailContent() {
       </div>
 
       {/* Main Card */}
-      <div className="bg-white rounded-3xl border border-[#D9CEDF] shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
         {/* Header */}
         <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-[#EEF3FF] text-[#1E5BFF] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden">
+              <div className="w-14 h-14 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden shadow-xs">
                 {company.logoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={company.logoUrl}
                     alt=""
-                    className="w-full h-full object-cover rounded-2xl aspect-square"
+                    className="w-full h-full object-cover rounded-xl aspect-square"
                   />
                 ) : (
                   company.companyName?.charAt(0).toUpperCase() || "C"

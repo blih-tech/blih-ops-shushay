@@ -105,7 +105,7 @@ export default function PublicCourseDetailPage() {
           height={32}
           className="w-48 rounded-xl"
         />
-        <Skeleton variant="rectangular" height={260} className="rounded-3xl" />
+        <Skeleton variant="rectangular" height={260} className="rounded-xl" />
         <div className="space-y-3">
           {[0, 1, 2, 3].map((i) => (
             <Skeleton

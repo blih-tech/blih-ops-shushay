@@ -25,7 +25,7 @@ export default function AuthLayout({
           </p>
         </div>
 
-        <div className="w-full bg-white border border-[#D9CEDF] p-6 sm:p-10 rounded-3xl shadow-[0_12px_48px_rgba(30,91,255,0.06)]">
+        <div className="w-full bg-white border border-[#D9CEDF] p-6 sm:p-10 rounded-xl shadow-[0_12px_48px_rgba(30,91,255,0.06)]">
           {children}
         </div>
       </div>

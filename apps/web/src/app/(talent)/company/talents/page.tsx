@@ -89,7 +89,7 @@ function CompanyTalentsSearchContent() {
 
       {/* Subscription Paywall Prompt */}
       {subscriptionRequired ? (
-        <Card className="border border-[#1E5BFF]/30 bg-gradient-to-br from-white to-[#EEF3FF] rounded-3xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-5 shadow-md">
+        <Card className="border border-[#D9CEDF] bg-white rounded-xl p-8 sm:p-12 text-center max-w-3xl mx-auto space-y-5 shadow-xs">
           <div className="w-14 h-14 rounded-full bg-[#1E5BFF] text-white flex items-center justify-center mx-auto shadow-sm">
             <Sparkles className="w-7 h-7" />
           </div>

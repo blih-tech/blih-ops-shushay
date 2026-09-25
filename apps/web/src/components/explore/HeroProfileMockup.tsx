@@ -104,7 +104,7 @@ export function HeroProfileMockup() {
       ref={containerRef}
       className="relative w-full max-w-[520px] h-[580px] sm:h-[620px] mx-auto select-none font-sans"
     >
-      <div className="profile-card absolute left-0 right-0 mx-auto sm:mx-0 sm:right-auto sm:left-[70px] top-[60px] sm:top-[80px] w-[90%] sm:w-[380px] h-[460px] bg-white border border-[#D9CEDF] rounded-[28px] p-6 sm:p-8 shadow-[0_26px_60px_rgba(23,19,31,0.1)] flex flex-col justify-between z-10 transition-shadow hover:shadow-[0_32px_75px_rgba(30,91,255,0.12)]">
+      <div className="profile-card absolute left-0 right-0 mx-auto sm:mx-0 sm:right-auto sm:left-[70px] top-[60px] sm:top-[80px] w-[90%] sm:w-[380px] h-[460px] bg-white border border-[#D9CEDF] rounded-xl p-6 sm:p-8 shadow-[0_26px_60px_rgba(23,19,31,0.1)] flex flex-col justify-between z-10 transition-shadow hover:shadow-[0_32px_75px_rgba(30,91,255,0.12)]">
         <div>
           {/* Profile Header */}
           <div className="flex items-center gap-3.5 mb-8">
@@ -219,7 +219,7 @@ export function HeroProfileMockup() {
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="bg-white border border-[#D9CEDF] rounded-[18px] px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
+          className="bg-white border border-[#D9CEDF] rounded-md px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
         >
           Learn
         </div>
@@ -233,7 +233,7 @@ export function HeroProfileMockup() {
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="bg-white border border-[#D9CEDF] rounded-[18px] px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
+          className="bg-white border border-[#D9CEDF] rounded-md px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
         >
           Practice
         </div>
@@ -247,7 +247,7 @@ export function HeroProfileMockup() {
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="bg-[#1E5BFF] border border-[#1E5BFF] rounded-[18px] px-5 py-3 shadow-[0_12px_24px_rgba(30,91,255,0.3)] cursor-pointer select-none font-mono text-xs font-bold text-white"
+          className="bg-[#1E5BFF] border border-[#1E5BFF] rounded-md px-5 py-3 shadow-[0_12px_24px_rgba(30,91,255,0.3)] cursor-pointer select-none font-mono text-xs font-bold text-white"
         >
           Prove
         </div>
@@ -261,7 +261,7 @@ export function HeroProfileMockup() {
         <div
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
-          className="bg-white border border-[#D9CEDF] rounded-[18px] px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
+          className="bg-white border border-[#D9CEDF] rounded-md px-5 py-3 shadow-[0_4px_12px_rgba(23,19,31,0.05)] cursor-pointer select-none font-mono text-xs font-semibold text-[#17131F]"
         >
           Get Hired
         </div>

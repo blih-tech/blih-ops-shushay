@@ -54,7 +54,7 @@ export function CompanyJobCard({
   const initial = job.title ? job.title.charAt(0).toUpperCase() : "J";
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-[#D9CEDF] bg-white shadow-xs">
+    <div className="relative overflow-hidden rounded-xl border border-[#D9CEDF] bg-white shadow-xs">
       <div className="p-6 sm:p-7 space-y-5">
         {/* Header: Role Title, Status Badge & Top Action Hub */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -108,7 +108,7 @@ export function CompanyJobCard({
                     size="sm"
                     aria-label="Edit role"
                     leftIcon={<Edit3 className="w-3.5 h-3.5" />}
-                    className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#F8FAFD] hover:border-[#1E5BFF]/40 transition-all"
+                    className="px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#F8FAFD] hover:border-[#1E5BFF]/40 transition-all"
                   >
                     Edit
                   </Button>
@@ -119,7 +119,7 @@ export function CompanyJobCard({
                   size="sm"
                   disabled={isClosing}
                   onClick={() => onCloseJob(job.id)}
-                  className="h-9 px-3.5 text-xs font-semibold rounded-xl border-red-200/80 bg-red-50/50 text-red-600 hover:bg-red-100/80 hover:border-red-300 transition-all"
+                  className="px-3.5 text-xs font-semibold rounded-xl border-red-200/80 bg-red-50/50 text-red-600 hover:bg-red-100/80 hover:border-red-300 transition-all"
                   leftIcon={<XCircle className="w-3.5 h-3.5 text-red-500" />}
                 >
                   {isClosing ? "Closing..." : "Close"}
@@ -132,7 +132,7 @@ export function CompanyJobCard({
                   size="sm"
                   disabled={isReopening}
                   onClick={() => onReopenJob(job.id)}
-                  className="h-9 px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
+                  className="px-3.5 text-xs font-semibold rounded-xl border-[#D9CEDF] text-[#17131F] hover:bg-[#EEF3FF] hover:border-[#1E5BFF] hover:text-[#1E5BFF] transition-all"
                   leftIcon={<RefreshCw className="w-3.5 h-3.5 text-[#1E5BFF]" />}
                 >
                   {isReopening ? "Reopening..." : "Reopen Role"}
@@ -144,7 +144,7 @@ export function CompanyJobCard({
               <Button
                 variant="primary"
                 size="sm"
-                className="h-9 px-4 text-xs font-semibold rounded-xl shadow-xs"
+                className="px-4 text-xs font-semibold rounded-xl shadow-xs"
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
               >
                 Manage Role
