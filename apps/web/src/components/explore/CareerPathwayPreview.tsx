@@ -206,7 +206,7 @@ export function CareerPathwayPreview() {
                   <div className="bg-[#F7F9FF] border border-[#DDE7FF] rounded-md p-3.5 mt-4 space-y-2.5">
                     <div className="h-2 w-28 bg-[#BFD0FF] rounded-full" />
                     <div className="h-3 w-20 bg-[#1E5BFF] rounded-full" />
-                    <div className="h-2 w-36 bg-[#DDE7FF] rounded-full" />
+                    <div className="h-2 w-24 bg-[#DDE7FF] rounded-full" />
                   </div>
                 </div>
                 <div className="flex items-end justify-between mt-4">

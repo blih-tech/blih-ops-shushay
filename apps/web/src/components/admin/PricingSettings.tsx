@@ -54,7 +54,7 @@ export function PricingSettings() {
     }
   };
 
-  if (loading) return <div className="h-32 bg-secondary/20 animate-pulse rounded-lg mb-8" />;
+  if (loading) return <div className="h-32 bg-[#F4F1F8] border border-[#D9CEDF] animate-pulse rounded-xl mb-8" />;
 
   return (
     <Card className="p-6 mb-8 border-primary/20">

@@ -51,9 +51,9 @@ export function MobileNav({
       }`}
     >
       <div className="bg-white border border-[#D9CEDF] rounded-lg p-3 shadow-md space-y-2.5 font-sans">
-        {(loading && user || navLinks.length > 0) && (
+        {(loading || navLinks.length > 0) && (
           <div className="flex flex-col space-y-1">
-            {loading && user ? (
+            {loading ? (
               <div className="space-y-2 p-1">
                 <Skeleton
                   variant="rectangular"
@@ -90,8 +90,12 @@ export function MobileNav({
           </div>
         )}
 
-        <div className={`flex flex-col gap-2 ${navLinks.length > 0 || (loading && user) ? "pt-2.5 border-t border-[#D9CEDF]" : ""}`}>
-          {user ? (
+        <div className={`flex flex-col gap-2 ${navLinks.length > 0 || loading ? "pt-2.5 border-t border-[#D9CEDF]" : ""}`}>
+          {loading ? (
+            <div className="space-y-2 p-1">
+              <Skeleton variant="rectangular" height={36} className="w-full rounded-md bg-[#F4F1F8]" />
+            </div>
+          ) : user ? (
             <div className="space-y-2">
               <div className="p-2.5 bg-[#F9F8FC] rounded-md border border-[#D9CEDF] flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-sans font-bold text-xs shrink-0">

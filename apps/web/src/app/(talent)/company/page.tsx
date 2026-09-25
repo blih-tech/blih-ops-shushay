@@ -185,7 +185,7 @@ function CompanyDashboardContent() {
             {[1, 2].map((n) => (
               <div
                 key={n}
-                className="h-28 rounded-xl bg-slate-100/80 animate-pulse border border-[#D9CEDF]/50"
+                className="h-28 rounded-xl bg-[#F4F1F8] animate-pulse border border-[#D9CEDF]"
               />
             ))}
           </div>

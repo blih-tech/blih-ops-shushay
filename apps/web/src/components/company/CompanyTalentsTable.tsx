@@ -43,20 +43,20 @@ export function CompanyTalentsTable({
                         variant="circular"
                         width={40}
                         height={40}
-                        className="rounded-full bg-[#EEF3FF]"
+                        className="rounded-full bg-[#F4F1F8]"
                       />
                       <div className="space-y-1">
                         <Skeleton
                           variant="rectangular"
                           width={140}
                           height={16}
-                          className="rounded bg-[#EEF3FF]"
+                          className="rounded bg-[#F4F1F8]"
                         />
                         <Skeleton
                           variant="rectangular"
                           width={100}
                           height={12}
-                          className="rounded bg-[#EEF3FF]"
+                          className="rounded bg-[#F4F1F8]"
                         />
                       </div>
                     </div>
@@ -67,19 +67,19 @@ export function CompanyTalentsTable({
                         variant="rectangular"
                         width={50}
                         height={20}
-                        className="rounded-md bg-[#EEF3FF]"
+                        className="rounded-md bg-[#F4F1F8]"
                       />
                       <Skeleton
                         variant="rectangular"
                         width={60}
                         height={20}
-                        className="rounded-md bg-[#EEF3FF]"
+                        className="rounded-md bg-[#F4F1F8]"
                       />
                       <Skeleton
                         variant="rectangular"
                         width={45}
                         height={20}
-                        className="rounded-md bg-[#EEF3FF]"
+                        className="rounded-md bg-[#F4F1F8]"
                       />
                     </div>
                   </td>
@@ -88,7 +88,7 @@ export function CompanyTalentsTable({
                       variant="rectangular"
                       width={100}
                       height={16}
-                      className="rounded bg-[#EEF3FF]"
+                      className="rounded bg-[#F4F1F8]"
                     />
                   </td>
                   <td className="py-4 px-6">
@@ -96,7 +96,7 @@ export function CompanyTalentsTable({
                       variant="rectangular"
                       width={80}
                       height={20}
-                      className="rounded-md bg-[#EEF3FF]"
+                      className="rounded-md bg-[#F4F1F8]"
                     />
                   </td>
                   <td className="py-4 px-6">
@@ -104,7 +104,7 @@ export function CompanyTalentsTable({
                       variant="rectangular"
                       width={110}
                       height={20}
-                      className="rounded-full bg-[#EEF3FF]"
+                      className="rounded-full bg-[#F4F1F8]"
                     />
                   </td>
                   <td className="py-4 px-6 text-right">
@@ -112,7 +112,7 @@ export function CompanyTalentsTable({
                       variant="rectangular"
                       width={90}
                       height={32}
-                      className="rounded-xl bg-[#EEF3FF] ml-auto"
+                      className="rounded-xl bg-[#F4F1F8] ml-auto"
                     />
                   </td>
                 </tr>

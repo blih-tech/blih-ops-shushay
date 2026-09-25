@@ -99,7 +99,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Desktop navigation links */}
         <div className="hidden md:flex items-center gap-0.5 rounded-md border border-[#D9CEDF] bg-white p-1 shadow-2xs">
-          {loading && user ? (
+          {loading ? (
             <div className="flex items-center gap-1 px-1">
               <Skeleton
                 variant="rectangular"
@@ -145,7 +145,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
 
         {/* Account actions */}
         <div className="hidden sm:flex items-center gap-3">
-          {loading && user ? (
+          {loading ? (
             <div className="flex items-center gap-2">
               <Skeleton
                 variant="circular"

@@ -11,10 +11,10 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const SKELETON_THEME_MAP: Record<SkeletonColorTheme, string> = {
-  surface: "bg-[#EEF3FF] border border-[#D9CEDF]/40",
-  lavender: "bg-[#DDE7FF]/80 border border-[#1E5BFF]/15",
-  peach: "bg-[#FFF4EC] border border-[#FF8A5B]/20",
-  mint: "bg-[#EAFBF6] border border-[#2E8F79]/20",
+  surface: "bg-[#F4F1F8] border border-[#D9CEDF]/50",
+  lavender: "bg-[#F0EDF5] border border-[#D9CEDF]/60",
+  peach: "bg-[#F8F6FA] border border-[#D9CEDF]/40",
+  mint: "bg-[#EBE5F0]/70 border border-[#D9CEDF]/50",
 };
 
 export const SKELETON_THEME_ORDER: SkeletonColorTheme[] = [

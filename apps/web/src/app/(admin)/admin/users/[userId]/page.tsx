@@ -94,7 +94,7 @@ function AdminUserDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F9F8FC] rounded-xl animate-pulse" />
+        <div className="h-64 bg-[#F4F1F8] border border-[#D9CEDF] rounded-xl animate-pulse" />
       </main>
     );
   }
