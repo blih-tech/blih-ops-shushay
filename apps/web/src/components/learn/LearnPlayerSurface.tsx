@@ -14,6 +14,8 @@ interface LearnPlayerSurfaceProps {
   activeStep?: CourseStep;
   activeStepIndex: number;
   totalSteps: number;
+  lessonPositions?: Record<string, { lastPosition: number; completed: boolean }>;
+  onPositionSave?: (lessonId: string, position: number) => void;
   onPrevStep: () => void;
   onNextStep: () => void;
   selectedQuizOption: Record<number, number>;
@@ -38,9 +40,12 @@ interface LearnPlayerSurfaceProps {
 }
 
 export function LearnPlayerSurface({
+  courseTitle,
   activeStep,
   activeStepIndex,
   totalSteps,
+  lessonPositions,
+  onPositionSave,
   onPrevStep,
   onNextStep,
   selectedQuizOption,
@@ -149,6 +154,10 @@ export function LearnPlayerSurface({
           <LearnVideoPlayer
             activeLesson={activeLesson}
             activeLessonIndex={activeStep.lessonIndex}
+            initialLastPosition={
+              lessonPositions?.[activeLesson.id]?.lastPosition ?? 0
+            }
+            onPositionSave={onPositionSave}
           />
         )}
 

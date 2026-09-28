@@ -2,13 +2,16 @@ import { Router } from "express";
 import * as learningController from "./learning.controller";
 import { requireAuth } from "../../middleware/auth";
 import { validate } from "../../middleware/validate";
-import { markLessonCompleteSchema, submitQuizSchema } from "./learning.schemas";
+import {
+  markLessonCompleteSchema,
+  saveLessonPositionSchema,
+  submitQuizSchema,
+} from "./learning.schemas";
 
 const router = Router();
 
 // All learning routes require authentication
 router.use(requireAuth);
-// Enrollment checks are performed in the service layer on a per-course basis
 
 /**
  * @openapi
@@ -36,6 +39,38 @@ router.post(
   "/lesson/complete",
   validate(markLessonCompleteSchema),
   learningController.markLessonComplete,
+);
+
+/**
+ * @openapi
+ * /learning/lesson/position:
+ *   post:
+ *     summary: Save video playback timestamp position for a lesson
+ *     tags: [Learning]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [lessonId, lastPosition]
+ *             properties:
+ *               lessonId:
+ *                 type: string
+ *               lastPosition:
+ *                 type: number
+ *               completed:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Video position saved
+ */
+router.post(
+  "/lesson/position",
+  validate(saveLessonPositionSchema),
+  learningController.saveLessonPosition,
 );
 
 /**

@@ -194,6 +194,17 @@ export async function markLessonComplete(lessonId: string) {
   });
 }
 
+export async function saveLessonPosition(
+  lessonId: string,
+  lastPosition: number,
+  completed?: boolean,
+) {
+  return apiFetch<any>("/learning/lesson/position", {
+    method: "POST",
+    body: JSON.stringify({ lessonId, lastPosition, completed }),
+  });
+}
+
 export async function submitQuiz(quizId: string, answers: number[]) {
   return apiFetch<any>("/learning/quiz/submit", {
     method: "POST",

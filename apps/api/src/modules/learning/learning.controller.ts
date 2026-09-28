@@ -28,6 +28,23 @@ export async function markLessonComplete(
   }
 }
 
+export async function saveLessonPosition(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const result = await learningService.saveLessonPosition(
+      req.user!.id,
+      req.body,
+      req.user!.role,
+    );
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function submitQuiz(
   req: Request,
   res: Response,

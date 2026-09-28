@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Play,
   Pause,
@@ -8,21 +6,30 @@ import {
   VolumeX,
   Maximize,
   Download,
+  RotateCcw,
 } from "lucide-react";
 import { Badge } from "@blih/ui";
+import { saveLessonPosition } from "@blih/api-client";
 import type { PublicLesson } from "@/types/course";
 
 interface LearnVideoPlayerProps {
   activeLesson: PublicLesson;
   activeLessonIndex?: number;
+  initialLastPosition?: number;
+  onPositionSave?: (lessonId: string, position: number) => void;
 }
 
 export function LearnVideoPlayer({
   activeLesson,
   activeLessonIndex = 0,
+  initialLastPosition = 0,
+  onPositionSave,
 }: LearnVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const playerContainerRef = useRef<HTMLDivElement | null>(null);
+  const hasSeeked = useRef(false);
+  const lastSavedPosRef = useRef(initialLastPosition);
+  const [resumedToast, setResumedToast] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -36,11 +43,49 @@ export function LearnVideoPlayer({
   const hasVideo = !!activeLesson.videoUrl;
   const hasDocuments = (activeLesson.documents?.length ?? 0) > 0;
 
+  useEffect(() => {
+    hasSeeked.current = false;
+    setResumedToast(null);
+    lastSavedPosRef.current = initialLastPosition || 0;
+  }, [activeLesson.id, initialLastPosition]);
+
+  const savePosition = async (pos: number) => {
+    if (!activeLesson.id || pos <= 0) return;
+    if (
+      Math.abs(pos - lastSavedPosRef.current) < 2 &&
+      lastSavedPosRef.current !== 0
+    ) {
+      return;
+    }
+
+    lastSavedPosRef.current = pos;
+    try {
+      await saveLessonPosition(activeLesson.id, Math.floor(pos));
+      if (onPositionSave) {
+        onPositionSave(activeLesson.id, Math.floor(pos));
+      }
+    } catch (err) {
+      console.error("Failed to save lesson position", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      if (videoRef.current && !videoRef.current.paused) {
+        savePosition(videoRef.current.currentTime);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, activeLesson.id]);
+
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
       videoRef.current.pause();
       setIsPlaying(false);
+      savePosition(videoRef.current.currentTime);
     } else {
       videoRef.current.play();
       setIsPlaying(true);
@@ -55,7 +100,21 @@ export function LearnVideoPlayer({
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
-      setDuration(videoRef.current.duration);
+      const dur = videoRef.current.duration;
+      setDuration(dur);
+
+      if (
+        !hasSeeked.current &&
+        initialLastPosition &&
+        initialLastPosition > 1 &&
+        initialLastPosition < dur - 5
+      ) {
+        videoRef.current.currentTime = initialLastPosition;
+        setCurrentTime(initialLastPosition);
+        hasSeeked.current = true;
+        setResumedToast(initialLastPosition);
+        setTimeout(() => setResumedToast(null), 4500);
+      }
     }
   };
 
@@ -166,13 +225,16 @@ export function LearnVideoPlayer({
         >
           <div className="flex items-center justify-between gap-4">
             <div>
-              <span className="font-mono text-xs text-[#BFD0FF] font-semibold uppercase tracking-wider block mb-1">
+              <span className="font-mono text-xs text-[#BFD0FF] font-semibold uppercase tracking-wider block">
                 Lesson {activeLessonIndex + 1}
               </span>
-              <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white tracking-tight leading-tight max-w-2xl drop-shadow-md">
-                {activeLesson.title}
-              </h2>
             </div>
+            {resumedToast !== null && (
+              <div className="pointer-events-auto flex items-center gap-2 bg-[#1E5BFF]/90 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-xs font-mono font-medium shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Resumed at {formatTime(resumedToast)}</span>
+              </div>
+            )}
           </div>
         </div>
 

@@ -40,6 +40,9 @@ function LearnContent({ courseId }: { courseId: string }) {
   const [quizPassed, setQuizPassed] = useState<boolean | null>(null);
   const [quizScore, setQuizScore] = useState<number | null>(null);
   const [completedLessons, setCompletedLessons] = useState<number[]>([]);
+  const [lessonPositions, setLessonPositions] = useState<
+    Record<string, { lastPosition: number; completed: boolean }>
+  >({});
   const [isMarkingComplete, setIsMarkingComplete] = useState(false);
   const [completionError, setCompletionError] = useState<string | null>(null);
   const [assignmentContent, setAssignmentContent] = useState("");
@@ -65,10 +68,26 @@ function LearnContent({ courseId }: { courseId: string }) {
               .filter((i: number) => i !== -1);
             setCompletedLessons(indices);
           }
+          if (progressData?.lessonPositions) {
+            setLessonPositions(progressData.lessonPositions);
+          }
         })
         .catch(console.error);
     },
     [courseId],
+  );
+
+  const handlePositionSave = useCallback(
+    (lessonId: string, position: number) => {
+      setLessonPositions((prev) => ({
+        ...prev,
+        [lessonId]: {
+          lastPosition: position,
+          completed: prev[lessonId]?.completed ?? false,
+        },
+      }));
+    },
+    [],
   );
 
   useEffect(() => {
@@ -315,6 +334,8 @@ function LearnContent({ courseId }: { courseId: string }) {
           activeStep={activeStep}
           activeStepIndex={activeStepIndex}
           totalSteps={totalSteps}
+          lessonPositions={lessonPositions}
+          onPositionSave={handlePositionSave}
           onPrevStep={handlePrevStep}
           onNextStep={handleNextStep}
           selectedQuizOption={quizAnswers}

@@ -1,6 +1,10 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import { SubmitQuizInput, SubmitAssignmentInput } from "./learning.schemas";
+import {
+  SubmitQuizInput,
+  SubmitAssignmentInput,
+  SaveLessonPositionInput,
+} from "./learning.schemas";
 import { enqueuePdfGeneration } from "../../services/queue.service";
 
 /** Typed shape of a single quiz question stored in the Prisma JSON field. */
@@ -55,10 +59,13 @@ export async function markLessonComplete(userId: string, lessonId: string, userR
         lessonId,
       },
     },
-    update: {},
+    update: {
+      completed: true,
+    },
     create: {
       userId,
       lessonId,
+      completed: true,
     },
   });
 
@@ -66,6 +73,44 @@ export async function markLessonComplete(userId: string, lessonId: string, userR
   try {
     await enqueuePdfGeneration(userId, lesson.courseId);
   } catch {}
+
+  return progress;
+}
+
+export async function saveLessonPosition(
+  userId: string,
+  data: SaveLessonPositionInput,
+  userRole?: string,
+) {
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: data.lessonId },
+    select: { id: true, courseId: true },
+  });
+
+  if (!lesson) {
+    throw new AppError(404, "Lesson not found");
+  }
+
+  await assertEnrolled(userId, lesson.courseId, userRole);
+
+  const progress = await prisma.lessonProgress.upsert({
+    where: {
+      userId_lessonId: {
+        userId,
+        lessonId: data.lessonId,
+      },
+    },
+    update: {
+      lastPosition: data.lastPosition,
+      ...(data.completed !== undefined ? { completed: data.completed } : {}),
+    },
+    create: {
+      userId,
+      lessonId: data.lessonId,
+      lastPosition: data.lastPosition,
+      completed: data.completed ?? false,
+    },
+  });
 
   return progress;
 }
@@ -230,16 +275,28 @@ export async function getCourseProgress(userId: string, courseId: string) {
     };
   }
 
-  const completed = await prisma.lessonProgress.findMany({
+  const allProgress = await prisma.lessonProgress.findMany({
     where: {
       userId,
       lessonId: { in: lessonIds },
     },
-    select: { lessonId: true },
+    select: { lessonId: true, lastPosition: true, completed: true },
   });
 
+  const completed = allProgress.filter((p) => p.completed);
   const completedCount = completed.length;
   const isCompleted = completedCount === totalLessons;
+
+  const lessonPositions: Record<
+    string,
+    { lastPosition: number; completed: boolean }
+  > = {};
+  for (const p of allProgress) {
+    lessonPositions[p.lessonId] = {
+      lastPosition: p.lastPosition,
+      completed: p.completed,
+    };
+  }
 
   // If completed, trigger certificate generation only when no certificate exists yet
   if (isCompleted) {
@@ -261,5 +318,6 @@ export async function getCourseProgress(userId: string, courseId: string) {
     isCompleted,
     progressPercentage: Math.round((completedCount / totalLessons) * 100),
     completedLessonIds: completed.map((c: { lessonId: string }) => c.lessonId),
+    lessonPositions,
   };
 }

@@ -6,6 +6,14 @@ export const markLessonCompleteSchema = z.object({
 
 export type MarkLessonCompleteInput = z.infer<typeof markLessonCompleteSchema>;
 
+export const saveLessonPositionSchema = z.object({
+  lessonId: z.string(),
+  lastPosition: z.number().min(0),
+  completed: z.boolean().optional(),
+});
+
+export type SaveLessonPositionInput = z.infer<typeof saveLessonPositionSchema>;
+
 export const submitQuizSchema = z.object({
   quizId: z.string(),
   answers: z.array(z.number()), // Array of selected option indices
