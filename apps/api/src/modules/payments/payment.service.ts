@@ -10,11 +10,8 @@ import {
 } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 import { chapaService } from "./chapa.service";
-import {
-  createNotification,
-  sendCoursePaymentConfirmationEmail,
-  sendSubscriptionConfirmationEmail,
-} from "../notifications/notification.service";
+import { createNotification } from "../notifications/notification.service";
+import { enqueueEmail } from "../../services/queue.service";
 import { getSetting } from "../settings/settings.service";
 
 /** Typed shape of the JSON metadata stored on a PaymentTransaction. */
@@ -127,7 +124,7 @@ export async function initializeCoursePayment(userId: string, courseId: string) 
   const firstName = nameParts[0] || "Learner";
   const lastName = nameParts.slice(1).join(" ") || "User";
 
-  const returnUrl = `${env.skillsWebUrl}/checkout/return?tx_ref=${txRef}`;
+  const returnUrl = `${env.skillsWebUrl}/checkout/return?tx_ref=${txRef}&courseId=${courseId}`;
   const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
   const chapaRes = await chapaService.initializePayment({
@@ -389,12 +386,15 @@ export async function verifyAndCompletePayment(
 
     const companyName = companyProfile.companyName || transaction.user.email;
     const companyEmail = companyProfile.contactEmail || transaction.user.email;
-    sendSubscriptionConfirmationEmail(
-      companyEmail,
-      companyName,
-      transaction.amount,
-      plan,
-    );
+    enqueueEmail({
+      jobType: "SUBSCRIPTION",
+      payload: {
+        email: companyEmail,
+        companyName,
+        amount: transaction.amount,
+        plan,
+      },
+    });
 
     return {
       verified: true,
@@ -484,13 +484,16 @@ export async function verifyAndCompletePayment(
   // Send confirmation email (resilient / non-blocking)
   const userName =
     transaction.user.talentProfile?.fullName || transaction.user.email;
-  sendCoursePaymentConfirmationEmail(
-    transaction.user.email,
-    userName,
-    transaction.amount,
-    txRef,
-    course.title,
-  );
+  enqueueEmail({
+    jobType: "COURSE_PAYMENT",
+    payload: {
+      email: transaction.user.email,
+      userName,
+      amount: transaction.amount,
+      txRef,
+      courseName: course.title,
+    },
+  });
 
   return {
     verified: true,

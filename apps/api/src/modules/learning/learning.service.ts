@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { SubmitQuizInput, SubmitAssignmentInput } from "./learning.schemas";
-import { checkAndGenerateCertificate } from "../certificates/certificate.service";
+import { enqueuePdfGeneration } from "../../services/queue.service";
 
 /** Typed shape of a single quiz question stored in the Prisma JSON field. */
 interface QuizQuestion {
@@ -64,7 +64,7 @@ export async function markLessonComplete(userId: string, lessonId: string, userR
 
   // Automatically check if course is completed and generate certificate
   try {
-    await checkAndGenerateCertificate(userId, lesson.courseId);
+    await enqueuePdfGeneration(userId, lesson.courseId);
   } catch {}
 
   return progress;
@@ -129,7 +129,7 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput, userRole
 
     // Automatically check if course is completed and generate certificate
     try {
-      await checkAndGenerateCertificate(userId, quiz.lesson.courseId);
+      await enqueuePdfGeneration(userId, quiz.lesson.courseId);
     } catch {}
   }
 
@@ -196,7 +196,7 @@ export async function submitAssignment(
 
   // Automatically check if course is completed and generate certificate
   try {
-    await checkAndGenerateCertificate(userId, assignment.lesson.courseId);
+    await enqueuePdfGeneration(userId, assignment.lesson.courseId);
   } catch {}
 
   return submission;
@@ -249,7 +249,7 @@ export async function getCourseProgress(userId: string, courseId: string) {
         select: { id: true },
       });
       if (!existingCert) {
-        await checkAndGenerateCertificate(userId, courseId);
+        await enqueuePdfGeneration(userId, courseId);
       }
     } catch {}
   }

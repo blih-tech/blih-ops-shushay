@@ -98,7 +98,10 @@ export async function requireAuth(
   next: NextFunction,
 ) {
   try {
-    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    const token =
+      req.cookies.token ||
+      req.headers.authorization?.split(" ")[1] ||
+      (req.query.token as string | undefined);
 
     if (!token) {
       return next(new AppError(401, "Authentication token required"));

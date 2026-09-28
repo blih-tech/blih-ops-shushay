@@ -2,10 +2,8 @@ import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { CreateApplicationInput } from "./application.schemas";
 import { JobStatus, ApplicationStatus } from "@prisma/client";
-import {
-  createNotification,
-  sendJobApplicationEmail,
-} from "../notifications/notification.service";
+import { createNotification } from "../notifications/notification.service";
+import { enqueueEmail } from "../../services/queue.service";
 
 export async function applyToJob(userId: string, data: CreateApplicationInput) {
   const talentProfile = await prisma.talentProfile.findUnique({
@@ -106,7 +104,10 @@ export async function applyToJob(userId: string, data: CreateApplicationInput) {
   const companyEmail =
     job.companyProfile?.contactEmail || job.companyProfile?.user?.email;
   if (companyEmail) {
-    sendJobApplicationEmail(companyEmail, job.title, applicantName);
+    enqueueEmail({
+      jobType: "JOB_APPLICATION",
+      payload: { companyEmail, jobTitle: job.title, applicantName },
+    });
   }
 
   return application;
@@ -233,12 +234,14 @@ export async function updateApplicationStatus(
     );
   }
 
-  return prisma.jobApplication.update({
+  const updated = await prisma.jobApplication.update({
     where: { id: applicationId },
     data: { status: ApplicationStatus.IN_REVIEW },
     include: {
       talentProfile: {
-        include: {
+        select: {
+          userId: true,
+          fullName: true,
           user: {
             select: {
               email: true,
@@ -246,6 +249,28 @@ export async function updateApplicationStatus(
           },
         },
       },
+      job: {
+        select: {
+          title: true,
+          companyProfile: {
+            select: {
+              companyName: true,
+            },
+          },
+        },
+      },
     },
   });
+
+  if (updated.talentProfile?.userId) {
+    const companyName = updated.job?.companyProfile?.companyName || "A company";
+    await createNotification({
+      userId: updated.talentProfile.userId,
+      type: "APPLICATION_STATUS_UPDATED",
+      title: "Application Under Review",
+      message: `${companyName} has moved your application for '${updated.job.title}' to Reviewing.`,
+    });
+  }
+
+  return updated;
 }

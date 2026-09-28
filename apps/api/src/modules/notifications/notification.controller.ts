@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as notificationService from "./notification.service";
+import { sseNotificationManager } from "./sse.service";
 
 export async function getUserNotifications(
   req: Request,
@@ -32,4 +33,25 @@ export async function markAsRead(
   } catch (err) {
     next(err);
   }
+}
+
+export function streamNotifications(req: Request, res: Response) {
+  const userId = req.user!.id;
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
+  res.flushHeaders();
+
+  // Send initial handshake
+  res.write(
+    `data: ${JSON.stringify({ type: "INIT", message: "Real-time notification stream connected" })}\n\n`,
+  );
+
+  sseNotificationManager.addClient(userId, res);
+
+  req.on("close", () => {
+    sseNotificationManager.removeClient(userId, res);
+  });
 }

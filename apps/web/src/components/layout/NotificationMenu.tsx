@@ -28,6 +28,37 @@ export function NotificationMenu() {
     fetchNotifications();
   }, []);
 
+  // Subscribe to Real-time SSE Notification Stream
+  useEffect(() => {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+    const eventSource = new EventSource(`${baseUrl}/notifications/stream`, {
+      withCredentials: true,
+    });
+
+    eventSource.onmessage = (event) => {
+      try {
+        const payload = JSON.parse(event.data);
+        if (payload && payload.id) {
+          setNotifications((prev) => {
+            if (prev.some((n) => n.id === payload.id)) return prev;
+            return [payload, ...prev];
+          });
+        }
+      } catch (err) {
+        console.error("Error parsing SSE notification payload:", err);
+      }
+    };
+
+    eventSource.onerror = (err) => {
+      console.debug("SSE notification stream connection state event:", err);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

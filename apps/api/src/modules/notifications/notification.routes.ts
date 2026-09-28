@@ -1,8 +1,25 @@
 import { Router } from "express";
 import { requireAuth } from "../../middleware/auth";
-import { getUserNotifications, markAsRead } from "./notification.controller";
+import {
+  getUserNotifications,
+  markAsRead,
+  streamNotifications,
+} from "./notification.controller";
 
 const router = Router();
+
+/**
+ * @openapi
+ * /notifications/stream:
+ *   get:
+ *     summary: Real-time Server-Sent Events (SSE) notification stream for authenticated user
+ *     tags: [Notifications]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200: { description: Event stream established }
+ */
+router.get("/stream", requireAuth, streamNotifications);
 
 /**
  * @openapi

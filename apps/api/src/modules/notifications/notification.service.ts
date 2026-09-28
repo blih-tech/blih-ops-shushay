@@ -55,6 +55,8 @@ function wrapHtml(title: string, body: string): string {
 
 // ─── In-app notification helpers ──────────────────────────────────────────────
 
+import { sseNotificationManager } from "./sse.service";
+
 export interface CreateNotificationInput {
   userId: string;
   type: string;
@@ -63,7 +65,7 @@ export interface CreateNotificationInput {
 }
 
 export async function createNotification(input: CreateNotificationInput) {
-  return prisma.notification.create({
+  const notification = await prisma.notification.create({
     data: {
       userId: input.userId,
       type: input.type,
@@ -71,6 +73,11 @@ export async function createNotification(input: CreateNotificationInput) {
       message: input.message,
     },
   });
+
+  // Broadcast real-time SSE event to user's connected clients
+  sseNotificationManager.sendNotificationToUser(input.userId, notification);
+
+  return notification;
 }
 
 export async function getUserNotifications(userId: string) {

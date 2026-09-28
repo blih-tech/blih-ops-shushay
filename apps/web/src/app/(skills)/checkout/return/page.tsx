@@ -19,11 +19,15 @@ import { verifyPayment } from "@blih/api-client";
 function ReturnContent() {
   const searchParams = useSearchParams();
   const txRef = searchParams.get("tx_ref") || searchParams.get("txRef");
+  const queryCourseId =
+    searchParams.get("courseId") ||
+    searchParams.get("course_id") ||
+    searchParams.get("course");
 
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [courseName, setCourseName] = useState<string | null>(null);
-  const [courseId, setCourseId] = useState<string | null>(null);
+  const [courseId, setCourseId] = useState<string | null>(queryCourseId);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -39,10 +43,17 @@ function ReturnContent() {
       .then((res) => {
         if (res.verified) {
           setSuccess(true);
-          const name = res.enrollment?.course?.title || null;
-          const id = res.enrollment?.courseId || res.enrollment?.course?.id || null;
-          setCourseName(name);
-          setCourseId(id);
+          const metadata = (res.payment?.metadata as any) || {};
+          const name =
+            res.enrollment?.course?.title || metadata.courseTitle || null;
+          const id =
+            res.enrollment?.courseId ||
+            res.enrollment?.course?.id ||
+            metadata.courseId ||
+            queryCourseId ||
+            null;
+          if (name) setCourseName(name);
+          if (id) setCourseId(id);
         } else {
           setErrorMessage(res.message || "Payment verification failed.");
         }
@@ -53,7 +64,7 @@ function ReturnContent() {
       .finally(() => {
         setLoading(false);
       });
-  }, [txRef]);
+  }, [txRef, queryCourseId]);
 
   const statusParam = searchParams.get("status");
   const isCanceled = statusParam === "canceled" || statusParam === "cancelled";
@@ -67,10 +78,17 @@ function ReturnContent() {
       const res = await verifyPayment(txRef);
       if (res.verified) {
         setSuccess(true);
-        const name = res.enrollment?.course?.title || null;
-        const id = res.enrollment?.courseId || res.enrollment?.course?.id || null;
-        setCourseName(name);
-        setCourseId(id);
+        const metadata = (res.payment?.metadata as any) || {};
+        const name =
+          res.enrollment?.course?.title || metadata.courseTitle || null;
+        const id =
+          res.enrollment?.courseId ||
+          res.enrollment?.course?.id ||
+          metadata.courseId ||
+          queryCourseId ||
+          null;
+        if (name) setCourseName(name);
+        if (id) setCourseId(id);
       } else {
         setErrorMessage(res.message || "Payment verification failed.");
       }
@@ -181,17 +199,28 @@ function ReturnContent() {
             {/* Action Buttons */}
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               {courseId ? (
-                <Link href={`/courses/${courseId}/learn`} className="w-full">
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    fullWidth
-                    leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
-                    rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
-                  >
-                    Start Learning Now
-                  </Button>
-                </Link>
+                <>
+                  <Link href={`/courses/${courseId}/learn`} className="w-full sm:flex-1">
+                    <Button
+                      variant="primary"
+                      size="lg"
+                      fullWidth
+                      leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
+                      rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
+                    >
+                      Start Learning Now
+                    </Button>
+                  </Link>
+                  <Link href={`/courses/${courseId}`} className="w-full sm:flex-1">
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      fullWidth
+                    >
+                      View Course Details
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <Link href="/courses" className="w-full">
                   <Button
@@ -201,7 +230,7 @@ function ReturnContent() {
                     leftIcon={<BookOpen className="w-5 h-5 shrink-0" />}
                     rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
                   >
-                    Go to Courses
+                    Go to Courses Catalog
                   </Button>
                 </Link>
               )}
