@@ -275,3 +275,182 @@ export async function sendJobApplicationEmail(
     return { success: false, error: err.message };
   }
 }
+
+// ─── Subscription Lifecycle Email Helpers ─────────────────────────────────────
+
+/**
+ * Sends a subscription expiry reminder email to the company contact.
+ * daysLeft should be 7, 3, or 1 — the subject line adapts accordingly.
+ * Non-fatal — returns { success: false } on any failure.
+ */
+export async function sendSubscriptionReminderEmail(
+  email: string,
+  companyName: string,
+  daysLeft: 7 | 3 | 1,
+  plan: string,
+  expiresAt: Date,
+) {
+  const resend = getResend();
+  const planLabel = plan === "YEARLY" ? "Yearly" : "Monthly";
+  const expiresStr = expiresAt.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const urgencyColor = daysLeft === 1 ? "#DC2626" : daysLeft === 3 ? "#D97706" : "#1E5BFF";
+  const urgencyEmoji = daysLeft === 1 ? "🚨" : daysLeft === 3 ? "⚠️" : "📅";
+
+  if (!resend) {
+    logger.debug(
+      `[EMAIL DEV] Subscription reminder → ${email} | company: ${companyName} | daysLeft: ${daysLeft}`,
+    );
+    return { success: true };
+  }
+
+  try {
+    const body = `
+      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">${urgencyEmoji} Subscription Expiring in ${daysLeft} Day${daysLeft > 1 ? "s" : ""}</h2>
+      <p style="margin:0 0 12px;font-size:15px;color:#4A4154;line-height:1.6;">
+        Hi <strong>${companyName}</strong>, your <strong>${planLabel}</strong> subscription is expiring soon.
+      </p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#EEF3FF;border-radius:10px;padding:16px;margin-bottom:20px;">
+        <tr><td style="font-size:13px;color:#6E6678;">Plan</td><td align="right" style="font-size:15px;font-weight:700;color:#1E5BFF;">${planLabel}</td></tr>
+        <tr><td style="font-size:13px;color:#6E6678;padding-top:8px;">Expires</td><td align="right" style="font-size:14px;font-weight:600;color:${urgencyColor};padding-top:8px;">${expiresStr}</td></tr>
+        <tr><td style="font-size:13px;color:#6E6678;padding-top:8px;">Days Remaining</td><td align="right" style="font-size:22px;font-weight:900;color:${urgencyColor};padding-top:8px;">${daysLeft}</td></tr>
+      </table>
+      <p style="margin:0 0 24px;font-size:14px;color:#4A4154;line-height:1.6;">
+        Renew your subscription now to maintain uninterrupted access to the full talent directory, complete profiles, and unlimited job listings.
+      </p>
+      <a href="${env.talentWebUrl}/company/subscription" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;">Renew Now →</a>
+    `;
+
+    await resend.emails.send({
+      from: env.resend.emailFrom,
+      to: email,
+      subject: `${urgencyEmoji} ${companyName} — Subscription expires in ${daysLeft} day${daysLeft > 1 ? "s" : ""}`,
+      html: wrapHtml("Subscription Renewal Reminder", body),
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    logger.error(`[EMAIL ERROR] Subscription reminder to ${email}: ${err.message}`);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Sends a subscription expired notification to the company contact.
+ * Non-fatal — returns { success: false } on any failure.
+ */
+export async function sendSubscriptionExpiredEmail(
+  email: string,
+  companyName: string,
+  plan: string,
+  expiredAt: Date,
+) {
+  const resend = getResend();
+  const planLabel = plan === "YEARLY" ? "Yearly" : "Monthly";
+  const expiredStr = expiredAt.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  if (!resend) {
+    logger.debug(
+      `[EMAIL DEV] Subscription expired → ${email} | company: ${companyName} | plan: ${plan}`,
+    );
+    return { success: true };
+  }
+
+  try {
+    const body = `
+      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">Your Subscription Has Expired 😔</h2>
+      <p style="margin:0 0 12px;font-size:15px;color:#4A4154;line-height:1.6;">
+        Hi <strong>${companyName}</strong>, your <strong>${planLabel}</strong> subscription expired on <strong>${expiredStr}</strong>.
+      </p>
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:16px;margin-bottom:20px;">
+        <p style="margin:0;font-size:14px;color:#DC2626;font-weight:600;">
+          🔒 Your access to talent profiles and premium features has been paused.
+        </p>
+      </div>
+      <p style="margin:0 0 24px;font-size:14px;color:#4A4154;line-height:1.6;">
+        Renew your subscription to immediately restore access to the full talent directory, complete profiles, and unlimited job listings. Your existing job posts and company data are safe.
+      </p>
+      <a href="${env.talentWebUrl}/company/subscription" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;">Renew Subscription →</a>
+    `;
+
+    await resend.emails.send({
+      from: env.resend.emailFrom,
+      to: email,
+      subject: `🔒 ${companyName} — Your Blih subscription has expired`,
+      html: wrapHtml("Subscription Expired", body),
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    logger.error(`[EMAIL ERROR] Subscription expired email to ${email}: ${err.message}`);
+    return { success: false, error: err.message };
+  }
+}
+
+/**
+ * Sends a grace period email (subscription recently expired, company still has
+ * temporary access for a configurable window before hard-lock).
+ * Non-fatal — returns { success: false } on any failure.
+ */
+export async function sendGracePeriodEmail(
+  email: string,
+  companyName: string,
+  plan: string,
+  gracePeriodEndsAt: Date,
+) {
+  const resend = getResend();
+  const planLabel = plan === "YEARLY" ? "Yearly" : "Monthly";
+  const graceStr = gracePeriodEndsAt.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  if (!resend) {
+    logger.debug(
+      `[EMAIL DEV] Grace period → ${email} | company: ${companyName} | graceEnds: ${graceStr}`,
+    );
+    return { success: true };
+  }
+
+  try {
+    const body = `
+      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">⏳ Grace Period Active — Renew Soon</h2>
+      <p style="margin:0 0 12px;font-size:15px;color:#4A4154;line-height:1.6;">
+        Hi <strong>${companyName}</strong>, your <strong>${planLabel}</strong> subscription has expired, but you're still in your grace period.
+      </p>
+      <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:10px;padding:16px;margin-bottom:20px;">
+        <p style="margin:0;font-size:14px;color:#92400E;font-weight:600;">
+          ⚠️ Your grace period ends on <strong>${graceStr}</strong>. After that, access will be restricted until you renew.
+        </p>
+      </div>
+      <p style="margin:0 0 24px;font-size:14px;color:#4A4154;line-height:1.6;">
+        Renew your subscription now to continue without interruption.
+      </p>
+      <a href="${env.talentWebUrl}/company/subscription" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:12px 28px;border-radius:10px;text-decoration:none;">Renew Now →</a>
+    `;
+
+    await resend.emails.send({
+      from: env.resend.emailFrom,
+      to: email,
+      subject: `⏳ ${companyName} — Grace period ending ${graceStr}`,
+      html: wrapHtml("Grace Period Ending", body),
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    logger.error(`[EMAIL ERROR] Grace period email to ${email}: ${err.message}`);
+    return { success: false, error: err.message };
+  }
+}
+

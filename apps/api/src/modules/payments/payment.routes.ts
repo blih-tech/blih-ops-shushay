@@ -13,11 +13,13 @@ import {
   getUserEnrollments,
   listUserPayments,
 } from "./payment.controller";
+import { webhookIdempotency } from "../../middleware/idempotency";
 
 const router = Router();
 
-// Public webhook endpoint for Chapa server-to-server POST notifications only
-router.post("/webhook", chapaWebhook);
+// Public webhook endpoint for Chapa server-to-server POST notifications only.
+// webhookIdempotency (Redis SET NX) guards against duplicate Chapa retries.
+router.post("/webhook", webhookIdempotency, chapaWebhook);
 
 // Protected payment endpoints
 router.post(

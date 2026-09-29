@@ -1,0 +1,15 @@
+# Blih Ops — Terraform Variables Reference
+# Copy to prod.tfvars and fill in your values.
+# NEVER commit prod.tfvars to git — it contains secrets.
+
+aws_region  = "us-east-1"
+environment = "prod"
+project     = "blih"
+
+# ECR image URIs (filled after docker build + push)
+api_image = "123456789.dkr.ecr.us-east-1.amazonaws.com/blih-prod/api:latest"
+web_image = "123456789.dkr.ecr.us-east-1.amazonaws.com/blih-prod/web:latest"
+
+# Secrets (use AWS SSM Parameter Store or Secrets Manager in real deployments)
+db_password      = "CHANGE_ME_STRONG_PASSWORD"
+redis_auth_token = "CHANGE_ME_STRONG_TOKEN"

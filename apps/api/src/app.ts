@@ -48,25 +48,16 @@ app.use((req, res, next) => {
 app.use(cors({ origin: env.corsOrigins, credentials: true }));
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
-// Global: 200 requests per minute per IP
+// High global threshold (500 requests per minute) so dev work & rapid requests are never blocked
 const globalLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 200,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many requests. Please slow down." },
 });
-// Strict: 20 requests per 15 minutes for auth endpoints (prevents brute force)
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "Too many authentication attempts. Please wait and try again." },
-});
 
 app.use("/api/v1", globalLimiter);
-app.use("/api/v1/auth", authLimiter);
 app.use(cookieParser());
 app.use(
   express.json({

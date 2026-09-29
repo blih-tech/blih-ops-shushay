@@ -1,0 +1,138 @@
+version: "3.9"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Blih Ops — Production Docker Compose
+# Usage:
+#   cp apps/api/.env.example apps/api/.env   # fill in secrets
+#   docker compose -f docker-compose.prod.yml up -d
+# ──────────────────────────────────────────────────────────────────────────────
+
+x-common-env: &common-env
+  NODE_ENV: production
+  TZ: UTC
+
+services:
+  # ── PostgreSQL ────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-blih}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD must be set}
+      POSTGRES_DB: ${POSTGRES_DB:-blih_prod}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - blih_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-blih}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  # ── Redis ─────────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD:-} --save 60 1 --loglevel warning
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - blih_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - backend
+
+  # ── API (Express / Node.js) ───────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: runner
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-blih}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-blih_prod}
+      REDIS_URL: redis://:${REDIS_PASSWORD:-}@redis:6379
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://blih.tech}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:?required}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:?required}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:?required}
+      CHAPA_SECRET_KEY: ${CHAPA_SECRET_KEY:?required}
+      CHAPA_API_URL: ${CHAPA_API_URL:-https://api.chapa.co/v1}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      EMAIL_FROM: ${EMAIL_FROM:-Blih <no-reply@blih.tech>}
+      API_URL: ${API_URL:-https://api.blih.tech}
+      TALENT_WEB_URL: ${TALENT_WEB_URL:-https://blih.tech}
+      SKILLS_WEB_URL: ${SKILLS_WEB_URL:-https://blih.tech}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-https://api.blih.tech/api/v1/auth/google/callback}
+      JUDGE0_API_URL: ${JUDGE0_API_URL:-https://judge0-ce.p.rapidapi.com}
+      JUDGE0_API_KEY: ${JUDGE0_API_KEY}
+      JUDGE0_API_HOST: ${JUDGE0_API_HOST:-judge0-ce.p.rapidapi.com}
+    ports:
+      - "${API_PORT:-4000}:4000"
+    volumes:
+      - blih_uploads:/app/uploads
+    networks:
+      - backend
+      - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:4000/api/v1/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ── Web (Next.js) ─────────────────────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      target: runner
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      <<: *common-env
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: ${API_URL:-https://api.blih.tech}
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  blih_pg_data:
+    driver: local
+  blih_redis_data:
+    driver: local
+  blih_uploads:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge

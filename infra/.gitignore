@@ -1,0 +1,15 @@
+# ── Terraform ────────────────────────────────────────────────────────────────
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+*.tfvars
+!*.tfvars.example
+.terraform/
+.terraform.lock.hcl
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+*.env.prod
+.env.production
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.idea/
