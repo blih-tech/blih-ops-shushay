@@ -35,6 +35,20 @@ export async function markAsRead(
   }
 }
 
+export async function markAllAsRead(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const userId = req.user!.id;
+    const updated = await notificationService.markAllNotificationsAsRead(userId);
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export function streamNotifications(req: Request, res: Response) {
   const userId = req.user!.id;
 

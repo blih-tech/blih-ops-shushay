@@ -99,7 +99,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div
         ref={containerRef}
-        className={`group font-sans space-y-1.5 ${isOpen ? "relative z-50" : "relative z-10"} ${fullWidth && !className?.includes("w-") ? "w-full" : ""} ${className}`}
+        className={`group font-sans ${label ? "space-y-1.5" : ""} ${isOpen ? "relative z-50" : "relative z-10"} ${fullWidth && !className?.includes("w-") ? "w-full" : ""} ${className}`}
       >
         {label && (
           <label

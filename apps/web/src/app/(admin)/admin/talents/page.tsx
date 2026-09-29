@@ -114,6 +114,7 @@ function AdminTalentsContent() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search by name, email, skill, title, or location..."
+        buttonClassName="w-full sm:w-32"
       />
 
       <AdminTable<AdminTalentItem>
@@ -303,3 +304,5 @@ export default function AdminTalentsPage() {
     </AuthGuard>
   );
 }
+
+

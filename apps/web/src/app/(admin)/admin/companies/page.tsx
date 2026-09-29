@@ -120,14 +120,12 @@ function AdminCompaniesContent() {
         </Alert>
       )}
 
-      <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-        <div className="flex-1 min-w-0 w-full">
-          <UniversalSearch
+      <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
+        <UniversalSearch
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search companies by name, email, or country..."
-          />
-        </div>
+           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
         <Select
           id="sub-filter"
           value={subFilter}
@@ -323,3 +321,5 @@ export default function AdminCompaniesPage() {
     </AuthGuard>
   );
 }
+
+

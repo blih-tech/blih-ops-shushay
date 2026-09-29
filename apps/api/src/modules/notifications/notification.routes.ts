@@ -3,6 +3,7 @@ import { requireAuth } from "../../middleware/auth";
 import {
   getUserNotifications,
   markAsRead,
+  markAllAsRead,
   streamNotifications,
 } from "./notification.controller";
 
@@ -33,6 +34,19 @@ router.get("/stream", requireAuth, streamNotifications);
  *       200: { description: Array of user notifications }
  */
 router.get("/", requireAuth, getUserNotifications);
+
+/**
+ * @openapi
+ * /notifications/read-all:
+ *   patch:
+ *     summary: Mark all notifications as read
+ *     tags: [Notifications]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200: { description: All notifications marked as read }
+ */
+router.patch("/read-all", requireAuth, markAllAsRead);
 
 /**
  * @openapi

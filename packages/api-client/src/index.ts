@@ -323,6 +323,12 @@ export async function markNotificationAsRead(id: string) {
   });
 }
 
+export async function markAllNotificationsAsRead() {
+  return apiFetch<any>("/notifications/read-all", {
+    method: "PATCH",
+  });
+}
+
 // ─── Talent Search API Client Helpers ────────────────────────────────────────
 
 export async function searchTalents(params?: Record<string, any>) {

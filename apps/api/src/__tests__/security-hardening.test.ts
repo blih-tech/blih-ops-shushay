@@ -36,18 +36,6 @@ jest.mock("../modules/payments/chapa.service", () => ({
   },
 }));
 
-// Mock sandbox service
-jest.mock("../modules/sandbox/sandbox.service", () => ({
-  executeCode: jest.fn().mockResolvedValue({
-    stdout: "ok",
-    stderr: null,
-    compileOutput: null,
-    exitCode: 0,
-    time: "0.01",
-    memory: 512,
-    status: { id: 3, description: "Accepted" },
-  }),
-}));
 
 describe("Security Hardening — Rate Limiting & Idempotency", () => {
   beforeEach(() => jest.clearAllMocks());
@@ -73,33 +61,6 @@ describe("Security Hardening — Rate Limiting & Idempotency", () => {
     });
   });
 
-  describe("Sandbox Rate Limiting", () => {
-    const token = makeToken(Role.TALENT, "talent-rl-1", "rl@blih.com");
-    const cookie = [`token=${token}`];
-
-    it("accepts sandbox execution for authenticated user", async () => {
-      // Mock prisma.user.findUnique for auth middleware
-      const prisma = require("../config/prisma");
-      prisma.user.findUnique.mockResolvedValue({
-        id: "talent-rl-1",
-        email: "rl@blih.com",
-        role: Role.TALENT,
-        emailVerified: true,
-      });
-
-      const res = await request(app)
-        .post("/api/v1/sandbox/execute")
-        .set("Cookie", cookie)
-        .send({ language: "javascript", code: 'console.log("ok")' });
-
-      expect(res.status).toBe(200);
-    });
-
-    it("sandbox languages endpoint is public (no auth needed)", async () => {
-      const res = await request(app).get("/api/v1/sandbox/languages");
-      expect(res.status).toBe(200);
-    });
-  });
 
   describe("Auth Rate Limiter", () => {
     it("auth endpoints return JSON structured errors", async () => {

@@ -96,19 +96,17 @@ function AdminNotificationsContent() {
         </Alert>
       )}
 
-      <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-        <div className="flex-1 min-w-0 w-full">
-          <UniversalSearch
+      <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
+        <UniversalSearch
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by title, message, or user email..."
-          />
-        </div>
+           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
         <Select
           id="type-filter"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="w-full sm:w-44 shrink-0"
+          className="w-full sm:w-32 shrink-0"
           options={[
             { value: "", label: "All Types" },
             ...notificationTypes.map((t) => ({
@@ -124,7 +122,7 @@ function AdminNotificationsContent() {
           id="read-filter"
           value={readFilter}
           onChange={(e) => setReadFilter(e.target.value)}
-          className="w-full sm:w-44 shrink-0"
+          className="w-full sm:w-32 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "true", label: "Read" },
@@ -245,3 +243,5 @@ export default function AdminNotificationsPage() {
     </AuthGuard>
   );
 }
+
+

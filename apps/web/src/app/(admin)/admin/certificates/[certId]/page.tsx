@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Award, Download } from "lucide-react";
-import { Alert, Badge, Button, MetricCard } from "@blih/ui";
+import { Alert, Badge, Button, MetricCard , Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { fetchAdminCertificateById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
@@ -36,7 +36,7 @@ function AdminCertificateDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F4F1F8] border border-[#D9CEDF] rounded-xl animate-pulse" />
+        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
       </main>
     );
   }

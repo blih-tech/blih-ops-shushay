@@ -9,6 +9,7 @@ export interface UniversalSearchProps {
   shortcut?: string;
   actionText?: string;
   className?: string;
+  buttonClassName?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -18,6 +19,7 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
   onSearch,
   actionText = "Search",
   className = "",
+  buttonClassName = "",
   value,
   onChange,
 }) => {
@@ -53,7 +55,7 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
       {actionText && (
         <button
           type="submit"
-          className="h-10 min-h-[40px] flex items-center justify-center font-sans text-xs sm:text-sm font-medium text-white bg-[#1E5BFF] hover:bg-[#1E5BFF]/90 px-4 rounded-md transition-colors shadow-xs cursor-pointer select-none active:translate-y-px shrink-0"
+          className={`h-10 min-h-[40px] flex items-center justify-center font-sans text-xs sm:text-sm font-medium text-white bg-[#1E5BFF] hover:bg-[#1E5BFF]/90 px-4 rounded-md transition-colors shadow-xs cursor-pointer select-none active:translate-y-px shrink-0 ${buttonClassName}`}
         >
           {actionText}
         </button>

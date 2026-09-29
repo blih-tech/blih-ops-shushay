@@ -1,8 +1,22 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { Bell, Check, Info, AlertCircle } from "lucide-react";
-import { getUserNotifications, markNotificationAsRead } from "@blih/api-client";
+import {
+  getUserNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+} from "@blih/api-client";
+
+function getNotificationLink(type?: string): string {
+  if (!type) return "/dashboard";
+  if (type.includes("APPLICATION")) return "/applications";
+  if (type.includes("CERTIFICATE")) return "/certificates";
+  if (type.includes("COURSE") || type.includes("PAYMENT")) return "/courses";
+  if (type.includes("COMPANY_SUBSCRIPTION")) return "/company/subscription";
+  return "/dashboard";
+}
 
 export function NotificationMenu() {
   const [open, setOpen] = useState(false);
@@ -81,6 +95,16 @@ export function NotificationMenu() {
     }
   };
 
+  const handleMarkAllAsRead = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await markAllNotificationsAsRead();
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch (err) {
+      console.error("Error marking all notifications as read:", err);
+    }
+  };
+
   return (
     <div className="relative inline-block" ref={menuRef}>
       <button
@@ -106,11 +130,22 @@ export function NotificationMenu() {
             <h4 className="font-display font-bold text-sm text-[#17131F] flex items-center gap-2">
               <Bell className="w-4 h-4 text-[#17131F]" /> Notifications
             </h4>
-            {unreadCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full bg-[#EEF3FF] text-[#1E5BFF] font-mono text-[10px] font-semibold">
-                {unreadCount} new
-              </span>
-            )}
+            <div className="flex items-center gap-2">
+              {unreadCount > 0 && (
+                <>
+                  <span className="px-2 py-0.5 rounded-full bg-[#EEF3FF] text-[#1E5BFF] font-mono text-[10px] font-semibold">
+                    {unreadCount} new
+                  </span>
+                  <button
+                    type="button"
+                    onClick={handleMarkAllAsRead}
+                    className="text-[10px] font-medium text-[#1E5BFF] hover:underline"
+                  >
+                    Mark all read
+                  </button>
+                </>
+              )}
+            </div>
           </div>
 
           {loading ? (
@@ -123,51 +158,55 @@ export function NotificationMenu() {
             </p>
           ) : (
             <div className="max-h-72 overflow-y-auto space-y-2 pr-1">
-              {notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className={`p-3 rounded-xl border transition-colors flex items-start gap-2.5 ${
-                    n.read
-                      ? "bg-white border-[#E6EAF3] text-[#6E6678]"
-                      : "bg-[#EEF3FF]/70 border-[#1E5BFF]/30 text-[#17131F]"
-                  }`}
-                >
-                  <div className="pt-0.5 shrink-0">
-                    {n.type?.includes("SUCCESS") ||
-                    n.type?.includes("CERTIFICATE") ? (
-                      <Check className="w-4 h-4 text-[#2E8F79]" />
-                    ) : n.type?.includes("APPLICATION") ? (
-                      <Info className="w-4 h-4 text-[#1E5BFF]" />
-                    ) : (
-                      <AlertCircle className="w-4 h-4 text-[#FF8A5B]" />
+              {notifications.map((n) => {
+                return (
+                  <Link
+                    href={getNotificationLink(n.type)}
+                    key={n.id}
+                    onClick={() => setOpen(false)}
+                    className={`p-3 rounded-xl border transition-colors flex items-start gap-2.5 hover:bg-[#F5F7FF] block ${
+                      n.read
+                        ? "bg-white border-[#E6EAF3] text-[#6E6678]"
+                        : "bg-[#EEF3FF]/70 border-[#1E5BFF]/30 text-[#17131F]"
+                    }`}
+                  >
+                    <div className="pt-0.5 shrink-0">
+                      {n.type?.includes("SUCCESS") ||
+                      n.type?.includes("CERTIFICATE") ? (
+                        <Check className="w-4 h-4 text-[#2E8F79]" />
+                      ) : n.type?.includes("APPLICATION") ? (
+                        <Info className="w-4 h-4 text-[#1E5BFF]" />
+                      ) : (
+                        <AlertCircle className="w-4 h-4 text-[#FF8A5B]" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <p className="font-semibold text-xs leading-tight">
+                        {n.title}
+                      </p>
+                      <p className="text-[11px] leading-relaxed text-[#4A4154]">
+                        {n.message}
+                      </p>
+                      <span className="text-[10px] font-mono text-[#6E6678] block">
+                        {new Date(n.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    {!n.read && (
+                      <button
+                        type="button"
+                        onClick={(e) => handleMarkAsRead(n.id, e)}
+                        title="Mark as read"
+                        className="p-1 text-[#1E5BFF] hover:bg-[#DDE7FF] rounded-lg transition-colors shrink-0"
+                      >
+                        <Check className="w-3.5 h-3.5" />
+                      </button>
                     )}
-                  </div>
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <p className="font-semibold text-xs leading-tight">
-                      {n.title}
-                    </p>
-                    <p className="text-[11px] leading-relaxed text-[#4A4154]">
-                      {n.message}
-                    </p>
-                    <span className="text-[10px] font-mono text-[#6E6678] block">
-                      {new Date(n.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </span>
-                  </div>
-                  {!n.read && (
-                    <button
-                      type="button"
-                      onClick={(e) => handleMarkAsRead(n.id, e)}
-                      title="Mark as read"
-                      className="p-1 text-[#1E5BFF] hover:bg-white rounded-lg transition-colors shrink-0"
-                    >
-                      <Check className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           )}
         </div>

@@ -3,12 +3,18 @@ import { TalentProfile } from "@/types/profile";
 import { getTalentProfile } from "@/lib/talentApi";
 import { getErrorMessage } from "@blih/api-client";
 
+import { useAuth } from "@/providers/AuthProvider";
 export function useTalentProfile() {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<TalentProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchProfile = useCallback(async () => {
+    if (!user || user.role !== "TALENT") {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -20,7 +26,7 @@ export function useTalentProfile() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     fetchProfile();
@@ -34,3 +40,4 @@ export function useTalentProfile() {
     setProfile,
   };
 }
+

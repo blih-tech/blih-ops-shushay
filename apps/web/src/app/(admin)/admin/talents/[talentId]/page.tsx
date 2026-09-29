@@ -14,7 +14,7 @@ import {
   XCircle,
   Trash2,
 } from "lucide-react";
-import { Alert, Badge, Button, ConfirmDialog, MetricCard } from "@blih/ui";
+import { Alert, Badge, Button, ConfirmDialog, MetricCard , Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import {
@@ -99,7 +99,7 @@ function AdminTalentDetailContent() {
     return (
       <main className="w-full px-6 py-6 space-y-6">
 
-        <div className="h-64 bg-[#F4F1F8] border border-[#D9CEDF] rounded-xl animate-pulse" />
+        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
       </main>
     );
   }

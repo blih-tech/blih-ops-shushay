@@ -109,6 +109,20 @@ export async function markNotificationAsRead(
   });
 }
 
+export async function markAllNotificationsAsRead(userId: string) {
+  const result = await prisma.notification.updateMany({
+    where: {
+      userId,
+      read: false,
+    },
+    data: {
+      read: true,
+    },
+  });
+
+  return { updatedCount: result.count };
+}
+
 // ─── Email delivery helpers ───────────────────────────────────────────────────
 
 /**

@@ -89,19 +89,17 @@ function AdminSubscriptionsContent() {
 
       <PricingSettings />
 
-      <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-        <div className="flex-1 min-w-0 w-full">
-          <UniversalSearch
+      <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
+        <UniversalSearch
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by company name or email..."
-          />
-        </div>
+           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
         <Select
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full sm:w-44 shrink-0"
+          className="w-full sm:w-32 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "ACTIVE", label: "Active" },
@@ -244,3 +242,5 @@ export default function AdminSubscriptionsPage() {
     </AuthGuard>
   );
 }
+
+
