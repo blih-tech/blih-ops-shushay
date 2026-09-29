@@ -2,14 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { FileText, Briefcase, ExternalLink } from "lucide-react";
-import { Alert, Button, MetricCard , Spinner } from "@blih/ui";
+import { Alert, Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminApplicationById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
-import { usePageTitle } from "@/hooks/usePageTitle";
+
+import { ApplicationDetailHeader } from "@/components/admin/application-detail/ApplicationDetailHeader";
+import { ApplicationDetailStats } from "@/components/admin/application-detail/ApplicationDetailStats";
+import { ApplicationCoverLetterCard } from "@/components/admin/application-detail/ApplicationCoverLetterCard";
+import { ApplicationDetailSidebar } from "@/components/admin/application-detail/ApplicationDetailSidebar";
 
 function AdminApplicationDetailContent() {
   const params = useParams();
@@ -35,188 +37,43 @@ function AdminApplicationDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full px-6 py-6 space-y-6">
-
-        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col items-center justify-center min-h-[420px] bg-white border border-[#EBE5F0] rounded-2xl shadow-xs">
+          <Spinner size="lg" />
+          <p className="mt-4 text-sm font-medium text-[#6E6678] animate-pulse">
+            Loading application record...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (error || !application) {
     return (
-      <main className="w-full px-6 py-6 space-y-4">
-
-        <Alert variant="error">{error || "Application not found"}</Alert>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <Alert variant="error">{error || "Application record not found."}</Alert>
       </main>
     );
   }
 
-  const applicantName =
-    application.talentProfile?.fullName || "Unknown Applicant";
-  const jobTitle = application.job?.title || "Unknown Job";
-  const companyName =
-    application.job?.companyProfile?.companyName || "Unknown Company";
-  const employmentType = application.job?.employmentType
-    ? application.job.employmentType.replace(/_/g, " ")
-    : "—";
-
   return (
-    <main className="w-full px-6 py-6 space-y-4">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Hero Header */}
+      <ApplicationDetailHeader application={application} />
 
+      {/* 4 Metric Cards */}
+      <ApplicationDetailStats application={application} />
 
-      {/* Stat Grid */}
-      <div className="grid grid-cols-3 gap-3">
-        <MetricCard
-          value={application.status.replace(/_/g, " ")}
-          label="Status"
-          variant="primary"
-        />
-        <MetricCard
-          value={new Date(application.createdAt).toLocaleDateString()}
-          label="Applied Date"
-          variant="surface"
-        />
-        <MetricCard
-          value={employmentType}
-          label="Employment Type"
-          variant="surface"
-        />
-      </div>
-
-      {/* Main Card */}
-      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-[#D9CEDF]">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-xl shrink-0 overflow-hidden shadow-xs">
-              {application.talentProfile?.photoUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={application.talentProfile.photoUrl}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                applicantName.charAt(0).toUpperCase()
-              )}
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                  {applicantName}
-                </h1>
-                <AdminStatusBadge
-                  type="application"
-                  value={application.status}
-                />
-              </div>
-              {/* Inline data chip */}
-              <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F8F5FB] border border-[#D9CEDF] rounded-xl px-3 py-1.5 font-sans">
-                <Briefcase className="h-3 w-3 shrink-0 text-[#17131F]" />
-                Applied for{" "}
-                <span className="font-medium text-[#17131F] ml-1">
-                  {jobTitle}
-                </span>
-                <span className="text-[#D9CEDF]">·</span>
-                {companyName}
-              </span>
-            </div>
-          </div>
+      {/* 2-Column Main Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column (8 cols): Cover Letter & Resume Documents */}
+        <div className="lg:col-span-8">
+          <ApplicationCoverLetterCard application={application} />
         </div>
 
-        {/* Content Body */}
-        <div className="divide-y divide-[#D9CEDF]">
-          {/* Cover Letter */}
-          <div className="p-6 sm:p-8 space-y-3">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Cover Letter
-            </h2>
-            <div className="bg-white rounded-xl p-5 border border-[#D9CEDF]">
-              <p className="text-sm text-[#17131F] leading-relaxed whitespace-pre-line font-sans">
-                {application.coverLetter || "No cover letter provided."}
-              </p>
-            </div>
-          </div>
-
-          {/* Linked Entities */}
-          <div className="p-6 sm:p-8 space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Linked Entities
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Applicant */}
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#D9CEDF] shadow-2xs">
-                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-sm shrink-0 shadow-2xs">
-                  {applicantName.charAt(0).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0 space-y-0.5 font-sans">
-                  <p className="text-xs text-[#6E6678]">Applicant</p>
-                  <p className="font-medium text-[#17131F] text-sm truncate">
-                    {applicantName}
-                  </p>
-                  <p className="text-xs text-[#6E6678] truncate">
-                    {application.talentProfile?.user?.email}
-                  </p>
-                </div>
-                {application.talentProfile?.id && (
-                  <Link href={`/admin/talents/${application.talentProfile.id}`}>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-xs shrink-0"
-                    >
-                      View →
-                    </Button>
-                  </Link>
-                )}
-              </div>
-
-              {/* Job */}
-              <div className="flex items-center gap-3 p-4 bg-white rounded-xl border border-[#D9CEDF] shadow-2xs">
-                <div className="w-8 h-8 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-2xs">
-                  <Briefcase className="h-4 w-4" />
-                </div>
-                <div className="flex-1 min-w-0 space-y-0.5 font-sans">
-                  <p className="text-xs text-[#6E6678]">Job Listing</p>
-                  <p className="font-medium text-[#17131F] text-sm truncate">
-                    {jobTitle}
-                  </p>
-                  <p className="text-xs text-[#6E6678] truncate">
-                    {companyName}
-                  </p>
-                </div>
-                {application.job?.id && (
-                  <Link href={`/admin/jobs/${application.job.id}`}>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="text-xs shrink-0"
-                    >
-                      View →
-                    </Button>
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Resume */}
-          {application.talentProfile?.cvUrl && (
-            <div className="p-6 sm:p-8 space-y-3">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Resume / CV
-              </h2>
-              <a
-                href={application.talentProfile.cvUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-[#1E5BFF] font-medium text-xs bg-[#EEF3FF] hover:bg-[#DDE7FF] px-3 py-2 rounded-xl border border-[#1E5BFF]/15 transition-colors"
-              >
-                <FileText className="h-4 w-4" /> Download Resume
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
-            </div>
-          )}
+        {/* Right Column (4 cols): Candidate & Job Entity Information */}
+        <div className="lg:col-span-4">
+          <ApplicationDetailSidebar application={application} />
         </div>
       </div>
     </main>

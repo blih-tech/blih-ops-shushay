@@ -2,14 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { CreditCard, Building2 } from "lucide-react";
-import { Alert, Badge, Button, MetricCard , Spinner } from "@blih/ui";
+import { Alert, Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminSubscriptionById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
-import { usePageTitle } from "@/hooks/usePageTitle";
+
+import { SubscriptionDetailHeader } from "@/components/admin/subscription-detail/SubscriptionDetailHeader";
+import { SubscriptionDetailStats } from "@/components/admin/subscription-detail/SubscriptionDetailStats";
+import { SubscriptionPlanCard } from "@/components/admin/subscription-detail/SubscriptionPlanCard";
+import { SubscriptionPaymentCard } from "@/components/admin/subscription-detail/SubscriptionPaymentCard";
+import { SubscriptionDetailSidebar } from "@/components/admin/subscription-detail/SubscriptionDetailSidebar";
 
 function AdminSubscriptionDetailContent() {
   const params = useParams();
@@ -35,202 +38,44 @@ function AdminSubscriptionDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full px-6 py-6 space-y-6">
-
-        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col items-center justify-center min-h-[420px] bg-white border border-[#EBE5F0] rounded-2xl shadow-xs">
+          <Spinner size="lg" />
+          <p className="mt-4 text-sm font-medium text-[#6E6678] animate-pulse">
+            Loading subscription details...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (error || !subscription) {
     return (
-      <main className="w-full px-6 py-6 space-y-4">
-
-        <Alert variant="error">{error || "Subscription not found"}</Alert>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <Alert variant="error">{error || "Subscription record not found."}</Alert>
       </main>
     );
   }
 
-  const companyName =
-    subscription.companyProfile?.companyName || "Unknown Company";
-
   return (
-    <main className="w-full px-6 py-6 space-y-5">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Hero Header */}
+      <SubscriptionDetailHeader subscription={subscription} />
 
+      {/* 4 Metric Cards */}
+      <SubscriptionDetailStats subscription={subscription} />
 
-      {/* Stat Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MetricCard value={subscription.plan} label="Plan" variant="primary" />
-        <MetricCard
-          value={`${subscription.amount} ${subscription.currency}`}
-          label="Amount"
-          variant="surface"
-        />
-        <MetricCard
-          value={new Date(subscription.startDate).toLocaleDateString()}
-          label="Started"
-          variant="surface"
-        />
-        <MetricCard
-          value={
-            subscription.expiresAt
-              ? new Date(subscription.expiresAt).toLocaleDateString()
-              : "Never"
-          }
-          label="Expires"
-          variant="surface"
-        />
-      </div>
-
-      {/* Main Single Seamless Container */}
-      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Banner Header */}
-        <div className="p-6 sm:p-8 border-b border-[#D9CEDF] bg-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
-                <CreditCard className="h-5 w-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                    {companyName}
-                  </h1>
-                  <AdminStatusBadge
-                    type="subscription"
-                    value={subscription.status}
-                  />
-                  <Badge variant="primary">{subscription.plan} PLAN</Badge>
-                </div>
-                <p className="text-sm text-[#6E6678] flex items-center gap-2">
-                  <Building2 className="h-3.5 w-3.5" />
-                  Subscription Record
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* 2-Column Main Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column (8 cols): Plan Terms & Linked Payment */}
+        <div className="lg:col-span-8 space-y-6">
+          <SubscriptionPlanCard subscription={subscription} />
+          <SubscriptionPaymentCard payment={subscription.payment} />
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
-          {/* Subscription Info */}
-          <div className="space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Subscription Details
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Subscription ID
-                </p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">
-                  {subscription.id}
-                </p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Auto Renew
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {subscription.autoRenew ? "Enabled" : "Disabled"}
-                </p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Created Date
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {new Date(subscription.createdAt).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Subscribed Company */}
-          <div className="pt-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Company Account
-              </h2>
-              {subscription.companyProfile?.id && (
-                <Link
-                  href={`/admin/companies/${subscription.companyProfile.id}`}
-                >
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Company Profile →
-                  </Button>
-                </Link>
-              )}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Company Name
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">{companyName}</p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Account Email
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {subscription.companyProfile?.user?.email || "—"}
-                </p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Location
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {[
-                    subscription.companyProfile?.city,
-                    subscription.companyProfile?.country,
-                  ]
-                    .filter(Boolean)
-                    .join(", ") || "—"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Linked Payment */}
-          {subscription.payment && (
-            <div className="pt-8 space-y-4">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Linked Payment
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">
-                    Transaction Ref
-                  </p>
-                  <p className="font-mono text-xs text-[#17131F] break-all mt-1">
-                    {subscription.payment.txRef}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">
-                    Payment Status
-                  </p>
-                  <div className="mt-1">
-                    <AdminStatusBadge
-                      type="payment"
-                      value={subscription.payment.status}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <p className="font-mono text-xs text-[#6E6678] uppercase">
-                    Amount Charged
-                  </p>
-                  <p className="font-medium text-[#17131F] mt-1">
-                    {subscription.payment.amount}{" "}
-                    {subscription.payment.currency}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Right Column (4 cols): Subscriber Company & Lifecycle Details */}
+        <div className="lg:col-span-4">
+          <SubscriptionDetailSidebar subscription={subscription} />
         </div>
       </div>
     </main>

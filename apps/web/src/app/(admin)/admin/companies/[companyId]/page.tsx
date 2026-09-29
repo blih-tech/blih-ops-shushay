@@ -2,14 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { Globe, Mail, MapPin, Briefcase, Eye, Trash2 } from "lucide-react";
-import { Alert, Badge, Button, ConfirmDialog, MetricCard , Spinner } from "@blih/ui";
+import { Alert, ConfirmDialog, Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
-import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminCompanyById, deleteAdminUser } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
-import { usePageTitle } from "@/hooks/usePageTitle";
+
+import { CompanyDetailHeader } from "@/components/admin/company-detail/CompanyDetailHeader";
+import { CompanyDetailStats } from "@/components/admin/company-detail/CompanyDetailStats";
+import { CompanyOverviewCard } from "@/components/admin/company-detail/CompanyOverviewCard";
+import { CompanyJobsCard } from "@/components/admin/company-detail/CompanyJobsCard";
+import { CompanyDetailSidebar } from "@/components/admin/company-detail/CompanyDetailSidebar";
 
 function AdminCompanyDetailContent() {
   const params = useParams();
@@ -46,7 +49,6 @@ function AdminCompanyDetailContent() {
       router.push("/admin/companies");
     } catch (err: unknown) {
       setActionError(getErrorMessage(err) || "Failed to delete company account");
-    } finally {
       setActionLoading(false);
       setShowDeleteConfirm(false);
     }
@@ -54,297 +56,71 @@ function AdminCompanyDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full px-6 py-6 space-y-6">
-
-        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col items-center justify-center min-h-[420px] bg-white border border-[#EBE5F0] rounded-2xl shadow-xs">
+          <Spinner size="lg" />
+          <p className="mt-4 text-sm font-medium text-[#6E6678] animate-pulse">
+            Loading company profile...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (error || !company) {
     return (
-      <main className="w-full px-6 py-6 space-y-4">
-
-        <Alert variant="error">{error || "Company profile not found"}</Alert>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <Alert variant="error">{error || "Company profile not found."}</Alert>
       </main>
     );
   }
 
-  const sub = company.companySubscription;
+  const jobs = company.jobs || [];
 
   return (
-    <main className="w-full px-6 py-6 space-y-4">
-
-
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {actionError && (
         <Alert variant="error" onClose={() => setActionError(null)}>
           {actionError}
         </Alert>
       )}
 
-      {/* Stat Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <MetricCard
-          value={company.jobs?.length ?? 0}
-          label="Job Postings"
-          variant="primary"
-        />
-        <MetricCard
-          value={sub?.plan || "Free"}
-          label="Plan"
-          variant="surface"
-        />
-        <MetricCard
-          value={sub?.status || "None"}
-          label="Sub Status"
-          variant="surface"
-        />
-        <MetricCard
-          value={
-            sub?.expiresAt
-              ? new Date(sub.expiresAt).toLocaleDateString()
-              : "N/A"
-          }
-          label="Expires"
-          variant="surface"
-        />
-      </div>
+      {/* Hero Header */}
+      <CompanyDetailHeader
+        company={company}
+        onDeleteClick={() => setShowDeleteConfirm(true)}
+      />
 
-      {/* Main Card */}
-      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-[#EBE5F0]">
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-5">
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center font-display font-bold text-2xl shrink-0 overflow-hidden shadow-xs">
-                {company.logoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={company.logoUrl}
-                    alt=""
-                    className="w-full h-full object-cover rounded-xl aspect-square"
-                  />
-                ) : (
-                  company.companyName?.charAt(0).toUpperCase() || "C"
-                )}
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                    {company.companyName}
-                  </h1>
-                  {sub ? (
-                    <AdminStatusBadge type="subscription" value={sub.status} />
-                  ) : (
-                    <Badge variant="secondary">NO SUBSCRIPTION</Badge>
-                  )}
-                </div>
-                {/* Inline data chips */}
-                <div className="flex flex-wrap gap-2">
-                  {company.user?.email && (
-                    <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
-                      <Mail className="h-3 w-3 shrink-0" />
-                      {company.user.email}
-                    </span>
-                  )}
-                  {(company.city || company.country) && (
-                    <span className="inline-flex items-center gap-1.5 text-xs text-[#6E6678] bg-[#F9F8FC] border border-[#EBE5F0] rounded-xl px-3 py-1.5">
-                      <MapPin className="h-3 w-3 shrink-0" />
-                      {[company.city, company.country]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </span>
-                  )}
-                  {company.website && (
-                    <a
-                      href={
-                        company.website.startsWith("http")
-                          ? company.website
-                          : `https://${company.website}`
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs text-[#1E5BFF] bg-[#EEF3FF] border border-[#1E5BFF]/15 rounded-xl px-3 py-1.5 hover:underline"
-                    >
-                      <Globe className="h-3 w-3 shrink-0" />
-                      Website
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-            {company.user?.id && (
-              <div className="flex items-center gap-2 shrink-0">
-                <Link href={`/admin/users/${company.user.id}`}>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    leftIcon={<Mail className="h-3.5 w-3.5" />}
-                  >
-                    View User Account
-                  </Button>
-                </Link>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => setShowDeleteConfirm(true)}
-                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
-                >
-                  Delete Account
-                </Button>
-              </div>
-            )}
-          </div>
+      {/* 4 Metric Cards */}
+      <CompanyDetailStats company={company} />
+
+      {/* 2-Column Main Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column (8 cols): Overview & Jobs */}
+        <div className="lg:col-span-8 space-y-6">
+          <CompanyOverviewCard company={company} />
+          <CompanyJobsCard jobs={jobs} />
         </div>
 
-        {/* Content Body */}
-        <div className="divide-y divide-[#EBE5F0]">
-          {/* Description */}
-          {company.description && (
-            <div className="p-6 sm:p-8 space-y-3">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Overview
-              </h2>
-              <p className="text-sm text-[#6E6678] leading-relaxed whitespace-pre-line">
-                {company.description}
-              </p>
-            </div>
-          )}
-
-          {/* Contact Info */}
-          <div className="p-6 sm:p-8 space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Contact
-            </h2>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
-                <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                  Contact Email
-                </span>
-                <span className="font-medium text-sm text-[#17131F]">
-                  {company.contactEmail || "—"}
-                </span>
-              </div>
-              <div className="flex items-center justify-between gap-4 py-2">
-                <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                  Contact Phone
-                </span>
-                <span className="font-medium text-sm text-[#17131F]">
-                  {company.contactPhone || "—"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Subscription */}
-          <div className="p-6 sm:p-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Subscription
-              </h2>
-              {sub?.id && (
-                <Link href={`/admin/subscriptions/${sub.id}`}>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Details →
-                  </Button>
-                </Link>
-              )}
-            </div>
-            {sub ? (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
-                  <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                    Plan
-                  </span>
-                  <span className="font-medium text-sm text-[#17131F]">
-                    {sub.plan}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
-                  <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                    Status
-                  </span>
-                  <AdminStatusBadge type="subscription" value={sub.status} />
-                </div>
-                <div className="flex items-center justify-between gap-4 py-2 border-b border-[#F9F8FC]">
-                  <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                    Amount
-                  </span>
-                  <span className="font-medium text-sm text-[#17131F]">
-                    {sub.amount} {sub.currency}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 py-2">
-                  <span className="text-xs text-[#6E6678] w-36 shrink-0">
-                    Expires
-                  </span>
-                  <span className="font-medium text-sm text-[#17131F]">
-                    {sub.expiresAt
-                      ? new Date(sub.expiresAt).toLocaleDateString()
-                      : "Never"}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm text-[#6E6678]">
-                No active paid subscription.
-              </p>
-            )}
-          </div>
-
-          {/* Job Postings */}
-          <div className="p-6 sm:p-8 space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider flex items-center gap-2">
-              <Briefcase className="h-3.5 w-3.5" /> Job Postings (
-              {company.jobs?.length ?? 0})
-            </h2>
-            {company.jobs && company.jobs.length > 0 ? (
-              <div className="space-y-1">
-                {company.jobs.map((job: any) => (
-                  <div
-                    key={job.id}
-                    className="flex items-center justify-between gap-4 py-2.5 border-b border-[#F9F8FC] last:border-0"
-                  >
-                    <div>
-                      <p className="font-medium text-[#17131F] text-sm">
-                        {job.title}
-                      </p>
-                      <p className="text-xs text-[#6E6678] font-mono">
-                        Posted {new Date(job.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <AdminStatusBadge type="job" value={job.status} />
-                      <Link href={`/admin/jobs/${job.id}`}>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          leftIcon={<Eye className="h-3.5 w-3.5" />}
-                        >
-                          View
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-[#6E6678]">
-                No job postings recorded.
-              </p>
-            )}
-          </div>
+        {/* Right Column (4 cols): Subscription & Security & Danger Zone */}
+        <div className="lg:col-span-4">
+          <CompanyDetailSidebar
+            company={company}
+            onDeleteClick={() => setShowDeleteConfirm(true)}
+          />
         </div>
       </div>
 
+      {/* Delete Confirmation Modal */}
       <ConfirmDialog
         isOpen={showDeleteConfirm}
         title="Delete Company Account"
-        message={`Are you sure you want to delete company "${company.companyName}" (${company.user?.email || "N/A"})? This action is permanent.`}
-        confirmText="Delete Account"
+        message={`Are you sure you want to permanently delete company "${company.companyName}"? All published jobs, applicant records, and subscription access will be erased.`}
+        confirmText="Yes, Delete Account"
         onConfirm={handleDelete}
         onClose={() => setShowDeleteConfirm(false)}
         variant="destructive"
+        isLoading={actionLoading}
       />
     </main>
   );

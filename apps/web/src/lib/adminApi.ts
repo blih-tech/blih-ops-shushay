@@ -26,13 +26,21 @@ export async function deleteAdminUser(userId: string): Promise<{ success: boolea
 
 export async function grantAdminSkillsAccess(
   userId: string,
-): Promise<{ alreadyGranted: boolean; entitlement: any }> {
-  return apiFetch(`/admin/users/${userId}/skills-access`, { method: "POST" });
+  courseId?: string,
+): Promise<{ alreadyGranted: boolean; enrollment?: any }> {
+  return apiFetch(`/admin/users/${userId}/skills-access`, {
+    method: "POST",
+    body: courseId ? JSON.stringify({ courseId }) : undefined,
+  });
 }
 
-export async function revokeAdminSkillsAccess(userId: string): Promise<{ success: boolean }> {
+export async function revokeAdminSkillsAccess(
+  userId: string,
+  courseId?: string,
+): Promise<{ success: boolean }> {
   return apiFetch<{ success: boolean }>(`/admin/users/${userId}/skills-access`, {
     method: "DELETE",
+    body: courseId ? JSON.stringify({ courseId }) : undefined,
   });
 }
 

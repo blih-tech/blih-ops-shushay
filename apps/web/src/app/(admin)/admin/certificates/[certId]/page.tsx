@@ -2,13 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { Award, Download } from "lucide-react";
-import { Alert, Badge, Button, MetricCard , Spinner } from "@blih/ui";
+import { Alert, Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminCertificateById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
-import { usePageTitle } from "@/hooks/usePageTitle";
+
+import { CertificateDetailHeader } from "@/components/admin/certificate-detail/CertificateDetailHeader";
+import { CertificateDetailStats } from "@/components/admin/certificate-detail/CertificateDetailStats";
+import { CertificateOverviewCard } from "@/components/admin/certificate-detail/CertificateOverviewCard";
+import { CertificateDetailSidebar } from "@/components/admin/certificate-detail/CertificateDetailSidebar";
 
 function AdminCertificateDetailContent() {
   const params = useParams();
@@ -24,7 +27,9 @@ function AdminCertificateDetailContent() {
         const data = await fetchAdminCertificateById(certId);
         setCert(data);
       } catch (err: unknown) {
-        setError(getErrorMessage(err) || "Failed to load certificate details");
+        setError(
+          getErrorMessage(err) || "Failed to load certificate details",
+        );
       } finally {
         setLoading(false);
       }
@@ -34,156 +39,43 @@ function AdminCertificateDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full px-6 py-6 space-y-6">
-
-        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col items-center justify-center min-h-[420px] bg-white border border-[#EBE5F0] rounded-2xl shadow-xs">
+          <Spinner size="lg" />
+          <p className="mt-4 text-sm font-medium text-[#6E6678] animate-pulse">
+            Loading certificate details...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (error || !cert) {
     return (
-      <main className="w-full px-6 py-6 space-y-4">
-
-        <Alert variant="error">{error || "Certificate not found"}</Alert>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <Alert variant="error">{error || "Certificate record not found."}</Alert>
       </main>
     );
   }
 
-  const recipientName =
-    cert.user?.talentProfile?.fullName ||
-    cert.user?.email ||
-    "Unknown Recipient";
-  const courseTitle = cert.course?.title || "Course Certificate";
-
   return (
-    <main className="w-full px-6 py-6 space-y-6">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Hero Header */}
+      <CertificateDetailHeader cert={cert} />
 
+      {/* 4 Metric Cards */}
+      <CertificateDetailStats cert={cert} />
 
-      {/* Stat Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <MetricCard
-          value={cert.certificateNumber}
-          label="Certificate Code"
-          variant="primary"
-        />
-        <MetricCard
-          value={new Date(
-            cert.createdAt || cert.issueDate,
-          ).toLocaleDateString()}
-          label="Issue Date"
-          variant="surface"
-        />
-        <MetricCard value="Valid" label="Status" variant="surface" />
-      </div>
-
-      {/* Main Single Seamless Container */}
-      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Banner Header */}
-        <div className="p-6 sm:p-8 border-b border-[#D9CEDF] bg-white">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
-                <Award className="h-5 w-5" />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                    {courseTitle}
-                  </h1>
-                  <Badge variant="success">VERIFIED CERTIFICATE</Badge>
-                </div>
-                <p className="text-sm text-[#6E6678] flex items-center gap-2">
-                  Awarded to{" "}
-                  <span className="font-medium text-[#17131F]">
-                    {recipientName}
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            {cert.pdfUrl && (
-              <div className="flex items-center gap-2 shrink-0">
-                <a href={cert.pdfUrl} target="_blank" rel="noreferrer">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    leftIcon={<Download className="h-3.5 w-3.5" />}
-                  >
-                    PDF
-                  </Button>
-                </a>
-              </div>
-            )}
-          </div>
+      {/* 2-Column Main Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column (8 cols): Course Overview & Verification Statement */}
+        <div className="lg:col-span-8">
+          <CertificateOverviewCard cert={cert} />
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
-          {/* Certificate Details */}
-          <div className="space-y-4">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Certificate Overview
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Certificate ID
-                </p>
-                <p className="font-mono text-xs text-[#17131F] break-all mt-1">
-                  {cert.id}
-                </p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Course Title
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">{courseTitle}</p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Issued Timestamp
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {new Date(cert.createdAt || cert.issueDate).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Recipient Account */}
-          <div className="pt-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Recipient
-              </h2>
-              {cert.user?.id && (
-                <Link href={`/admin/users/${cert.user.id}`}>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Recipient User Account →
-                  </Button>
-                </Link>
-              )}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Full Name
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {recipientName}
-                </p>
-              </div>
-              <div>
-                <p className="font-mono text-xs text-[#6E6678] uppercase">
-                  Account Email
-                </p>
-                <p className="font-medium text-[#17131F] mt-1">
-                  {cert.user?.email || "—"}
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Right Column (4 cols): Recipient Account & Credential Security */}
+        <div className="lg:col-span-4">
+          <CertificateDetailSidebar cert={cert} />
         </div>
       </div>
     </main>

@@ -2,13 +2,16 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import { Bell, Clock } from "lucide-react";
-import { Alert, Badge, Button , Spinner } from "@blih/ui";
+import { Alert, Spinner } from "@blih/ui";
 import { AuthGuard } from "@/components/auth/AuthGuard";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminNotificationById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
-import { usePageTitle } from "@/hooks/usePageTitle";
+
+import { NotificationDetailHeader } from "@/components/admin/notification-detail/NotificationDetailHeader";
+import { NotificationDetailStats } from "@/components/admin/notification-detail/NotificationDetailStats";
+import { NotificationMessageCard } from "@/components/admin/notification-detail/NotificationMessageCard";
+import { NotificationDetailSidebar } from "@/components/admin/notification-detail/NotificationDetailSidebar";
 
 function AdminNotificationDetailContent() {
   const params = useParams();
@@ -34,108 +37,43 @@ function AdminNotificationDetailContent() {
 
   if (loading) {
     return (
-      <main className="w-full px-6 py-6 space-y-6">
-
-        <div className="flex items-center justify-center h-64 bg-white border border-[#D9CEDF] rounded-xl"><Spinner size="lg" /></div>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <div className="flex flex-col items-center justify-center min-h-[420px] bg-white border border-[#EBE5F0] rounded-2xl shadow-xs">
+          <Spinner size="lg" />
+          <p className="mt-4 text-sm font-medium text-[#6E6678] animate-pulse">
+            Loading notification details...
+          </p>
+        </div>
       </main>
     );
   }
 
   if (error || !notification) {
     return (
-      <main className="w-full px-6 py-6 space-y-4">
-
-        <Alert variant="error">{error || "Notification not found"}</Alert>
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <Alert variant="error">{error || "Notification not found."}</Alert>
       </main>
     );
   }
 
-  const recipientName =
-    notification.user?.talentProfile?.fullName ||
-    notification.user?.companyProfile?.companyName ||
-    notification.user?.email;
-
   return (
-    <main className="w-full px-6 py-6 space-y-5">
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Hero Header */}
+      <NotificationDetailHeader notification={notification} />
 
+      {/* 4 Metric Cards */}
+      <NotificationDetailStats notification={notification} />
 
-      {/* Main Content Card */}
-      <div className="bg-white rounded-xl border border-[#D9CEDF] shadow-sm overflow-hidden">
-        {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-[#D9CEDF] bg-white">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-white border border-[#D9CEDF] text-[#17131F] flex items-center justify-center shrink-0 shadow-xs">
-              <Bell className="h-5 w-5" />
-            </div>
-            <div className="space-y-1">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <h1 className="font-display text-2xl font-bold tracking-tight text-[#17131F]">
-                  {notification.title}
-                </h1>
-                <Badge variant="primary">
-                  {notification.type.replace(/_/g, " ")}
-                </Badge>
-                {notification.read ? (
-                  <Badge variant="secondary">READ</Badge>
-                ) : (
-                  <Badge variant="warning">UNREAD</Badge>
-                )}
-              </div>
-              <p className="text-sm text-[#6E6678] flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5" />
-                Sent on {new Date(notification.createdAt).toLocaleString()}
-              </p>
-            </div>
-          </div>
+      {/* 2-Column Main Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column (8 cols): Message Content */}
+        <div className="lg:col-span-8">
+          <NotificationMessageCard notification={notification} />
         </div>
 
-        {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-8 divide-y divide-[#EBE5F0]">
-          {/* Message */}
-          <div className="space-y-3">
-            <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-              Message Body
-            </h2>
-            <div className="bg-[#F9F8FC] rounded-2xl p-5 border border-[#EBE5F0]">
-              <p className="text-sm text-[#17131F] leading-relaxed whitespace-pre-line">
-                {notification.message}
-              </p>
-            </div>
-          </div>
-
-          {/* Recipient */}
-          <div className="pt-8 space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display font-bold text-sm text-[#6E6678] uppercase tracking-wider">
-                Recipient Account
-              </h2>
-              {notification.user?.id && (
-                <Link href={`/admin/users/${notification.user.id}`}>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    View Recipient Account →
-                  </Button>
-                </Link>
-              )}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
-              <div>
-                <p className="text-xs text-[#6E6678] mb-1">Name</p>
-                <p className="font-medium text-[#17131F]">{recipientName}</p>
-              </div>
-              <div>
-                <p className="text-xs text-[#6E6678] mb-1">Email</p>
-                <p className="font-medium text-[#17131F]">
-                  {notification.user?.email}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-[#6E6678] mb-1">Role</p>
-                <p className="font-medium text-[#17131F]">
-                  {notification.user?.role}
-                </p>
-              </div>
-            </div>
-          </div>
+        {/* Right Column (4 cols): Recipient & Telemetry */}
+        <div className="lg:col-span-4">
+          <NotificationDetailSidebar notification={notification} />
         </div>
       </div>
     </main>
