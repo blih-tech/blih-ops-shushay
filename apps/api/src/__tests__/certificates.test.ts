@@ -14,6 +14,7 @@ jest.mock("../config/prisma", () => ({
   },
   certificate: {
     findUnique: jest.fn(),
+    findFirst: jest.fn(),
     create: jest.fn(),
     findMany: jest.fn(),
   },
@@ -49,6 +50,7 @@ describe("Certificates Service", () => {
       });
       (prisma.lessonProgress.count as jest.Mock).mockResolvedValue(2); // 2 out of 2
       (prisma.certificate.findUnique as jest.Mock).mockResolvedValue(null);
+      (prisma.certificate.findFirst as jest.Mock).mockResolvedValue(null);
       (prisma.certificate.create as jest.Mock).mockResolvedValue({
         id: "cert-1",
         userId: "user-1",
@@ -81,6 +83,7 @@ describe("Certificates Service", () => {
       });
       (prisma.lessonProgress.count as jest.Mock).mockResolvedValue(2);
       (prisma.certificate.findUnique as jest.Mock).mockResolvedValue(existing);
+      (prisma.certificate.findFirst as jest.Mock).mockResolvedValue(existing);
 
       const cert = await checkAndGenerateCertificate("user-1", "course-1");
       expect(cert).toEqual(existing);

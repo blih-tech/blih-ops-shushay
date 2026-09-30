@@ -2,9 +2,10 @@
 
 import React from "react";
 import { Shield, Briefcase, BookOpen, Building2, Award } from "lucide-react";
+import type { AdminUserDetail } from "@/types/admin";
 
 interface UserDetailStatsProps {
-  user: any;
+  user: AdminUserDetail;
   enrollmentsCount: number;
 }
 

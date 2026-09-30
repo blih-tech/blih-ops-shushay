@@ -21,12 +21,20 @@ export async function getSetting(key: string, defaultValue: string): Promise<str
 }
 
 export async function updateSettings(settings: Record<string, string>) {
-  for (const [key, value] of Object.entries(settings)) {
-    await prisma.systemSetting.upsert({
-      where: { key },
-      update: { value },
-      create: { key, value },
-    });
+  const entries = Object.entries(settings);
+  if (entries.length === 0) return { success: true };
+
+  await prisma.$transaction(
+    entries.map(([key, value]) =>
+      prisma.systemSetting.upsert({
+        where: { key },
+        update: { value },
+        create: { key, value },
+      })
+    )
+  );
+
+  for (const [key] of entries) {
     settingsCache.delete(key);
   }
   

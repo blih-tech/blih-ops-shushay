@@ -7,6 +7,7 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminCompanyById, deleteAdminUser } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
+import type { AdminCompanyDetail } from "@/types/admin";
 
 import { CompanyDetailHeader } from "@/components/admin/company-detail/CompanyDetailHeader";
 import { CompanyDetailStats } from "@/components/admin/company-detail/CompanyDetailStats";
@@ -19,7 +20,7 @@ function AdminCompanyDetailContent() {
   const router = useRouter();
   const companyId = params.companyId as string;
 
-  const [company, setCompany] = useState<any>(null);
+  const [company, setCompany] = useState<AdminCompanyDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);

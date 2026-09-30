@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import { CheckCircle2, AlertTriangle, Trash2, Copy, Check } from "lucide-react";
 import { Button } from "@blih/ui";
+import type { AdminUserDetail } from "@/types/admin";
 
 interface UserDetailSidebarProps {
-  user: any;
+  user: AdminUserDetail;
   enrollmentsCount: number;
   onDeleteClick: () => void;
 }

@@ -21,18 +21,31 @@ import {
 } from "./auth.controller";
 
 import rateLimit from "express-rate-limit";
+import { env } from "../../config/env";
 
+const isProd = env.nodeEnv === "production";
+
+// Strict in production to protect against brute-force and credential-stuffing attacks.
+// Generous in development so testing is never blocked.
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // generous limit so dev testing is never blocked
+  max: isProd ? 10 : 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many login attempts from this IP, please try again after 15 minutes" },
 });
 
+const registerLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isProd ? 20 : 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many registration attempts from this IP, please try again after 15 minutes" },
+});
+
 const router = Router();
 
-router.post("/register", authLimiter, validate(registerSchema), register);
+router.post("/register", registerLimiter, validate(registerSchema), register);
 router.post("/login", authLimiter, validate(loginSchema), login);
 router.post("/logout", logout);
 router.post("/verify-email", validate(verifyEmailSchema), verifyEmail);

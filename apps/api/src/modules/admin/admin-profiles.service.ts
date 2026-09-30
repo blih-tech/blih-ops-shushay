@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import { Role, JobStatus } from "@prisma/client";
-
+import { Prisma, SubscriptionStatus } from "@prisma/client";
+import { computeEffectiveJobStatus } from "../jobs/job.service";
 
 export async function getAdminTalents(params?: {
   page?: number;
@@ -11,7 +11,7 @@ export async function getAdminTalents(params?: {
   const { page = 1, limit = 50, search } = params || {};
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: Prisma.TalentProfileWhereInput = {};
   if (search) {
     where.OR = [
       { fullName: { contains: search, mode: "insensitive" } },
@@ -61,7 +61,7 @@ export async function getAdminCompanies(params?: {
   const { page = 1, limit = 50, search, subscriptionStatus } = params || {};
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: Prisma.CompanyProfileWhereInput = {};
   if (search) {
     where.OR = [
       { companyName: { contains: search, mode: "insensitive" } },
@@ -71,8 +71,8 @@ export async function getAdminCompanies(params?: {
       { city: { contains: search, mode: "insensitive" } },
     ];
   }
-  if (subscriptionStatus) {
-    where.companySubscription = { status: subscriptionStatus };
+  if (subscriptionStatus && Object.values(SubscriptionStatus).includes(subscriptionStatus as SubscriptionStatus)) {
+    where.companySubscription = { status: subscriptionStatus as SubscriptionStatus };
   }
 
   const [companies, total] = await Promise.all([
@@ -165,17 +165,10 @@ export async function getAdminCompanyById(companyId: string) {
   });
   if (!company) throw new AppError(404, "Company profile not found.");
 
-  const now = new Date();
-  const jobs = company.jobs.map((j) => {
-    const isExpired =
-      j.status === "ACTIVE" &&
-      j.applicationDeadline &&
-      new Date(j.applicationDeadline) < now;
-    return {
-      ...j,
-      status: isExpired ? "EXPIRED" : j.status,
-    };
-  });
+  const jobs = company.jobs.map((j) => ({
+    ...j,
+    status: computeEffectiveJobStatus(j.status, j.applicationDeadline),
+  }));
 
   return {
     ...company,

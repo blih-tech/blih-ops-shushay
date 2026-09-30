@@ -13,9 +13,10 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@blih/ui";
+import type { AdminUserDetail } from "@/types/admin";
 
 interface UserRoleProfileCardProps {
-  user: any;
+  user: AdminUserDetail;
 }
 
 export function UserRoleProfileCard({ user }: UserRoleProfileCardProps) {

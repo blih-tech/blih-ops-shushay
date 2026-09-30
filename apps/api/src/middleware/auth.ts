@@ -100,8 +100,7 @@ export async function requireAuth(
   try {
     const token =
       req.cookies.token ||
-      req.headers.authorization?.split(" ")[1] ||
-      (req.query.token as string | undefined);
+      req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return next(new AppError(401, "Authentication token required"));
@@ -197,11 +196,6 @@ export async function requireCourseEnrollment(
   next();
 }
 
-/**
- * @deprecated Use requireCourseEnrollment instead.
- * Kept as an alias so existing imports compile during the migration.
- */
-export const requireSkillsAccess = requireCourseEnrollment;
 
 export async function requireActiveSubscription(
   req: Request,

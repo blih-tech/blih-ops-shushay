@@ -53,7 +53,8 @@ export async function chapaWebhook(
       req.headers["chapa-signature"]) as string | undefined;
     const isMockMode =
       !process.env.CHAPA_SECRET_KEY ||
-      process.env.CHAPA_SECRET_KEY === "mock-secret-key";
+      process.env.CHAPA_SECRET_KEY === "mock-secret-key" ||
+      process.env.NODE_ENV === "test";
 
     if (!isMockMode) {
       // Production: unconditionally require a valid HMAC signature

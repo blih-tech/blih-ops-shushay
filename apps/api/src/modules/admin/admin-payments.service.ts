@@ -1,7 +1,6 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import { Role, JobStatus } from "@prisma/client";
-
+import { Prisma, PaymentStatus, PaymentType, SubscriptionStatus } from "@prisma/client";
 
 export async function getAdminPayments(params: {
   page?: number;
@@ -13,12 +12,12 @@ export async function getAdminPayments(params: {
   const { page = 1, limit = 20, search, status, paymentType } = params;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
-  if (status && ["PENDING", "SUCCESSFUL", "FAILED", "CANCELLED"].includes(status)) {
-    where.status = status;
+  const where: Prisma.PaymentTransactionWhereInput = {};
+  if (status && Object.values(PaymentStatus).includes(status as PaymentStatus)) {
+    where.status = status as PaymentStatus;
   }
-  if (paymentType && ["SKILLS_ACCESS", "COMPANY_SUBSCRIPTION"].includes(paymentType)) {
-    where.paymentType = paymentType;
+  if (paymentType && Object.values(PaymentType).includes(paymentType as PaymentType)) {
+    where.paymentType = paymentType as PaymentType;
   }
   if (search) {
     where.OR = [
@@ -47,7 +46,7 @@ export async function getAdminPayments(params: {
     prisma.paymentTransaction.aggregate({
       _sum: { amount: true },
       _count: { _all: true },
-      where: { status: "SUCCESSFUL" },
+      where: { ...where, status: PaymentStatus.SUCCESSFUL },
     }),
   ]);
 
@@ -75,9 +74,9 @@ export async function getAdminSubscriptions(params: {
   const { page = 1, limit = 20, search, status } = params;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
-  if (status && ["ACTIVE", "EXPIRED"].includes(status)) {
-    where.status = status;
+  const where: Prisma.CompanySubscriptionWhereInput = {};
+  if (status && Object.values(SubscriptionStatus).includes(status as SubscriptionStatus)) {
+    where.status = status as SubscriptionStatus;
   }
   if (search) {
     where.companyProfile = {

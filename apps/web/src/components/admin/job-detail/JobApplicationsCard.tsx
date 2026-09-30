@@ -5,9 +5,10 @@ import Link from "next/link";
 import { Users, Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@blih/ui";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import type { AdminJobDetail } from "@/types/admin";
 
 interface JobApplicationsCardProps {
-  applications: any[];
+  applications: AdminJobDetail["applications"];
 }
 
 export function JobApplicationsCard({

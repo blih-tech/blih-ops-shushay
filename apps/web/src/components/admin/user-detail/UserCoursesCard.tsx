@@ -4,9 +4,10 @@ import React from "react";
 import { GraduationCap, Plus, BookOpen, Calendar } from "lucide-react";
 import { Badge, Button, Select } from "@blih/ui";
 import type { Course } from "@/types/course";
+import type { AdminUserDetail } from "@/types/admin";
 
 interface UserCoursesCardProps {
-  enrollments: any[];
+  enrollments: AdminUserDetail["courseEnrollments"];
   availableCourses: Course[];
   selectedCourseId: string;
   onSelectCourse: (courseId: string) => void;

@@ -9,7 +9,7 @@ import {
   SubscriptionStatus,
 } from "@prisma/client";
 import { Prisma } from "@prisma/client";
-import { chapaService } from "./chapa.service";
+import { chapaService, ChapaVerifyResponse } from "./chapa.service";
 import { createNotification } from "../notifications/notification.service";
 import { enqueueEmail } from "../../services/queue.service";
 import { getSetting } from "../settings/settings.service";
@@ -23,11 +23,12 @@ interface PaymentMetadata {
 }
 
 async function lockAndCompletePayment(
-  tx: any,
+  tx: Prisma.TransactionClient,
   transactionId: string,
   chapaRefFallback: string | null,
-  verification: any
+  verification: ChapaVerifyResponse
 ) {
+  // transactionId is the verified internal DB UUID from findUnique
   await tx.$queryRaw`SELECT "id" FROM "payment_transactions" WHERE "id" = ${transactionId} FOR UPDATE`;
   const lockedPayment = await tx.paymentTransaction.findUnique({
     where: { id: transactionId },
@@ -42,7 +43,7 @@ async function lockAndCompletePayment(
     data: {
       status: PaymentStatus.SUCCESSFUL,
       chapaRef: verification.chapaRef || chapaRefFallback,
-      metadata: verification.rawResponse ?? undefined,
+      metadata: (verification.rawResponse ?? undefined) as Prisma.InputJsonValue | undefined,
     },
   });
 

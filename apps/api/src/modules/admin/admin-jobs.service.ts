@@ -1,7 +1,7 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-import { Role, JobStatus } from "@prisma/client";
-
+import { Prisma, JobStatus, ApplicationStatus, EmploymentType, ExperienceLevel } from "@prisma/client";
+import { computeEffectiveJobStatus } from "../jobs/job.service";
 
 export async function getAdminJobs(params: {
   page?: number;
@@ -14,10 +14,14 @@ export async function getAdminJobs(params: {
   const { page = 1, limit = 20, search, status, employmentType, experienceLevel } = params;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
-  if (status && ["ACTIVE", "CLOSED"].includes(status)) where.status = status;
-  if (employmentType) where.employmentType = employmentType;
-  if (experienceLevel) where.experienceLevel = experienceLevel;
+  const where: Prisma.JobWhereInput = {};
+  if (status && Object.values(JobStatus).includes(status as JobStatus)) where.status = status as JobStatus;
+  if (employmentType && Object.values(EmploymentType).includes(employmentType as EmploymentType)) {
+    where.employmentType = employmentType as EmploymentType;
+  }
+  if (experienceLevel && Object.values(ExperienceLevel).includes(experienceLevel as ExperienceLevel)) {
+    where.experienceLevel = experienceLevel as ExperienceLevel;
+  }
   if (search) {
     where.OR = [
       { title: { contains: search, mode: "insensitive" } },
@@ -52,17 +56,10 @@ export async function getAdminJobs(params: {
     prisma.job.count({ where }),
   ]);
 
-  const now = new Date();
-  const jobs = rawJobs.map((j) => {
-    const isExpired =
-      j.status === "ACTIVE" &&
-      j.applicationDeadline &&
-      new Date(j.applicationDeadline) < now;
-    return {
-      ...j,
-      status: isExpired ? "EXPIRED" : j.status,
-    };
-  });
+  const jobs = rawJobs.map((j) => ({
+    ...j,
+    status: computeEffectiveJobStatus(j.status, j.applicationDeadline),
+  }));
 
   return { jobs, total, page, limit, totalPages: Math.ceil(total / limit) };
 }
@@ -82,6 +79,7 @@ export async function getAdminJobById(jobId: string) {
         include: {
           talentProfile: {
             select: {
+              id: true,
               fullName: true,
               title: true,
               photoUrl: true,
@@ -94,15 +92,9 @@ export async function getAdminJobById(jobId: string) {
   });
   if (!job) throw new AppError(404, "Job not found.");
 
-  const now = new Date();
-  const isExpired =
-    job.status === "ACTIVE" &&
-    job.applicationDeadline &&
-    new Date(job.applicationDeadline) < now;
-
   return {
     ...job,
-    status: isExpired ? "EXPIRED" : job.status,
+    status: computeEffectiveJobStatus(job.status, job.applicationDeadline),
   };
 }
 
@@ -110,9 +102,9 @@ export async function adminUpdateJobStatus(jobId: string, status: JobStatus) {
   const job = await prisma.job.findUnique({ where: { id: jobId } });
   if (!job) throw new AppError(404, "Job not found.");
 
-  const updateData: any = { status };
+  const updateData: Prisma.JobUpdateInput = { status };
 
-  if (status === "ACTIVE") {
+  if (status === JobStatus.ACTIVE) {
     const now = new Date();
     if (!job.applicationDeadline || new Date(job.applicationDeadline) < now) {
       // Reopening sets a fresh 30-day application deadline
@@ -146,14 +138,12 @@ export async function getAdminApplications(params: {
   const { page = 1, limit = 20, search, status } = params;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: Prisma.JobApplicationWhereInput = {};
   if (
     status &&
-    ["SUBMITTED", "IN_REVIEW", "INTERVIEW_SCHEDULED", "OFFER_EXTENDED", "REJECTED", "WITHDRAWN"].includes(
-      status,
-    )
+    Object.values(ApplicationStatus).includes(status as ApplicationStatus)
   ) {
-    where.status = status;
+    where.status = status as ApplicationStatus;
   }
 
   if (search) {

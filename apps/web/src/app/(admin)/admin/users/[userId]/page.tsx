@@ -15,6 +15,7 @@ import {
 } from "@/lib/adminApi";
 import { fetchAdminCourses } from "@/lib/courses";
 import type { Course } from "@/types/course";
+import type { AdminUserDetail } from "@/types/admin";
 
 import { UserDetailHeader } from "@/components/admin/user-detail/UserDetailHeader";
 import { UserDetailStats } from "@/components/admin/user-detail/UserDetailStats";
@@ -27,7 +28,7 @@ function AdminUserDetailContent() {
   const router = useRouter();
   const userId = params.userId as string;
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AdminUserDetail | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState<string>("");
   const [loading, setLoading] = useState(true);

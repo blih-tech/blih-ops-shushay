@@ -3,10 +3,18 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
-  
+  const role = request.cookies.get("blih_role")?.value;
+  const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith("/admin")) {
+    if (!token) {
+      const returnTo = encodeURIComponent(pathname + request.nextUrl.search);
+      return NextResponse.redirect(new URL(`/login?returnTo=${returnTo}`, request.url));
+    }
+  }
+
   if (token) {
-    const role = request.cookies.get("blih_role")?.value;
-    if (role === "ADMIN" && request.nextUrl.pathname === "/") {
+    if (role === "ADMIN" && pathname === "/") {
       return NextResponse.redirect(new URL("/admin", request.url));
     }
   }
@@ -15,5 +23,6 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/admin/:path*"],
 };
+

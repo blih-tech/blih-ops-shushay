@@ -188,6 +188,21 @@ export async function getJobApplicationsForCompany(
   });
 }
 
+// ─── Application status state machine ────────────────────────────────────────
+// Maps each status to the set of statuses a company is allowed to transition to.
+const COMPANY_STATUS_TRANSITIONS: Partial<Record<ApplicationStatus, ApplicationStatus[]>> = {
+  [ApplicationStatus.SUBMITTED]: [ApplicationStatus.IN_REVIEW, ApplicationStatus.REJECTED],
+  [ApplicationStatus.IN_REVIEW]: [
+    ApplicationStatus.INTERVIEW_SCHEDULED,
+    ApplicationStatus.OFFER_EXTENDED,
+    ApplicationStatus.REJECTED,
+  ],
+  [ApplicationStatus.INTERVIEW_SCHEDULED]: [
+    ApplicationStatus.OFFER_EXTENDED,
+    ApplicationStatus.REJECTED,
+  ],
+};
+
 export async function updateApplicationStatus(
   applicationId: string,
   companyUserId: string,
@@ -207,6 +222,15 @@ export async function updateApplicationStatus(
       job: {
         select: {
           companyProfileId: true,
+          title: true,
+          companyProfile: { select: { companyName: true } },
+        },
+      },
+      talentProfile: {
+        select: {
+          userId: true,
+          fullName: true,
+          user: { select: { email: true } },
         },
       },
     },
@@ -223,52 +247,37 @@ export async function updateApplicationStatus(
     );
   }
 
-  // Enforcement: Allow only Applied (SUBMITTED) -> Reviewing (IN_REVIEW)
-  if (
-    application.status !== ApplicationStatus.SUBMITTED ||
-    targetStatus !== ApplicationStatus.IN_REVIEW
-  ) {
+  // Validate against the state machine.
+  const allowedNextStatuses = COMPANY_STATUS_TRANSITIONS[application.status as ApplicationStatus] ?? [];
+  if (!allowedNextStatuses.includes(targetStatus)) {
     throw new AppError(
       400,
-      "Only status change from Applied (SUBMITTED) to Reviewing (IN_REVIEW) is allowed.",
+      `Cannot transition application from "${application.status}" to "${targetStatus}". ` +
+        `Only status change from Applied (SUBMITTED) to Reviewing (IN_REVIEW) is allowed. ` +
+        `Allowed transitions: ${allowedNextStatuses.join(", ") || "none"}.`,
     );
   }
 
   const updated = await prisma.jobApplication.update({
     where: { id: applicationId },
-    data: { status: ApplicationStatus.IN_REVIEW },
-    include: {
-      talentProfile: {
-        select: {
-          userId: true,
-          fullName: true,
-          user: {
-            select: {
-              email: true,
-            },
-          },
-        },
-      },
-      job: {
-        select: {
-          title: true,
-          companyProfile: {
-            select: {
-              companyName: true,
-            },
-          },
-        },
-      },
-    },
+    data: { status: targetStatus },
   });
 
-  if (updated.talentProfile?.userId) {
-    const companyName = updated.job?.companyProfile?.companyName || "A company";
+  // Notify the talent of every status change.
+  if (application.talentProfile?.userId) {
+    const companyName = application.job.companyProfile?.companyName || "A company";
+    const statusLabels: Partial<Record<ApplicationStatus, string>> = {
+      [ApplicationStatus.IN_REVIEW]: "is now under review",
+      [ApplicationStatus.INTERVIEW_SCHEDULED]: "has been selected for an interview",
+      [ApplicationStatus.OFFER_EXTENDED]: "has received a job offer",
+      [ApplicationStatus.REJECTED]: "was not selected at this time",
+    };
+    const statusLabel = statusLabels[targetStatus] ?? `moved to ${targetStatus}`;
     await createNotification({
-      userId: updated.talentProfile.userId,
+      userId: application.talentProfile.userId,
       type: "APPLICATION_STATUS_UPDATED",
-      title: "Application Under Review",
-      message: `${companyName} has moved your application for '${updated.job.title}' to Reviewing.`,
+      title: "Application Update",
+      message: `Your application for '${application.job.title}' at ${companyName} ${statusLabel}.`,
     });
   }
 

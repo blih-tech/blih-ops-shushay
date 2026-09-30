@@ -1,10 +1,13 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { Role, JobStatus } from "@prisma/client";
+import { redisClient } from "../../config/redis";
 
 // ─── Dashboard Stats Cache (60-second TTL) ───────────────────────────────────
 let statsCache: { data: Awaited<ReturnType<typeof _getAdminStatsRaw>>; expiresAt: number } | null = null;
 const STATS_CACHE_TTL_MS = 60_000;
+const STATS_CACHE_TTL_S = 60;
+const STATS_REDIS_KEY = "admin:stats:summary";
 
 // ─── Dashboard Stats ──────────────────────────────────────────────────────────
 
@@ -124,12 +127,32 @@ async function _getAdminStatsRaw() {
   };
 }
 
-// Public cached wrapper
+// Public cached wrapper (Redis with in-memory fallback for cluster safety)
 export async function getAdminStats() {
-  if (statsCache && Date.now() < statsCache.expiresAt) {
+  if (redisClient) {
+    try {
+      const cached = await redisClient.get(STATS_REDIS_KEY);
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    } catch {
+      // Fall through to DB query if Redis errors
+    }
+  } else if (statsCache && Date.now() < statsCache.expiresAt) {
     return statsCache.data;
   }
+
   const data = await _getAdminStatsRaw();
-  statsCache = { data, expiresAt: Date.now() + STATS_CACHE_TTL_MS };
+
+  if (redisClient) {
+    try {
+      await redisClient.setex(STATS_REDIS_KEY, STATS_CACHE_TTL_S, JSON.stringify(data));
+    } catch {
+      // Ignore cache write error
+    }
+  } else {
+    statsCache = { data, expiresAt: Date.now() + STATS_CACHE_TTL_MS };
+  }
+
   return data;
 }

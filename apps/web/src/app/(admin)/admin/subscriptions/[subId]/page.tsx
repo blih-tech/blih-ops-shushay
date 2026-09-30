@@ -7,6 +7,7 @@ import { AuthGuard } from "@/components/auth/AuthGuard";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { fetchAdminSubscriptionById } from "@/lib/adminApi";
 import { getErrorMessage } from "@blih/api-client";
+import type { AdminSubscriptionDetail } from "@/types/admin";
 
 import { SubscriptionDetailHeader } from "@/components/admin/subscription-detail/SubscriptionDetailHeader";
 import { SubscriptionDetailStats } from "@/components/admin/subscription-detail/SubscriptionDetailStats";
@@ -18,7 +19,7 @@ function AdminSubscriptionDetailContent() {
   const params = useParams();
   const subId = params.subId as string;
 
-  const [subscription, setSubscription] = useState<any>(null);
+  const [subscription, setSubscription] = useState<AdminSubscriptionDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

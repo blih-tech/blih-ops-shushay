@@ -32,6 +32,38 @@ let pdfWorker: Worker<PdfJobData> | null = null;
 
 const isRedisAvailable = Boolean(env.redisUrl || env.nodeEnv === "production");
 
+async function processEmailDispatch(data: EmailJobData): Promise<void> {
+  const { jobType, payload } = data;
+  switch (jobType) {
+    case "COURSE_PAYMENT":
+      await sendCoursePaymentConfirmationEmail(
+        payload.email,
+        payload.userName,
+        payload.amount,
+        payload.txRef,
+        payload.courseName,
+      );
+      break;
+    case "SUBSCRIPTION":
+      await sendSubscriptionConfirmationEmail(
+        payload.email,
+        payload.companyName,
+        payload.amount,
+        payload.plan,
+      );
+      break;
+    case "JOB_APPLICATION":
+      await sendJobApplicationEmail(
+        payload.companyEmail,
+        payload.jobTitle,
+        payload.applicantName,
+      );
+      break;
+    default:
+      logger.warn(`[Queue:Email] Unknown job type: ${jobType}`);
+  }
+}
+
 if (isRedisAvailable) {
   try {
     emailQueue = new Queue<EmailJobData>("email-queue", {
@@ -63,36 +95,7 @@ if (isRedisAvailable) {
       "email-queue",
       async (job: Job<EmailJobData>) => {
         logger.info(`[Queue:Email] Processing job ${job.id} (${job.data.jobType})`);
-        const { jobType, payload } = job.data;
-
-        switch (jobType) {
-          case "COURSE_PAYMENT":
-            await sendCoursePaymentConfirmationEmail(
-              payload.email,
-              payload.userName,
-              payload.amount,
-              payload.txRef,
-              payload.courseName,
-            );
-            break;
-          case "SUBSCRIPTION":
-            await sendSubscriptionConfirmationEmail(
-              payload.email,
-              payload.companyName,
-              payload.amount,
-              payload.plan,
-            );
-            break;
-          case "JOB_APPLICATION":
-            await sendJobApplicationEmail(
-              payload.companyEmail,
-              payload.jobTitle,
-              payload.applicantName,
-            );
-            break;
-          default:
-            logger.warn(`[Queue:Email] Unknown job type: ${jobType}`);
-        }
+        await processEmailDispatch(job.data);
       },
       { connection: redisConnection },
     );
@@ -135,29 +138,7 @@ export async function enqueueEmail(data: EmailJobData) {
     logger.debug(`[Queue] Email job enqueued (${data.jobType})`);
   } else {
     // Direct sync fallback when Redis is offline or in development
-    const { jobType, payload } = data;
-    if (jobType === "COURSE_PAYMENT") {
-      await sendCoursePaymentConfirmationEmail(
-        payload.email,
-        payload.userName,
-        payload.amount,
-        payload.txRef,
-        payload.courseName,
-      );
-    } else if (jobType === "SUBSCRIPTION") {
-      await sendSubscriptionConfirmationEmail(
-        payload.email,
-        payload.companyName,
-        payload.amount,
-        payload.plan,
-      );
-    } else if (jobType === "JOB_APPLICATION") {
-      await sendJobApplicationEmail(
-        payload.companyEmail,
-        payload.jobTitle,
-        payload.applicantName,
-      );
-    }
+    await processEmailDispatch(data);
   }
 }
 

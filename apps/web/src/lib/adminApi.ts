@@ -1,4 +1,24 @@
-import type { AdminStats, AdminUserListResponse, AdminTalentListResponse, AdminCompanyListResponse, AdminJobListResponse, AdminJobDetail, AdminApplicationListResponse, AdminPaymentListResponse, AdminSubscriptionListResponse, AdminCertificateListResponse, AdminNotificationListResponse } from "../types/admin";
+import type {
+  AdminStats,
+  AdminUserListResponse,
+  AdminTalentListResponse,
+  AdminCompanyListResponse,
+  AdminJobListResponse,
+  AdminJobDetail,
+  AdminApplicationListResponse,
+  AdminPaymentListResponse,
+  AdminSubscriptionListResponse,
+  AdminCertificateListResponse,
+  AdminNotificationListResponse,
+  AdminUserDetail,
+  AdminTalentDetail,
+  AdminCompanyDetail,
+  AdminApplicationDetail,
+  AdminPaymentDetail,
+  AdminSubscriptionDetail,
+  AdminCertificateDetail,
+  AdminNotificationDetail,
+} from "../types/admin";
 import { apiFetch, buildQueryString } from "./api";
 
 // ─── Dashboard Stats ──────────────────────────────────────────────────────────
@@ -172,34 +192,34 @@ export async function fetchAdminNotifications(params?: {
 
 // ─── Single Item Fetchers ──────────────────────────────────────────────────────
 
-export async function fetchAdminUserById(userId: string): Promise<any> {
-  return apiFetch(`/admin/users/${userId}`);
+export async function fetchAdminUserById(userId: string): Promise<AdminUserDetail> {
+  return apiFetch<AdminUserDetail>(`/admin/users/${userId}`);
 }
 
-export async function fetchAdminTalentById(talentId: string): Promise<any> {
-  return apiFetch(`/admin/talents/${talentId}`);
+export async function fetchAdminTalentById(talentId: string): Promise<AdminTalentDetail> {
+  return apiFetch<AdminTalentDetail>(`/admin/talents/${talentId}`);
 }
 
-export async function fetchAdminCompanyById(companyId: string): Promise<any> {
-  return apiFetch(`/admin/companies/${companyId}`);
+export async function fetchAdminCompanyById(companyId: string): Promise<AdminCompanyDetail> {
+  return apiFetch<AdminCompanyDetail>(`/admin/companies/${companyId}`);
 }
 
-export async function fetchAdminApplicationById(appId: string): Promise<any> {
-  return apiFetch(`/admin/applications/${appId}`);
+export async function fetchAdminApplicationById(appId: string): Promise<AdminApplicationDetail> {
+  return apiFetch<AdminApplicationDetail>(`/admin/applications/${appId}`);
 }
 
-export async function fetchAdminPaymentById(paymentId: string): Promise<any> {
-  return apiFetch(`/admin/payments/${paymentId}`);
+export async function fetchAdminPaymentById(paymentId: string): Promise<AdminPaymentDetail> {
+  return apiFetch<AdminPaymentDetail>(`/admin/payments/${paymentId}`);
 }
 
-export async function fetchAdminSubscriptionById(subId: string): Promise<any> {
-  return apiFetch(`/admin/subscriptions/${subId}`);
+export async function fetchAdminSubscriptionById(subId: string): Promise<AdminSubscriptionDetail> {
+  return apiFetch<AdminSubscriptionDetail>(`/admin/subscriptions/${subId}`);
 }
 
-export async function fetchAdminCertificateById(certId: string): Promise<any> {
-  return apiFetch(`/admin/certificates/${certId}`);
+export async function fetchAdminCertificateById(certId: string): Promise<AdminCertificateDetail> {
+  return apiFetch<AdminCertificateDetail>(`/admin/certificates/${certId}`);
 }
 
-export async function fetchAdminNotificationById(id: string): Promise<any> {
-  return apiFetch(`/admin/notifications/${id}`);
+export async function fetchAdminNotificationById(id: string): Promise<AdminNotificationDetail> {
+  return apiFetch<AdminNotificationDetail>(`/admin/notifications/${id}`);
 }

@@ -1,7 +1,6 @@
+import { Prisma, Role } from "@prisma/client";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
-
-
 
 export async function getAdminUsers(params: {
   page?: number;
@@ -12,9 +11,9 @@ export async function getAdminUsers(params: {
   const { page = 1, limit = 20, search, role } = params;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  const where: Prisma.UserWhereInput = {};
   if (role && ["TALENT", "COMPANY", "ADMIN"].includes(role)) {
-    where.role = role;
+    where.role = role as Role;
   }
   if (search) {
     where.OR = [
@@ -199,6 +198,14 @@ export async function getAdminUserById(userId: string) {
 export async function deleteUser(userId: string) {
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new AppError(404, "User not found.");
+
+  if (user.role === Role.ADMIN) {
+    const adminCount = await prisma.user.count({ where: { role: Role.ADMIN } });
+    if (adminCount <= 1) {
+      throw new AppError(400, "Cannot delete the last admin account.");
+    }
+  }
+
   await prisma.user.delete({ where: { id: userId } });
   return { success: true };
 }

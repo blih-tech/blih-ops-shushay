@@ -1,7 +1,25 @@
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { CreateJobInput, UpdateJobInput, JobQueryInput } from "./job.schemas";
-import { JobStatus } from "@prisma/client";
+import { JobStatus, Prisma } from "@prisma/client";
+
+/**
+ * Derives the effective job status, accounting for whether an ACTIVE job's
+ * application deadline has passed.
+ */
+export function computeEffectiveJobStatus(
+  status: JobStatus | string,
+  applicationDeadline?: Date | string | null
+): string {
+  if (
+    status === JobStatus.ACTIVE &&
+    applicationDeadline &&
+    new Date(applicationDeadline) < new Date()
+  ) {
+    return "EXPIRED";
+  }
+  return status;
+}
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -220,7 +238,28 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
   } = query;
   const skip = (page - 1) * limit;
 
-  const where: any = {};
+  // Filter active, non-expired jobs at the DB level — avoids full-table scan in JS.
+  const now = new Date();
+  const andFilters: Prisma.JobWhereInput[] = [
+    {
+      OR: [{ applicationDeadline: null }, { applicationDeadline: { gte: now } }],
+    },
+  ];
+
+  if (search) {
+    andFilters.push({
+      OR: [
+        { title: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+        { requiredSkills: { hasSome: [search] } },
+      ],
+    });
+  }
+
+  const where: Prisma.JobWhereInput = {
+    status: JobStatus.ACTIVE,
+    AND: andFilters,
+  };
 
   if (employmentType) where.employmentType = employmentType;
   if (experienceLevel) where.experienceLevel = experienceLevel;
@@ -232,21 +271,13 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
       .filter(Boolean);
     if (skillList.length) where.requiredSkills = { hasSome: skillList };
   }
-  if (search) {
-    where.AND = [
-      {
-        OR: [
-          { title: { contains: search, mode: "insensitive" } },
-          { description: { contains: search, mode: "insensitive" } },
-          { requiredSkills: { hasSome: [search] } },
-        ],
-      },
-    ];
-  }
 
-  const [allMatchingJobs, total] = await Promise.all([
+  const [jobs, total] = await Promise.all([
     prisma.job.findMany({
       where,
+      skip,
+      take: limit,
+      orderBy: { createdAt: "desc" },
       include: {
         companyProfile: {
           select: {
@@ -261,21 +292,6 @@ export async function listActiveJobs(query: JobQueryInput, userId?: string) {
     }),
     prisma.job.count({ where }),
   ]);
-
-  const now = new Date();
-  const isJobActive = (j: any) =>
-    j.status === JobStatus.ACTIVE &&
-    (!j.applicationDeadline || new Date(j.applicationDeadline) >= now);
-
-  const sortedJobs = allMatchingJobs.sort((a, b) => {
-    const aActive = isJobActive(a);
-    const bActive = isJobActive(b);
-    if (aActive && !bActive) return -1;
-    if (!aActive && bActive) return 1;
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
-
-  const jobs = sortedJobs.slice(skip, skip + limit);
 
   let appliedJobIds = new Set<string>();
   if (userId) {

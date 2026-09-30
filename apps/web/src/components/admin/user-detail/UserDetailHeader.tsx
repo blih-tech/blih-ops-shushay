@@ -16,9 +16,10 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { Button } from "@blih/ui";
+import type { AdminUserDetail } from "@/types/admin";
 
 interface UserDetailHeaderProps {
-  user: any;
+  user: AdminUserDetail;
   displayName: string;
   onDeleteClick: () => void;
 }

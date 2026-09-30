@@ -20,8 +20,10 @@ jest.mock("../config/prisma", () => ({
   assignment: { findUnique: jest.fn() },
   assignmentSubmission: { upsert: jest.fn() },
   course: { findUnique: jest.fn() },
+  courseEnrollment: { findUnique: jest.fn() },
   certificate: {
     findUnique: jest.fn(),
+    findFirst: jest.fn(),
     findMany: jest.fn(),
     create: jest.fn(),
   },
@@ -36,6 +38,8 @@ describe("Learning Service", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (checkAndGenerateCertificate as jest.Mock).mockResolvedValue(null);
+    ((prisma as any).courseEnrollment?.findUnique as jest.Mock)?.mockResolvedValue({ id: "enrollment-1" });
+    ((prisma as any).certificate?.findFirst as jest.Mock)?.mockResolvedValue(null);
   });
 
   // ─── markLessonComplete ──────────────────────────────────────────────────────
@@ -299,8 +303,8 @@ describe("Learning Service", () => {
         lessons: [{ id: "l1" }, { id: "l2" }, { id: "l3" }, { id: "l4" }],
       });
       (prisma.lessonProgress.findMany as jest.Mock).mockResolvedValue([
-        { lessonId: "l1" },
-        { lessonId: "l2" },
+        { lessonId: "l1", completed: true, lastPosition: 0 },
+        { lessonId: "l2", completed: true, lastPosition: 0 },
       ]);
 
       const progress = await getCourseProgress("user-1", "course-1");
@@ -317,8 +321,8 @@ describe("Learning Service", () => {
         lessons: [{ id: "l1" }, { id: "l2" }],
       });
       (prisma.lessonProgress.findMany as jest.Mock).mockResolvedValue([
-        { lessonId: "l1" },
-        { lessonId: "l2" },
+        { lessonId: "l1", completed: true, lastPosition: 0 },
+        { lessonId: "l2", completed: true, lastPosition: 0 },
       ]);
 
       const progress = await getCourseProgress("user-1", "course-1");

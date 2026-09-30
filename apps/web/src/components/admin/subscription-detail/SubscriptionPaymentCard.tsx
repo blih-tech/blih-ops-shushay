@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import { Receipt, Hash, Copy, Check } from "lucide-react";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import type { AdminSubscriptionDetail } from "@/types/admin";
 
 interface SubscriptionPaymentCardProps {
-  payment: any;
+  payment: AdminSubscriptionDetail["payment"];
 }
 
 export function SubscriptionPaymentCard({

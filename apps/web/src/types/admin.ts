@@ -80,6 +80,82 @@ export interface AdminUser {
   };
 }
 
+export interface AdminUserDetail {
+  id: string;
+  email: string;
+  role: string;
+  emailVerified: boolean;
+  createdAt: string;
+  updatedAt?: string;
+  talentProfile: {
+    id: string;
+    fullName: string | null;
+    title: string | null;
+    phone: string | null;
+    country: string | null;
+    city: string | null;
+    englishLevel: string | null;
+    skills: string[];
+    bio: string | null;
+    photoUrl: string | null;
+    cvUrl: string | null;
+    experience: {
+      id: string;
+      title: string;
+      company: string;
+      startDate: string;
+      endDate: string | null;
+      current: boolean;
+    }[];
+    education: {
+      id: string;
+      institution: string;
+      degree: string;
+      field: string | null;
+      startYear: number;
+      endYear: number | null;
+    }[];
+    _count: {
+      jobApplications: number;
+    };
+  } | null;
+  companyProfile: {
+    id: string;
+    companyName: string | null;
+    logoUrl: string | null;
+    country: string | null;
+    city: string | null;
+    subscriptionActive: boolean;
+    subscriptionExpiresAt: string | null;
+    website: string | null;
+    description: string | null;
+    companySubscription: {
+      status: string;
+      plan: string;
+      expiresAt: string;
+    } | null;
+    _count: {
+      jobs: number;
+    };
+  } | null;
+  certificates?: {
+    courseId: string;
+    course: { title: string } | null;
+  }[];
+  courseEnrollments: {
+    courseId: string;
+    grantedAt: string;
+    course: {
+      id: string;
+      title: string;
+    };
+  }[];
+  _count: {
+    paymentTransactions: number;
+    certificates: number;
+  };
+}
+
 export interface AdminUserListResponse {
   users: AdminUser[];
   total: number;
@@ -233,6 +309,7 @@ export interface AdminJobDetail extends AdminJob {
     coverLetter: string | null;
     createdAt: string;
     talentProfile: {
+      id: string;
       fullName: string | null;
       title: string | null;
       photoUrl: string | null;
@@ -391,8 +468,6 @@ export interface AdminNotificationListResponse {
   totalPages: number;
 }
 
-// ─── Pagination helper ────────────────────────────────────────────────────────
-
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
@@ -400,3 +475,24 @@ export interface PaginatedResponse<T> {
   limit: number;
   totalPages: number;
 }
+
+// ─── Single Item Detail Types ─────────────────────────────────────────────────
+
+export interface AdminCompanyDetail extends AdminCompanyItem {
+  jobs: {
+    id: string;
+    title: string;
+    status: string;
+    employmentType: string;
+    applicationDeadline: string | null;
+    createdAt: string;
+  }[];
+}
+
+export type AdminTalentDetail = AdminTalentItem;
+export type AdminApplicationDetail = AdminApplication;
+export type AdminPaymentDetail = AdminPayment;
+export type AdminSubscriptionDetail = AdminSubscription;
+export type AdminCertificateDetail = AdminCertificate;
+export type AdminNotificationDetail = AdminNotification;
+
