@@ -24,11 +24,24 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const router = useRouter();
   const { user, loading } = useAuth();
   useEffect(() => {
-    if (!loading && !user) {
-      const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
-      router.replace(`/login?returnTo=${returnTo}`);
+    if (!loading) {
+      if (!user) {
+        const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+        router.replace(`/login?returnTo=${returnTo}`);
+      } else if (allowedRoles && !allowedRoles.includes(user.role)) {
+        // Automatically redirect unauthorized users to their designated portal
+        const targetPortal =
+          user.role === "COMPANY"
+            ? "/company"
+            : user.role === "TALENT"
+            ? "/dashboard"
+            : user.role === "ADMIN"
+            ? "/admin"
+            : "/";
+        router.replace(targetPortal);
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, allowedRoles]);
 
   if (loading) {
     return (
@@ -47,7 +60,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white px-4 relative antialiased">
+      <div className="min-h-screen flex items-center justify-center bg-[#F9F8FC] px-4 relative antialiased">
         <Card className="max-w-md w-full text-center rounded-xl border border-[#D9CEDF] shadow-lg p-6 bg-white">
           <CardHeader className="p-4 pb-2">
             <div className="mx-auto w-14 h-14 rounded-2xl bg-[#FFF0F0] text-[#EF4444] border border-[#EF4444]/20 flex items-center justify-center mb-3">
@@ -57,8 +70,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               Access Restricted
             </CardTitle>
             <CardDescription className="text-sm text-[#6E6678] font-sans mt-1">
-              You do not have the required role permissions to access this
-              workspace.
+              You do not have permission to access the administrative workspace. Redirecting to your dashboard...
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 pt-4">
@@ -66,6 +78,8 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               onClick={() => {
                 if (user.role === "ADMIN") {
                   router.push("/admin");
+                } else if (user.role === "COMPANY") {
+                  router.push("/company");
                 } else {
                   router.push("/dashboard");
                 }
@@ -74,7 +88,11 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               fullWidth
               size="lg"
             >
-              {user.role === "ADMIN" ? "Go to Admin Portal" : "Go to Dashboard"}
+              {user.role === "ADMIN"
+                ? "Go to Admin Portal"
+                : user.role === "COMPANY"
+                ? "Go to Company Portal"
+                : "Go to Dashboard"}
             </Button>
           </CardContent>
         </Card>

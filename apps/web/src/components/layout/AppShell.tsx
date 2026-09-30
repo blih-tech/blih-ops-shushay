@@ -24,8 +24,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  // Admin routes get the dedicated full-width sidebar layout
+  // Admin routes get the dedicated full-width sidebar layout only for ADMIN accounts
   if (pathname.startsWith("/admin")) {
+    if (user && user.role !== "ADMIN") {
+      return <>{children}</>;
+    }
     return <AdminShell>{children}</AdminShell>;
   }
 
