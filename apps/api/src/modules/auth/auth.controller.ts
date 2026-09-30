@@ -104,6 +104,7 @@ export async function login(
       secure: env.nodeEnv === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       sameSite: "lax",
+      path: "/",
     });
 
     res.cookie("blih_role", user.role, {
@@ -111,6 +112,7 @@ export async function login(
       secure: env.nodeEnv === "production",
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: "lax",
+      path: "/",
     });
 
     res.json({
@@ -131,11 +133,13 @@ export async function logout(_req: Request, res: Response, next: NextFunction) {
       httpOnly: true,
       secure: env.nodeEnv === "production",
       sameSite: "lax",
+      path: "/",
     });
     res.clearCookie("blih_role", {
       httpOnly: false,
       secure: env.nodeEnv === "production",
       sameSite: "lax",
+      path: "/",
     });
     res.json({ message: "Logged out successfully" });
   } catch (err) {

@@ -59,6 +59,13 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
+    const targetPortalName =
+      user.role === "ADMIN"
+        ? "Admin Portal"
+        : user.role === "COMPANY"
+        ? "Company Portal"
+        : "Dashboard";
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F9F8FC] px-4 relative antialiased">
         <Card className="max-w-md w-full text-center rounded-xl border border-[#D9CEDF] shadow-lg p-6 bg-white">
@@ -70,7 +77,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               Access Restricted
             </CardTitle>
             <CardDescription className="text-sm text-[#6E6678] font-sans mt-1">
-              You do not have permission to access the administrative workspace. Redirecting to your dashboard...
+              You do not have permission to access this area. Redirecting to your {targetPortalName}...
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4 pt-4">
@@ -88,11 +95,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               fullWidth
               size="lg"
             >
-              {user.role === "ADMIN"
-                ? "Go to Admin Portal"
-                : user.role === "COMPANY"
-                ? "Go to Company Portal"
-                : "Go to Dashboard"}
+              Go to {targetPortalName}
             </Button>
           </CardContent>
         </Card>

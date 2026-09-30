@@ -1,8 +1,64 @@
 import { Response } from "express";
+import Redis from "ioredis";
 import { logger } from "../../utils/logger";
+import { env } from "../../config/env";
+import { redisClient } from "../../config/redis";
+
+const SSE_REDIS_CHANNEL = "sse:notifications";
 
 class SSENotificationManager {
   private clients: Map<string, Set<Response>> = new Map();
+  private subscriber: Redis | null = null;
+
+  constructor() {
+    this.initRedisSubscriber();
+  }
+
+  private initRedisSubscriber() {
+    if (!env.redisUrl) return;
+
+    try {
+      this.subscriber = new Redis(env.redisUrl, {
+        enableOfflineQueue: false,
+        lazyConnect: false,
+        retryStrategy: (times) => Math.min(1000 * 2 ** times, 30_000),
+      });
+
+      this.subscriber.on("connect", () => {
+        logger.info("[SSE] Redis subscriber connected");
+        this.subscriber?.subscribe(SSE_REDIS_CHANNEL, (err) => {
+          if (err) {
+            logger.error("[SSE] Failed to subscribe to channel", {
+              error: err.message,
+            });
+          } else {
+            logger.info(`[SSE] Subscribed to ${SSE_REDIS_CHANNEL}`);
+          }
+        });
+      });
+
+      this.subscriber.on("message", (channel, message) => {
+        if (channel === SSE_REDIS_CHANNEL) {
+          try {
+            const { userId, data } = JSON.parse(message);
+            if (userId && data) {
+              this.deliverLocally(userId, data);
+            }
+          } catch (err) {
+            logger.error("[SSE] Failed to parse message from Redis", { err });
+          }
+        }
+      });
+
+      this.subscriber.on("error", (err) => {
+        logger.error("[SSE] Redis subscriber error", { message: err.message });
+      });
+    } catch (err: any) {
+      logger.error("[SSE] Error initializing Redis subscriber", {
+        message: err?.message,
+      });
+    }
+  }
 
   /**
    * Register an SSE client connection for an authenticated user
@@ -33,9 +89,31 @@ class SSENotificationManager {
   }
 
   /**
-   * Send a real-time notification object to all active connections of a user
+   * Send a real-time notification object to all active connections of a user.
+   * If Redis is active, broadcasts over Redis pub/sub so that all API cluster replicas deliver it.
+   * Otherwise gracefully falls back to local delivery.
    */
-  sendNotificationToUser(userId: string, data: any) {
+  async sendNotificationToUser(userId: string, data: any) {
+    if (redisClient && redisClient.status === "ready") {
+      try {
+        await redisClient.publish(
+          SSE_REDIS_CHANNEL,
+          JSON.stringify({ userId, data }),
+        );
+        return;
+      } catch (err) {
+        logger.warn("[SSE] Redis publish failed — delivering locally", { err });
+      }
+    }
+
+    // Direct local delivery fallback (e.g. Redis disabled/unreachable)
+    this.deliverLocally(userId, data);
+  }
+
+  /**
+   * Write SSE payload to all local response sockets connected to this user
+   */
+  private deliverLocally(userId: string, data: any) {
     const userClients = this.clients.get(userId);
     if (!userClients || userClients.size === 0) return;
 
@@ -71,6 +149,14 @@ class SSENotificationManager {
     }, 25000);
     if (timer.unref) {
       timer.unref();
+    }
+  }
+
+  async close() {
+    if (this.subscriber) {
+      try {
+        await this.subscriber.quit();
+      } catch {}
     }
   }
 }

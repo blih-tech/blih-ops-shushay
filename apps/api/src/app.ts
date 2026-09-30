@@ -12,6 +12,8 @@ import { errorHandler } from "./middleware/errorHandler";
 import { requireAuth } from "./middleware/auth";
 import routes from "./routes";
 
+import { redisClient } from "./config/redis";
+
 const app = express();
 
 // Strict CSP for all routes; relaxed only for the Swagger UI documentation path
@@ -80,21 +82,34 @@ app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api/v1/health", async (_req, res) => {
+  let dbStatus = "connected";
+  let redisStatus = "not_configured";
+
   try {
     await prisma.$queryRaw`SELECT 1`;
-    res.json({
-      status: "ok",
-      database: "connected",
-      timestamp: new Date().toISOString(),
-    });
   } catch (error) {
     console.error("[health] Database check failed", error);
-    res.status(500).json({
-      status: "error",
-      database: "disconnected",
-      timestamp: new Date().toISOString(),
-    });
+    dbStatus = "disconnected";
   }
+
+  if (redisClient) {
+    try {
+      const pong = await redisClient.ping();
+      redisStatus = pong === "PONG" ? "connected" : "degraded";
+    } catch {
+      redisStatus = "disconnected";
+    }
+  }
+
+  const isHealthy = dbStatus === "connected";
+  const statusCode = isHealthy ? 200 : 503;
+
+  res.status(statusCode).json({
+    status: !isHealthy ? "error" : redisStatus === "disconnected" ? "degraded" : "ok",
+    database: dbStatus,
+    redis: redisStatus,
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.use("/api/v1", routes);

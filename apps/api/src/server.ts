@@ -4,6 +4,11 @@ import {
   initSubscriptionScheduler,
   gracefulShutdownScheduler,
 } from "./modules/company-subscriptions/subscription.scheduler";
+import {
+  initJobScheduler,
+  gracefulShutdownJobScheduler,
+} from "./modules/jobs/job.scheduler";
+import { sseNotificationManager } from "./modules/notifications/sse.service";
 
 process.on("unhandledRejection", (reason) => {
   console.error("⚠️ Unhandled Promise Rejection:", reason);
@@ -17,12 +22,18 @@ const server = app.listen(env.port, () => {
   console.log(`🚀 blih-api listening on port ${env.port}`);
   // Start the subscription renewal reminder scheduler (every 6 hours)
   initSubscriptionScheduler();
+  // Start the job deadline expiration cleaner (every 1 hour)
+  initJobScheduler();
 });
 
-// Graceful shutdown: drain BullMQ workers before exiting
+// Graceful shutdown: drain BullMQ workers and close connections before exiting
 async function shutdown(signal: string) {
   console.log(`\n[Server] Received ${signal} — shutting down gracefully...`);
-  await gracefulShutdownScheduler();
+  await Promise.allSettled([
+    gracefulShutdownScheduler(),
+    gracefulShutdownJobScheduler(),
+    sseNotificationManager.close(),
+  ]);
   server.close(() => {
     console.log("[Server] HTTP server closed.");
     process.exit(0);

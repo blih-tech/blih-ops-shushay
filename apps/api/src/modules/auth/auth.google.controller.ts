@@ -216,6 +216,7 @@ function issueAuthCookies(res: Response, user: any) {
     secure: env.nodeEnv === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     sameSite: "lax",
+    path: "/",
   });
 
   res.cookie("blih_role", user.role, {
@@ -223,6 +224,7 @@ function issueAuthCookies(res: Response, user: any) {
     secure: env.nodeEnv === "production",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     sameSite: "lax",
+    path: "/",
   });
 }
 
