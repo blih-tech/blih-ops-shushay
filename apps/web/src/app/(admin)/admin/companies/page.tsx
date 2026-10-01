@@ -122,15 +122,16 @@ function AdminCompaniesContent() {
 
       <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
         <UniversalSearch
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search companies by name, email, or country..."
-           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search companies by name, email, or country..."
+          className="flex-1 w-full"
+        />
         <Select
           id="sub-filter"
           value={subFilter}
           onChange={(e) => setSubFilter(e.target.value)}
-          className="w-full sm:w-56 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Subscriptions" },
             { value: "ACTIVE", label: "Active" },

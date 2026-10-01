@@ -200,7 +200,7 @@ function CompanyDashboardContent() {
             </p>
             <div className="pt-2">
               <Link href="/company/jobs">
-                <Button size="sm" variant="primary" leftIcon={<Plus className="w-4 h-4" />}>
+                <Button size="md" variant="primary" leftIcon={<Plus className="w-4 h-4" />}>
                   Create Job Posting
                 </Button>
               </Link>

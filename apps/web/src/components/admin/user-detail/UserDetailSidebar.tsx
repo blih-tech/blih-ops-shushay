@@ -121,11 +121,11 @@ export function UserDetailSidebar({
           Deleting this user is irreversible. All related talent profiles, applications, and curriculum progress will be permanently erased.
         </p>
         <Button
-          size="sm"
+          size="md"
           variant="destructive"
           className="w-full justify-center"
           onClick={onDeleteClick}
-          leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+          leftIcon={<Trash2 className="h-4 w-4" />}
         >
           Delete User Account
         </Button>

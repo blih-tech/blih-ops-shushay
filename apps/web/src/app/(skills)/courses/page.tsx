@@ -77,8 +77,8 @@ export default function CourseCatalogPage() {
     <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       {/* Page Title & Premise */}
       <div className="space-y-4 max-w-3xl">
-        <div className="inline-flex items-center gap-2 font-mono text-xs text-[#17131F] bg-white border border-[#D9CEDF] shadow-2xs px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-          <Layers className="w-3.5 h-3.5 text-[#17131F]" />
+        <div className="inline-flex items-center gap-2 font-mono text-xs text-[#1E5BFF] bg-[#DDE7FF] px-3.5 py-1.5 rounded-full uppercase tracking-wider font-semibold shadow-2xs">
+          <Layers className="w-3.5 h-3.5" />
           <span>Learning Discovery</span>
         </div>
 

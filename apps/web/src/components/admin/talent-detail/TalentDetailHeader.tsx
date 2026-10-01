@@ -139,19 +139,19 @@ export function TalentDetailHeader({
           {talent.user?.id && (
             <Link href={`/admin/users/${talent.user.id}`}>
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
-                leftIcon={<User className="h-3.5 w-3.5" />}
+                leftIcon={<User className="h-4 w-4" />}
               >
                 User Account
               </Button>
             </Link>
           )}
           <Button
-            size="sm"
+            size="md"
             variant="destructive"
             onClick={onDeleteClick}
-            leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+            leftIcon={<Trash2 className="h-4 w-4" />}
           >
             Delete Account
           </Button>

@@ -55,7 +55,7 @@ export const UniversalSearch: React.FC<UniversalSearchProps> = ({
       {actionText && (
         <button
           type="submit"
-          className={`h-10 min-h-[40px] flex items-center justify-center font-sans text-xs sm:text-sm font-medium text-white bg-[#1E5BFF] hover:bg-[#1E5BFF]/90 px-4 rounded-md transition-colors shadow-xs cursor-pointer select-none active:translate-y-px shrink-0 ${buttonClassName}`}
+          className={`h-10 min-h-[40px] flex items-center justify-center font-sans text-xs sm:text-sm font-semibold text-white bg-[#1E5BFF] hover:bg-[#1E5BFF]/90 px-6 min-w-[100px] sm:min-w-[136px] rounded-md transition-colors shadow-xs cursor-pointer select-none active:translate-y-px shrink-0 ${buttonClassName}`}
         >
           {actionText}
         </button>

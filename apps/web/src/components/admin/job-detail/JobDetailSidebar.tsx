@@ -155,11 +155,11 @@ export function JobDetailSidebar({ job, onDeleteClick }: JobDetailSidebarProps) 
           Permanently delete this job listing. All associated candidate applications and review logs will be irrevocably purged.
         </p>
         <Button
-          size="sm"
+          size="md"
           variant="destructive"
           className="w-full justify-center"
           onClick={onDeleteClick}
-          leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+          leftIcon={<Trash2 className="h-4 w-4" />}
         >
           Delete Job Listing
         </Button>

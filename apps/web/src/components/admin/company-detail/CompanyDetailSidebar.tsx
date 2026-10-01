@@ -190,11 +190,11 @@ export function CompanyDetailSidebar({
           Deleting this company account will permanently remove all associated jobs, candidate applications, and subscription access.
         </p>
         <Button
-          size="sm"
+          size="md"
           variant="destructive"
           className="w-full justify-center"
           onClick={onDeleteClick}
-          leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+          leftIcon={<Trash2 className="h-4 w-4" />}
         >
           Delete Company Account
         </Button>

@@ -123,9 +123,9 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
         {/* Profile Content Body */}
         <div className="px-6 sm:px-10 pb-8 space-y-6">
           {/* Avatar & Header Actions */}
-          <div className="-mt-12 sm:-mt-16 relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-end gap-5">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-1.5 shadow-md border-4 border-white overflow-hidden flex items-center justify-center shrink-0 relative">
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 sm:pt-5">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <div className="-mt-14 sm:-mt-20 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white p-1.5 shadow-md border-4 border-white overflow-hidden flex items-center justify-center shrink-0 relative">
                 {company.logoUrl ? (
                   <img
                     src={company.logoUrl}
@@ -139,7 +139,7 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
                 )}
               </div>
 
-              <div className="space-y-1 pb-1">
+              <div className="space-y-1.5">
                 <div className="flex items-center gap-3 flex-wrap">
                   <h1 className="font-display text-2xl sm:text-3xl font-bold text-[#17131F]">
                     {companyName}
@@ -164,11 +164,11 @@ function CompanyProfileContent({ companyId }: { companyId: string }) {
                 }
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 border border-[#D9CEDF] rounded-xl text-xs font-mono text-[#1E5BFF] hover:bg-[#EEF3FF] transition-colors shrink-0 self-start sm:self-auto"
+                className="inline-flex items-center gap-2 h-10 min-h-[40px] px-4 border border-[#D9CEDF] rounded-xl text-xs sm:text-sm font-sans font-semibold text-[#17131F] hover:text-[#1E5BFF] hover:border-[#1E5BFF]/50 hover:bg-[#EEF3FF]/50 transition-all shrink-0 self-start sm:self-center shadow-2xs"
               >
-                <Globe className="h-3.5 w-3.5" />
+                <Globe className="h-4 w-4 text-[#1E5BFF]" />
                 <span>Visit Website</span>
-                <ExternalLink className="h-3 w-3" />
+                <ExternalLink className="h-3.5 w-3.5 text-[#6E6678]" />
               </a>
             )}
           </div>

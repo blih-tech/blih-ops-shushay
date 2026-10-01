@@ -31,7 +31,7 @@ export const ProfileCompletionBanner: React.FC<
       <Link href="/profile/setup" className="shrink-0">
         <Button
           variant="primary"
-          size="sm"
+          size="md"
           className="bg-amber-600 hover:bg-amber-700 text-white border-transparent"
           rightIcon={<ArrowRight className="h-4 w-4" />}
         >

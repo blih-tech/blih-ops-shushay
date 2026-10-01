@@ -106,24 +106,30 @@ export function TalentInspectModal({
           </div>
         )}
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-[#D9CEDF]">
+        <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-3 pt-4 border-t border-[#D9CEDF]">
           {talent.cvUrl && (
             <a
               href={talent.cvUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5"
+              className="w-full sm:w-auto inline-flex items-center gap-1.5"
             >
               <Button
                 variant="outline"
-                size="sm"
+                size="md"
+                className="w-full sm:w-auto"
                 leftIcon={<FileText className="h-4 w-4" />}
               >
                 Download Attached CV
               </Button>
             </a>
           )}
-          <Button variant="primary" size="sm" onClick={onClose}>
+          <Button
+            variant="primary"
+            size="md"
+            className="w-full sm:w-auto min-w-[100px]"
+            onClick={onClose}
+          >
             Close
           </Button>
         </div>

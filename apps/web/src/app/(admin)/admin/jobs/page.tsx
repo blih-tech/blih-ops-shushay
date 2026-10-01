@@ -153,15 +153,16 @@ function AdminJobsContent() {
 
       <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
         <UniversalSearch
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by title, company, or description..."
-           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by title, company, or description..."
+          className="flex-1 w-full"
+        />
         <Select
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full sm:w-32 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "ACTIVE", label: "Active" },
@@ -172,7 +173,7 @@ function AdminJobsContent() {
           id="employment-filter"
           value={employmentTypeFilter}
           onChange={(e) => setEmploymentTypeFilter(e.target.value)}
-          className="w-full sm:w-32 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Types" },
             { value: "FULL_TIME", label: "Full Time" },

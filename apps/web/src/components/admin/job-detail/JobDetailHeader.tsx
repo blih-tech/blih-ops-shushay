@@ -80,13 +80,13 @@ export function JobDetailHeader({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
+        <div className="flex items-center gap-2.5 self-start lg:self-center shrink-0">
           {job.status === "ACTIVE" ? (
             <Button
-              size="sm"
+              size="md"
               variant="outline"
               className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828] border-red-200"
-              leftIcon={<XCircle className="h-3.5 w-3.5" />}
+              leftIcon={<XCircle className="h-4 w-4" />}
               onClick={onCloseClick}
               isLoading={actionLoading}
             >
@@ -94,9 +94,9 @@ export function JobDetailHeader({
             </Button>
           ) : (
             <Button
-              size="sm"
+              size="md"
               variant="secondary"
-              leftIcon={<RefreshCw className="h-3.5 w-3.5 text-[#2E8F79]" />}
+              leftIcon={<RefreshCw className="h-4 w-4 text-[#2E8F79]" />}
               onClick={onReopenClick}
               isLoading={actionLoading}
             >
@@ -105,9 +105,9 @@ export function JobDetailHeader({
           )}
 
           <Button
-            size="sm"
+            size="md"
             variant="destructive"
-            leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+            leftIcon={<Trash2 className="h-4 w-4" />}
             onClick={onDeleteClick}
             isLoading={actionLoading}
           >

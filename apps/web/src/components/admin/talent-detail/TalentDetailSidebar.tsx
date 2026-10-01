@@ -148,11 +148,11 @@ export function TalentDetailSidebar({
           Deleting this talent account will permanently purge their profile, resume attachments, application submissions, and course history.
         </p>
         <Button
-          size="sm"
+          size="md"
           variant="destructive"
           className="w-full justify-center"
           onClick={onDeleteClick}
-          leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+          leftIcon={<Trash2 className="h-4 w-4" />}
         >
           Delete Talent Account
         </Button>

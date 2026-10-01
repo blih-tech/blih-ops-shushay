@@ -54,7 +54,7 @@ export function CompanyJobsFilters({
             actionText="Search"
           />
         </div>
-        <div className="w-full sm:w-48 shrink-0">
+        <div className="w-full sm:w-40 shrink-0">
           <Select
             options={statusFilterOptions}
             value={statusFilter}
@@ -62,7 +62,7 @@ export function CompanyJobsFilters({
             placeholder="Filter Status"
           />
         </div>
-        <div className="w-full sm:w-48 shrink-0">
+        <div className="w-full sm:w-40 shrink-0">
           <Select
             options={employmentTypeOptions}
             value={employmentTypeFilter}

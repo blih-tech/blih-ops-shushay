@@ -104,7 +104,7 @@ export function LearnQuizStep({
               </p>
               <Button
                 variant="outline"
-                size="sm"
+                size="md"
                 onClick={onRetryQuiz}
                 leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
                 className="shrink-0"

@@ -128,13 +128,12 @@ function AdminUsersContent() {
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by email, name, or company..."
           className="flex-1 w-full"
-          buttonClassName="w-full sm:w-32"
         />
         <Select
           id="role-filter"
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="w-full sm:w-32 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Roles" },
             { value: "TALENT", label: "Talent" },

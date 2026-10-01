@@ -12,6 +12,7 @@ export interface ConfirmDialogProps {
   cancelText?: string;
   variant?: "destructive" | "primary";
   isLoading?: boolean;
+  error?: string | null;
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
@@ -24,6 +25,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   cancelText = "Cancel",
   variant = "destructive",
   isLoading = false,
+  error,
 }) => {
   return (
     <Modal
@@ -33,9 +35,13 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       size="sm"
       footer={
         <>
+          {error && (
+            <p className="text-xs font-mono text-[#EF4444] mr-auto self-center">{error}</p>
+          )}
           <Button
             variant="outline"
-            size="sm"
+            size="md"
+            className="w-full sm:w-auto min-w-[105px]"
             onClick={onClose}
             disabled={isLoading}
           >
@@ -43,7 +49,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           </Button>
           <Button
             variant={variant}
-            size="sm"
+            size="md"
+            className="w-full sm:w-auto min-w-[105px]"
             onClick={onConfirm}
             isLoading={isLoading}
           >
@@ -52,7 +59,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </>
       }
     >
-      <p className="text-sm text-[#17131F] leading-relaxed font-sans">{message}</p>
+      <p className="text-sm sm:text-base text-[#6E6678] leading-relaxed font-sans">{message}</p>
     </Modal>
   );
 };

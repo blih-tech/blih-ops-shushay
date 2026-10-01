@@ -20,13 +20,13 @@ export function ViewModeToggle({
     <div
       role="group"
       aria-label="View mode toggle"
-      className={`inline-flex items-center p-0.5 bg-[#F4F1F8] rounded-md border border-[#D9CEDF] shadow-xs ${className}`}
+      className={`inline-flex items-center h-10 min-h-[40px] p-1 bg-[#F4F1F8] rounded-xl border border-[#D9CEDF] shadow-xs shrink-0 ${className}`}
     >
       <button
         type="button"
         onClick={() => onChange("cards")}
         aria-pressed={mode === "cards"}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-sans transition-all cursor-pointer ${
+        className={`flex items-center gap-1.5 px-3 h-full rounded-lg text-xs sm:text-sm font-sans transition-all cursor-pointer ${
           mode === "cards"
             ? "bg-white text-[#1E5BFF] font-semibold shadow-xs border border-[#D9CEDF]"
             : "text-[#6E6678] hover:text-[#17131F] font-medium"
@@ -40,7 +40,7 @@ export function ViewModeToggle({
         type="button"
         onClick={() => onChange("table")}
         aria-pressed={mode === "table"}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-sm text-xs font-sans transition-all cursor-pointer ${
+        className={`flex items-center gap-1.5 px-3 h-full rounded-lg text-xs sm:text-sm font-sans transition-all cursor-pointer ${
           mode === "table"
             ? "bg-white text-[#1E5BFF] font-semibold shadow-xs border border-[#D9CEDF]"
             : "text-[#6E6678] hover:text-[#17131F] font-medium"

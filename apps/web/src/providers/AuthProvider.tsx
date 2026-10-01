@@ -4,8 +4,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { User } from "@blih/types";
-import { Modal } from "@blih/ui";
-import { Button } from "@blih/ui";
+import { ConfirmDialog } from "@blih/ui";
 
 export type { User };
 
@@ -60,25 +59,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider value={{ user, loading, logout, refresh: fetchUser }}>
       {children}
-      <Modal
+      <ConfirmDialog
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={confirmLogout}
         title="Sign Out"
-        description="Are you sure you want to sign out?"
-        size="sm"
-        footer={
-          <>
-            {logoutError && (
-              <p className="text-xs text-red-500 mr-auto">{logoutError}</p>
-            )}
-            <Button variant="outline" size="sm" className="w-24" onClick={() => setIsLogoutModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="destructive" size="sm" className="w-24" onClick={confirmLogout}>
-              Sign Out
-            </Button>
-          </>
-        }
+        message="Are you sure you want to sign out of your account?"
+        confirmText="Sign Out"
+        cancelText="Cancel"
+        variant="destructive"
+        error={logoutError}
       />
     </AuthContext.Provider>
   );

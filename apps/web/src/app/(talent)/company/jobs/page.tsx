@@ -137,7 +137,7 @@ function CompanyJobsContent() {
           <Link href="/company/jobs/new">
             <Button
               variant="primary"
-              size="sm"
+              size="md"
               leftIcon={<Plus className="h-4 w-4" />}
             >
               Create New Job Post
@@ -221,14 +221,14 @@ function CompanyJobsContent() {
           }
           action={
             hasActiveFilters ? (
-              <Button variant="outline" size="sm" onClick={handleClearFilters}>
+              <Button variant="outline" size="md" onClick={handleClearFilters}>
                 Clear Active Filters
               </Button>
             ) : (
               <Link href="/company/jobs/new">
                 <Button
                   variant="primary"
-                  size="sm"
+                  size="md"
                   leftIcon={<Plus className="h-4 w-4" />}
                 >
                   Create First Job

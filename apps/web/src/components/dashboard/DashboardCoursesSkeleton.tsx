@@ -40,7 +40,7 @@ export function DashboardCoursesSkeleton() {
             <Skeleton
               variant="rectangular"
               themeIndex={i}
-              className="h-8 w-full rounded-xl"
+              className="h-10 w-full rounded-md"
             />
           </div>
         </Card>

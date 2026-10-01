@@ -41,7 +41,7 @@ export function LearnFooterBar({
         {!isFirstStep && (
           <Button
             variant="ghost"
-            size="sm"
+            size="md"
             leftIcon={<ArrowLeft className="w-4 h-4" />}
             onClick={onPrevStep}
           >

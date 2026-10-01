@@ -76,7 +76,7 @@ export function FeaturedJobsPreview() {
         <Link href="/jobs" className="shrink-0">
           <Button
             variant="outline"
-            size="sm"
+            size="md"
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
             View All Openings
@@ -142,7 +142,7 @@ export function FeaturedJobsPreview() {
             <div className="pt-6 mt-6 border-t border-[#D9CEDF]/50">
               <Link href={`/jobs/${job.id}`}>
                 <Button
-                  size="sm"
+                  size="md"
                   fullWidth
                   variant="secondary"
                   rightIcon={<ArrowRight className="w-3.5 h-3.5" />}

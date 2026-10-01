@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import AuthGuard from "@/components/auth/AuthGuard";
-import { Badge, UniversalSearch, Chip, Alert, EmptyState } from "@blih/ui";
+import { Button, Badge, UniversalSearch, Chip, Alert, EmptyState } from "@blih/ui";
 import { MapPin, DollarSign, Sparkles, Building2 } from "lucide-react";
 import { useJobs } from "@/hooks/useJobs";
 import { Job } from "@/types/job";
@@ -160,6 +160,18 @@ function JobsFeedContent() {
               icon={<Building2 className="w-8 h-8 text-[#1E5BFF]" />}
               title="No Opportunities Found"
               description="There are no open positions matching your search criteria right now. Check back soon or try clearing your filters!"
+              action={
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveFilter("All Roles");
+                    setFilters({});
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              }
             />
           ) : (
             <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">

@@ -115,7 +115,7 @@ function ApplicationsContent() {
 
         <Link href="/jobs">
           <Button
-            size="sm"
+            size="md"
             variant="outline"
             rightIcon={<ArrowRight className="h-4 w-4" />}
           >
@@ -208,7 +208,7 @@ function ApplicationsContent() {
                     {job.id && (
                       <Link href={`/jobs/${job.id}`}>
                         <Button
-                          size="sm"
+                          size="md"
                           variant="primary"
                           rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                         >
@@ -219,7 +219,7 @@ function ApplicationsContent() {
                     {companyId && (
                       <Link href={`/companies/${companyId}`}>
                         <Button
-                          size="sm"
+                          size="md"
                           variant="outline"
                           leftIcon={
                             <Building2 className="w-3.5 h-3.5 text-[#1E5BFF]" />

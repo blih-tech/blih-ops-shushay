@@ -96,7 +96,7 @@ export function ProfileCompletionCard({
               <Button
                 variant="outline"
                 fullWidth
-                size="sm"
+                size="md"
                 rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
               >
                 Upload CV & Experience

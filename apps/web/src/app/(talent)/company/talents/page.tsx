@@ -125,7 +125,7 @@ function CompanyTalentsSearchContent() {
                   actionText="Search"
                 />
               </div>
-              <div className="w-full sm:w-56 shrink-0">
+              <div className="w-full sm:w-40 shrink-0">
                 <Select
                   options={englishLevelFilterOptions}
                   value={englishLevelFilter}
@@ -176,6 +176,21 @@ function CompanyTalentsSearchContent() {
               icon={<Users className="w-8 h-8 text-[#1E5BFF]" />}
               title="No Candidates Found"
               description="Try adjusting your search criteria or clearing active filters."
+              action={
+                searchQuery || englishLevelFilter ? (
+                  <Button
+                    variant="outline"
+                    size="md"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setEnglishLevelFilter("");
+                      setFilters({});
+                    }}
+                  >
+                    Clear Active Filters
+                  </Button>
+                ) : undefined
+              }
             />
           ) : viewMode === "table" ? (
             <div className="pt-2 animate-in fade-in slide-in-from-bottom-4 duration-300">

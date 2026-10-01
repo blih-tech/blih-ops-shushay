@@ -177,7 +177,7 @@ export function MobileNav({
                 <Button
                   variant="outline"
                   fullWidth
-                  size="sm"
+                  size="md"
                   onClick={onSignOut}
                   leftIcon={<LogOut className="h-4 w-4 shrink-0" />}
                   className="flex flex-row items-center justify-center gap-2 text-[#EF4444] border-red-200 hover:bg-red-50 cursor-pointer"
@@ -189,7 +189,7 @@ export function MobileNav({
           ) : (
             <>
               <Link href={toRelativeUrl(`${authUrl}/login`)} className="w-full">
-                <Button variant="outline" fullWidth size="sm">
+                <Button variant="outline" fullWidth size="md">
                   Sign in
                 </Button>
               </Link>
@@ -197,7 +197,7 @@ export function MobileNav({
                 href={toRelativeUrl(`${authUrl}/register`)}
                 className="w-full"
               >
-                <Button variant="primary" fullWidth size="sm">
+                <Button variant="primary" fullWidth size="md">
                   Create account
                 </Button>
               </Link>

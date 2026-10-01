@@ -137,7 +137,6 @@ function CoursesContent() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search courses by title, topic, or status..."
-          buttonClassName="w-full sm:w-32"
         />
       </div>
 

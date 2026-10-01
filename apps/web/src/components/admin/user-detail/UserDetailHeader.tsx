@@ -148,9 +148,9 @@ export function UserDetailHeader({
           {user.talentProfile && (
             <Link href={`/admin/talents/${user.talentProfile.id}`}>
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
-                rightIcon={<ExternalLink className="h-3.5 w-3.5" />}
+                rightIcon={<ExternalLink className="h-4 w-4" />}
               >
                 Talent Profile
               </Button>
@@ -159,19 +159,19 @@ export function UserDetailHeader({
           {user.companyProfile && (
             <Link href={`/admin/companies/${user.companyProfile.id}`}>
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
-                rightIcon={<ExternalLink className="h-3.5 w-3.5" />}
+                rightIcon={<ExternalLink className="h-4 w-4" />}
               >
                 Company Profile
               </Button>
             </Link>
           )}
           <Button
-            size="sm"
+            size="md"
             variant="destructive"
             onClick={onDeleteClick}
-            leftIcon={<Trash2 className="h-3.5 w-3.5" />}
+            leftIcon={<Trash2 className="h-4 w-4" />}
           >
             Delete Account
           </Button>

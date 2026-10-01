@@ -81,20 +81,22 @@ export function JobApplyModal({
               />
             </FormField>
 
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-3 pt-4 border-t border-[#D9CEDF]">
               <Button
                 variant="outline"
-                size="sm"
+                size="md"
                 onClick={onClose}
                 disabled={applying}
+                className="w-full sm:w-auto min-w-[100px]"
               >
                 Cancel
               </Button>
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
                 onClick={handleApply}
                 disabled={applying}
+                className="w-full sm:w-auto min-w-[140px]"
               >
                 {applying ? "Submitting..." : "Confirm & Submit Application"}
               </Button>

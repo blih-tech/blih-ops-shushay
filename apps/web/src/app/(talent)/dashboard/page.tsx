@@ -316,10 +316,10 @@ function DashboardContent() {
                       className="w-full block pt-1"
                     >
                       <Button
-                        variant="outline"
+                        variant={isCompleted ? "outline" : "primary"}
                         fullWidth
-                        size="sm"
-                        rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
+                        size="md"
+                        rightIcon={<ArrowRight className="w-4 h-4" />}
                       >
                         {isCompleted
                           ? "Review Course"

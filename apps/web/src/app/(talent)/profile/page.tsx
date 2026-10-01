@@ -121,7 +121,7 @@ function ProfileContent() {
             <Link href="/profile/preview">
               <Button
                 variant="outline"
-                size="sm"
+                size="md"
                 leftIcon={<Eye className="h-4 w-4" />}
               >
                 Public Preview
@@ -130,7 +130,7 @@ function ProfileContent() {
             <Link href="/profile/edit">
               <Button
                 variant="primary"
-                size="sm"
+                size="md"
                 leftIcon={<Edit3 className="h-4 w-4" />}
               >
                 Edit Profile

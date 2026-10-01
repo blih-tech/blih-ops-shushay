@@ -56,10 +56,10 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const sizes = {
-    sm: "max-w-sm",
-    md: "max-w-md",
-    lg: "max-w-lg",
-    xl: "max-w-xl",
+    sm: "max-w-sm sm:max-w-[440px]",
+    md: "max-w-md sm:max-w-lg",
+    lg: "max-w-lg sm:max-w-2xl",
+    xl: "max-w-xl sm:max-w-4xl",
   };
 
   return (
@@ -80,7 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
             {title && (
               <h3
                 id="modal-title"
-                className="font-serif text-xl font-semibold tracking-tight text-[#17131F] leading-snug"
+                className="font-display text-xl sm:text-2xl font-bold tracking-tight text-[#17131F] leading-snug"
               >
                 {title}
               </h3>
@@ -108,7 +108,7 @@ export const Modal: React.FC<ModalProps> = ({
         )}
 
         {footer ? (
-          <div className="p-6 pt-3 flex flex-col sm:flex-row justify-end gap-2.5 bg-white border-t border-[#D9CEDF]">
+          <div className="p-6 pt-4 flex flex-col-reverse sm:flex-row justify-end items-center gap-3 bg-[#FAF8FC]/50 border-t border-[#D9CEDF]">
             {footer}
           </div>
         ) : (

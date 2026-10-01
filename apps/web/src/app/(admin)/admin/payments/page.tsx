@@ -108,15 +108,16 @@ function AdminPaymentsContent() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row items-start gap-3 w-full">
         <UniversalSearch
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by email or transaction reference..."
-           className="flex-1 w-full" buttonClassName="w-full sm:w-32" />
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by email or transaction reference..."
+          className="flex-1 w-full"
+        />
         <Select
           id="status-filter"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="w-full sm:w-32 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Statuses" },
             { value: "PENDING", label: "Pending" },
@@ -129,7 +130,7 @@ function AdminPaymentsContent() {
           id="type-filter"
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="w-full sm:w-32 shrink-0"
+          className="w-full sm:w-40 shrink-0"
           options={[
             { value: "", label: "All Types" },
             { value: "SKILLS_ACCESS", label: "Skills Access" },

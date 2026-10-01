@@ -107,7 +107,6 @@ function AdminCertificatesContent() {
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search by certificate number, recipient name, or email..."
-        buttonClassName="w-full sm:w-32"
       />
 
       <AdminTable<AdminCertificate>

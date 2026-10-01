@@ -233,20 +233,20 @@ export function TalentExplorerPreview() {
 
             <div className="flex flex-wrap items-center justify-end gap-3 pt-6 border-t border-[#D9CEDF]/60">
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
                 leftIcon={<Mail className="w-3.5 h-3.5" />}
               >
                 View Profile
               </Button>
               <Button
-                size="sm"
+                size="md"
                 variant="outline"
                 leftIcon={<Heart className="w-3.5 h-3.5" />}
               >
                 Save
               </Button>
-              <Button size="sm" variant="coral">
+              <Button size="md" variant="coral">
                 Invite to Opportunity
               </Button>
             </div>

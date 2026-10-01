@@ -269,7 +269,7 @@ function CompanyTalentDetailsContent({ talentId }: { talentId: string }) {
               >
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="md"
                   leftIcon={<FileText className="w-4 h-4" />}
                 >
                   Download CV
