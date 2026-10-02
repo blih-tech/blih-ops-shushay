@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as adminService from "./admin.service";
-import { JobStatus } from "@prisma/client";
+import { JobStatus, Role } from "@prisma/client";
 
 function qs(req: Request, key: string): string | undefined {
   const v = req.query[key];

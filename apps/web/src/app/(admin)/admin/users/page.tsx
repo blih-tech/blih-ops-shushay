@@ -1,20 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import {
-  Users,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Eye,
-  UserPlus,
-  Mail,
-  UserX,
-  UserCheck,
-  Copy,
-  Check,
-  Shield,
-} from "lucide-react";
+import { Users, CheckCircle, XCircle, UserPlus, Copy, Check, Shield } from "lucide-react";
 import {
   Button,
   Alert,
@@ -23,20 +10,18 @@ import {
   Pagination,
   Select,
   Badge,
-  Modal,
-  Input,
 } from "@blih/ui";
-import Link from "next/link";
 import { AuthGuard as AuthGuardComponent } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
+import { CreateAdminModal } from "@/components/admin/users/CreateAdminModal";
+import { PromoteToAdminModal } from "@/components/admin/users/ChangeRoleModal";
+import { UserTableActions } from "@/components/admin/users/UserTableActions";
 import {
   fetchAdminUsers,
   deleteAdminUser,
-  createAdminUser,
   resendAdminUserInvite,
   updateAdminUserStatus,
-  updateAdminUserRole,
 } from "@/lib/adminApi";
 import type { AdminUser } from "@/types/admin";
 import { getErrorMessage } from "@blih/api-client";
@@ -55,23 +40,17 @@ function AdminUsersContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+
+  // Targets for dialogs & modals
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
   const [statusTarget, setStatusTarget] = useState<AdminUser | null>(null);
   const [roleTarget, setRoleTarget] = useState<AdminUser | null>(null);
-  const [newRoleValue, setNewRoleValue] = useState<string>("TALENT");
+  const [showCreateAdmin, setShowCreateAdmin] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [activeInviteLink, setActiveInviteLink] = useState<string | null>(null);
 
-  // Create Admin state
-  const [showCreateAdmin, setShowCreateAdmin] = useState(false);
-  const [createAdminEmail, setCreateAdminEmail] = useState("");
-  const [createAdminLoading, setCreateAdminLoading] = useState(false);
-  const [createAdminError, setCreateAdminError] = useState<string | null>(null);
-  const [createAdminSuccess, setCreateAdminSuccess] = useState<string | null>(null);
-  const [createAdminInviteLink, setCreateAdminInviteLink] = useState<string | null>(null);
-
-  // Debounce search
+  // Debounce search input
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
     return () => clearTimeout(t);
@@ -100,7 +79,6 @@ function AdminUsersContent() {
     load();
   }, [load]);
 
-  // Reset page on filter change
   useEffect(() => {
     setPage(1);
   }, [debouncedSearch, roleFilter]);
@@ -161,47 +139,6 @@ function AdminUsersContent() {
     }
   }
 
-  async function handleUpdateRole() {
-    if (!roleTarget) return;
-    setActionLoading(roleTarget.id);
-    setActionError(null);
-    setActionSuccess(null);
-    try {
-      await updateAdminUserRole(roleTarget.id, newRoleValue);
-      setActionSuccess(`User ${roleTarget.email} role changed to ${newRoleValue}.`);
-      setRoleTarget(null);
-      load();
-    } catch (err: unknown) {
-      setActionError(getErrorMessage(err) || "Failed to update user role");
-    } finally {
-      setActionLoading(null);
-    }
-  }
-
-  async function handleCreateAdmin(e: React.FormEvent) {
-    e.preventDefault();
-    if (!createAdminEmail.trim()) return;
-    setCreateAdminLoading(true);
-    setCreateAdminError(null);
-    setCreateAdminSuccess(null);
-    setCreateAdminInviteLink(null);
-    try {
-      const newAdmin = await createAdminUser(createAdminEmail.trim());
-      setCreateAdminSuccess(
-        `Admin account created for ${newAdmin.email}. An invite email has been sent.`,
-      );
-      if (newAdmin.inviteLink) {
-        setCreateAdminInviteLink(newAdmin.inviteLink);
-      }
-      setCreateAdminEmail("");
-      load();
-    } catch (err: unknown) {
-      setCreateAdminError(getErrorMessage(err) || "Failed to create admin");
-    } finally {
-      setCreateAdminLoading(false);
-    }
-  }
-
   const displayName = (u: AdminUser) =>
     u.talentProfile?.fullName ||
     u.companyProfile?.companyName ||
@@ -211,8 +148,6 @@ function AdminUsersContent() {
 
   return (
     <main className="w-full px-6 py-6 space-y-8">
-      {/* Breadcrumb */}
-
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#D9CEDF]">
         <div className="space-y-1">
@@ -228,17 +163,13 @@ function AdminUsersContent() {
         </div>
         <Button
           leftIcon={<UserPlus className="h-4 w-4" />}
-          onClick={() => {
-            setShowCreateAdmin(true);
-            setCreateAdminEmail("");
-            setCreateAdminError(null);
-            setCreateAdminSuccess(null);
-          }}
+          onClick={() => setShowCreateAdmin(true)}
         >
           Create Admin
         </Button>
       </div>
 
+      {/* Alerts */}
       {error && (
         <Alert variant="error" onClose={() => setError(null)}>
           {error}
@@ -250,14 +181,26 @@ function AdminUsersContent() {
         </Alert>
       )}
       {actionSuccess && (
-        <Alert variant="success" onClose={() => { setActionSuccess(null); setActiveInviteLink(null); }}>
+        <Alert
+          variant="success"
+          onClose={() => {
+            setActionSuccess(null);
+            setActiveInviteLink(null);
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <span>{actionSuccess}</span>
             {activeInviteLink && (
               <Button
                 size="sm"
                 variant="outline"
-                leftIcon={copiedLinkId === activeInviteLink ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                leftIcon={
+                  copiedLinkId === activeInviteLink ? (
+                    <Check className="h-3.5 w-3.5" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5" />
+                  )
+                }
                 onClick={() => {
                   navigator.clipboard.writeText(activeInviteLink);
                   setCopiedLinkId(activeInviteLink);
@@ -339,20 +282,7 @@ function AdminUsersContent() {
             key: "role",
             header: "Role",
             width: "120px",
-            render: (u) => (
-              <button
-                type="button"
-                onClick={() => {
-                  setRoleTarget(u);
-                  setNewRoleValue(u.role);
-                }}
-                className="group inline-flex items-center gap-1 hover:opacity-80 transition-opacity text-left cursor-pointer"
-                title="Click to change user role"
-              >
-                <AdminStatusBadge type="role" value={u.role} />
-                <Shield className="h-3 w-3 text-[#6E6678] opacity-0 group-hover:opacity-100 transition-opacity" />
-              </button>
-            ),
+            render: (u) => <AdminStatusBadge type="role" value={u.role} />,
           },
           {
             key: "status",
@@ -397,64 +327,16 @@ function AdminUsersContent() {
           {
             key: "actions",
             header: "Actions",
-            width: "280px",
+            width: "220px",
             render: (u) => (
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  title="Resend invite or password reset email"
-                  leftIcon={<Mail className="h-3.5 w-3.5" />}
-                  onClick={() => handleResendInvite(u)}
-                  isLoading={actionLoading === u.id}
-                >
-                  Resend Invite
-                </Button>
-                {u.isActive === false ? (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-[#2E8F79] hover:bg-[#E8F5E9]"
-                    title="Activate account"
-                    leftIcon={<UserCheck className="h-3.5 w-3.5 text-[#2E8F79]" />}
-                    onClick={() => setStatusTarget(u)}
-                    isLoading={actionLoading === u.id}
-                  >
-                    Activate
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="text-[#D97706] hover:bg-[#FEF3C7]"
-                    title="Suspend user account"
-                    leftIcon={<UserX className="h-3.5 w-3.5 text-[#D97706]" />}
-                    onClick={() => setStatusTarget(u)}
-                    isLoading={actionLoading === u.id}
-                  >
-                    Suspend
-                  </Button>
-                )}
-                <Link href={`/admin/users/${u.id}`}>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    leftIcon={<Eye className="h-3.5 w-3.5" />}
-                  >
-                    View
-                  </Button>
-                </Link>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-[#D32F2F] hover:bg-[#FFEBEE] hover:text-[#C62828]"
-                  leftIcon={<Trash2 className="h-3.5 w-3.5" />}
-                  onClick={() => setDeleteTarget(u)}
-                  isLoading={actionLoading === u.id}
-                >
-                  Delete
-                </Button>
-              </div>
+              <UserTableActions
+                user={u}
+                actionLoading={actionLoading}
+                onResendInvite={handleResendInvite}
+                onStatusClick={setStatusTarget}
+                onPromoteClick={setRoleTarget}
+                onDeleteClick={setDeleteTarget}
+              />
             ),
           },
         ]}
@@ -471,69 +353,45 @@ function AdminUsersContent() {
         </div>
       )}
 
-      {/* Suspend/Activate Confirmation Dialog */}
+      {/* Modals & Dialogs */}
+      <CreateAdminModal
+        isOpen={showCreateAdmin}
+        onClose={() => setShowCreateAdmin(false)}
+        onSuccess={load}
+      />
+
+      <PromoteToAdminModal
+        user={roleTarget}
+        onClose={() => setRoleTarget(null)}
+        onSuccess={(msg) => {
+          setActionSuccess(msg);
+          load();
+        }}
+      />
+
       <ConfirmDialog
         isOpen={!!statusTarget}
-        title={statusTarget?.isActive === false ? "Activate User Account" : "Suspend User Account"}
+        title={
+          statusTarget?.isActive === false
+            ? "Activate User Account"
+            : "Suspend User Account"
+        }
         message={
           statusTarget?.isActive === false
-            ? `Are you sure you want to activate the account for "${statusTarget?.email}"? They will regain ability to log in and access the platform.`
+            ? `Are you sure you want to activate the account for "${statusTarget?.email}"? They will regain ability to log in.`
             : `Are you sure you want to suspend the account for "${statusTarget?.email}"? They will be immediately blocked from logging in.`
         }
-        confirmText={statusTarget?.isActive === false ? "Activate Account" : "Suspend Account"}
+        confirmText={
+          statusTarget?.isActive === false
+            ? "Activate Account"
+            : "Suspend Account"
+        }
         cancelText="Cancel"
         variant={statusTarget?.isActive === false ? "primary" : "destructive"}
         onConfirm={handleToggleStatus}
         onClose={() => setStatusTarget(null)}
       />
 
-      {/* Change Role Modal */}
-      <Modal
-        isOpen={!!roleTarget}
-        onClose={() => setRoleTarget(null)}
-        title="Change User Role"
-        description={`Modify the platform access level for user ${roleTarget?.email}.`}
-        size="sm"
-        footer={
-          <>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setRoleTarget(null)}
-              disabled={actionLoading === roleTarget?.id}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              leftIcon={<Shield className="h-4 w-4" />}
-              isLoading={actionLoading === roleTarget?.id}
-              onClick={handleUpdateRole}
-            >
-              Save Role
-            </Button>
-          </>
-        }
-      >
-        <div className="space-y-4 py-2">
-          <p className="text-xs text-[#6E6678]">
-            Current Role: <strong className="text-[#17131F] font-mono">{roleTarget?.role}</strong>
-          </p>
-          <Select
-            id="change-role-select"
-            label="Select New Role"
-            value={newRoleValue}
-            onChange={(e) => setNewRoleValue(e.target.value)}
-            options={[
-              { value: "TALENT", label: "Talent (Standard User)" },
-              { value: "COMPANY", label: "Company (Employer Account)" },
-              { value: "ADMIN", label: "Admin (Full System Access)" },
-            ]}
-          />
-        </div>
-      </Modal>
-
-      {/* Delete Confirmation */}
       <ConfirmDialog
         isOpen={!!deleteTarget}
         title="Delete User Account"
@@ -544,89 +402,6 @@ function AdminUsersContent() {
         onConfirm={handleDelete}
         onClose={() => setDeleteTarget(null)}
       />
-
-      {/* Create Admin Modal */}
-      <Modal
-        isOpen={showCreateAdmin}
-        onClose={() => setShowCreateAdmin(false)}
-        title="Create Admin Account"
-        description="Enter the email address of the new admin. They will receive an invite email with a link to set their own password."
-        size="sm"
-        footer={
-          <>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setShowCreateAdmin(false)}
-              disabled={createAdminLoading}
-            >
-              Cancel
-            </Button>
-            <Button
-              type="button"
-              leftIcon={<UserPlus className="h-4 w-4" />}
-              isLoading={createAdminLoading}
-              onClick={(e) => handleCreateAdmin(e as any)}
-            >
-              Send Invite
-            </Button>
-          </>
-        }
-      >
-        <form onSubmit={handleCreateAdmin} className="space-y-4 py-2">
-          {createAdminError && (
-            <Alert variant="error" onClose={() => setCreateAdminError(null)}>
-              {createAdminError}
-            </Alert>
-          )}
-          {createAdminSuccess && (
-            <Alert variant="success" onClose={() => setCreateAdminSuccess(null)}>
-              <div className="space-y-2">
-                <p>{createAdminSuccess}</p>
-                {createAdminInviteLink && (
-                  <div className="pt-2 border-t border-[#D9CEDF] flex items-center justify-between gap-2">
-                    <span className="text-xs font-mono truncate text-[#4A4154] max-w-[220px]">
-                      {createAdminInviteLink}
-                    </span>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      type="button"
-                      leftIcon={
-                        copiedLinkId === createAdminInviteLink ? (
-                          <Check className="h-3.5 w-3.5" />
-                        ) : (
-                          <Copy className="h-3.5 w-3.5" />
-                        )
-                      }
-                      onClick={() => {
-                        navigator.clipboard.writeText(createAdminInviteLink);
-                        setCopiedLinkId(createAdminInviteLink);
-                        setTimeout(() => setCopiedLinkId(null), 2000);
-                      }}
-                    >
-                      {copiedLinkId === createAdminInviteLink ? "Copied!" : "Copy Link"}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </Alert>
-          )}
-          <Input
-            id="create-admin-email"
-            type="email"
-            label="Email address"
-            required
-            value={createAdminEmail}
-            onChange={(e) => setCreateAdminEmail(e.target.value)}
-            placeholder="admin@example.com"
-            disabled={createAdminLoading}
-            fullWidth
-          />
-          {/* Hidden submit for Enter key support */}
-          <button type="submit" className="hidden" aria-hidden="true" />
-        </form>
-      </Modal>
     </main>
   );
 }
