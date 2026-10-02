@@ -49,10 +49,42 @@ export async function createAdminUser(email: string): Promise<{
   email: string;
   role: string;
   createdAt: string;
+  inviteLink?: string;
 }> {
   return apiFetch(`/admin/users/create-admin`, {
     method: "POST",
     body: JSON.stringify({ email }),
+  });
+}
+
+export async function resendAdminUserInvite(userId: string): Promise<{
+  success: boolean;
+  email: string;
+  role: string;
+  inviteLink?: string;
+}> {
+  return apiFetch(`/admin/users/${userId}/resend-invite`, {
+    method: "POST",
+  });
+}
+
+export async function updateAdminUserStatus(
+  userId: string,
+  isActive: boolean,
+): Promise<{ id: string; isActive: boolean }> {
+  return apiFetch(`/admin/users/${userId}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ isActive }),
+  });
+}
+
+export async function updateAdminUserRole(
+  userId: string,
+  role: string,
+): Promise<{ id: string; role: string }> {
+  return apiFetch(`/admin/users/${userId}/role`, {
+    method: "PATCH",
+    body: JSON.stringify({ role }),
   });
 }
 

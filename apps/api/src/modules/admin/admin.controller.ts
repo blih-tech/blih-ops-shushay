@@ -63,6 +63,47 @@ export async function createAdmin(req: Request, res: Response, next: NextFunctio
   }
 }
 
+export async function resendInvite(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = String(req.params.userId);
+    const requestedByEmail = req.user?.email ?? "Admin";
+    const result = await adminService.resendInvite(userId, requestedByEmail);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function toggleUserActiveStatus(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = String(req.params.userId);
+    const { isActive } = req.body as { isActive?: boolean };
+    if (typeof isActive !== "boolean") {
+      res.status(400).json({ error: { message: "isActive (boolean) is required in request body" } });
+      return;
+    }
+    const result = await adminService.toggleUserActive(userId, isActive);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateUserRole(req: Request, res: Response, next: NextFunction) {
+  try {
+    const userId = String(req.params.userId);
+    const { role } = req.body as { role?: Role };
+    if (!role) {
+      res.status(400).json({ error: { message: "role is required in request body" } });
+      return;
+    }
+    const result = await adminService.updateUserRole(userId, role);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function grantSkillsAccess(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = String(req.params.userId);

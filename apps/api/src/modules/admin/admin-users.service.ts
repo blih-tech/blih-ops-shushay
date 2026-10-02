@@ -3,7 +3,8 @@ import crypto from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
 import { env } from "../../config/env";
-import { sendAdminInviteEmail } from "../../services/email.service";
+import { logger } from "../../utils/logger";
+import { sendAdminInviteEmail, sendPasswordResetEmail } from "../../services/email.service";
 
 export async function getAdminUsers(params: {
   page?: number;
@@ -45,6 +46,7 @@ export async function getAdminUsers(params: {
         email: true,
         role: true,
         emailVerified: true,
+        isActive: true,
         createdAt: true,
         talentProfile: {
           select: {
@@ -116,6 +118,7 @@ export async function getAdminUserById(userId: string) {
       email: true,
       role: true,
       emailVerified: true,
+      isActive: true,
       createdAt: true,
       talentProfile: {
         select: {
@@ -297,7 +300,113 @@ export async function createAdmin(
   // Send the invite email
   const setPasswordLink = `${env.authUrl}/reset-password?token=${resetToken}`;
   await sendAdminInviteEmail(normalizedEmail, setPasswordLink, invitedByEmail);
+  logger.info(`[ADMIN CREATED] Admin invite for ${normalizedEmail} | Link: ${setPasswordLink}`);
 
-  return user;
+  return { ...user, inviteLink: setPasswordLink };
 }
+
+/**
+ * Resends an invite or password reset link to a user.
+ * Generates a fresh 24h reset token, logs the link to console, and sends the email.
+ */
+export async function resendInvite(userId: string, requestedByEmail: string = "Admin") {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError(404, "User not found.");
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { resetToken, resetExpires },
+  });
+
+  const setPasswordLink = `${env.authUrl}/reset-password?token=${resetToken}`;
+
+  if (user.role === Role.ADMIN) {
+    await sendAdminInviteEmail(user.email, setPasswordLink, requestedByEmail);
+  } else {
+    await sendPasswordResetEmail(user.email, setPasswordLink);
+  }
+
+  logger.info(`[INVITE RESENT] Set-password link for ${user.email} (${user.role}) → ${setPasswordLink}`);
+
+  return {
+    success: true,
+    email: user.email,
+    role: user.role,
+    inviteLink: setPasswordLink,
+  };
+}
+
+/**
+ * Toggles a user's active/suspended status (isActive: true/false).
+ */
+export async function toggleUserActive(userId: string, isActive: boolean) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError(404, "User not found.");
+
+  // If deactivating an admin, ensure they are not the last active admin
+  if (user.role === Role.ADMIN && !isActive) {
+    const activeAdminCount = await prisma.user.count({
+      where: { role: Role.ADMIN, isActive: true },
+    });
+    if (activeAdminCount <= 1) {
+      throw new AppError(400, "Cannot deactivate the last active admin account.");
+    }
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { isActive },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      isActive: true,
+      updatedAt: true,
+    },
+  });
+
+  return updatedUser;
+}
+
+/**
+ * Updates a user's role (ADMIN, TALENT, COMPANY).
+ */
+export async function updateUserRole(userId: string, newRole: Role) {
+  if (![Role.ADMIN, Role.TALENT, Role.COMPANY].includes(newRole)) {
+    throw new AppError(400, `Invalid role: ${newRole}`);
+  }
+
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError(404, "User not found.");
+
+  if (user.role === newRole) {
+    return user;
+  }
+
+  // If demoting an admin, ensure they are not the last admin account
+  if (user.role === Role.ADMIN && newRole !== Role.ADMIN) {
+    const adminCount = await prisma.user.count({ where: { role: Role.ADMIN } });
+    if (adminCount <= 1) {
+      throw new AppError(400, "Cannot demote the last admin account.");
+    }
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { role: newRole },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      isActive: true,
+      updatedAt: true,
+    },
+  });
+
+  return updatedUser;
+}
+
 

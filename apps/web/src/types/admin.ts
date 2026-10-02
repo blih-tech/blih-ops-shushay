@@ -51,6 +51,7 @@ export interface AdminUser {
   email: string;
   role: string;
   emailVerified: boolean;
+  isActive?: boolean;
   createdAt: string;
   talentProfile: {
     id: string;

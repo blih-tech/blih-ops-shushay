@@ -19,6 +19,7 @@ model User {
   role          Role
   googleId      String?  @unique
   emailVerified     Boolean   @default(false)
+  isActive          Boolean   @default(true)
   verificationToken String?   @unique
   resetToken        String?   @unique
   resetExpires      DateTime?

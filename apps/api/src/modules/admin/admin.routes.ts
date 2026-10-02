@@ -7,6 +7,9 @@ import {
   getUserById,
   deleteUser,
   createAdmin,
+  resendInvite,
+  toggleUserActiveStatus,
+  updateUserRole,
   grantSkillsAccess,
   revokeSkillsAccess,
   getTalents,
@@ -43,6 +46,9 @@ router.get("/users", getUsers);
 router.post("/users/create-admin", createAdmin);
 router.get("/users/:userId", getUserById);
 router.delete("/users/:userId", deleteUser);
+router.post("/users/:userId/resend-invite", resendInvite);
+router.patch("/users/:userId/status", toggleUserActiveStatus);
+router.patch("/users/:userId/role", updateUserRole);
 router.post("/users/:userId/skills-access", grantSkillsAccess);
 router.delete("/users/:userId/skills-access", revokeSkillsAccess);
 

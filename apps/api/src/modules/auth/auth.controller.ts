@@ -93,6 +93,15 @@ export async function login(
       );
     }
 
+    if (user.isActive === false) {
+      return next(
+        new AppError(
+          403,
+          "Your account has been deactivated. Please contact support.",
+        ),
+      );
+    }
+
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       env.jwtSecret,
