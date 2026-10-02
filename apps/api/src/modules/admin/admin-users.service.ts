@@ -1,6 +1,9 @@
 import { Prisma, Role } from "@prisma/client";
+import crypto from "crypto";
 import prisma from "../../config/prisma";
 import { AppError } from "../../middleware/errorHandler";
+import { env } from "../../config/env";
+import { sendAdminInviteEmail } from "../../services/email.service";
 
 export async function getAdminUsers(params: {
   page?: number;
@@ -251,3 +254,50 @@ export async function revokeSkillsAccess(userId: string, courseId: string) {
   });
   return { success: true };
 }
+
+/**
+ * Creates a new admin user and sends them an invite email with a set-password link.
+ * The account is created without a password; the invite link uses the reset-token
+ * flow so the new admin can set their own password within 24 hours.
+ */
+export async function createAdmin(
+  email: string,
+  invitedByEmail: string,
+) {
+  const normalizedEmail = email.trim().toLowerCase();
+
+  const existing = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
+  if (existing) {
+    throw new AppError(409, "An account with this email already exists.");
+  }
+
+  // Create the admin account with no password — they'll set it via the invite link
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+  const user = await prisma.user.create({
+    data: {
+      email: normalizedEmail,
+      role: Role.ADMIN,
+      emailVerified: true, // No email verification step needed for invited admins
+      resetToken,
+      resetExpires,
+    },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+      emailVerified: true,
+      createdAt: true,
+    },
+  });
+
+  // Send the invite email
+  const setPasswordLink = `${env.authUrl}/reset-password?token=${resetToken}`;
+  await sendAdminInviteEmail(normalizedEmail, setPasswordLink, invitedByEmail);
+
+  return user;
+}
+

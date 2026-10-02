@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
-import { Users, Trash2, CheckCircle, XCircle, Eye } from "lucide-react";
+import { Users, Trash2, CheckCircle, XCircle, Eye, UserPlus } from "lucide-react";
 import {
   Button,
   Alert,
@@ -10,12 +10,14 @@ import {
   Pagination,
   Select,
   Badge,
+  Modal,
+  Input,
 } from "@blih/ui";
 import Link from "next/link";
 import { AuthGuard as AuthGuardComponent } from "@/components/auth/AuthGuard";
 import { AdminTable } from "@/components/admin/AdminTable";
 import { AdminStatusBadge } from "@/components/admin/AdminStatusBadge";
-import { fetchAdminUsers, deleteAdminUser } from "@/lib/adminApi";
+import { fetchAdminUsers, deleteAdminUser, createAdminUser } from "@/lib/adminApi";
 import type { AdminUser } from "@/types/admin";
 import { getErrorMessage } from "@blih/api-client";
 import { usePageTitle } from "@/hooks/usePageTitle";
@@ -34,6 +36,13 @@ function AdminUsersContent() {
   const [roleFilter, setRoleFilter] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<AdminUser | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  // Create Admin state
+  const [showCreateAdmin, setShowCreateAdmin] = useState(false);
+  const [createAdminEmail, setCreateAdminEmail] = useState("");
+  const [createAdminLoading, setCreateAdminLoading] = useState(false);
+  const [createAdminError, setCreateAdminError] = useState<string | null>(null);
+  const [createAdminSuccess, setCreateAdminSuccess] = useState<string | null>(null);
 
   // Debounce search
   useEffect(() => {
@@ -84,6 +93,26 @@ function AdminUsersContent() {
     }
   }
 
+  async function handleCreateAdmin(e: React.FormEvent) {
+    e.preventDefault();
+    if (!createAdminEmail.trim()) return;
+    setCreateAdminLoading(true);
+    setCreateAdminError(null);
+    setCreateAdminSuccess(null);
+    try {
+      const newAdmin = await createAdminUser(createAdminEmail.trim());
+      setCreateAdminSuccess(
+        `Admin account created for ${newAdmin.email}. An invite email has been sent so they can set their password.`,
+      );
+      setCreateAdminEmail("");
+      load();
+    } catch (err: unknown) {
+      setCreateAdminError(getErrorMessage(err) || "Failed to create admin");
+    } finally {
+      setCreateAdminLoading(false);
+    }
+  }
+
   const displayName = (u: AdminUser) =>
     u.talentProfile?.fullName ||
     u.companyProfile?.companyName ||
@@ -108,6 +137,17 @@ function AdminUsersContent() {
             Manage user accounts, roles, and status across the platform.
           </p>
         </div>
+        <Button
+          leftIcon={<UserPlus className="h-4 w-4" />}
+          onClick={() => {
+            setShowCreateAdmin(true);
+            setCreateAdminEmail("");
+            setCreateAdminError(null);
+            setCreateAdminSuccess(null);
+          }}
+        >
+          Create Admin
+        </Button>
       </div>
 
       {error && (
@@ -297,6 +337,61 @@ function AdminUsersContent() {
         onConfirm={handleDelete}
         onClose={() => setDeleteTarget(null)}
       />
+
+      {/* Create Admin Modal */}
+      <Modal
+        isOpen={showCreateAdmin}
+        onClose={() => setShowCreateAdmin(false)}
+        title="Create Admin Account"
+        description="Enter the email address of the new admin. They will receive an invite email with a link to set their own password."
+        size="sm"
+        footer={
+          <>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setShowCreateAdmin(false)}
+              disabled={createAdminLoading}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              leftIcon={<UserPlus className="h-4 w-4" />}
+              isLoading={createAdminLoading}
+              onClick={(e) => handleCreateAdmin(e as any)}
+            >
+              Send Invite
+            </Button>
+          </>
+        }
+      >
+        <form onSubmit={handleCreateAdmin} className="space-y-4 py-2">
+          {createAdminError && (
+            <Alert variant="error" onClose={() => setCreateAdminError(null)}>
+              {createAdminError}
+            </Alert>
+          )}
+          {createAdminSuccess && (
+            <Alert variant="success" onClose={() => setCreateAdminSuccess(null)}>
+              {createAdminSuccess}
+            </Alert>
+          )}
+          <Input
+            id="create-admin-email"
+            type="email"
+            label="Email address"
+            required
+            value={createAdminEmail}
+            onChange={(e) => setCreateAdminEmail(e.target.value)}
+            placeholder="admin@example.com"
+            disabled={createAdminLoading}
+            fullWidth
+          />
+          {/* Hidden submit for Enter key support */}
+          <button type="submit" className="hidden" aria-hidden="true" />
+        </form>
+      </Modal>
     </main>
   );
 }
@@ -309,5 +404,3 @@ export default function AdminUsersPage() {
     </AuthGuardComponent>
   );
 }
-
-

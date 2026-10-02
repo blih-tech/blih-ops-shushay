@@ -48,6 +48,21 @@ export async function deleteUser(req: Request, res: Response, next: NextFunction
   }
 }
 
+export async function createAdmin(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { email } = req.body as { email?: string };
+    if (!email || typeof email !== "string") {
+      res.status(400).json({ error: { message: "email is required in the request body" } });
+      return;
+    }
+    const invitedByEmail = req.user?.email ?? "an administrator";
+    const user = await adminService.createAdmin(email, invitedByEmail);
+    res.status(201).json(user);
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function grantSkillsAccess(req: Request, res: Response, next: NextFunction) {
   try {
     const userId = String(req.params.userId);

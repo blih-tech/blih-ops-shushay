@@ -44,6 +44,18 @@ export async function deleteAdminUser(userId: string): Promise<{ success: boolea
   });
 }
 
+export async function createAdminUser(email: string): Promise<{
+  id: string;
+  email: string;
+  role: string;
+  createdAt: string;
+}> {
+  return apiFetch(`/admin/users/create-admin`, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
+
 export async function grantAdminSkillsAccess(
   userId: string,
   courseId?: string,

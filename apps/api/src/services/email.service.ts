@@ -90,6 +90,52 @@ export async function sendVerificationEmail(
 }
 
 /**
+ * Sends an admin invite email with a link for the new admin to set their password.
+ * Falls back to console in dev when RESEND_API_KEY is not set.
+ */
+export async function sendAdminInviteEmail(
+  email: string,
+  setPasswordLink: string,
+  invitedByEmail: string,
+): Promise<{ success: boolean; error?: string }> {
+  const resend = getResend();
+  if (!resend) {
+    logger.debug(
+      `[EMAIL DEV] Admin Invite Email → ${email} | Link: ${setPasswordLink}`,
+    );
+    return { success: true };
+  }
+
+  try {
+    const body = `
+      <h2 style="margin:0 0 16px;font-size:22px;color:#17131F;">You've been invited as an Admin</h2>
+      <p style="margin:0 0 20px;font-size:15px;color:#4A4154;line-height:1.6;">
+        <strong>${invitedByEmail}</strong> has granted you administrator access to the Blih platform.
+        Click the button below to set your password and activate your account.
+      </p>
+      <a href="${setPasswordLink}" style="display:inline-block;background:linear-gradient(135deg,#1E5BFF,#0A3DCC);color:#fff;font-weight:700;font-size:14px;padding:14px 32px;border-radius:10px;text-decoration:none;margin-bottom:24px;">Set Your Password →</a>
+      <p style="margin:0;font-size:12px;color:#6E6678;line-height:1.6;">
+        This invitation link expires in 24 hours. If you did not expect this invitation, you can safely ignore this email.
+      </p>
+    `;
+
+    await resend.emails.send({
+      from: FROM(),
+      to: email,
+      subject: "You've been invited to Blih as an Admin",
+      html: wrapHtml("Admin Invitation", body),
+    });
+
+    return { success: true };
+  } catch (err: any) {
+    console.error(
+      `[EMAIL ERROR] Admin invite email to ${email}: ${err.message}`,
+    );
+    return { success: false, error: err.message };
+  }
+}
+
+/**
  * Sends a password reset link.
  * Falls back to console in dev when RESEND_API_KEY is not set.
  */

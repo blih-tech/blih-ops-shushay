@@ -6,6 +6,7 @@ import {
   getUsers,
   getUserById,
   deleteUser,
+  createAdmin,
   grantSkillsAccess,
   revokeSkillsAccess,
   getTalents,
@@ -39,6 +40,7 @@ router.get("/stats", getStats);
 
 // ─── Users ────────────────────────────────────────────────────────────────────
 router.get("/users", getUsers);
+router.post("/users/create-admin", createAdmin);
 router.get("/users/:userId", getUserById);
 router.delete("/users/:userId", deleteUser);
 router.post("/users/:userId/skills-access", grantSkillsAccess);
