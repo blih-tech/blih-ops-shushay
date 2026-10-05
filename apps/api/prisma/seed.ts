@@ -23,6 +23,7 @@ async function main() {
     where: { email: "admin@blih.com" },
     update: {
       passwordHash: defaultPasswordHash,
+      role: "ADMIN",
       emailVerified: true,
     },
     create: {
@@ -39,6 +40,7 @@ async function main() {
     where: { email: "talent@blih.com" },
     update: {
       passwordHash: defaultPasswordHash,
+      role: "TALENT",
       emailVerified: true,
     },
     create: {
@@ -79,6 +81,7 @@ async function main() {
     where: { email: "company@blih.com" },
     update: {
       passwordHash: defaultPasswordHash,
+      role: "COMPANY",
       emailVerified: true,
     },
     create: {
