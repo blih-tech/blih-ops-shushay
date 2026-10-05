@@ -141,13 +141,27 @@ export async function handleGoogleCallback(
     // ── 5. Find or create the user ────────────────────────────────────────────
     const user = await findOrCreateGoogleUser(googleProfile, oauthState.role);
 
-    // ── 6. Issue JWT cookie ───────────────────────────────────────────────────
-    issueAuthCookies(res, user);
+    // ── 6. Generate JWT (do NOT set cookie here — cross-domain cookies are
+    //       blocked by browsers during redirects between different origins).
+    //       Instead, redirect to the frontend /auth/callback page with the token
+    //       in the URL so the Vercel app can set the cookie on its own domain.
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, role: user.role },
+      env.jwtSecret,
+      { expiresIn: "7d" },
+    );
 
-    // ── 7. Redirect to the correct frontend destination ───────────────────────
-    const destination = getRedirectDestination(user, oauthState.returnTo, TALENT_URL, APP_URL);
+    // ── 7. Determine the post-auth destination for returnTo ──────────────────
+    const postAuthDest = getPostAuthPath(user, oauthState.returnTo);
 
-    res.redirect(destination);
+    // ── 8. Redirect to /auth/callback on the frontend with token + returnTo ───
+    const callbackParams = new URLSearchParams({
+      token,
+      role: user.role,
+    });
+    if (postAuthDest) callbackParams.set("returnTo", postAuthDest);
+
+    res.redirect(`${TALENT_URL}/auth/callback?${callbackParams.toString()}`);
   } catch (err) {
     next(err);
   }
@@ -204,76 +218,42 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
   return user;
 }
 
-function issueAuthCookies(res: Response, user: any) {
-  const token = jwt.sign(
-    { userId: user.id, email: user.email, role: user.role },
-    env.jwtSecret,
-    { expiresIn: "7d" },
-  );
+/**
+ * Returns the relative path the user should land on after Google OAuth.
+ * returnTo is preserved when safe; otherwise we pick the role-appropriate home.
+ */
+function getPostAuthPath(user: any, returnTo?: string): string {
+  const role = user.role as "TALENT" | "COMPANY" | "ADMIN";
 
-  const isProd = env.nodeEnv === "production";
-  const sameSiteOption = isProd ? "none" : "lax";
+  const defaultPath =
+    role === "ADMIN" ? "/admin" : role === "COMPANY" ? "/company" : "/profile";
 
-  res.cookie("token", token, {
-    httpOnly: true,
-    secure: isProd,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite: sameSiteOption,
-    path: "/",
-  });
+  if (!returnTo) return defaultPath;
 
-  res.cookie("blih_role", user.role, {
-    httpOnly: false,
-    secure: isProd,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite: sameSiteOption,
-    path: "/",
-  });
-}
-
-function getRedirectDestination(user: any, returnTo: string | undefined, talentUrl: string, appUrl: string) {
-  let destination = returnTo;
-
-  if (destination) {
-    try {
-      const destUrl = new URL(destination, talentUrl);
-      const path = destUrl.pathname;
-      if (user.role === "COMPANY") {
-        const isTalentOnly = path === "/profile" || path.startsWith("/profile/") || path === "/jobs" || path.startsWith("/jobs/") || path === "/applications" || path.startsWith("/applications/");
-        if (isTalentOnly) destination = `${talentUrl}/company`;
-      } else if (user.role === "TALENT") {
-        const isCompanyOnly = path === "/company" || path.startsWith("/company/");
-        if (isCompanyOnly) destination = `${talentUrl}/profile`;
-      }
-    } catch {
-      destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
-    }
-  }
-
-  if (!destination) {
-    if (user.role === "ADMIN") destination = `${appUrl}/admin`;
-    else if (user.role === "COMPANY") destination = `${appUrl}/company`;
-    else destination = `${appUrl}/profile`;
-  }
-
-  const allowedHosts = env.corsOrigins;
   try {
-    const destUrl = new URL(destination, talentUrl);
-    const isAllowed = allowedHosts.some((origin) => {
-      try {
-        return new URL(origin).host === destUrl.host;
-      } catch {
-        return false;
-      }
-    });
-    if (!isAllowed) {
-      destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
-    } else {
-      destination = destUrl.toString();
-    }
-  } catch {
-    destination = user.role === "COMPANY" ? `${talentUrl}/company` : `${talentUrl}/profile`;
-  }
+    // Accept both absolute URLs and relative paths
+    const path = returnTo.startsWith("http")
+      ? new URL(returnTo).pathname
+      : returnTo.startsWith("/")
+      ? returnTo
+      : `/${returnTo}`;
 
-  return destination;
+    const isTalentOnly =
+      path === "/profile" ||
+      path.startsWith("/profile/") ||
+      path === "/applications" ||
+      path.startsWith("/applications/");
+    const isCompanyOnly =
+      path === "/company" || path.startsWith("/company/");
+    const isAdminOnly =
+      path === "/admin" || path.startsWith("/admin/");
+
+    if (role === "TALENT" && (isCompanyOnly || isAdminOnly)) return "/profile";
+    if (role === "COMPANY" && (isTalentOnly || isAdminOnly)) return "/company";
+    if (role === "ADMIN" && (isTalentOnly || isCompanyOnly)) return "/admin";
+
+    return path;
+  } catch {
+    return defaultPath;
+  }
 }

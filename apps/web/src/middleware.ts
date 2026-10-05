@@ -87,6 +87,7 @@ export const config = {
     "/dashboard/:path*",
     "/applications/:path*",
     "/profile/:path*",
+    // /auth/callback is intentionally excluded — it handles OAuth token exchange
   ],
 };
 
