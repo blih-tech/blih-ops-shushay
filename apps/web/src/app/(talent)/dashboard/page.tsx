@@ -47,11 +47,7 @@ function DashboardContent() {
     {},
   );
 
-  useEffect(() => {
-    if (user?.role === "ADMIN") {
-      router.push("/admin");
-    }
-  }, [user, router]);
+
 
   useEffect(() => {
     fetchPublicCourses()
@@ -80,16 +76,7 @@ function DashboardContent() {
       .finally(() => setLoadingCourses(false));
   }, []);
 
-  if (user?.role === "ADMIN") {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-3">
-        <Spinner size="lg" />
-        <p className="text-sm text-[#6E6678] font-sans animate-pulse">
-          Redirecting to Admin Portal...
-        </p>
-      </div>
-    );
-  }
+
 
   const completedFromProgress = Object.values(progressMap).filter(
     (p) => p.isCompleted,
@@ -341,7 +328,7 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <AuthGuard allowedRoles={["TALENT", "ADMIN"]}>
+    <AuthGuard allowedRoles={["TALENT"]}>
       <DashboardContent />
     </AuthGuard>
   );
