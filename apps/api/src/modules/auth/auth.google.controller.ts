@@ -76,9 +76,9 @@ export async function handleGoogleCallback(
   res: Response,
   next: NextFunction,
 ) {
-  const APP_URL = env.appUrl ?? "http://localhost:3000";
-  const TALENT_URL = APP_URL;
-  const AUTH_URL = APP_URL;
+  const APP_URL = env.appUrl;
+  const TALENT_URL = env.talentWebUrl;
+  const AUTH_URL = env.authUrl;
 
   const errorRedirect = (message: string) =>
     res.redirect(`${APP_URL}/login?error=${encodeURIComponent(message)}`);
@@ -211,19 +211,22 @@ function issueAuthCookies(res: Response, user: any) {
     { expiresIn: "7d" },
   );
 
+  const isProd = env.nodeEnv === "production";
+  const sameSiteOption = isProd ? "none" : "lax";
+
   res.cookie("token", token, {
     httpOnly: true,
-    secure: env.nodeEnv === "production",
+    secure: isProd,
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite: "lax",
+    sameSite: sameSiteOption,
     path: "/",
   });
 
   res.cookie("blih_role", user.role, {
     httpOnly: false,
-    secure: env.nodeEnv === "production",
+    secure: isProd,
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite: "lax",
+    sameSite: sameSiteOption,
     path: "/",
   });
 }
