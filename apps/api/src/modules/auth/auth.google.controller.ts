@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma";
 import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
+import { invalidateCachedUser } from "../../middleware/auth";
 import { logger } from "../../utils/logger";
 import {
   buildGoogleAuthUrl,
@@ -140,6 +141,8 @@ export async function handleGoogleCallback(
 
     // ── 5. Find or create the user ────────────────────────────────────────────
     const user = await findOrCreateGoogleUser(googleProfile, oauthState.role);
+
+    await invalidateCachedUser(user.id);
 
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },

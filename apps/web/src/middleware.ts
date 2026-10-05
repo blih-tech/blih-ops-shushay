@@ -23,7 +23,8 @@ function getRoleFromToken(token?: string): string | null {
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
-  const role = request.cookies.get("blih_role")?.value || getRoleFromToken(token);
+  const tokenRole = getRoleFromToken(token);
+  const role = tokenRole || request.cookies.get("blih_role")?.value;
   const { pathname } = request.nextUrl;
 
   // 1. Admin Workspace Guard
@@ -76,7 +77,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  if (tokenRole && request.cookies.get("blih_role")?.value !== tokenRole) {
+    response.cookies.set("blih_role", tokenRole, { path: "/", maxAge: 7 * 24 * 60 * 60 });
+  }
+  return response;
 }
 
 export const config = {

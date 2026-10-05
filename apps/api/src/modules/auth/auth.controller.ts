@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma";
 import { env } from "../../config/env";
 import { AppError } from "../../middleware/errorHandler";
+import { invalidateCachedUser } from "../../middleware/auth";
 import {
   RegisterInput,
   LoginInput,
@@ -101,6 +102,8 @@ export async function login(
         ),
       );
     }
+
+    await invalidateCachedUser(user.id);
 
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },

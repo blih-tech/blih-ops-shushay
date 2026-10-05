@@ -111,8 +111,12 @@ export async function requireAuth(
     // Check cache first to avoid DB hit on every request
     const cached = await getCachedUser(decoded.userId);
     if (cached) {
-      req.user = cached;
-      return next();
+      if (cached.role !== decoded.role) {
+        await invalidateCachedUser(decoded.userId);
+      } else {
+        req.user = cached;
+        return next();
+      }
     }
 
     const user = await prisma.user.findUnique({
