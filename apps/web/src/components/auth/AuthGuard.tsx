@@ -23,6 +23,8 @@ interface AuthGuardProps {
 export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const allowedRolesKey = allowedRoles ? allowedRoles.slice().sort().join(",") : "";
+
   useEffect(() => {
     if (!loading) {
       if (!user) {
@@ -40,12 +42,10 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
             : "/";
         if (typeof window !== "undefined" && window.location.pathname !== targetPortal) {
           window.location.href = targetPortal;
-        } else {
-          router.replace(targetPortal);
         }
       }
     }
-  }, [user, loading, router, allowedRoles]);
+  }, [user?.id, user?.role, loading, allowedRolesKey, router]);
 
   if (loading) {
     return (
