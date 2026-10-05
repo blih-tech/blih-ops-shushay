@@ -41,7 +41,7 @@ export function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
             ? "/admin"
             : "/";
         if (typeof window !== "undefined" && window.location.pathname !== targetPortal) {
-          window.location.href = targetPortal;
+          router.replace(targetPortal);
         }
       }
     }
