@@ -42,10 +42,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const confirmLogout = async () => {
     setLogoutError(null);
     try {
-      await apiFetch("/auth/logout", { method: "POST" });
+      await apiFetch("/auth/logout", { method: "POST" }).catch(() => {});
+
+      if (typeof document !== "undefined") {
+        document.cookie = "token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "blih_role=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
+
       setUser(null);
       setIsLogoutModalOpen(false);
-      router.push("/login");
+      window.location.href = "/login";
     } catch {
       setLogoutError("Sign out failed. Please try again.");
     }
