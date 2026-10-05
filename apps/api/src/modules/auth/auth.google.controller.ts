@@ -141,15 +141,30 @@ export async function handleGoogleCallback(
     // ── 5. Find or create the user ────────────────────────────────────────────
     const user = await findOrCreateGoogleUser(googleProfile, oauthState.role);
 
-    // ── 6. Generate JWT (do NOT set cookie here — cross-domain cookies are
-    //       blocked by browsers during redirects between different origins).
-    //       Instead, redirect to the frontend /auth/callback page with the token
-    //       in the URL so the Vercel app can set the cookie on its own domain.
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
       env.jwtSecret,
       { expiresIn: "7d" },
     );
+
+    const isProd = env.nodeEnv === "production";
+    const sameSiteOption = isProd ? "none" : "lax";
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: isProd,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: sameSiteOption,
+      path: "/",
+    });
+
+    res.cookie("blih_role", user.role, {
+      httpOnly: false,
+      secure: isProd,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: sameSiteOption,
+      path: "/",
+    });
 
     // ── 7. Determine the post-auth destination for returnTo ──────────────────
     const postAuthDest = getPostAuthPath(user, oauthState.returnTo);

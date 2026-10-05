@@ -41,9 +41,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         loading={loading}
         onSignOut={logout}
         pathname={pathname}
-        skillsUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
-        talentUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
-        authUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
+        skillsUrl={process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}
+        talentUrl={process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}
+        authUrl={process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "")}
         extraActions={user ? <NotificationMenu /> : null}
       />
 

@@ -85,8 +85,6 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
     role,
     currentPath,
     currentApp,
-    skillsUrl,
-    talentUrl,
   });
 
   return (
