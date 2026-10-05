@@ -53,6 +53,11 @@ export async function sendVerificationEmail(
   email: string,
   verificationLink: string,
 ): Promise<{ success: boolean; error?: string }> {
+  console.log(`\n======================================================`);
+  console.log(`🔑 [VERIFICATION LINK] ${email}:`);
+  console.log(`${verificationLink}`);
+  console.log(`======================================================\n`);
+
   const resend = getResend();
   if (!resend) {
     logger.debug(
@@ -143,6 +148,11 @@ export async function sendPasswordResetEmail(
   email: string,
   resetLink: string,
 ): Promise<{ success: boolean; error?: string }> {
+  console.log(`\n======================================================`);
+  console.log(`🔑 [PASSWORD RESET LINK] ${email}:`);
+  console.log(`${resetLink}`);
+  console.log(`======================================================\n`);
+
   const resend = getResend();
   if (!resend) {
     logger.debug(

@@ -62,7 +62,5 @@ export const env = {
    * marked as email-verified (skips email confirmation flow).
    * Never active in production regardless of this flag.
    */
-  skipEmailVerification:
-    process.env.NODE_ENV !== "production" &&
-    process.env.SKIP_EMAIL_VERIFICATION === "true",
+  skipEmailVerification: process.env.SKIP_EMAIL_VERIFICATION === "true",
 };

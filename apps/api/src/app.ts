@@ -16,6 +16,9 @@ import { redisClient } from "./config/redis";
 
 const app = express();
 
+// Enable trust proxy for Render / reverse proxies
+app.set("trust proxy", 1);
+
 // Strict CSP for all routes; relaxed only for the Swagger UI documentation path
 app.use((req, res, next) => {
   if (req.path.startsWith("/api/docs")) {
