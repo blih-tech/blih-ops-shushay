@@ -188,13 +188,13 @@ export function MobileNav({
             </div>
           ) : (
             <>
-              <Link href={toRelativeUrl(`${authUrl}/login`)} className="w-full">
+              <Link href={authUrl ? `${authUrl}/login` : "/login"} className="w-full">
                 <Button variant="outline" fullWidth size="md">
                   Sign in
                 </Button>
               </Link>
               <Link
-                href={toRelativeUrl(`${authUrl}/register`)}
+                href={authUrl ? `${authUrl}/register` : "/register"}
                 className="w-full"
               >
                 <Button variant="primary" fullWidth size="md">
