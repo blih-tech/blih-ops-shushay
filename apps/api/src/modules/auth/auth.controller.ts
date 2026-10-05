@@ -131,6 +131,7 @@ export async function login(
     });
 
     res.json({
+      token,
       user: {
         id: user.id,
         email: user.email,

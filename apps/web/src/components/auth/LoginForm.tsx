@@ -43,6 +43,7 @@ export function LoginForm() {
 
     try {
       const data = await apiFetch<{
+        token?: string;
         user: {
           id: string;
           email: string;
@@ -52,6 +53,15 @@ export function LoginForm() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+
+      if (data.token) {
+        const isProd = window.location.protocol === "https:";
+        const secureFlag = isProd ? "; Secure; SameSite=None" : "; SameSite=Lax";
+        const maxAge = 7 * 24 * 60 * 60; // 7 days
+
+        document.cookie = `token=${data.token}; path=/; max-age=${maxAge}${secureFlag}`;
+        document.cookie = `blih_role=${data.user.role}; path=/; max-age=${maxAge}${secureFlag}`;
+      }
 
       await refresh();
 
