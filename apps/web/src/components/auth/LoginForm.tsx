@@ -55,45 +55,41 @@ export function LoginForm() {
 
       await refresh();
 
-      // Successful login - determine redirect location
-      if (returnTo) {
-        const { role } = data.user;
-        let finalUrl = returnTo;
-        try {
-          const parsed = new URL(returnTo, TALENT_URL);
-          const path = parsed.pathname;
+      // Successful login - determine redirect location based on role & returnTo
+      const { role } = data.user;
+      let finalUrl = returnTo || (role === "ADMIN" ? "/admin" : role === "COMPANY" ? "/company" : "/");
 
-          const isAdminPath = path === "/admin" || path.startsWith("/admin/");
-          const isCompanyOnly = path === "/company" || path.startsWith("/company/");
-          const isTalentOnly =
-            path === "/profile" ||
-            path.startsWith("/profile/") ||
-            path === "/jobs" ||
-            path.startsWith("/jobs/") ||
-            path === "/applications" ||
-            path.startsWith("/applications/");
+      try {
+        const parsed = new URL(finalUrl, TALENT_URL);
+        const path = parsed.pathname;
 
-          if (role === "ADMIN") {
-            if (isTalentOnly || isCompanyOnly) {
-              finalUrl = `/admin`;
-            }
-          } else if (role === "COMPANY") {
-            if (isTalentOnly || isAdminPath) {
-              finalUrl = `/company`;
-            }
-          } else if (role === "TALENT") {
-            if (isCompanyOnly || isAdminPath) {
-              finalUrl = `/dashboard`;
-            }
+        const isAdminPath = path === "/admin" || path.startsWith("/admin/");
+        const isCompanyOnly = path === "/company" || path.startsWith("/company/");
+        const isTalentOnly =
+          path === "/profile" ||
+          path.startsWith("/profile/") ||
+          path === "/jobs" ||
+          path.startsWith("/jobs/") ||
+          path === "/applications" ||
+          path.startsWith("/applications/");
+
+        if (role === "ADMIN") {
+          if (isTalentOnly || isCompanyOnly) {
+            finalUrl = `/admin`;
           }
-        } catch {
-          finalUrl = `${TALENT_URL}/`;
+        } else if (role === "COMPANY") {
+          if (isTalentOnly || isAdminPath) {
+            finalUrl = `/company`;
+          }
+        } else if (role === "TALENT") {
+          if (isCompanyOnly || isAdminPath) {
+            finalUrl = `/dashboard`;
+          }
         }
-        router.push(toPath(finalUrl));
-      } else {
-        // Redirect all roles (TALENT, ADMIN, COMPANY) to the Explore landing page by default
-        router.push("/");
+      } catch {
+        finalUrl = role === "ADMIN" ? "/admin" : role === "COMPANY" ? "/company" : "/";
       }
+      router.push(toPath(finalUrl));
     } catch (err: unknown) {
       setError(getErrorMessage(err) || "Invalid email or password");
     } finally {
