@@ -47,7 +47,23 @@ app.use((req, res, next) => {
     })(req, res, next);
   }
 });
-app.use(cors({ origin: env.corsOrigins, credentials: true }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowed = env.corsOrigins.some(
+        (allowed) => allowed === "*" || allowed.replace(/\/$/, "") === normalizedOrigin
+      );
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      console.warn(`[CORS] Blocked request from origin: ${origin}. Allowed origins:`, env.corsOrigins);
+      return callback(null, false);
+    },
+    credentials: true,
+  })
+);
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
 // High global threshold (500 requests per minute) so dev work & rapid requests are never blocked

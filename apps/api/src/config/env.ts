@@ -16,7 +16,9 @@ export const env = {
   databaseUrl: required("DATABASE_URL"),
   jwtSecret: required("JWT_SECRET"),
   corsOrigins: process.env.CORS_ORIGINS
-    ? process.env.CORS_ORIGINS.split(",").map((s) => s.trim()).filter(Boolean)
+    ? process.env.CORS_ORIGINS.split(",")
+        .map((s) => s.trim().replace(/^["']|["']$/g, "").replace(/\/$/, ""))
+        .filter(Boolean)
     : ["http://localhost:3000"],
   nodeEnv: process.env.NODE_ENV ?? "development",
   uploadsBaseUrl:
