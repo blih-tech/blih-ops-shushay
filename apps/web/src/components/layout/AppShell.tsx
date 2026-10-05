@@ -13,6 +13,7 @@ const AUTH_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/verify-email",
+  "/auth/callback",
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -40,6 +41,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         loading={loading}
         onSignOut={logout}
         pathname={pathname}
+        skillsUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
+        talentUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
+        authUrl={process.env.NEXT_PUBLIC_APP_URL || ""}
         extraActions={user ? <NotificationMenu /> : null}
       />
 
