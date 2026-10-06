@@ -4,6 +4,32 @@ export interface NavLinkItem {
   active?: boolean;
 }
 
+/**
+ * Safely constructs a URL combining an app base URL with a route path.
+ * If the base URL is missing, invalid, or malformed (e.g. "https://"),
+ * it gracefully falls back to the clean relative route path.
+ */
+export function buildAppUrl(baseUrl: string | undefined, path: string): string {
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (!baseUrl) return cleanPath;
+  const trimmed = baseUrl.trim().replace(/\/+$/, "");
+  if (!trimmed || trimmed === "http://" || trimmed === "https://") {
+    return cleanPath;
+  }
+  try {
+    const full = trimmed.startsWith("http") ? trimmed : `https://${trimmed}`;
+    const parsed = new URL(full);
+    if (!parsed.hostname || parsed.hostname.length < 3 || (!parsed.hostname.includes(".") && parsed.hostname !== "localhost")) {
+      if (typeof window !== "undefined" && window.location.hostname !== parsed.hostname) {
+        return cleanPath;
+      }
+    }
+    return `${parsed.protocol}//${parsed.host}${cleanPath}`;
+  } catch {
+    return cleanPath;
+  }
+}
+
 export function toRelativeUrl(url: string): string {
   if (!url) return "/";
   if (url.startsWith("http://") || url.startsWith("https://")) {
@@ -15,7 +41,7 @@ export function toRelativeUrl(url: string): string {
       const envAppUrl = process.env.NEXT_PUBLIC_APP_URL;
       if (envAppUrl) {
         try {
-          const envParsed = new URL(envAppUrl);
+          const envParsed = new URL(envAppUrl.startsWith("http") ? envAppUrl : `https://${envAppUrl}`);
           if (parsed.origin === envParsed.origin) {
             return parsed.pathname + parsed.search + parsed.hash || "/";
           }

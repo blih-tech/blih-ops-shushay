@@ -7,6 +7,7 @@ import { Button } from "./Button";
 import {
   getNavLinks,
   toRelativeUrl,
+  buildAppUrl,
 } from "./GlobalNavbar/GlobalNavbar.helpers";
 import type { NavLinkItem } from "./GlobalNavbar/GlobalNavbar.helpers";
 import { UserMenu } from "./GlobalNavbar/UserMenu";
@@ -92,7 +93,7 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[68px] flex items-center justify-between">
         {/* Brand identity */}
         <div className="flex items-center gap-3">
-          <Logo href={toRelativeUrl(talentUrl || "/")} priority className="h-5 w-auto" />
+          <Logo href={toRelativeUrl(buildAppUrl(talentUrl, "/"))} priority className="h-5 w-auto" />
         </div>
 
         {/* Desktop navigation links */}
@@ -169,14 +170,14 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
           ) : (
             <div className="flex items-center gap-2">
               <Link
-                href={toRelativeUrl(authUrl ? `${authUrl}/login` : "/login")}
+                href={toRelativeUrl(buildAppUrl(authUrl, "/login"))}
               >
                 <Button variant="ghost" size="sm">
                   Sign in
                 </Button>
               </Link>
               <Link
-                href={toRelativeUrl(authUrl ? `${authUrl}/register` : "/register")}
+                href={toRelativeUrl(buildAppUrl(authUrl, "/register"))}
               >
                 <Button variant="primary" size="sm">
                   Create account

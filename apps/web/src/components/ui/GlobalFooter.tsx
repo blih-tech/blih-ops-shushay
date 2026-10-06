@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Sparkles, ShieldCheck, ArrowUpRight } from "lucide-react";
-import { toRelativeUrl } from "./GlobalNavbar/GlobalNavbar.helpers";
+import { toRelativeUrl, buildAppUrl } from "./GlobalNavbar/GlobalNavbar.helpers";
 import { Logo } from "./Logo";
 
 export interface GlobalFooterProps {
@@ -24,39 +24,39 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
   const getRoleLinks = () => {
     if (role === "COMPANY") {
       return [
-        { label: "Dashboard", href: `${talentUrl}/company` },
-        { label: "Talent Search", href: `${talentUrl}/company/talents` },
-        { label: "Job Posts", href: `${talentUrl}/company/jobs` },
+        { label: "Dashboard", href: buildAppUrl(talentUrl, "/company") },
+        { label: "Talent Search", href: buildAppUrl(talentUrl, "/company/talents") },
+        { label: "Job Posts", href: buildAppUrl(talentUrl, "/company/jobs") },
         {
           label: "Company Subscription",
-          href: `${talentUrl}/company/subscription`,
+          href: buildAppUrl(talentUrl, "/company/subscription"),
         },
-        { label: "Company Profile", href: `${talentUrl}/company/profile` },
+        { label: "Company Profile", href: buildAppUrl(talentUrl, "/company/profile") },
       ];
     }
     if (role === "TALENT") {
       return [
-        { label: "Explore Platform", href: `${talentUrl}/` },
-        { label: "Skills Courses", href: `${skillsUrl}/courses` },
-        { label: "Verified Opportunities", href: `${talentUrl}/jobs` },
-        { label: "Learning Dashboard", href: `${skillsUrl}/dashboard` },
-        { label: "My Certificates", href: `${skillsUrl}/certificates` },
-        { label: "Talent Profile", href: `${talentUrl}/profile` },
+        { label: "Explore Platform", href: buildAppUrl(talentUrl, "/") },
+        { label: "Skills Courses", href: buildAppUrl(skillsUrl, "/courses") },
+        { label: "Verified Opportunities", href: buildAppUrl(talentUrl, "/jobs") },
+        { label: "Learning Dashboard", href: buildAppUrl(skillsUrl, "/dashboard") },
+        { label: "My Certificates", href: buildAppUrl(skillsUrl, "/certificates") },
+        { label: "Talent Profile", href: buildAppUrl(talentUrl, "/profile") },
       ];
     }
     if (role === "ADMIN") {
       return [
-        { label: "Admin Hub", href: `${skillsUrl}/admin` },
-        { label: "Course Studio", href: `${skillsUrl}/admin/courses` },
-        { label: "Talent Directory", href: `${skillsUrl}/admin/talents` },
-        { label: "Company Directory", href: `${skillsUrl}/admin/companies` },
+        { label: "Admin Hub", href: buildAppUrl(skillsUrl, "/admin") },
+        { label: "Course Studio", href: buildAppUrl(skillsUrl, "/admin/courses") },
+        { label: "Talent Directory", href: buildAppUrl(skillsUrl, "/admin/talents") },
+        { label: "Company Directory", href: buildAppUrl(skillsUrl, "/admin/companies") },
       ];
     }
     // Guest / Unauthenticated
     return [
-      { label: "Explore Ecosystem", href: `${talentUrl}/` },
-      { label: "Sign In", href: `${authUrl}/login` },
-      { label: "Sign Up", href: `${authUrl}/register` },
+      { label: "Explore Ecosystem", href: buildAppUrl(talentUrl, "/") },
+      { label: "Sign In", href: buildAppUrl(authUrl, "/login") },
+      { label: "Sign Up", href: buildAppUrl(authUrl, "/register") },
     ];
   };
 
@@ -132,21 +132,21 @@ export const GlobalFooter: React.FC<GlobalFooterProps> = ({
           <p>© 2026 Blih Skills & Talent Ecosystem. All rights reserved.</p>
           <div className="flex flex-wrap gap-4 items-center">
             <Link
-              href={toRelativeUrl(`${talentUrl}/company/subscription`)}
+              href={toRelativeUrl(buildAppUrl(talentUrl, "/company/subscription"))}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Subscription
             </Link>
             <span className="text-[#D9CEDF]">·</span>
             <Link
-              href={toRelativeUrl(`${skillsUrl}/courses`)}
+              href={toRelativeUrl(buildAppUrl(skillsUrl, "/courses"))}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Courses
             </Link>
             <span className="text-[#D9CEDF]">·</span>
             <Link
-              href={toRelativeUrl(`${talentUrl}/jobs`)}
+              href={toRelativeUrl(buildAppUrl(talentUrl, "/jobs"))}
               className="hover:text-[#1E5BFF] transition-colors"
             >
               Opportunities

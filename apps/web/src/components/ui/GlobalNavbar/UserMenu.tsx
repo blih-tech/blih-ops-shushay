@@ -13,7 +13,7 @@ import {
   Building,
 } from "lucide-react";
 import { Badge } from "../Badge";
-import { toRelativeUrl } from "./GlobalNavbar.helpers";
+import { toRelativeUrl, buildAppUrl } from "./GlobalNavbar.helpers";
 
 interface UserMenuProps {
   user: { email?: string; role?: string; photoUrl?: string };
@@ -97,7 +97,7 @@ export function UserMenu({
             {role === "COMPANY" ? (
               <>
                 <Link
-                  href={toRelativeUrl(talentUrl ? `${talentUrl}/company/profile` : "/company/profile")}
+                  href={toRelativeUrl(buildAppUrl(talentUrl, "/company/profile"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -105,7 +105,7 @@ export function UserMenu({
                   <span>Company Profile</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(talentUrl ? `${talentUrl}/company/jobs` : "/company/jobs")}
+                  href={toRelativeUrl(buildAppUrl(talentUrl, "/company/jobs"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -116,7 +116,7 @@ export function UserMenu({
             ) : role === "ADMIN" ? (
               <>
                 <Link
-                  href={toRelativeUrl(skillsUrl ? `${skillsUrl}/admin` : "/admin")}
+                  href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -124,7 +124,7 @@ export function UserMenu({
                   <span>Admin Portal</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(skillsUrl ? `${skillsUrl}/admin/courses` : "/admin/courses")}
+                  href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin/courses"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -135,7 +135,7 @@ export function UserMenu({
             ) : (
               <>
                 <Link
-                  href={toRelativeUrl(talentUrl ? `${talentUrl}/applications` : "/applications")}
+                  href={toRelativeUrl(buildAppUrl(talentUrl, "/applications"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -143,7 +143,7 @@ export function UserMenu({
                   <span>My Applications</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(talentUrl ? `${talentUrl}/profile` : "/profile")}
+                  href={toRelativeUrl(buildAppUrl(talentUrl, "/profile"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -151,7 +151,7 @@ export function UserMenu({
                   <span>View Talent Profile</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(talentUrl ? `${talentUrl}/profile/edit` : "/profile/edit")}
+                  href={toRelativeUrl(buildAppUrl(talentUrl, "/profile/edit"))}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >

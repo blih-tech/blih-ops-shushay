@@ -12,7 +12,7 @@ import {
   Building,
 } from "lucide-react";
 import { Button } from "../Button";
-import { toRelativeUrl, type NavLinkItem } from "./GlobalNavbar.helpers";
+import { toRelativeUrl, buildAppUrl, type NavLinkItem } from "./GlobalNavbar.helpers";
 import { Skeleton } from "../Skeleton";
 
 interface MobileNavProps {
@@ -116,7 +116,7 @@ export function MobileNav({
                 {role === "COMPANY" ? (
                   <>
                     <Link
-                      href={toRelativeUrl(talentUrl ? `${talentUrl}/company/profile` : "/company/profile")}
+                      href={toRelativeUrl(buildAppUrl(talentUrl, "/company/profile"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -124,7 +124,7 @@ export function MobileNav({
                       <span>Company Profile</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(talentUrl ? `${talentUrl}/company/jobs` : "/company/jobs")}
+                      href={toRelativeUrl(buildAppUrl(talentUrl, "/company/jobs"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -135,7 +135,7 @@ export function MobileNav({
                 ) : role === "ADMIN" ? (
                   <>
                     <Link
-                      href={toRelativeUrl(skillsUrl ? `${skillsUrl}/admin` : "/admin")}
+                      href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -143,7 +143,7 @@ export function MobileNav({
                       <span>Admin Portal</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(skillsUrl ? `${skillsUrl}/admin/courses` : "/admin/courses")}
+                      href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin/courses"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -154,7 +154,7 @@ export function MobileNav({
                 ) : (
                   <>
                     <Link
-                      href={toRelativeUrl(talentUrl ? `${talentUrl}/applications` : "/applications")}
+                      href={toRelativeUrl(buildAppUrl(talentUrl, "/applications"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -162,7 +162,7 @@ export function MobileNav({
                       <span>My Applications</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(talentUrl ? `${talentUrl}/profile` : "/profile")}
+                      href={toRelativeUrl(buildAppUrl(talentUrl, "/profile"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -170,7 +170,7 @@ export function MobileNav({
                       <span>View Talent Profile</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(talentUrl ? `${talentUrl}/profile/edit` : "/profile/edit")}
+                      href={toRelativeUrl(buildAppUrl(talentUrl, "/profile/edit"))}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
