@@ -18,8 +18,9 @@ process.on("uncaughtException", (error) => {
   console.error("💥 Uncaught Exception:", error);
 });
 
-const server = app.listen(env.port, () => {
-  console.log(`🚀 blih-api listening on port ${env.port}`);
+const port = Number(env.port) || 4000;
+const server = app.listen(port, "0.0.0.0", () => {
+  console.log(`🚀 blih-api listening on 0.0.0.0:${port}`);
   // Start the subscription renewal reminder scheduler (every 6 hours)
   initSubscriptionScheduler();
   // Start the job deadline expiration cleaner (every 1 hour)
