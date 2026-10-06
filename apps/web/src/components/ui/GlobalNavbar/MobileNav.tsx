@@ -196,14 +196,19 @@ export function MobileNav({
             </div>
           ) : (
             <>
-              <Link href={authUrl ? `${authUrl}/login` : "/login"} className="w-full">
+              <Link
+                href={toRelativeUrl(buildAppUrl(authUrl, "/login"))}
+                className="w-full"
+                onClick={() => setMobileMenuOpen(false)}
+              >
                 <Button variant="outline" fullWidth size="md">
                   Sign in
                 </Button>
               </Link>
               <Link
-                href={authUrl ? `${authUrl}/register` : "/register"}
+                href={toRelativeUrl(buildAppUrl(authUrl, "/register"))}
                 className="w-full"
+                onClick={() => setMobileMenuOpen(false)}
               >
                 <Button variant="primary" fullWidth size="md">
                   Create account
