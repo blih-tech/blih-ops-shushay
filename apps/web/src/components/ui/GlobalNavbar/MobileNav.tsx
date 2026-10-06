@@ -116,7 +116,7 @@ export function MobileNav({
                 {role === "COMPANY" ? (
                   <>
                     <Link
-                      href={toRelativeUrl(`${talentUrl}/company/profile`)}
+                      href={talentUrl ? `${talentUrl}/company/profile` : "/company/profile"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -124,7 +124,7 @@ export function MobileNav({
                       <span>Company Profile</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(`${talentUrl}/company/jobs`)}
+                      href={talentUrl ? `${talentUrl}/company/jobs` : "/company/jobs"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -135,7 +135,7 @@ export function MobileNav({
                 ) : role === "ADMIN" ? (
                   <>
                     <Link
-                      href={toRelativeUrl(`${skillsUrl}/admin`)}
+                      href={skillsUrl ? `${skillsUrl}/admin` : "/admin"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -143,7 +143,7 @@ export function MobileNav({
                       <span>Admin Portal</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(`${skillsUrl}/admin/courses`)}
+                      href={skillsUrl ? `${skillsUrl}/admin/courses` : "/admin/courses"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -154,7 +154,15 @@ export function MobileNav({
                 ) : (
                   <>
                     <Link
-                      href={toRelativeUrl(`${talentUrl}/profile`)}
+                      href={talentUrl ? `${talentUrl}/applications` : "/applications"}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
+                    >
+                      <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
+                      <span>My Applications</span>
+                    </Link>
+                    <Link
+                      href={talentUrl ? `${talentUrl}/profile` : "/profile"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >
@@ -162,7 +170,7 @@ export function MobileNav({
                       <span>View Talent Profile</span>
                     </Link>
                     <Link
-                      href={toRelativeUrl(`${talentUrl}/profile/edit`)}
+                      href={talentUrl ? `${talentUrl}/profile/edit` : "/profile/edit"}
                       onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                     >

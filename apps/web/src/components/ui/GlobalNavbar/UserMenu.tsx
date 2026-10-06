@@ -97,7 +97,7 @@ export function UserMenu({
             {role === "COMPANY" ? (
               <>
                 <Link
-                  href={toRelativeUrl(`${talentUrl}/company/profile`)}
+                  href={talentUrl ? `${talentUrl}/company/profile` : "/company/profile"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -105,7 +105,7 @@ export function UserMenu({
                   <span>Company Profile</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(`${talentUrl}/company/jobs`)}
+                  href={talentUrl ? `${talentUrl}/company/jobs` : "/company/jobs"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -116,7 +116,7 @@ export function UserMenu({
             ) : role === "ADMIN" ? (
               <>
                 <Link
-                  href={toRelativeUrl(`${skillsUrl}/admin`)}
+                  href={skillsUrl ? `${skillsUrl}/admin` : "/admin"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -124,7 +124,7 @@ export function UserMenu({
                   <span>Admin Portal</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(`${skillsUrl}/admin/courses`)}
+                  href={skillsUrl ? `${skillsUrl}/admin/courses` : "/admin/courses"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -135,7 +135,7 @@ export function UserMenu({
             ) : (
               <>
                 <Link
-                  href={toRelativeUrl(`${talentUrl}/applications`)}
+                  href={talentUrl ? `${talentUrl}/applications` : "/applications"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -143,7 +143,7 @@ export function UserMenu({
                   <span>My Applications</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(`${talentUrl}/profile`)}
+                  href={talentUrl ? `${talentUrl}/profile` : "/profile"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
@@ -151,7 +151,7 @@ export function UserMenu({
                   <span>View Talent Profile</span>
                 </Link>
                 <Link
-                  href={toRelativeUrl(`${talentUrl}/profile/edit`)}
+                  href={talentUrl ? `${talentUrl}/profile/edit` : "/profile/edit"}
                   onClick={() => setUserMenuOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
