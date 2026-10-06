@@ -13,6 +13,7 @@ interface RegisterFormProps {
     email: string;
     password: string;
     role: Role;
+    fullName?: string;
   }) => Promise<void>;
   loading: boolean;
   error: string | null;
@@ -26,7 +27,7 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ email, password, role });
+    onSubmit({ email, password, role, fullName });
   };
 
   const handleGoogleSignup = () => {

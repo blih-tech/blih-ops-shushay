@@ -78,17 +78,9 @@ export async function updateProfile(
   userId: string,
   data: UpdateTalentProfileInput,
 ) {
-  const profile = await prisma.talentProfile.findUnique({
+  const updated = await prisma.talentProfile.upsert({
     where: { userId },
-  });
-
-  if (!profile) {
-    throw new AppError(404, "Talent profile not found");
-  }
-
-  const updated = await prisma.talentProfile.update({
-    where: { userId },
-    data: {
+    update: {
       fullName: data.fullName !== undefined ? data.fullName : undefined,
       title: data.title !== undefined ? data.title : undefined,
       phone: data.phone !== undefined ? data.phone : undefined,
@@ -98,6 +90,17 @@ export async function updateProfile(
         data.englishLevel !== undefined ? data.englishLevel : undefined,
       skills: data.skills !== undefined ? data.skills : undefined,
       bio: data.bio !== undefined ? data.bio : undefined,
+    },
+    create: {
+      userId,
+      fullName: data.fullName,
+      title: data.title,
+      phone: data.phone,
+      country: data.country,
+      city: data.city,
+      englishLevel: data.englishLevel,
+      skills: data.skills || [],
+      bio: data.bio,
     },
     include: {
       experience: true,
@@ -120,21 +123,19 @@ export async function updateFile(
   fileUrl: string | null,
   publicId: string | null = null,
 ) {
-  const profile = await prisma.talentProfile.findUnique({
-    where: { userId },
-  });
-
-  if (!profile) {
-    throw new AppError(404, "Talent profile not found");
-  }
-
   const publicIdField = field === "photoUrl" ? "photoPublicId" : "cvPublicId";
 
-  const updated = await prisma.talentProfile.update({
+  const updated = await prisma.talentProfile.upsert({
     where: { userId },
-    data: {
+    update: {
       [field]: fileUrl,
       [publicIdField]: publicId,
+    },
+    create: {
+      userId,
+      [field]: fileUrl,
+      [publicIdField]: publicId,
+      skills: [],
     },
     include: {
       experience: true,

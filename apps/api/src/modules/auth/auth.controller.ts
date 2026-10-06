@@ -24,7 +24,7 @@ export async function register(
   next: NextFunction,
 ) {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role, fullName } = req.body;
     const normalizedEmail = email.trim().toLowerCase();
 
     const existingUser = await prisma.user.findUnique({
@@ -45,6 +45,24 @@ export async function register(
         role,
         verificationToken,
         emailVerified: env.skipEmailVerification,
+        ...(role === "TALENT"
+          ? {
+              talentProfile: {
+                create: {
+                  fullName: fullName?.trim() || undefined,
+                  skills: [],
+                },
+              },
+            }
+          : role === "COMPANY"
+          ? {
+              companyProfile: {
+                create: {
+                  companyName: fullName?.trim() || normalizedEmail.split("@")[0],
+                },
+              },
+            }
+          : {}),
       },
     });
 

@@ -6,6 +6,7 @@ export const registerSchema = z.object({
   role: z.enum(["TALENT", "COMPANY"], {
     errorMap: () => ({ message: "Role must be either TALENT or COMPANY" }),
   }),
+  fullName: z.string().optional(),
 });
 
 export const loginSchema = z.object({
