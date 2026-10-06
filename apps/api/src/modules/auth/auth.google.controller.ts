@@ -204,7 +204,10 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
       if (user.role === "TALENT") {
         await prisma.talentProfile.upsert({
           where: { userId: user.id },
-          update: {},
+          update: {
+            ...(name ? { fullName: name } : {}),
+            ...(googleProfile.picture ? { photoUrl: googleProfile.picture } : {}),
+          },
           create: {
             userId: user.id,
             fullName: name,
@@ -214,7 +217,9 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
       } else if (user.role === "COMPANY") {
         await prisma.companyProfile.upsert({
           where: { userId: user.id },
-          update: {},
+          update: {
+            ...(name ? { contactName: name } : {}),
+          },
           create: {
             userId: user.id,
             companyName: name || normalizedEmail.split("@")[0],
