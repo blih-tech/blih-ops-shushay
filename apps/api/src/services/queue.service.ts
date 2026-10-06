@@ -30,7 +30,7 @@ let pdfQueue: Queue<PdfJobData> | null = null;
 let emailWorker: Worker<EmailJobData> | null = null;
 let pdfWorker: Worker<PdfJobData> | null = null;
 
-const isRedisAvailable = Boolean(env.redisUrl || env.nodeEnv === "production");
+const isRedisAvailable = Boolean(env.redisUrl);
 
 async function processEmailDispatch(data: EmailJobData): Promise<void> {
   const { jobType, payload } = data;

@@ -6,6 +6,7 @@ import {
   SaveLessonPositionInput,
 } from "./learning.schemas";
 import { enqueuePdfGeneration } from "../../services/queue.service";
+import { logger } from "../../utils/logger";
 
 /** Typed shape of a single quiz question stored in the Prisma JSON field. */
 interface QuizQuestion {
@@ -69,10 +70,10 @@ export async function markLessonComplete(userId: string, lessonId: string, userR
     },
   });
 
-  // Automatically check if course is completed and generate certificate
-  try {
-    await enqueuePdfGeneration(userId, lesson.courseId);
-  } catch {}
+  // Automatically check if course is completed and generate certificate (non-blocking)
+  enqueuePdfGeneration(userId, lesson.courseId).catch((err) => {
+    logger.error("[LearningService] Non-blocking PDF generation error:", err);
+  });
 
   return progress;
 }
@@ -172,10 +173,10 @@ export async function submitQuiz(userId: string, data: SubmitQuizInput, userRole
       },
     });
 
-    // Automatically check if course is completed and generate certificate
-    try {
-      await enqueuePdfGeneration(userId, quiz.lesson.courseId);
-    } catch {}
+    // Automatically check if course is completed and generate certificate (non-blocking)
+    enqueuePdfGeneration(userId, quiz.lesson.courseId).catch((err) => {
+      logger.error("[LearningService] Non-blocking PDF generation error:", err);
+    });
   }
 
   return attempt;
@@ -239,10 +240,10 @@ export async function submitAssignment(
     },
   });
 
-  // Automatically check if course is completed and generate certificate
-  try {
-    await enqueuePdfGeneration(userId, assignment.lesson.courseId);
-  } catch {}
+  // Automatically check if course is completed and generate certificate (non-blocking)
+  enqueuePdfGeneration(userId, assignment.lesson.courseId).catch((err) => {
+    logger.error("[LearningService] Non-blocking PDF generation error:", err);
+  });
 
   return submission;
 }
