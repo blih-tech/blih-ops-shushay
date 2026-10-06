@@ -201,6 +201,27 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
         where: { id: user.id },
         data: { googleId },
       });
+      if (user.role === "TALENT") {
+        await prisma.talentProfile.upsert({
+          where: { userId: user.id },
+          update: {},
+          create: {
+            userId: user.id,
+            fullName: name,
+            photoUrl: googleProfile.picture ?? null,
+          },
+        });
+      } else if (user.role === "COMPANY") {
+        await prisma.companyProfile.upsert({
+          where: { userId: user.id },
+          update: {},
+          create: {
+            userId: user.id,
+            companyName: name || normalizedEmail.split("@")[0],
+            contactName: name,
+          },
+        });
+      }
       logger.debug(`[GOOGLE OAUTH] Linked Google account to existing user: ${normalizedEmail}`);
     } else {
       user = await prisma.user.create({
@@ -225,6 +246,7 @@ async function findOrCreateGoogleUser(googleProfile: any, role: "TALENT" | "COMP
         await prisma.companyProfile.create({
           data: {
             userId: user.id,
+            companyName: name || normalizedEmail.split("@")[0],
             contactName: name,
           },
         });

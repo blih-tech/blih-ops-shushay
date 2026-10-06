@@ -22,17 +22,9 @@ export async function updateProfile(
   userId: string,
   data: UpdateCompanyProfileInput,
 ) {
-  const profile = await prisma.companyProfile.findUnique({
+  return prisma.companyProfile.upsert({
     where: { userId },
-  });
-
-  if (!profile) {
-    throw new AppError(404, "Company profile not found");
-  }
-
-  return prisma.companyProfile.update({
-    where: { userId },
-    data: {
+    update: {
       companyName:
         data.companyName !== undefined ? data.companyName : undefined,
       description:
@@ -47,6 +39,17 @@ export async function updateProfile(
       contactPhone:
         data.contactPhone !== undefined ? data.contactPhone : undefined,
     },
+    create: {
+      userId,
+      companyName: data.companyName,
+      description: data.description,
+      website: data.website,
+      country: data.country,
+      city: data.city,
+      contactName: data.contactName,
+      contactEmail: data.contactEmail,
+      contactPhone: data.contactPhone,
+    },
   });
 }
 
@@ -56,19 +59,16 @@ export async function updateFile(
   fileUrl: string | null,
   publicId: string | null = null,
 ) {
-  const profile = await prisma.companyProfile.findUnique({
-    where: { userId },
-  });
-
-  if (!profile) {
-    throw new AppError(404, "Company profile not found");
-  }
-
   const publicIdField = "logoPublicId";
 
-  return prisma.companyProfile.update({
+  return prisma.companyProfile.upsert({
     where: { userId },
-    data: {
+    update: {
+      [field]: fileUrl,
+      [publicIdField]: publicId,
+    },
+    create: {
+      userId,
       [field]: fileUrl,
       [publicIdField]: publicId,
     },
