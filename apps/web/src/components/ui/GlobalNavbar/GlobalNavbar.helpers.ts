@@ -7,7 +7,26 @@ export interface NavLinkItem {
 export function toRelativeUrl(url: string): string {
   if (!url) return "/";
   if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
+    try {
+      const parsed = new URL(url);
+      if (typeof window !== "undefined" && parsed.origin === window.location.origin) {
+        return parsed.pathname + parsed.search + parsed.hash || "/";
+      }
+      const envAppUrl = process.env.NEXT_PUBLIC_APP_URL;
+      if (envAppUrl) {
+        try {
+          const envParsed = new URL(envAppUrl);
+          if (parsed.origin === envParsed.origin) {
+            return parsed.pathname + parsed.search + parsed.hash || "/";
+          }
+        } catch {
+          // ignore invalid env var
+        }
+      }
+      return url;
+    } catch {
+      return url;
+    }
   }
   return url.startsWith("/") ? url : `/${url}`;
 }

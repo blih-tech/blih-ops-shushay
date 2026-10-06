@@ -169,14 +169,14 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
           ) : (
             <div className="flex items-center gap-2">
               <Link
-                href={authUrl ? `${authUrl}/login` : "/login"}
+                href={toRelativeUrl(authUrl ? `${authUrl}/login` : "/login")}
               >
                 <Button variant="ghost" size="sm">
                   Sign in
                 </Button>
               </Link>
               <Link
-                href={authUrl ? `${authUrl}/register` : "/register"}
+                href={toRelativeUrl(authUrl ? `${authUrl}/register` : "/register")}
               >
                 <Button variant="primary" size="sm">
                   Create account
