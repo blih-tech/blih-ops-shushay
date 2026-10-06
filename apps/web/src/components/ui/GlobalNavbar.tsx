@@ -187,10 +187,29 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
           )}
         </div>
 
-        {/* Mobile menu trigger */}
+        {/* Mobile menu trigger & Quick Actions */}
         <div className="flex md:hidden items-center gap-2">
           {extraActions && (
             <div className="flex items-center">{extraActions}</div>
+          )}
+          {!user && !loading && (
+            <Link href={toRelativeUrl(buildAppUrl(authUrl, "/login"))}>
+              <Button variant="ghost" size="sm">
+                Sign in
+              </Button>
+            </Link>
+          )}
+          {user && !loading && (
+            <UserMenu
+              user={user}
+              role={role}
+              userMenuOpen={userMenuOpen}
+              setUserMenuOpen={setUserMenuOpen}
+              userMenuRef={userMenuRef}
+              skillsUrl={skillsUrl}
+              talentUrl={talentUrl}
+              onSignOut={onSignOut}
+            />
           )}
           <button
             type="button"
