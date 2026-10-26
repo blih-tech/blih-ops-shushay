@@ -26,15 +26,6 @@ importers:
       '@prisma/client':
         specifier: ^7.9.1
         version: 7.10.0(prisma@7.10.0(@types/react-dom@19.2.5(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@6.0.3))(typescript@6.0.3)
-      '@types/pg':
-        specifier: ^8.23.1
-        version: 8.23.1
-      '@types/swagger-jsdoc':
-        specifier: ^6.0.4
-        version: 6.0.4
-      '@types/swagger-ui-express':
-        specifier: ^4.1.8
-        version: 4.1.8
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
@@ -132,9 +123,18 @@ importers:
       '@types/pdfkit':
         specifier: ^0.17.6
         version: 0.17.6
+      '@types/pg':
+        specifier: ^8.23.1
+        version: 8.23.1
       '@types/supertest':
         specifier: ^7.2.1
         version: 7.2.1
+      '@types/swagger-jsdoc':
+        specifier: ^6.0.4
+        version: 6.0.4
+      '@types/swagger-ui-express':
+        specifier: ^4.1.8
+        version: 4.1.8
       jest:
         specifier: ^30.4.2
         version: 30.4.2(@types/node@22.20.1)(ts-node@10.9.2(@types/node@22.20.1)(typescript@6.0.3))
@@ -256,7 +256,7 @@ importers:
   packages/validation:
     dependencies:
       zod:
-        specifier: ^4.0.0
+        specifier: '>=3.23.8'
         version: 4.4.3
 
 packages:
