@@ -8,6 +8,7 @@ import type {
   JobsListResponse,
   JobFilters
 } from "@blih/types";
+declare const process: { env: Record<string, string | undefined> };
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
