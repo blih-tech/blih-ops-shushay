@@ -1,5 +1,6 @@
 import app from "./app";
 import { env } from "./config/env";
+import prisma from "./config/prisma";
 import {
   initSubscriptionScheduler,
   gracefulShutdownScheduler,
@@ -16,6 +17,7 @@ process.on("unhandledRejection", (reason) => {
 
 process.on("uncaughtException", (error) => {
   console.error("💥 Uncaught Exception:", error);
+  process.exit(1);
 });
 
 const port = Number(env.port) || 4000;
@@ -27,13 +29,14 @@ const server = app.listen(port, "0.0.0.0", () => {
   initJobScheduler();
 });
 
-// Graceful shutdown: drain BullMQ workers and close connections before exiting
+// Graceful shutdown: drain BullMQ workers, close DB connections, and close HTTP server before exiting
 async function shutdown(signal: string) {
   console.log(`\n[Server] Received ${signal} — shutting down gracefully...`);
   await Promise.allSettled([
     gracefulShutdownScheduler(),
     gracefulShutdownJobScheduler(),
     sseNotificationManager.close(),
+    prisma.$disconnect(),
   ]);
   server.close(() => {
     console.log("[Server] HTTP server closed.");
@@ -45,3 +48,4 @@ async function shutdown(signal: string) {
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 process.on("SIGINT", () => shutdown("SIGINT"));
+

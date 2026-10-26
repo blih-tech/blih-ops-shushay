@@ -1,0 +1,13 @@
+{
+  "name": "@blih/types",
+  "projectType": "library",
+  "sourceRoot": "packages/types/src",
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --filter @blih/types typecheck"
+      }
+    }
+  }
+}

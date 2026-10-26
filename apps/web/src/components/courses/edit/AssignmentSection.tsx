@@ -105,11 +105,7 @@ export function AssignmentSection({
       title="Practical Assignment Brief"
       icon={<FileCheck className="h-4 w-4" />}
     >
-      {error && (
-        <Alert variant="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+
       <Input
         label="Assignment Title"
         value={title}
@@ -142,6 +138,12 @@ export function AssignmentSection({
           Save Assignment
         </Button>
       </div>
+
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
     </SectionCard>
   );
 }

@@ -143,7 +143,7 @@ export const EducationForm: React.FC<EducationFormProps> = ({
         )}
       </CardHeader>
       <CardContent className="space-y-6">
-        {error && <Alert variant="error">{error}</Alert>}
+
 
         {(isAdding || editingId) && (
           <form
@@ -234,6 +234,12 @@ export const EducationForm: React.FC<EducationFormProps> = ({
                 Save Record
               </Button>
             </div>
+
+            {error && (
+              <div className="pt-2">
+                <Alert variant="error">{error}</Alert>
+              </div>
+            )}
           </form>
         )}
 

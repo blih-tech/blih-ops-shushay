@@ -7,6 +7,7 @@ import { AppError } from "./errorHandler";
 import { JwtPayload } from "../types/auth.types";
 import { getSetting } from "../modules/settings/settings.service";
 import { redisClient } from "../config/redis";
+import { isCompanySubscriptionActive } from "../utils/subscription";
 
 // ─── Cached user shape ────────────────────────────────────────────────────────
 interface CachedUserData {
@@ -141,7 +142,6 @@ export async function requireAuth(
   }
 }
 
-
 export function requireRole(allowedRoles: Role[]) {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
@@ -200,7 +200,6 @@ export async function requireCourseEnrollment(
   next();
 }
 
-
 export async function requireActiveSubscription(
   req: Request,
   _res: Response,
@@ -228,6 +227,8 @@ export async function requireActiveSubscription(
     where: { userId: req.user.id },
     select: {
       id: true,
+      subscriptionActive: true,
+      subscriptionExpiresAt: true,
       companySubscription: {
         select: {
           status: true,
@@ -241,23 +242,18 @@ export async function requireActiveSubscription(
     return next(new AppError(403, "Access denied. Company profile not found."));
   }
 
-  const now = new Date();
-  const sub = companyProfile.companySubscription;
-  const isSubscribed =
-    sub != null && sub.expiresAt > now && sub.status === "ACTIVE";
+  const isSubscribed = isCompanySubscriptionActive(companyProfile);
 
   if (!isSubscribed) {
-      const subMonthly = await getSetting("PRICE_SUBSCRIPTION_MONTHLY", "2000");
-      const subYearly = await getSetting("PRICE_SUBSCRIPTION_YEARLY", "10000");
-      return next(
-        new AppError(
-          402,
-          `Payment Required. An active company subscription (${Number(subMonthly).toLocaleString()} ETB/month or ${Number(subYearly).toLocaleString()} ETB/year) is required to perform this action.`,
-        ),
-      );
+    const subMonthly = await getSetting("PRICE_SUBSCRIPTION_MONTHLY", "2000");
+    const subYearly = await getSetting("PRICE_SUBSCRIPTION_YEARLY", "10000");
+    return next(
+      new AppError(
+        402,
+        `Payment Required. An active company subscription (${Number(subMonthly).toLocaleString()} ETB/month or ${Number(subYearly).toLocaleString()} ETB/year) is required to perform this action.`,
+      ),
+    );
   }
 
   next();
 }
-
-

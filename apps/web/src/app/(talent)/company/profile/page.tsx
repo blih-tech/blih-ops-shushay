@@ -157,8 +157,7 @@ function CompanyProfileContent() {
         </Link>
       </div>
 
-      {error && <Alert variant="error">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
+
 
       <form onSubmit={handleSubmit} className="space-y-8">
         <Card className="border border-[#D9CEDF] shadow-sm rounded-xl overflow-hidden">
@@ -250,6 +249,17 @@ function CompanyProfileContent() {
             {saving ? "Saving Changes..." : "Save Company Profile"}
           </Button>
         </div>
+
+        {error && (
+          <div className="w-full">
+            <Alert variant="error">{error}</Alert>
+          </div>
+        )}
+        {success && (
+          <div className="w-full">
+            <Alert variant="success">{success}</Alert>
+          </div>
+        )}
       </form>
     </main>
   );

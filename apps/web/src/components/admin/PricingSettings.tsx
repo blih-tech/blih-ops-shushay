@@ -68,8 +68,7 @@ export function PricingSettings() {
         </div>
       </div>
       
-      {error && <Alert variant="error" className="mb-4">{error}</Alert>}
-      {success && <Alert variant="success" className="mb-4">Settings saved successfully!</Alert>}
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <div>
@@ -101,6 +100,9 @@ export function PricingSettings() {
       <div className="flex justify-end">
         <Button onClick={handleSave} isLoading={saving} size="md">Save Prices</Button>
       </div>
+
+      {error && <Alert variant="error" className="mt-4">{error}</Alert>}
+      {success && <Alert variant="success" className="mt-4">Settings saved successfully!</Alert>}
     </Card>
   );
 }

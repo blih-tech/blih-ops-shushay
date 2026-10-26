@@ -80,10 +80,13 @@ export async function initializeCompanySubscription(
   const returnUrl = `${env.talentWebUrl}/company/subscription/return?tx_ref=${txRef}`;
   const callbackUrl = `${env.apiUrl}/api/v1/payments/webhook`;
 
+  const contactEmail =
+    user.companyProfile.contactEmail?.trim() || user.email?.trim() || "";
+
   const chapaRes = await chapaService.initializePayment({
     amount: price,
     currency: planConfig.currency,
-    email: user.companyProfile.contactEmail || user.email,
+    email: contactEmail,
     firstName,
     lastName,
     txRef,

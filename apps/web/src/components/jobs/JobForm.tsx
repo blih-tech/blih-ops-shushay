@@ -158,11 +158,7 @@ export function JobForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 font-sans">
-      {activeError && (
-        <Alert variant="error" title="Form Submission Error">
-          {activeError}
-        </Alert>
-      )}
+
 
       {subscriptionRequired && (
         <Card className="border border-[#D9CEDF] bg-white rounded-xl p-8 text-center space-y-4 shadow-sm">
@@ -307,6 +303,14 @@ export function JobForm({
           {isSubmitting ? loadingLabel : submitLabel}
         </Button>
       </div>
+
+      {activeError && (
+        <div className="w-full">
+          <Alert variant="error" title="Form Submission Error">
+            {activeError}
+          </Alert>
+        </div>
+      )}
     </form>
   );
 }

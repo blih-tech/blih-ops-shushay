@@ -101,11 +101,7 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
       title="Assessment Quiz Builder"
       icon={<HelpCircle className="h-4 w-4" />}
     >
-      {error && (
-        <Alert variant="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+
       <Input
         label="Quiz Title"
         value={title}
@@ -289,6 +285,12 @@ export function QuizSection({ courseId, lesson, onUpdate }: QuizSectionProps) {
           </Button>
         </div>
       </div>
+
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
     </SectionCard>
   );
 }

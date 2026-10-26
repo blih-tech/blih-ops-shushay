@@ -55,9 +55,8 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   extraActions,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [activePath, setActivePath] = useState("");
-  const userMenuRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setActivePath(window.location.pathname);
@@ -65,22 +64,8 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
   }, [user]);
 
   const currentPath = customPathname || activePath;
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
-        setUserMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const role = user?.role?.toUpperCase();
+
 
   const navLinks = getNavLinks({
     role,
@@ -159,9 +144,6 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
               <UserMenu
                 user={user}
                 role={role}
-                userMenuOpen={userMenuOpen}
-                setUserMenuOpen={setUserMenuOpen}
-                userMenuRef={userMenuRef}
                 skillsUrl={skillsUrl}
                 talentUrl={talentUrl}
                 onSignOut={onSignOut}
@@ -203,9 +185,6 @@ export const GlobalNavbar: React.FC<GlobalNavbarProps> = ({
             <UserMenu
               user={user}
               role={role}
-              userMenuOpen={userMenuOpen}
-              setUserMenuOpen={setUserMenuOpen}
-              userMenuRef={userMenuRef}
               skillsUrl={skillsUrl}
               talentUrl={talentUrl}
               onSignOut={onSignOut}

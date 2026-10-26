@@ -99,11 +99,7 @@ export function DocumentsSection({
       title="Downloadable Resources & Documents"
       icon={<FileText className="h-4 w-4" />}
     >
-      {error && (
-        <Alert variant="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+
 
       {/* Upload Progress Active State */}
       {uploading && uploadFile && (
@@ -187,6 +183,12 @@ export function DocumentsSection({
             Max 50 MB per file
           </span>
         </div>
+      )}
+
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
       )}
 
       <input

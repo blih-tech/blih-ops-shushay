@@ -54,8 +54,6 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {error && <Alert variant="error">{error}</Alert>}
-
         <Input
           label="Full name"
           type="text"
@@ -128,6 +126,12 @@ export function RegisterForm({ onSubmit, loading, error }: RegisterFormProps) {
             {loading ? "Creating account..." : "Create account"}
           </Button>
         </div>
+
+        {error && (
+          <Alert variant="error" className="mt-3">
+            {error}
+          </Alert>
+        )}
       </form>
 
       <div className="relative flex items-center justify-center">

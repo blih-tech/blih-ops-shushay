@@ -1,0 +1,25 @@
+{
+  "name": "@blih/web",
+  "projectType": "application",
+  "sourceRoot": "apps/web/src",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --filter @blih/web build"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --filter @blih/web typecheck"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --filter @blih/web lint"
+      }
+    }
+  }
+}

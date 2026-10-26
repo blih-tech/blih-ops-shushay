@@ -84,6 +84,18 @@ export function CreateAdminModal({
       }
     >
       <form onSubmit={handleSubmit} className="space-y-4 py-2">
+        <Input
+          id="create-admin-email"
+          type="email"
+          label="Email address"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="admin@example.com"
+          disabled={loading}
+          fullWidth
+        />
+
         {error && (
           <Alert variant="error" onClose={() => setError(null)}>
             {error}
@@ -118,17 +130,6 @@ export function CreateAdminModal({
             </div>
           </Alert>
         )}
-        <Input
-          id="create-admin-email"
-          type="email"
-          label="Email address"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@example.com"
-          disabled={loading}
-          fullWidth
-        />
         <button type="submit" className="hidden" aria-hidden="true" />
       </form>
     </Modal>

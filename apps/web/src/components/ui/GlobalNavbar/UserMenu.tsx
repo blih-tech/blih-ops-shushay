@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   LogOut,
@@ -18,34 +18,56 @@ import { toRelativeUrl, buildAppUrl } from "./GlobalNavbar.helpers";
 interface UserMenuProps {
   user: { email?: string; role?: string; photoUrl?: string };
   role?: string;
-  userMenuOpen: boolean;
-  setUserMenuOpen: (open: boolean) => void;
-  userMenuRef: React.RefObject<HTMLDivElement | null>;
   skillsUrl: string;
   talentUrl: string;
   onSignOut?: () => void;
+  userMenuOpen?: boolean;
+  setUserMenuOpen?: (open: boolean) => void;
+  userMenuRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export function UserMenu({
   user,
   role,
-  userMenuOpen,
-  setUserMenuOpen,
-  userMenuRef,
   skillsUrl,
   talentUrl,
   onSignOut,
+  userMenuOpen: controlledOpen,
+  setUserMenuOpen: setControlledOpen,
 }: UserMenuProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+  const setIsOpen = (next: boolean) => {
+    if (setControlledOpen) setControlledOpen(next);
+    if (!isControlled) setInternalOpen(next);
+  };
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isOpen]);
+
   const userInitial = user.email ? user.email.charAt(0).toUpperCase() : "U";
 
   return (
-    <div className="relative" ref={userMenuRef}>
+    <div className="relative" ref={menuRef}>
       {/* Avatar trigger button */}
       <button
         type="button"
-        onClick={() => setUserMenuOpen(!userMenuOpen)}
+        onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 p-1 pl-1.5 pr-2.5 rounded-xl bg-white border border-[#D9CEDF] hover:bg-[#F4F1F8] hover:border-[#1E5BFF]/30 transition-all duration-150 cursor-pointer group focus:outline-none focus:ring-2 focus:ring-[#1E5BFF]/30"
-        aria-expanded={userMenuOpen}
+        aria-expanded={isOpen}
         aria-label="User account menu"
       >
         <div className="w-7 h-7 rounded-lg bg-[#1E5BFF] text-white flex items-center justify-center font-sans font-semibold text-xs shadow-xs overflow-hidden shrink-0">
@@ -61,12 +83,12 @@ export function UserMenu({
           )}
         </div>
         <ChevronDown
-          className={`h-4 w-4 text-[#6E6678] transition-transform duration-200 ${userMenuOpen ? "rotate-180 text-[#1E5BFF]" : ""}`}
+          className={`h-4 w-4 text-[#6E6678] transition-transform duration-200 ${isOpen ? "rotate-180 text-[#1E5BFF]" : ""}`}
         />
       </button>
 
       {/* Floating Profile Popover Dropdown */}
-      {userMenuOpen && (
+      {isOpen && (
         <div className="absolute right-0 mt-2 w-64 bg-white border border-[#D9CEDF] rounded-lg shadow-md z-50 overflow-hidden p-1.5 font-sans">
           {/* User info header */}
           <div className="p-2.5 bg-[#F9F8FC] rounded-md mb-1 border border-[#D9CEDF]">
@@ -98,7 +120,7 @@ export function UserMenu({
               <>
                 <Link
                   href={toRelativeUrl(buildAppUrl(talentUrl, "/company/profile"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Building className="h-4 w-4 text-[#1E5BFF]" />
@@ -106,7 +128,7 @@ export function UserMenu({
                 </Link>
                 <Link
                   href={toRelativeUrl(buildAppUrl(talentUrl, "/company/jobs"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
@@ -117,7 +139,7 @@ export function UserMenu({
               <>
                 <Link
                   href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Shield className="h-4 w-4 text-[#1E5BFF]" />
@@ -125,7 +147,7 @@ export function UserMenu({
                 </Link>
                 <Link
                   href={toRelativeUrl(buildAppUrl(skillsUrl, "/admin/courses"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <BookOpen className="h-4 w-4 text-[#1E5BFF]" />
@@ -136,7 +158,7 @@ export function UserMenu({
               <>
                 <Link
                   href={toRelativeUrl(buildAppUrl(talentUrl, "/applications"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Briefcase className="h-4 w-4 text-[#1E5BFF]" />
@@ -144,7 +166,7 @@ export function UserMenu({
                 </Link>
                 <Link
                   href={toRelativeUrl(buildAppUrl(talentUrl, "/profile"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <UserIcon className="h-4 w-4 text-[#1E5BFF]" />
@@ -152,7 +174,7 @@ export function UserMenu({
                 </Link>
                 <Link
                   href={toRelativeUrl(buildAppUrl(talentUrl, "/profile/edit"))}
-                  onClick={() => setUserMenuOpen(false)}
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#17131F] hover:bg-[#F4F1F8] rounded-md transition-colors"
                 >
                   <Settings className="h-4 w-4 text-[#1E5BFF]" />
@@ -168,7 +190,7 @@ export function UserMenu({
               <button
                 type="button"
                 onClick={() => {
-                  setUserMenuOpen(false);
+                  setIsOpen(false);
                   onSignOut();
                 }}
                 className="w-full flex items-center gap-2.5 px-2.5 py-1.5 text-xs text-[#EF4444] hover:bg-red-50 rounded-md transition-colors font-medium cursor-pointer"
@@ -183,3 +205,4 @@ export function UserMenu({
     </div>
   );
 }
+

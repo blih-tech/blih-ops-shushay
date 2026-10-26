@@ -1,18 +1,23 @@
-import { Prisma } from "@prisma/client";
-
 /**
  * Canonical subscription-active check for a company profile.
  *
- * Accepts the minimal shape returned by Prisma when selecting
- * `companySubscription { status, expiresAt }`.
- * Only checks the `CompanySubscription` relation — the legacy
- * `subscriptionActive` / `subscriptionExpiresAt` scalar fields on
- * `CompanyProfile` are intentionally ignored here.
+ * Checks the `CompanySubscription` relation first, and also supports
+ * the company profile scalar flag (`subscriptionActive`) for seeded or
+ * administrative override accounts.
  */
 export function isCompanySubscriptionActive(company: {
-  companySubscription: { status: string; expiresAt: Date } | null;
+  subscriptionActive?: boolean | null;
+  subscriptionExpiresAt?: Date | null;
+  companySubscription?: { status: string; expiresAt: Date } | null;
 }): boolean {
   const sub = company.companySubscription;
-  if (!sub) return false;
-  return sub.expiresAt > new Date() && sub.status === "ACTIVE";
+  if (sub && sub.status === "ACTIVE" && sub.expiresAt > new Date()) {
+    return true;
+  }
+  if (company.subscriptionActive) {
+    if (!company.subscriptionExpiresAt || company.subscriptionExpiresAt > new Date()) {
+      return true;
+    }
+  }
+  return false;
 }

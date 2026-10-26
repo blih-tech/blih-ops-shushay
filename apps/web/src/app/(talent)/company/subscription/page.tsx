@@ -206,14 +206,7 @@ function CompanySubscriptionContent() {
         </div>
       )}
 
-      {/* Global Checkout Error Alert */}
-      {checkoutError && (
-        <div className="max-w-4xl mx-auto">
-          <Alert variant="error" className="text-sm">
-            {checkoutError}
-          </Alert>
-        </div>
-      )}
+
 
       {/* Billing Cycle Toggle */}
       <div className="text-center">
@@ -380,6 +373,14 @@ function CompanySubscriptionContent() {
           </div>
         </Card>
       </div>
+
+      {checkoutError && (
+        <div className="max-w-4xl mx-auto">
+          <Alert variant="error" className="text-sm">
+            {checkoutError}
+          </Alert>
+        </div>
+      )}
     </main>
   );
 }

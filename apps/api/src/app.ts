@@ -50,14 +50,20 @@ app.use((req, res, next) => {
     })(req, res, next);
   }
 });
+import { RedisStore } from "rate-limit-redis";
+
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
       const normalizedOrigin = origin.replace(/\/$/, "");
-      const isAllowed = env.corsOrigins.some(
-        (allowed) => allowed === "*" || allowed.replace(/\/$/, "") === normalizedOrigin
-      );
+      const isAllowed = env.corsOrigins.some((allowed) => {
+        if (allowed === "*") {
+          // Reject wildcard origin with credentials in production
+          return env.nodeEnv !== "production";
+        }
+        return allowed.replace(/\/$/, "") === normalizedOrigin;
+      });
       if (isAllowed) {
         return callback(null, true);
       }
@@ -69,16 +75,27 @@ app.use(
 );
 
 // ─── Rate Limiting ────────────────────────────────────────────────────────────
-// High global threshold (500 requests per minute) so dev work & rapid requests are never blocked
+// High global threshold (500 requests per minute) so dev work & rapid requests are never blocked.
+// Uses RedisStore when Redis is connected to share state across multiple containers/replicas.
 const globalLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 500,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many requests. Please slow down." },
+  ...(redisClient
+    ? {
+        store: new RedisStore({
+          prefix: "rl:global:",
+          // @ts-expect-error ioredis sendCommand signature compatibility
+          sendCommand: (...args: string[]) => redisClient!.call(...args),
+        }),
+      }
+    : {}),
 });
 
 app.use("/api/v1", globalLimiter);
+
 app.use(cookieParser());
 app.use(
   express.json({

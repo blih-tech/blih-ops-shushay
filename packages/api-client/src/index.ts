@@ -30,7 +30,20 @@ export class ApiError extends Error {
  * try { ... } catch (err: unknown) { setError(getErrorMessage(err)); }
  */
 export function getErrorMessage(err: unknown): string {
-  if (err instanceof ApiError) return err.message;
+  if (err instanceof ApiError) {
+    if (typeof err.details === "string" && err.details.trim().length > 0 && !err.message.includes(err.details)) {
+      return `${err.message}: ${err.details}`;
+    }
+    if (err.details && typeof err.details === "object") {
+      const parts = Object.entries(err.details as Record<string, unknown>)
+        .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : String(v)}`)
+        .filter(Boolean);
+      if (parts.length > 0 && !err.message.includes(parts[0])) {
+        return `${err.message} (${parts.join("; ")})`;
+      }
+    }
+    return err.message;
+  }
   if (err instanceof Error) return err.message;
   if (typeof err === "string") return err;
   return "An unexpected error occurred";

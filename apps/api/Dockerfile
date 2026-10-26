@@ -68,5 +68,9 @@ EXPOSE 4000
 
 ENV NODE_ENV=production
 
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:4000/api/v1/health || exit 1
+
 # Run migrations then start the server
 CMD ["sh", "-c", "node node_modules/.bin/prisma migrate deploy --schema=./prisma/schema.prisma && node dist/server.js"]
+

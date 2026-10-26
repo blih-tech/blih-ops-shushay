@@ -66,7 +66,7 @@ async function main() {
     },
     create: {
       userId: talent.id,
-      fullName: "Abebe Bikila",
+      fullName: "Mikeal Tadesse",
       title: "Full Stack Software Engineer",
       country: "Ethiopia",
       city: "Addis Ababa",

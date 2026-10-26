@@ -149,11 +149,7 @@ function ProfileSetupContent() {
 
   return (
     <main className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 flex flex-col">
-      {error && (
-        <Alert variant="error" className="mb-6">
-          {error}
-        </Alert>
-      )}
+
 
       <div className="flex-1 flex flex-col lg:flex-row gap-8 items-start">
         {/* Stepper rail */}
@@ -271,6 +267,12 @@ function ProfileSetupContent() {
                   onBack={() => setStep(2)}
                   saving={saving}
                 />
+              )}
+
+              {error && (
+                <Alert variant="error" className="mt-4">
+                  {error}
+                </Alert>
               )}
             </CardContent>
           </Card>

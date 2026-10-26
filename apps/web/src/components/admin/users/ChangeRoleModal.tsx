@@ -67,14 +67,14 @@ export function PromoteToAdminModal({
       }
     >
       <div className="space-y-4 py-2">
+        <p className="text-sm text-[#4A4154]">
+          Promoting <strong className="text-[#17131F]">{user.email}</strong> will grant them complete access to managing users, jobs, payments, and system configurations.
+        </p>
         {error && (
           <Alert variant="error" onClose={() => setError(null)}>
             {error}
           </Alert>
         )}
-        <p className="text-sm text-[#4A4154]">
-          Promoting <strong className="text-[#17131F]">{user.email}</strong> will grant them complete access to managing users, jobs, payments, and system configurations.
-        </p>
       </div>
     </Modal>
   );

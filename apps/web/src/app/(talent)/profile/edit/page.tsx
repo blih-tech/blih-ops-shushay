@@ -161,19 +161,7 @@ function ProfileContent() {
               Update your basic details to build your remote credibility.
             </CardDescription>
 
-            {error && (
-              <Alert variant="error" className="mt-4">
-                {error}
-              </Alert>
-            )}
-            {success && (
-              <Alert
-                variant="success"
-                className="mt-4 bg-[#E6F5F0] border-[#2E8F79] text-[#2E8F79]"
-              >
-                {success}
-              </Alert>
-            )}
+
 
             {loading ? (
               <div className="space-y-6 py-6 animate-pulse">
@@ -271,10 +259,27 @@ function ProfileContent() {
                   />
                 </div>
 
-                <div className="pt-4 border-t border-[#D9CEDF]/50 flex justify-end">
+                <div className="pt-4 border-t border-[#D9CEDF]/50 flex flex-col items-end gap-3">
                   <Button type="submit" variant="primary" isLoading={saving}>
                     Save Changes
                   </Button>
+                  {error && (
+                    <div className="w-full">
+                      <Alert variant="error">
+                        {error}
+                      </Alert>
+                    </div>
+                  )}
+                  {success && (
+                    <div className="w-full">
+                      <Alert
+                        variant="success"
+                        className="bg-[#E6F5F0] border-[#2E8F79] text-[#2E8F79]"
+                      >
+                        {success}
+                      </Alert>
+                    </div>
+                  )}
                 </div>
               </form>
             )}

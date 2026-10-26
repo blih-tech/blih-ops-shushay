@@ -213,12 +213,6 @@ export function LessonPanel({
       {/* Lesson body */}
       {expanded && (
         <div className="p-6 sm:p-8 border-t border-[#D9CEDF] space-y-6 bg-white">
-          {saveError && (
-            <Alert variant="error" onClose={() => setSaveError(null)}>
-              {saveError}
-            </Alert>
-          )}
-
           {/* Written content */}
           <SectionCard
             title="Written Lesson Content"
@@ -255,6 +249,11 @@ export function LessonPanel({
                     Save Notes
                   </Button>
                 </div>
+                {saveError && (
+                  <Alert variant="error" onClose={() => setSaveError(null)}>
+                    {saveError}
+                  </Alert>
+                )}
               </div>
             ) : (
               <div>

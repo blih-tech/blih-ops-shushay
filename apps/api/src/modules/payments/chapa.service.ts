@@ -29,6 +29,27 @@ export interface ChapaVerifyResponse {
   rawResponse?: any;
 }
 
+function formatChapaError(data: any, fallback: string): string {
+  if (!data) return fallback || "Unknown gateway error";
+  if (typeof data.message === "string" && data.message.trim().length > 0) {
+    return data.message;
+  }
+  if (data.message && typeof data.message === "object") {
+    const parts = Object.entries(data.message).map(([key, val]) => {
+      const detail = Array.isArray(val) ? val.join(", ") : String(val);
+      return `${key}: ${detail}`;
+    });
+    if (parts.length > 0) return parts.join("; ");
+  }
+  if (typeof data.error === "string" && data.error.trim().length > 0) {
+    return data.error;
+  }
+  if (data.error && typeof data.error === "object") {
+    return JSON.stringify(data.error);
+  }
+  return fallback || "Payment initialization failed";
+}
+
 export class ChapaService {
   private get baseUrl(): string {
     return env.chapa.apiUrl || "https://api.chapa.co/v1";
@@ -57,6 +78,31 @@ export class ChapaService {
       };
     }
 
+    let email = (payload.email || "").trim();
+    // In Chapa test mode (CHASECK_TEST-), Chapa performs strict DNS MX-record validation.
+    // Internal/demo domains like @blih.com, @example.com, @test.com, or custom non-configured domains
+    // lack public MX records and are rejected by Chapa with "validation.email".
+    if (this.secretKey.startsWith("CHASECK_TEST-")) {
+      const parts = email.split("@");
+      const domain = parts[1]?.toLowerCase();
+      const knownValidDomains = [
+        "gmail.com",
+        "yahoo.com",
+        "outlook.com",
+        "hotmail.com",
+        "icloud.com",
+        "proton.me",
+        "protonmail.com",
+      ];
+      if (!domain || !knownValidDomains.includes(domain)) {
+        const username = parts[0]?.replace(/[^a-zA-Z0-9._-]/g, "") || "company";
+        email = `${username || "company"}@gmail.com`;
+      }
+    }
+
+    const firstName = (payload.firstName || "").trim() || "Company";
+    const lastName = (payload.lastName || "").trim() || "Admin";
+
     const isLocalhostCallback =
       payload.callbackUrl?.includes("localhost") ||
       payload.callbackUrl?.includes("127.0.0.1");
@@ -64,14 +110,14 @@ export class ChapaService {
     const bodyData: Record<string, any> = {
       amount: payload.amount.toString(),
       currency: payload.currency,
-      email: payload.email,
-      first_name: payload.firstName || "Learner",
-      last_name: payload.lastName || "User",
+      email,
+      first_name: firstName,
+      last_name: lastName,
       tx_ref: payload.txRef,
       return_url: payload.returnUrl,
-      "customization[title]": payload.title || "Blih Skills Access",
+      "customization[title]": payload.title || "Blih Access",
       "customization[description]":
-        payload.description || "Permanent access to all Blih Skills courses",
+        payload.description || "Access to Blih platform",
     };
 
     if (payload.callbackUrl && !isLocalhostCallback) {
@@ -95,9 +141,11 @@ export class ChapaService {
         data.status !== "success" ||
         !data.data?.checkout_url
       ) {
+        const errorDetail = formatChapaError(data, response.statusText);
         throw new AppError(
           502,
-          `Chapa initialization failed: ${data.message || response.statusText}`,
+          `Chapa initialization failed: ${errorDetail}`,
+          data?.message || data,
         );
       }
 

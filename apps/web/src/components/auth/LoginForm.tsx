@@ -115,10 +115,6 @@ export function LoginForm() {
 
   return (
     <div className="space-y-6">
-      {(error || googleError) && (
-        <Alert variant="error">{error || googleError}</Alert>
-      )}
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Email"
@@ -161,6 +157,12 @@ export function LoginForm() {
             {loading ? "Signing in..." : "Sign in"}
           </Button>
         </div>
+
+        {(error || googleError) && (
+          <Alert variant="error" className="mt-3">
+            {error || googleError}
+          </Alert>
+        )}
       </form>
 
       {/* Divider */}

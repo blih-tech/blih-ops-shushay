@@ -230,11 +230,7 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                   </button>
                 </div>
                 <div className="px-5 py-5 space-y-4">
-                  {metaError && (
-                    <Alert variant="error" onClose={() => setMetaError(null)}>
-                      {metaError}
-                    </Alert>
-                  )}
+
                   <Input
                     label="Title"
                     value={metaTitle}
@@ -268,6 +264,12 @@ export function EditCourseContent({ courseId }: EditCourseContentProps) {
                       Save Details
                     </Button>
                   </div>
+
+                  {metaError && (
+                    <Alert variant="error" onClose={() => setMetaError(null)}>
+                      {metaError}
+                    </Alert>
+                  )}
                 </div>
               </div>
             )}

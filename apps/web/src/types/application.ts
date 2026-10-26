@@ -1,8 +1,6 @@
-export type ApplicationStatus =
-  | "SUBMITTED"
-  | "IN_REVIEW"
-  | "INTERVIEW_SCHEDULED"
-  | "OFFER_EXTENDED";
+import type { ApplicationStatus } from "@blih/types";
+export type { ApplicationStatus };
+
 
 export interface ApplicationItem {
   id: string;

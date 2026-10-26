@@ -33,11 +33,11 @@ export function useTalentSearch(initialFilters: TalentSearchFilters = {}) {
       setTotal(res.total || 0);
       setTotalPages(res.totalPages || 1);
     } catch (err: unknown) {
-      console.error("Error searching talents:", err);
       if (err instanceof ApiError && err.status === 402) {
         setSubscriptionRequired(true);
         setError("Active company subscription required to search talents.");
       } else {
+        console.error("Error searching talents:", err);
         setError(getErrorMessage(err) || "Failed to load talents");
       }
     } finally {

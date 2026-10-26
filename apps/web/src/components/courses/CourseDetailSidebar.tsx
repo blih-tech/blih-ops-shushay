@@ -78,11 +78,7 @@ export function CourseDetailSidebar({
           </div>
         )}
 
-        {paymentError && (
-          <Alert variant="error" className="text-xs text-left">
-            {paymentError}
-          </Alert>
-        )}
+
 
         <div className="space-y-3 pt-2">
           {hasAccess ? (
@@ -125,6 +121,12 @@ export function CourseDetailSidebar({
                 ? "Unlock This Course (1,000 ETB)"
                 : "Sign In to Unlock (1,000 ETB)"}
             </Button>
+          )}
+
+          {paymentError && (
+            <Alert variant="error" className="text-xs text-left">
+              {paymentError}
+            </Alert>
           )}
 
           <p className="text-[11px] font-mono text-center text-[#6E6678]">

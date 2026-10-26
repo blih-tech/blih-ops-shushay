@@ -64,11 +64,7 @@ export function JobApplyModal({
           </Alert>
         ) : (
           <>
-            {applyError && (
-              <Alert variant="error" title="Submission Error">
-                {applyError}
-              </Alert>
-            )}
+
 
             <FormField label="Note / Cover Letter (Optional)">
               <Textarea
@@ -101,6 +97,12 @@ export function JobApplyModal({
                 {applying ? "Submitting..." : "Confirm & Submit Application"}
               </Button>
             </div>
+
+            {applyError && (
+              <Alert variant="error" title="Submission Error">
+                {applyError}
+              </Alert>
+            )}
           </>
         )}
       </div>

@@ -107,11 +107,7 @@ export function VideoSection({
 
   return (
     <SectionCard title="Video Lesson" icon={<Video className="h-4 w-4" />}>
-      {error && (
-        <Alert variant="error" onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+
 
       {/* Uploading Progress Active State */}
       {uploading && uploadFile ? (
@@ -208,6 +204,12 @@ export function VideoSection({
             MP4, WebM format up to 500MB supported
           </p>
         </div>
+      )}
+
+      {error && (
+        <Alert variant="error" onClose={() => setError(null)}>
+          {error}
+        </Alert>
       )}
 
       <input

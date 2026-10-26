@@ -1,0 +1,13 @@
+{
+  "name": "@blih/validation",
+  "projectType": "library",
+  "sourceRoot": "packages/validation/src",
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm --filter @blih/validation typecheck"
+      }
+    }
+  }
+}

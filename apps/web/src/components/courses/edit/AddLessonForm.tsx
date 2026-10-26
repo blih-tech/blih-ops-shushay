@@ -34,11 +34,7 @@ export function AddLessonForm({
           STEP {stepNumber}
         </Badge>
       </div>
-      {addLessonError && (
-        <Alert variant="error" onClose={() => setAddLessonError(null)}>
-          {addLessonError}
-        </Alert>
-      )}
+
       <Input
         label="Module Title"
         value={newLessonTitle}
@@ -68,6 +64,12 @@ export function AddLessonForm({
           Create Lesson
         </Button>
       </div>
+
+      {addLessonError && (
+        <Alert variant="error" onClose={() => setAddLessonError(null)}>
+          {addLessonError}
+        </Alert>
+      )}
     </div>
   );
 }

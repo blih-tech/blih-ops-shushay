@@ -169,7 +169,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
         )}
       </CardHeader>
       <CardContent className="space-y-6">
-        {error && <Alert variant="error">{error}</Alert>}
+
 
         {(isAdding || editingId) && (
           <form
@@ -268,6 +268,12 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                 Save Record
               </Button>
             </div>
+
+            {error && (
+              <div className="pt-2">
+                <Alert variant="error">{error}</Alert>
+              </div>
+            )}
           </form>
         )}
 
